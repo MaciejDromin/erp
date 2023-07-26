@@ -1,0 +1,49 @@
+services:
+  fe:
+    image: "erp/fe:1.0.0"
+    ports:
+      - "5100:3000"
+    restart: unless-stopped
+  erp-pg:
+    image: "postgres:15.3-alpine3.18"
+    environment:
+      - POSTGRES_USER=erp
+      - POSTGRES_PASSWORD=erp
+    volumes:
+      - /opt/postgres/erp-data:/var/lib/postgresql/data
+      - ./sql/initialize_finances.sql:/docker-entrypoint-initdb.d/initialize_finances.sql
+    restart: unless-stopped
+  erp-mongodb:
+    image: "mongodb/mongodb-community-server:6.0.7-ubi8"
+    volumes:
+      - /opt/mongodb/erp-data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: inventory
+    restart: unless-stopped
+  consul-server-1:
+    image: "consul:1.7"
+    restart: unless-stopped
+    command: "agent -server -retry-join erp-consul -client 0.0.0.0"
+  erp-consul:
+    image: "consul:1.7"
+    restart: unless-stopped
+    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0"
+    ports:
+      - "8500:8500"
+  service-discovery:
+    image: "erp/service-discovery:1.0.0"
+    depends_on:
+      - erp-consul
+    restart: unless-stopped
+  inventory:
+    image: "erp/inventory:1.0.0"
+    depends_on:
+      - service-discovery
+      - erp-mongodb
+    restart: unless-stopped
+  finances:
+    image: "erp/finances:1.0.0"
+    depends_on:
+      - service-discovery
+      - erp-pg
+    restart: unless-stopped

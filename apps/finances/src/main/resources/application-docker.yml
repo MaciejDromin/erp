@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://erp-pg:5432/finances?useUnicode=yes&characterEncoding=UTF-8
+    username: finances
+    password: finances
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  cloud:
+    openfeign:
+      client:
+        config:
+          self-register:
+            url: http://service-discovery:8080/register
+
+logging:
+  level:
+    pl:
+      mlisowski: DEBUG
+
+#feign:
+#  client:
+#    config:
+#      default:
+#        loggerLevel: full
+
+service-discovery:
+  service-name: finances

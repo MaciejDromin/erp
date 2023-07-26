@@ -1,0 +1,15 @@
+quarkus:
+  http:
+    port: 8082
+  mongodb:
+    connection-string: mongodb://localhost:27017
+    database: inventory
+
+  rest-client:
+    "pl.mlisowski.inventory.selfregister.client.RegistrationClient":
+      url: http://localhost:8080
+
+service-discovery:
+  service-name: inventory
+  host: localhost
+  port: 8082

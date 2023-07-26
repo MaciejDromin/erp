@@ -1,0 +1,29 @@
+quarkus:
+  http:
+    cors:
+      ~: false
+#      origins: /.*/
+#    access-log:
+#      enabled: true
+#  log:
+#    level: DEBUG
+  stork:
+    inventory:
+      service-discovery:
+        type: consul
+        consul-host: localhost
+        consul-port: 8500
+      load-balancer:
+        type: round-robin
+    finances:
+      service-discovery:
+        type: consul
+        consul-host: localhost
+        consul-port: 8500
+      load-balancer:
+        type: round-robin
+
+consul:
+  host: localhost
+  port: 8500
+

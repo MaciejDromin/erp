@@ -1,0 +1,67 @@
+{
+	"/": [
+		"src/routes/+layout.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/api/finances/currencies": [
+		"src/routes/api/finances/currencies/+server.ts"
+	],
+	"/api/finances/money-operation": [
+		"src/routes/api/finances/money-operation/+server.ts"
+	],
+	"/api/finances/money-operation/periodical": [
+		"src/routes/api/finances/money-operation/periodical/+server.ts"
+	],
+	"/api/finances/object-value": [
+		"src/routes/api/finances/object-value/+server.ts"
+	],
+	"/api/finances/operation-category": [
+		"src/routes/api/finances/operation-category/+server.ts"
+	],
+	"/api/finances/planned-expenses": [
+		"src/routes/api/finances/planned-expenses/+server.ts"
+	],
+	"/api/inventory/categories": [
+		"src/routes/api/inventory/categories/+server.ts"
+	],
+	"/api/inventory/items": [
+		"src/routes/api/inventory/items/+server.ts"
+	],
+	"/api/inventory/items/object-names": [
+		"src/routes/api/inventory/items/object-names/+server.ts"
+	],
+	"/finances/currencies": [
+		"src/routes/+layout.server.ts"
+	],
+	"/finances/money-operation": [
+		"src/routes/finances/money-operation/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/finances/money-operation/periodical": [
+		"src/routes/finances/money-operation/periodical/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/finances/object-value": [
+		"src/routes/finances/object-value/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/finances/operation-category": [
+		"src/routes/finances/operation-category/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/finances/planned-expenses": [
+		"src/routes/finances/planned-expenses/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/inventory": [
+		"src/routes/+layout.server.ts"
+	],
+	"/inventory/categories": [
+		"src/routes/inventory/categories/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	],
+	"/inventory/items": [
+		"src/routes/inventory/items/+page.server.ts",
+		"src/routes/+layout.server.ts"
+	]
+}

@@ -1,0 +1,24 @@
+quarkus:
+  http:
+    cors:
+      ~: false
+  stork:
+    inventory:
+      service-discovery:
+        type: consul
+        consul-host: erp-consul
+        consul-port: 8500
+      load-balancer:
+        type: round-robin
+    finances:
+      service-discovery:
+        type: consul
+        consul-host: erp-consul
+        consul-port: 8500
+      load-balancer:
+        type: round-robin
+
+consul:
+  host: erp-consul
+  port: 8500
+
