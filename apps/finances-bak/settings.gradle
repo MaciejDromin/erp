@@ -1,4 +1,0 @@
-rootProject.name = 'finances'
-include 'build:generated:sources:annotationProcessor:java:main:generated'
-findProject(':build:generated:sources:annotationProcessor:java:main:generated')?.name = 'generated'
-
