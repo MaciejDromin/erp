@@ -58,8 +58,8 @@ public class OperationCategoryService {
     public List<OperationCategory> testing() {
         QOperationCategory category = QOperationCategory.operationCategory;
         List<OperationCategory> ret = new ArrayList<>();
-        var test = category.operationType.eq(MoneyOperationType.EXPENSES);
-        repository.findAll(test).forEach(ret::add);
+        var categories = category.operationType.eq(MoneyOperationType.EXPENSES);
+        repository.findAll(categories).forEach(ret::add);
         return ret;
     }
 

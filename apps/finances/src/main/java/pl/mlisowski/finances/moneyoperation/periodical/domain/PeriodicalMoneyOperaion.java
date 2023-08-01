@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
@@ -28,6 +29,7 @@ import java.time.Month;
 @NoArgsConstructor
 @SuperBuilder
 @Getter
+@Setter
 @Table(indexes = {
         @Index(name = "nextApplicableMonth", columnList = "nextApplicableMonth")
 })

@@ -15,6 +15,7 @@ import pl.mlisowski.finances.plannedexpenses.domain.PlannedExpenses;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -76,4 +77,7 @@ public class MoneyOperationService {
                 .build();
     }
 
+    public void saveAll(List<MoneyOperation> converted) {
+        repository.saveAll(converted);
+    }
 }

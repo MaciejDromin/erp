@@ -7,9 +7,14 @@ import org.springframework.stereotype.Service;
 import pl.mlisowski.finances.common.dto.AmountDto;
 import pl.mlisowski.finances.moneyoperation.periodical.application.port.PeriodicalMoneyOperationRepository;
 import pl.mlisowski.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperaion;
+import pl.mlisowski.finances.moneyoperation.periodical.domain.QPeriodicalMoneyOperaion;
 import pl.mlisowski.finances.moneyoperation.periodical.domain.dto.PeriodicalMoneyOperationCreationDto;
 import pl.mlisowski.finances.moneyoperation.periodical.domain.dto.PeriodicalMoneyOperationDto;
 import pl.mlisowski.finances.operationcategories.application.OperationCategoryService;
+
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +54,17 @@ public class PeriodicalMoneyOperationService {
                 .nextApplicableMonth(periodicalMoneyOperaion.getNextApplicableMonth())
                 .operationCategory(operationCategoryService.from(periodicalMoneyOperaion.getOperationCategory()))
                 .build();
+    }
+
+    public List<PeriodicalMoneyOperaion> getOperationsForMonth(Month accountingMonth) {
+        QPeriodicalMoneyOperaion operation = QPeriodicalMoneyOperaion.periodicalMoneyOperaion;
+        List<PeriodicalMoneyOperaion> ret = new ArrayList<>();
+        var operations = operation.nextApplicableMonth.eq(accountingMonth);
+        repository.findAll(operations).forEach(ret::add);
+        return ret;
+    }
+
+    public void saveAll(List<PeriodicalMoneyOperaion> operationList) {
+        repository.saveAll(operationList);
     }
 }

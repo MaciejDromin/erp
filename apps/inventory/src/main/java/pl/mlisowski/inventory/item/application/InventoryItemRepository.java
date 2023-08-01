@@ -1,18 +1,19 @@
 package pl.mlisowski.inventory.item.application;
 
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import pl.mlisowski.inventory.category.application.CategoryRepository;
-import pl.mlisowski.inventory.category.domain.Category;
 import pl.mlisowski.inventory.common.PageDto;
 import pl.mlisowski.inventory.item.domain.InventoryItem;
 import pl.mlisowski.inventory.item.domain.dto.InventoryItemDto;
 import pl.mlisowski.inventory.item.domain.dto.ItemCreationDto;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +34,18 @@ public class InventoryItemRepository implements PanacheMongoRepository<Inventory
         var params = uriInfo.getQueryParameters();
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
-        var items = findAll();
+        var objectIdsString = params.getFirst("objectIds");
+        PanacheQuery<InventoryItem> items;
+        if (objectIdsString == null) items = findAll();
+        else {
+            List<String> objectIds = Arrays.asList(objectIdsString.split(","));
+            if (objectIds.isEmpty()) items = findAll();
+            else {
+                items = findAllByIdsNotIn(objectIds.stream()
+                        .map(ObjectId::new)
+                        .collect(Collectors.toSet()));
+            }
+        }
         var itemList = items.page(pageNum, DEFAULT_PAGE_SIZE).list();
         return PageDto.of(itemList.stream()
                 .map(this::convert)
@@ -79,6 +91,10 @@ public class InventoryItemRepository implements PanacheMongoRepository<Inventory
 
     public Set<InventoryItem> findAllByIdsIn(Set<ObjectId> itemIds) {
         return new HashSet<>(list("_id in ?1", itemIds));
+    }
+
+    public PanacheQuery<InventoryItem> findAllByIdsNotIn(Set<ObjectId> itemIds) {
+        return find("{_id: { $nin: [?1]}}", itemIds);
     }
 
     public Map<String, Integer> findCountByObjectsIds(List<String> objectIds) {

@@ -11,7 +11,6 @@ export const actions = {
             currencyCode: data.get("currencyCode"),
             objectId: data.get("itemId")
         }
-        console.log(body)
         await unsecuredExternalApiRequest('/proxy/finances/object-value', HttpMethods.POST, body)
     }
 } satisfies Actions;
@@ -24,6 +23,7 @@ export const load = (async ({ params }) => {
     const countMap = await unsecuredExternalApiRequest('/proxy/inventory/items/object-count', HttpMethods.POST, objectIdsBody)
     const data = await unsecuredExternalApiRequest('/proxy/finances/object-value/total-value', HttpMethods.POST, await countMap.json())
     return {
-        objectsValue: await data.json()
+        objectsValue: await data.json(),
+        objectIds: objectIdsBody.itemIds
     };
 }) satisfies PageServerLoad;

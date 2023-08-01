@@ -1,6 +1,6 @@
 services:
   fe:
-    image: "erp/fe:1.0.0"
+    image: "erp/fe:1.0.1"
     ports:
       - "5100:3000"
     restart: unless-stopped
@@ -29,20 +29,20 @@ services:
     restart: unless-stopped
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0"
     ports:
-      - "8500:8500"
+      - "8555:8500"
   service-discovery:
     image: "erp/service-discovery:1.0.0"
     depends_on:
       - erp-consul
     restart: unless-stopped
   inventory:
-    image: "erp/inventory:1.0.0"
+    image: "erp/inventory:1.0.1"
     depends_on:
       - service-discovery
       - erp-mongodb
     restart: unless-stopped
   finances:
-    image: "erp/finances:1.0.0"
+    image: "erp/finances:1.0.1"
     depends_on:
       - service-discovery
       - erp-pg
