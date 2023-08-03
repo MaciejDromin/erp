@@ -1,4 +1,4 @@
-package pl.mlisowski.inventory.selfregister.domain;
+package pl.mlisowski.selfregister.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class RegisterResponseDto {
+public class RegisterDto {
 
-    private String serviceId;
+    private int port;
+    private String serviceName;
+    private String address;
 
 }

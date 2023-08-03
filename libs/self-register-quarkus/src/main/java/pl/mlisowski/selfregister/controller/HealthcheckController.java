@@ -1,4 +1,4 @@
-package pl.mlisowski.inventory.selfregister.controller;
+package pl.mlisowski.selfregister.controller;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

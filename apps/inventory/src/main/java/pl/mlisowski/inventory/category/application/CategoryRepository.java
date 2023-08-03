@@ -9,7 +9,6 @@ import org.bson.types.ObjectId;
 import pl.mlisowski.inventory.category.domain.Category;
 import pl.mlisowski.inventory.category.domain.dto.CategoryDto;
 import pl.mlisowski.inventory.common.PageDto;
-
 import java.util.HashSet;
 import java.util.Set;
 
