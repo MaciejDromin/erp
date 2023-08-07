@@ -6,7 +6,7 @@ quarkus:
     database: inventory
 
   rest-client:
-    "pl.mlisowski.inventory.selfregister.client.RegistrationClient":
+    "pl.mlisowski.selfregister.client.RegistrationClient":
       url: http://service-discovery:8080
 
 service-discovery:

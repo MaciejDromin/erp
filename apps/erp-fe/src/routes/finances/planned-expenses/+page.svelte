@@ -25,7 +25,7 @@
 
 </script>
 
-<div id="item" class="flex flex-col gap-3 px-10 pt-10">
+<div id="planned-expenses" class="flex flex-col gap-3 px-10 pt-10">
     <form method="POST" class="mx-auto flex flex-col gap-3 py-6" action="?/create">
         <div class="flex flex-row gap-3">
             <input

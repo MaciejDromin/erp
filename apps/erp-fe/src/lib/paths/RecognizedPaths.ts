@@ -52,6 +52,27 @@ const RECOGNIZED_PATHS:{ [key:string]:SidebarItem } = {
                 subPaths: []
             }
         ]
+    },
+    "planner": {
+        name: "Planner",
+        path: "/planner",
+        subPaths: [
+            {
+                name: "Material",
+                path: "/planner/materials",
+                subPaths: []
+            },
+            {
+                name: "Labour",
+                path: "/planner/labours",
+                subPaths: []
+            },
+            {
+                name: "Investment",
+                path: "/planner/investments",
+                subPaths: []
+            }
+        ]
     }
 }
 

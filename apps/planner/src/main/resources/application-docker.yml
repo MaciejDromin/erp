@@ -1,0 +1,15 @@
+quarkus:
+  http:
+    port: 8080
+  mongodb:
+    connection-string: mongodb://erp-mongodb:27017
+    database: planner
+
+  rest-client:
+    "pl.mlisowski.selfregister.client.RegistrationClient":
+      url: http://service-discovery:8080
+
+service-discovery:
+  service-name: planner
+  host: planner
+  port: 8080

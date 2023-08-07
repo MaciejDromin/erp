@@ -1,5 +1,6 @@
 package pl.mlisowski.inventory.category.domain;
 
+import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import org.bson.types.ObjectId;
 @AllArgsConstructor
 @Builder
 @ToString
+@MongoEntity(collection = "Category")
 public class Category {
 
     private ObjectId id;

@@ -6,6 +6,7 @@
     export let endpoint:string
     export let component:any
     export let additionalSearch:any = undefined
+    export let additionalParams:any = {}
 
     let currentPage:number = 0
     let maxPage:number = 0
@@ -36,7 +37,7 @@
 <div class="flex flex-col">
 
     <div class="my-3">
-        <svelte:component this={component} {...{data: data}}/>
+        <svelte:component this={component} {...{data: data}} {...additionalParams}/>
     </div>
 
     <div class="join flex mx-auto">

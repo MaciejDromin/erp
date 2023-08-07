@@ -26,7 +26,7 @@
     };
 </script>
 
-<div id="item" class="flex flex-col gap-3 px-10 pt-10">
+<div id="object-value" class="flex flex-col gap-3 px-10 pt-10">
     <div class="stats shadow mx-auto">
         <div class="stat">
             <div class="stat-figure text-primary text-4xl">

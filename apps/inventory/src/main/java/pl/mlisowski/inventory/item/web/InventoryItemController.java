@@ -13,8 +13,6 @@ import pl.mlisowski.inventory.item.application.InventoryItemRepository;
 import pl.mlisowski.inventory.item.domain.dto.InventoryItemDto;
 import pl.mlisowski.inventory.item.domain.dto.ItemCreationDto;
 import pl.mlisowski.inventory.item.domain.dto.ObjectIdsDto;
-
-import java.util.List;
 import java.util.Map;
 
 @Path("/inventory/items")

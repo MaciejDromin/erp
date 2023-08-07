@@ -1,2 +1,19 @@
-greeting:
-  message: "hello"
+quarkus:
+  http:
+    port: 8084
+  mongodb:
+    connection-string: mongodb://localhost:27017
+    database: planner
+
+  rest-client:
+    "pl.mlisowski.selfregister.client.RegistrationClient":
+      url: http://localhost:8080
+  index-dependency:
+    selfregister:
+      group-id: pl.mlisowski.selfregister
+      artifact-id: self-register-quarkus
+
+service-discovery:
+  service-name: planner
+  host: localhost
+  port: 8084
