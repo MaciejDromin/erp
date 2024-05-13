@@ -84,7 +84,7 @@
                     <Pageable
                         endpoint="/inventory/items"
                         component={ItemTable}
-                        additionalSearch={`&objectIds=${data.objectIds.join(",")}`}
+                        additionalSearch={data.objectIds.length === 0 ? '' : `&objectIds=${data.objectIds.join(",")}`}
                     />
                 </Modal>
             </div>
