@@ -15,30 +15,6 @@ UNIT_PRICE_PATTERN = r'\s{0,1}[x*+«]\s{0,1}\d+,\d{2}'
 QUANTITY_UNIT_PATTERN = r'[\s|~]\d+,{0,1}\d{0,4}(SZT|KG|L){0,1}$'
 UNIT_PATTERN = r'(SZT|KG|L)'
 
-class ParsedReceipt():
-    address = ""
-    items = []
-    date = ""
-
-    def __init__(self, address, items, date):
-        self.address = address
-        self.items = items
-        self.date = date
-
-class ReceiptItem():
-    name = ""
-    quantity = 0.0
-    unit = ""
-    unit_price = 0.0
-    price = 0.0
-
-    def __init__(self, name, quantity, unit, unit_price, price):
-        self.name = name
-        self. quantity = quantity
-        self.unit = unit
-        self.unit_price = unit_price
-        self.price = price
-
 def parse_args():
     ap = argparse.ArgumentParser()
     ap.add_argument("-i", "--image", required=True, nargs='*', help="Path to receipt images")
