@@ -44,4 +44,9 @@ bin/
 
 ### Quarkus ###
 .quarkus
+
+### Python ###
 __pycache__
+
+### Others ###
+generated/

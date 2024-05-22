@@ -1,6 +1,7 @@
 from file_manager import save_locally, unpack_archive, clean_directories
 from receipt_scan import scan_receipts, parse_receipts
 from sftp_connector import archive_receipts
+from message_publisher import publish
 from fastapi import UploadFile
 import json
 
@@ -16,7 +17,7 @@ async def handle_uploaded_receipts(filename, file_content):
     #    print(json.dumps(pr, indent=2))
     #filtered_receipts = filter_receipts()
 
-    #publish("topic", filtered_receipts)
+    await publish("scanned-receipts", parsed_receipts)
 
     clean_directories()
 
