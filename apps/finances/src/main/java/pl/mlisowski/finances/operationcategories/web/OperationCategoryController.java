@@ -1,5 +1,7 @@
 package pl.mlisowski.finances.operationcategories.web;
 
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,9 +14,6 @@ import pl.mlisowski.finances.operationcategories.application.OperationCategorySe
 import pl.mlisowski.finances.operationcategories.domain.OperationCategory;
 import pl.mlisowski.finances.operationcategories.domain.dto.OperationCategoryCreationDto;
 import pl.mlisowski.finances.operationcategories.domain.dto.OperationCategoryDto;
-
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/finances/operation-category")

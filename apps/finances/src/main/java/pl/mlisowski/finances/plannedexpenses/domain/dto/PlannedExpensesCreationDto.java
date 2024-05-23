@@ -1,10 +1,10 @@
 package pl.mlisowski.finances.plannedexpenses.domain.dto;
 
+import java.time.Month;
 import lombok.Builder;
 import lombok.Value;
 import pl.mlisowski.finances.common.dto.AmountDto;
 import pl.mlisowski.finances.moneyoperation.domain.MoneyOperationType;
-import java.time.Month;
 
 @Value
 @Builder

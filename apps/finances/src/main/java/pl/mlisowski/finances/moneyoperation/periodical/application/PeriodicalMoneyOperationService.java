@@ -1,5 +1,8 @@
 package pl.mlisowski.finances.moneyoperation.periodical.application;
 
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,10 +14,6 @@ import pl.mlisowski.finances.moneyoperation.periodical.domain.QPeriodicalMoneyOp
 import pl.mlisowski.finances.moneyoperation.periodical.domain.dto.PeriodicalMoneyOperationCreationDto;
 import pl.mlisowski.finances.moneyoperation.periodical.domain.dto.PeriodicalMoneyOperationDto;
 import pl.mlisowski.finances.operationcategories.application.OperationCategoryService;
-
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

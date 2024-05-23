@@ -9,6 +9,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Month;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +23,6 @@ import pl.mlisowski.finances.common.persistence.BaseEntity;
 import pl.mlisowski.finances.moneyoperation.domain.MoneyOperationType;
 import pl.mlisowski.finances.operationcategories.domain.OperationCategory;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.Month;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,7 +30,7 @@ import java.time.Month;
 @Getter
 @Setter
 @Table(indexes = {
-        @Index(name = "nextApplicableMonth", columnList = "nextApplicableMonth")
+    @Index(name = "nextApplicableMonth", columnList = "nextApplicableMonth")
 })
 public class PeriodicalMoneyOperaion extends BaseEntity {
 

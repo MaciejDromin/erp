@@ -2,6 +2,8 @@ package pl.mlisowski.finances.objectvalues.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +11,6 @@ import lombok.experimental.SuperBuilder;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import pl.mlisowski.finances.common.persistence.BaseEntity;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @Entity
 @AllArgsConstructor

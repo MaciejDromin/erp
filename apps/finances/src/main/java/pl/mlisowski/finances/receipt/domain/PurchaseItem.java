@@ -39,4 +39,7 @@ public class PurchaseItem extends BaseEntity {
         return Money.of(CurrencyUnit.of(this.currency), this.price, RoundingMode.DOWN);
     }
 
+    public void setPurchase(Purchase purchase) {
+        this.purchase = purchase;
+    }
 }

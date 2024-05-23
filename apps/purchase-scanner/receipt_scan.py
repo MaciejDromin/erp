@@ -123,6 +123,10 @@ def parse_receipts(scannedReceipts):
     return ret
 
 
+def filter_receipts(scannedReceipts):
+    return [x for x in scannedReceipts if x['items']]
+
+
 if __name__ == "__main__":
     scannedReceipts = scan_receipts(parse_args()['image'])
     parsedReceipts = parse_receipts(scannedReceipts)

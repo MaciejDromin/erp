@@ -1,5 +1,8 @@
 package pl.mlisowski.finances.operationcategories.application;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,10 +13,6 @@ import pl.mlisowski.finances.operationcategories.domain.OperationCategory;
 import pl.mlisowski.finances.operationcategories.domain.QOperationCategory;
 import pl.mlisowski.finances.operationcategories.domain.dto.OperationCategoryCreationDto;
 import pl.mlisowski.finances.operationcategories.domain.dto.OperationCategoryDto;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 import pl.mlisowski.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperaion;
 
 @Repository
-public interface PeriodicalMoneyOperationRepository extends JpaRepository<PeriodicalMoneyOperaion, String>, QuerydslPredicateExecutor<PeriodicalMoneyOperaion> {
+public interface PeriodicalMoneyOperationRepository
+        extends JpaRepository<PeriodicalMoneyOperaion, String>, QuerydslPredicateExecutor<PeriodicalMoneyOperaion> {
 }
