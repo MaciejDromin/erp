@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          self-register:
+            url: http://service-discovery:8080/register
+  rabbitmq:
+    host: erp-rabbit
+    port: 5672
+    username: erp-user
+    password: erp-user
+
+logging:
+  level:
+    pl:
+      mlisowski: DEBUG
+
+#feign:
+#  client:
+#    config:
+#      default:
+#        loggerLevel: full
+
+service-discovery:
+  service-name: analytics

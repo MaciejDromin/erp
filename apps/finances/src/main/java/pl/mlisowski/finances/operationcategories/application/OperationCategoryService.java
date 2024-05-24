@@ -1,7 +1,5 @@
 package pl.mlisowski.finances.operationcategories.application;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -52,14 +50,6 @@ public class OperationCategoryService {
 
     public OperationCategory getCategoryById(String operationCategory) {
         return repository.getReferenceById(operationCategory);
-    }
-
-    public List<OperationCategory> testing() {
-        QOperationCategory category = QOperationCategory.operationCategory;
-        List<OperationCategory> ret = new ArrayList<>();
-        var categories = category.operationType.eq(MoneyOperationType.EXPENSES);
-        repository.findAll(categories).forEach(ret::add);
-        return ret;
     }
 
 }

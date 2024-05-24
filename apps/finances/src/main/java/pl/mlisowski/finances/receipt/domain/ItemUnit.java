@@ -1,4 +1,4 @@
-package pl.mlisowski.finances.receipt.domain.dto;
+package pl.mlisowski.finances.receipt.domain;
 
 public enum ItemUnit {
 

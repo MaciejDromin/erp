@@ -30,6 +30,7 @@ public class PlannedExpensesService {
         repository.save(convert(creation));
     }
 
+    // TODO: Extract to factory
     private PlannedExpenses convert(PlannedExpensesCreationDto creation) {
         var operationCategory = operationCategoryService.getCategoryById(creation.getOperationCategoryId());
         return PlannedExpenses.builder()
@@ -48,6 +49,7 @@ public class PlannedExpensesService {
                 .map(this::convertToDto);
     }
 
+    // TODO: Extract to factory
     private PlannedExpensesDto convertToDto(PlannedExpenses plannedExpenses) {
         return PlannedExpensesDto.builder()
                 .uuid(plannedExpenses.getUuid())
@@ -77,7 +79,6 @@ public class PlannedExpensesService {
     private PlannedExpenses updateForAbandon(PlannedExpenses plannedExpenses) {
         plannedExpenses.setPlannedExpensesStatus(PlannedExpensesStatus.ABANDONED);
         plannedExpenses.setFinalizedDate(ZonedDateTime.now(ZoneOffset.UTC));
-        log.info("ML --- ABANDON {}", plannedExpenses);
         return plannedExpenses;
     }
 
