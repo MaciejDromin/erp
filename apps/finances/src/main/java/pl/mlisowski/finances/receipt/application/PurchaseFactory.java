@@ -23,6 +23,7 @@ public class PurchaseFactory {
     private Purchase buildPurchase(ReceiptDto receipt) {
         var items = purchaseItemFactory.from(receipt.getItems());
         var purchase = Purchase.builder()
+                .address(receipt.getAddress())
                 .amount(items.stream()
                         .map(PurchaseItem::getPrice)
                         .reduce(BigDecimal.ZERO, BigDecimal::add))

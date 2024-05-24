@@ -23,6 +23,7 @@ import pl.mlisowski.finances.common.persistence.BaseEntity;
 @Getter
 public class Purchase extends BaseEntity {
 
+    private String address;
     private BigDecimal amount;
     private String currency;
     //    private PurchaseAnalytics analytics;
