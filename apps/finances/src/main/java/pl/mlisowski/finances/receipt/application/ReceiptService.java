@@ -4,7 +4,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.mlisowski.finances.common.messaging.RabbitPublisher;
-import pl.mlisowski.finances.receipt.application.port.PurchaseRepository;
 import pl.mlisowski.finances.receipt.domain.Purchase;
 import pl.mlisowski.finances.receipt.domain.PurchaseItem;
 import pl.mlisowski.finances.receipt.domain.dto.PurchaseItemToAnalyzeDto;
@@ -17,11 +16,11 @@ import pl.mlisowski.finances.receipt.domain.dto.ReceiptDto;
 public class ReceiptService {
 
     private final PurchaseFactory purchaseFactory;
-    private final PurchaseRepository purchaseRepository;
+    private final PurchaseService purchaseService;
     private final RabbitPublisher rabbitPublisher;
 
     public void processReceipts(List<ReceiptDto> receipts) {
-        List<Purchase> saved = purchaseRepository.saveAll(purchaseFactory.from(receipts));
+        List<Purchase> saved = purchaseService.saveAll(purchaseFactory.from(receipts));
         // convert to analytics object
         List<PurchaseToAnalyzeDto> converted = convertPurchasesToAnalyze(saved);
         // publish rabbitMQ message for analytics

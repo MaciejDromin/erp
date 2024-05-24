@@ -2,12 +2,12 @@ package com.soitio.analytics.purchase;
 
 import static com.soitio.analytics.common.utils.FunctionUtils.calculateAndSet;
 
-import com.soitio.analytics.purchase.dto.MonthlyPurchaseStatistics;
+import com.soitio.analytics.purchase.dto.MonthlyPurchaseStatisticsDto;
 import com.soitio.analytics.purchase.dto.PurchaseToAnalyzeDto;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.time.Month;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class MonthlyAnalizerService {
 
-    public MonthlyPurchaseStatistics calculateMonthlyStats(List<PurchaseToAnalyzeDto> purchases) {
-        MonthlyPurchaseStatistics stats = new MonthlyPurchaseStatistics();
-        stats.setMonth(this.getMonth(purchases));
+    public MonthlyPurchaseStatisticsDto calculateMonthlyStats(List<PurchaseToAnalyzeDto> purchases) {
+        MonthlyPurchaseStatisticsDto stats = new MonthlyPurchaseStatisticsDto();
+        LocalDate date = this.getDate(purchases);
+        stats.setDate(date);
+        stats.setMonth(date.getMonth());
         calculateAndSet(stats::setMin, () -> this.calculateMin(purchases));
         calculateAndSet(stats::setMax, () -> this.calculateMax(purchases));
         calculateAndSet(stats::setMean, () -> this.calculateMean(purchases));
@@ -31,12 +33,11 @@ public class MonthlyAnalizerService {
         return stats;
     }
 
-    private Month getMonth(List<PurchaseToAnalyzeDto> purchases) {
+    private LocalDate getDate(List<PurchaseToAnalyzeDto> purchases) {
         return purchases.stream()
                 .map(PurchaseToAnalyzeDto::getDate)
                 .findFirst() // TODO: Throw dedicated exception
-                .orElseThrow()
-                .getMonth();
+                .orElseThrow();
     }
 
     private BigDecimal calculateMin(List<PurchaseToAnalyzeDto> purchase) {

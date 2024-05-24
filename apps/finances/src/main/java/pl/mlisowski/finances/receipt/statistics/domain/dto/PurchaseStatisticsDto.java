@@ -1,9 +1,6 @@
-package com.soitio.analytics.purchase.dto;
+package pl.mlisowski.finances.receipt.statistics.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import java.math.BigDecimal;
-import java.time.Month;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -11,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,8 +19,9 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MonthlyPurchaseStatistics {
+public class PurchaseStatisticsDto {
 
+    private String id;
     private BigDecimal min;
     private BigDecimal max;
     private BigDecimal mean;
@@ -29,10 +29,6 @@ public class MonthlyPurchaseStatistics {
     private BigDecimal variation;
     private BigDecimal standardDeviation;
     private BigDecimal total;
-    private int totalPurchases;
     private int totalItems;
-    private double averageItemPerPurchase;
-    private List<PurchaseStatisticsDto> purchases;
-    private Month month;
 
 }
