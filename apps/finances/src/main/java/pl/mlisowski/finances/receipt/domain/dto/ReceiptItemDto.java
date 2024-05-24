@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import pl.mlisowski.finances.receipt.domain.ItemUnit;
 
 @AllArgsConstructor
 @NoArgsConstructor

@@ -32,10 +32,5 @@ public class OperationCategoryController {
         operationCategoryService.create(creation);
     }
 
-    @GetMapping("/dupa")
-    public List<OperationCategory> test() {
-        return operationCategoryService.testing();
-    }
-
 }
 

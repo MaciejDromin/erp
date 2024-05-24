@@ -14,7 +14,6 @@ import lombok.experimental.SuperBuilder;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import pl.mlisowski.finances.common.persistence.BaseEntity;
-import pl.mlisowski.finances.receipt.domain.dto.ItemUnit;
 
 @Entity
 @AllArgsConstructor

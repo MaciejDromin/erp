@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class Purchase extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseItem> purchaseItems = new ArrayList<>();
+    private LocalDate date;
 
     public Money getAmount() {
         return Money.of(CurrencyUnit.of(this.currency), this.amount, RoundingMode.DOWN);
@@ -39,4 +41,9 @@ public class Purchase extends BaseEntity {
         this.purchaseItems = purchaseItems;
         purchaseItems.forEach(purchaseItem -> purchaseItem.setPurchase(this));
     }
+
+    public BigDecimal getRawAmount() {
+        return this.amount;
+    }
+
 }

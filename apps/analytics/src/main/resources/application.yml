@@ -1,0 +1,23 @@
+server:
+  port: 8084
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+logging:
+  level:
+    pl:
+      mlisowski: DEBUG
+
+#feign:
+#  client:
+#    config:
+#      default:
+#        loggerLevel: full
+
+service-discovery:
+  service-name: analytics
