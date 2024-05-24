@@ -20,6 +20,11 @@ spring:
         config:
           self-register:
             url: http://localhost:8080/register
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 logging:
   level:

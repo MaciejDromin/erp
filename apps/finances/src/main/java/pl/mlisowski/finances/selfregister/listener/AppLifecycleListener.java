@@ -9,7 +9,7 @@ import pl.mlisowski.finances.selfregister.client.RegistrationClient;
 import pl.mlisowski.finances.selfregister.domain.RegisterDto;
 
 @Slf4j
-@Component
+//@Component
 public class AppLifecycleListener {
 
     @Value("${server.address:finances}")

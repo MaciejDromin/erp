@@ -1,13 +1,12 @@
 package pl.mlisowski.finances.moneyoperation.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.ZonedDateTime;
 import lombok.Builder;
 import lombok.Value;
 import pl.mlisowski.finances.common.dto.AmountDto;
 import pl.mlisowski.finances.moneyoperation.domain.MoneyOperationType;
 import pl.mlisowski.finances.operationcategories.domain.dto.OperationCategoryDto;
-
-import java.time.ZonedDateTime;
 
 @Value
 @Builder

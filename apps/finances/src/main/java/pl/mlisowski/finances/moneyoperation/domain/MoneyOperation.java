@@ -7,6 +7,10 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Month;
+import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,10 +19,6 @@ import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import pl.mlisowski.finances.common.persistence.BaseEntity;
 import pl.mlisowski.finances.operationcategories.domain.OperationCategory;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.Month;
-import java.time.ZonedDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -26,7 +26,7 @@ import java.time.ZonedDateTime;
 @SuperBuilder
 @Getter
 @Table(indexes = {
-        @Index(name = "period", columnList = "effectiveMonth, effectiveYear")
+    @Index(name = "period", columnList = "effectiveMonth, effectiveYear")
 })
 public class MoneyOperation extends BaseEntity {
 

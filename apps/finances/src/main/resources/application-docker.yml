@@ -1,7 +1,6 @@
 server:
   port: 8080
 
-
 spring:
   datasource:
     url: jdbc:postgresql://erp-pg:5432/finances?useUnicode=yes&characterEncoding=UTF-8
@@ -21,6 +20,11 @@ spring:
         config:
           self-register:
             url: http://service-discovery:8080/register
+  rabbitmq:
+    host: erp-rabbit
+    port: 5672
+    username: erp-user
+    password: erp-user
 
 logging:
   level:

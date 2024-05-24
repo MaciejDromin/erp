@@ -5,6 +5,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Month;
+import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,10 +20,6 @@ import org.joda.money.Money;
 import pl.mlisowski.finances.common.persistence.BaseEntity;
 import pl.mlisowski.finances.moneyoperation.domain.MoneyOperationType;
 import pl.mlisowski.finances.operationcategories.domain.OperationCategory;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.Month;
-import java.time.ZonedDateTime;
 
 @Entity
 @AllArgsConstructor

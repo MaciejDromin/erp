@@ -4,14 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import pl.mlisowski.finances.common.persistence.BaseEntity;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @AllArgsConstructor
@@ -19,9 +19,9 @@ import java.time.LocalDate;
 @SuperBuilder
 @Getter
 @Table(indexes = {
-        @Index(name = "code_index", columnList = "code"),
-        @Index(name = "date_code_index", columnList = "code, effectiveDate", unique = true),
-        @Index(name = "date_index", columnList = "effectiveDate")
+    @Index(name = "code_index", columnList = "code"),
+    @Index(name = "date_code_index", columnList = "code, effectiveDate", unique = true),
+    @Index(name = "date_index", columnList = "effectiveDate")
 })
 public class Currency extends BaseEntity {
 
