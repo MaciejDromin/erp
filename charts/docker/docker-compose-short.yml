@@ -1,8 +1,6 @@
 services:
   fe:
     image: "erp/fe:latest"
-    ports:
-      - "5100:3000"
     restart: unless-stopped
   erp-pg:
     image: "postgres:15.3-alpine3.18"
@@ -30,8 +28,6 @@ services:
     image: "consul:1.7"
     restart: unless-stopped
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0"
-    ports:
-      - "8505:8500"
   service-discovery:
     image: "erp/service-discovery:latest"
     depends_on:
@@ -85,6 +81,10 @@ services:
     volumes:
       - ./rabbit/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
       - ./rabbit/definitions.json:/etc/rabbitmq/definitions.json:ro
+  nginx-proxy:
+    image: "nginx:latest"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/nginx.conf:ro
+    restart: unless-stopped
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "8000:80"
