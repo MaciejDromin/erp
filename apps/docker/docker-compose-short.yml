@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0"
     ports:
-      - "8555:8500"
+      - "8505:8500"
   service-discovery:
     image: "erp/service-discovery:latest"
     depends_on:
@@ -61,3 +61,6 @@ services:
       - /opt/sftp/erp-conf/users.conf:/etc/sftp/users.conf:ro
     userns: keep-id
     privileged: true
+  purchase-scanner:
+  analytics:
+  rabbit:

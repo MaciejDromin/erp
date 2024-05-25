@@ -1,8 +1,9 @@
 import pika
 import json
+import configs
 
 async def publish(topic, message):
-    parameters = pika.URLParameters('amqp://guest:guest@localhost:5672')
+    parameters = pika.URLParameters(f'amqp://{configs.RABBITMQ_USERNAME}:{configs.RABBITMQ_PASSWORD}@{configs.RABBITMQ_HOST}:5672')
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
     channel.basic_publish('receipt_exchange',
