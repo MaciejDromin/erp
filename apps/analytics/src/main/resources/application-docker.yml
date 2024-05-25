@@ -9,10 +9,10 @@ spring:
           self-register:
             url: http://service-discovery:8080/register
   rabbitmq:
-    host: erp-rabbit
+    host: rabbit
     port: 5672
     username: erp-user
-    password: erp-user
+    password: admin
 
 logging:
   level:

@@ -1,0 +1,111 @@
+{
+  "queues": [
+    {
+      "name": "purchase_analytics_queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "purchase_statistics_queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "receipt_queue",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "purchase_analytics_exchange",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "purchase_statistics_exchange",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "receipt_exchange",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "purchase_analytics_exchange",
+      "vhost": "/",
+      "destination": "purchase_analytics_queue",
+      "destination_type": "queue",
+      "routing_key": "purchase_analytics_queue",
+      "arguments": {}
+    },
+    {
+      "source": "purchase_statistics_exchange",
+      "vhost": "/",
+      "destination": "purchase_statistics_queue",
+      "destination_type": "queue",
+      "routing_key": "purchase_statistics_queue",
+      "arguments": {}
+    },
+    {
+      "source": "receipt_exchange",
+      "vhost": "/",
+      "destination": "receipt_queue",
+      "destination_type": "queue",
+      "routing_key": "receipt_queue",
+      "arguments": {}
+    }
+  ],
+ "users": [
+    {
+      "name": "erp-user",
+      "password_hash": "OVOoAdMCK43FwLTIluIJvVXLpiTdNAiolFTq3z0TK2gBC3c+",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": [
+        "administrator"
+      ],
+      "limits": {}
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "erp-user",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ]
+ }

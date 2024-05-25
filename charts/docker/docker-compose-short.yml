@@ -48,6 +48,7 @@ services:
     depends_on:
       - service-discovery
       - erp-pg
+      - rabbit
     restart: unless-stopped
   # SFTP has some weird issues with permissions, even tho I tell it to use my UID and GUID it is using
   # podman auto generated which requires full access on public (chmod 757 for example)
@@ -62,5 +63,28 @@ services:
     userns: keep-id
     privileged: true
   purchase-scanner:
+    image: "erp/purchase-scanner:latest"
+    environment:
+      SFTP_HOST: "sftp"
+      SFTP_USERNAME: "erp"
+      SFTP_PASSWORD: "admin"
+      RABBITMQ_HOST: "rabbit"
+      RABBITMQ_USERNAME: "erp-user"
+      RABBITMQ_PASSWORD: "admin"
+    restart: unless-stopped
+    depends_on:
+      - sftp
+      - rabbit
   analytics:
+    image: "erp/analytics:latest"
+    restart: unless-stopped
+    depends_on: 
+      - rabbit
   rabbit:
+    image: "rabbitmq:3.13-management"
+    volumes:
+      - ./rabbit/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./rabbit/definitions.json:/etc/rabbitmq/definitions.json:ro
+    ports:
+      - "5672:5672"
+      - "15672:15672"
