@@ -1,8 +1,6 @@
 services:
   fe:
     image: "erp/fe:latest"
-    ports:
-      - "5100:3000"
     restart: unless-stopped
   erp-pg:
     image: "postgres:15.3-alpine3.18"
@@ -30,8 +28,6 @@ services:
     image: "consul:1.7"
     restart: unless-stopped
     command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0"
-    ports:
-      - "8555:8500"
   service-discovery:
     image: "erp/service-discovery:latest"
     depends_on:
@@ -48,6 +44,7 @@ services:
     depends_on:
       - service-discovery
       - erp-pg
+      - rabbit
     restart: unless-stopped
   # SFTP has some weird issues with permissions, even tho I tell it to use my UID and GUID it is using
   # podman auto generated which requires full access on public (chmod 757 for example)
@@ -61,3 +58,33 @@ services:
       - /opt/sftp/erp-conf/users.conf:/etc/sftp/users.conf:ro
     userns: keep-id
     privileged: true
+  purchase-scanner:
+    image: "erp/purchase-scanner:latest"
+    environment:
+      SFTP_HOST: "sftp"
+      SFTP_USERNAME: "erp"
+      SFTP_PASSWORD: "admin"
+      RABBITMQ_HOST: "rabbit"
+      RABBITMQ_USERNAME: "erp-user"
+      RABBITMQ_PASSWORD: "admin"
+    restart: unless-stopped
+    depends_on:
+      - sftp
+      - rabbit
+  analytics:
+    image: "erp/analytics:latest"
+    restart: unless-stopped
+    depends_on: 
+      - rabbit
+  rabbit:
+    image: "rabbitmq:3.13-management"
+    volumes:
+      - ./rabbit/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./rabbit/definitions.json:/etc/rabbitmq/definitions.json:ro
+  nginx-proxy:
+    image: "nginx:latest"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/nginx.conf:ro
+    restart: unless-stopped
+    ports:
+      - "8000:80"
