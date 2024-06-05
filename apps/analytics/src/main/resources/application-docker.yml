@@ -1,5 +1,6 @@
 server:
   port: 8080
+  shutdown: graceful
 
 spring:
   cloud:
@@ -7,12 +8,14 @@ spring:
       client:
         config:
           self-register:
-            url: http://service-discovery:8080/register
+            url: http://erp-consul:8500
   rabbitmq:
     host: rabbit
     port: 5672
     username: erp-user
     password: admin
+  lifecycle:
+    timeout-per-shutdown-phase: 5s
 
 logging:
   level:

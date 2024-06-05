@@ -1,6 +1,7 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests';
 import { HttpMethods } from '$lib/types/httpMethods';
 import type { Actions } from './$types';
+import { PLANNER_URL } from '$lib/scripts/urls'
 
 export const actions = {
     default: async ({ cookies, request }) => {
@@ -15,6 +16,7 @@ export const actions = {
             contractorName: data.get("contractorName"),
             contractorContact: data.get("contractorContact")
         }
-        await unsecuredExternalApiRequest('/proxy/planner/labours', HttpMethods.POST, body)
+        await unsecuredExternalApiRequest(PLANNER_URL +
+            '/planner/labours', HttpMethods.POST, body)
     }
 } satisfies Actions;

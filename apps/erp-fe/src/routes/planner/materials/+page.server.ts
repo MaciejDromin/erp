@@ -1,6 +1,7 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests';
 import { HttpMethods } from '$lib/types/httpMethods';
 import type { Actions } from './$types';
+import { PLANNER_URL } from '$lib/scripts/urls'
 
 export const actions = {
     default: async ({ cookies, request }) => {
@@ -14,6 +15,7 @@ export const actions = {
             },
             source: data.get("source")
         }
-        await unsecuredExternalApiRequest('/proxy/planner/materials', HttpMethods.POST, body)
+        await unsecuredExternalApiRequest(PLANNER_URL +
+            '/planner/materials', HttpMethods.POST, body)
     }
 } satisfies Actions;
