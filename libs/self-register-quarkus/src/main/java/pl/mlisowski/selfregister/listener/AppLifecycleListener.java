@@ -4,12 +4,15 @@ import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
-import jakarta.ws.rs.core.Response;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import pl.mlisowski.selfregister.client.RegistrationClient;
-import pl.mlisowski.selfregister.domain.RegisterDto;
+import pl.mlisowski.selfregister.domain.ServiceContext;
+import pl.mlisowski.selfregister.domain.dto.CheckDto;
+import pl.mlisowski.selfregister.domain.dto.RegisterDto;
+import pl.mlisowski.selfregister.domain.dto.WeightsDto;
 
 @Slf4j
 @ApplicationScoped
@@ -24,20 +27,30 @@ public class AppLifecycleListener {
 
     @RestClient
     RegistrationClient registrationClient;
-    private String serviceId;
+    private final ServiceContext serviceContext;
+
+    public AppLifecycleListener(ServiceContext serviceContext) {
+        this.serviceContext = serviceContext;
+    }
 
     void onStart(@Observes StartupEvent event) {
         log.info("Registering application of name: {}", serviceName);
-        this.serviceId = registrationClient.register(RegisterDto.builder()
-                .serviceName(this.serviceName)
+        serviceContext.setServiceId(UUID.randomUUID().toString());
+        registrationClient.register(RegisterDto.builder()
+                .id(serviceContext.getServiceId())
+                .name(this.serviceName)
                 .address(this.host)
                 .port(this.port)
-                .build()).getServiceId();
+                .check(CheckDto.builder()
+                        .http("http://%s:%d/healthcheck".formatted(this.host, this.port))
+                        .build())
+                .weights(new WeightsDto(10, 3))
+                .build());
     }
 
     void onStop(@Observes ShutdownEvent event) {
         log.info("De-registering application of name: {}", serviceName);
-        try (Response res = registrationClient.deleteService(this.serviceId)){}
+        registrationClient.deleteService(serviceContext.getServiceId());
     }
 
 }

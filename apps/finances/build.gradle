@@ -33,6 +33,7 @@ idea {
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 }
 
 ext {
@@ -55,6 +56,9 @@ dependencies {
 	// QueryDSL
 	implementation "com.querydsl:querydsl-jpa:${queryDsl}:jakarta"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDsl}:jakarta"
+
+	// SELFREGISTER
+	implementation "com.soitio.selfregister:self-register-spring:1.0.0"
 
 	// LOMBOK
 	compileOnly 'org.projectlombok:lombok'

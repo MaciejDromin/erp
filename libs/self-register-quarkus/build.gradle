@@ -16,7 +16,7 @@ repositories {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId 'pl.mlisowski.selfregister'
+            groupId "${group}"
             artifact jar
         }
     }

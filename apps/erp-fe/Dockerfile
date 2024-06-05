@@ -35,6 +35,6 @@ USER sveltekit
 EXPOSE 3000
 
 ENV PORT 3000
-ENV ORIGIN "http://localhost:5100"
+ENV ORIGIN "http://soitio-erp.com:8000"
 
 CMD ["node", "build"]

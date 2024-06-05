@@ -20,31 +20,30 @@ services:
       MONGO_INITDB_DATABASE: inventory
     restart: unless-stopped
     user: "$UID:$GID"
-  consul-server-1:
-    image: "consul:1.7"
+  consul-client:
+    image: "hashicorp/consul:1.18.2"
     restart: unless-stopped
-    command: "agent -server -retry-join erp-consul -client 0.0.0.0"
+    command: "agent"
+    volumes:
+      - ./consul/client.json:/consul/config/client.json:ro
   erp-consul:
-    image: "consul:1.7"
+    image: "hashicorp/consul:1.18.2"
     restart: unless-stopped
-    command: "agent -server -bootstrap-expect 1 -ui -client 0.0.0.0"
-  service-discovery:
-    image: "erp/service-discovery:latest"
-    depends_on:
-      - erp-consul
-    restart: unless-stopped
+    command: "agent"
+    volumes:
+      - ./consul/server.json:/consul/config/server.json:ro
   inventory:
     image: "erp/inventory:latest"
     depends_on:
-      - service-discovery
       - erp-mongodb
+      - erp-consul
     restart: unless-stopped
   finances:
     image: "erp/finances:latest"
     depends_on:
-      - service-discovery
       - erp-pg
       - rabbit
+      - erp-consul
     restart: unless-stopped
   # SFTP has some weird issues with permissions, even tho I tell it to use my UID and GUID it is using
   # podman auto generated which requires full access on public (chmod 757 for example)
@@ -76,6 +75,13 @@ services:
     restart: unless-stopped
     depends_on: 
       - rabbit
+      - erp-consul
+  planner:
+    image: "erp/planner:latest"
+    depends_on:
+      - erp-consul
+      - erp-mongodb
+    restart: unless-stopped
   rabbit:
     image: "rabbitmq:3.13-management"
     volumes:

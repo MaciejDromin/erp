@@ -1,7 +1,7 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests';
 import { HttpMethods } from '$lib/types/httpMethods';
 import type { Actions } from './$types';
-
+import { FINANCES_URL } from '$lib/scripts/urls'
 
 export const actions = {
     default: async ({ request }) => {
@@ -17,6 +17,7 @@ export const actions = {
             repetitionPeriod: data.get("repetitionPeriod"),
             operationCategoryId: data.get("categoryId")
         }
-        await unsecuredExternalApiRequest('/proxy/finances/money-operation/periodical', HttpMethods.POST, body)
+        await unsecuredExternalApiRequest(FINANCES_URL +
+            '/finances/money-operation/periodical', HttpMethods.POST, body)
     }
 } satisfies Actions;
