@@ -29,6 +29,7 @@ public class Purchase extends BaseEntity {
     private String address;
     private BigDecimal amount;
     private String currency;
+    private String source;
     //    private PurchaseAnalytics analytics;
     @Builder.Default
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
