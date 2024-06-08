@@ -20,5 +20,6 @@ public class ReceiptDto {
     private String address;
     private List<ReceiptItemDto> items;
     private LocalDate date;
+    private String source;
 
 }

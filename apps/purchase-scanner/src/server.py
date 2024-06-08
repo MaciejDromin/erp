@@ -6,11 +6,6 @@ import asyncio
 app = FastAPI()
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
 @app.post("/receipts")
 async def upload_file(file: UploadFile):
     asyncio.ensure_future(handle_uploaded_receipts(file.filename, await file.read()))

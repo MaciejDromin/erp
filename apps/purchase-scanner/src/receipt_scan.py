@@ -47,7 +47,7 @@ def scan_receipts(receipts):
 		        break
         if receiptCnt is None:
             print("No outline found for receipt: " + receipt + " skipping...")
-            # send kafka message
+            # TODO: send kafka message
             continue
 
         receiptTransformed = four_point_transform(orig, receiptCnt.reshape(4, 2) * ratio)
@@ -55,7 +55,12 @@ def scan_receipts(receipts):
         text = pytesseract.image_to_string(
                 cv2.cvtColor(receiptTransformed, cv2.COLOR_BGR2RGB), config="--psm 4", lang="pol")
 
-        ret.append(text)
+        parsed_receipt = {
+            "data": text,
+            "source": receipt[6:]
+        }
+
+        ret.append(parsed_receipt)
 
     return ret
 
@@ -102,7 +107,7 @@ def parse_receipts(scannedReceipts):
     ret = []
 
     for receipt in scannedReceipts:
-        preprocessed = receipt.replace("\n", "~")
+        preprocessed = receipt["data"].replace("\n", "~")
         date = re.search(DATE_PATTERN, preprocessed)
         if date != None:
             date = date.group()
@@ -116,7 +121,8 @@ def parse_receipts(scannedReceipts):
         processed_receipt = {
             "address": re.sub(r'~', ';', address),
             "items": parse_items(items),
-            "date": date
+            "date": date,
+            "source": receipt["source"]
         }
         ret.append(processed_receipt)
     
@@ -124,6 +130,7 @@ def parse_receipts(scannedReceipts):
 
 
 def filter_receipts(scannedReceipts):
+    # TODO: here if items are empty send rabbit message
     return [x for x in scannedReceipts if x['items']]
 
 
