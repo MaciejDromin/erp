@@ -122,8 +122,11 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
                 splitted_date = source[:source.find("/")].split("-")
                 date = "{}-{}-{}".format(splitted_date[0], splitted_date[1], "01")
 
-            address = re.search(self.ADDRESS_PATTERN, preprocessed).group()
-            address = re.sub(r'P[\w\s]+Y', '', address)
+            address = re.search(self.ADDRESS_PATTERN, preprocessed)
+            if address == None:
+                # TODO: we have an issue
+                continue
+            address = re.sub(r'P[\w\s]+Y', '', address.group())
             preprocessed = preprocessed[len(address):]
             items = re.findall(self.ITEM_PATTERN, preprocessed)
             processed_receipt = {

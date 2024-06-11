@@ -17,7 +17,7 @@ def unpack_archive(filename):
     tar_file.extractall(TMP_DIRECTORY)
     tar_file.close()
     extracted_dir = filename[:-7]
-    return [extracted_dir + "/" + f for f in os.listdir(extracted_dir) if 'jpg' in f]
+    return [extracted_dir + "/" + f for f in os.listdir(extracted_dir)]
 
 def clean_directories():
     for filename in os.listdir(TMP_DIRECTORY):
