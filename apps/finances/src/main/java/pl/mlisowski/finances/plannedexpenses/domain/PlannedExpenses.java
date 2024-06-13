@@ -7,8 +7,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,7 +42,7 @@ public class PlannedExpenses extends BaseEntity {
     @Builder.Default
     private PlannedExpensesStatus plannedExpensesStatus = PlannedExpensesStatus.PLANNED;
 
-    private ZonedDateTime finalizedDate;
+    private LocalDateTime finalizedDate;
     private int plannedYear;
     private Month plannedMonth;
 

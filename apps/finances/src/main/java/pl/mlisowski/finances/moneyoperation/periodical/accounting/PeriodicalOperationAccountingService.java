@@ -1,9 +1,9 @@
 package pl.mlisowski.finances.moneyoperation.periodical.accounting;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class PeriodicalOperationAccountingService {
     }
 
     private MoneyOperation convertToMoneyOperation(PeriodicalMoneyOperaion periodicalMoneyOperaion) {
-        ZonedDateTime effectiveDate = ZonedDateTime.now(ZoneOffset.UTC);
+        LocalDateTime effectiveDate = LocalDateTime.now(ZoneOffset.UTC);
         return MoneyOperation.builder()
                 .amount(periodicalMoneyOperaion.getAmount().getAmount())
                 .effectiveDate(effectiveDate)

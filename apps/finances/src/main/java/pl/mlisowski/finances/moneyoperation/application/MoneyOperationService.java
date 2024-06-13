@@ -1,7 +1,7 @@
 package pl.mlisowski.finances.moneyoperation.application;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class MoneyOperationService {
     }
 
     private MoneyOperation createObject(MoneyOperationCreationDto creation) {
-        ZonedDateTime effectiveDate = ZonedDateTime.now(ZoneOffset.UTC);
+        LocalDateTime effectiveDate = LocalDateTime.now(ZoneOffset.UTC);
         return MoneyOperation.builder()
                 .amount(creation.getAmount().getValue())
                 .effectiveDate(effectiveDate)
@@ -63,7 +63,7 @@ public class MoneyOperationService {
     }
 
     private MoneyOperation createFromPlannedExpense(PlannedExpenses plannedExpenses) {
-        ZonedDateTime effectiveDate = ZonedDateTime.now(ZoneOffset.UTC);
+        LocalDateTime effectiveDate = LocalDateTime.now(ZoneOffset.UTC);
         return MoneyOperation.builder()
                 .amount(plannedExpenses.getActualAmount().getAmount())
                 .effectiveDate(effectiveDate)
