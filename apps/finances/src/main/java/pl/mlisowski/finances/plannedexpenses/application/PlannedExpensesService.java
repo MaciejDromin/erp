@@ -1,7 +1,7 @@
 package pl.mlisowski.finances.plannedexpenses.application;
 
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -78,7 +78,7 @@ public class PlannedExpensesService {
 
     private PlannedExpenses updateForAbandon(PlannedExpenses plannedExpenses) {
         plannedExpenses.setPlannedExpensesStatus(PlannedExpensesStatus.ABANDONED);
-        plannedExpenses.setFinalizedDate(ZonedDateTime.now(ZoneOffset.UTC));
+        plannedExpenses.setFinalizedDate(LocalDateTime.now(ZoneOffset.UTC));
         return plannedExpenses;
     }
 
@@ -90,7 +90,7 @@ public class PlannedExpensesService {
 
     private PlannedExpenses updateForCompletion(PlannedExpenses plannedExpenses, PlannedExpensesCompletionDto completion) {
         plannedExpenses.setActualAmount(completion.getActualAmount().getValue());
-        plannedExpenses.setFinalizedDate(ZonedDateTime.now(ZoneOffset.UTC));
+        plannedExpenses.setFinalizedDate(LocalDateTime.now(ZoneOffset.UTC));
         plannedExpenses.setPlannedExpensesStatus(PlannedExpensesStatus.COMPLETED);
         return plannedExpenses;
     }

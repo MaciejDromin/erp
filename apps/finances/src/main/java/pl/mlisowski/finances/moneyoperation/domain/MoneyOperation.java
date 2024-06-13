@@ -9,8 +9,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +35,7 @@ public class MoneyOperation extends BaseEntity {
     private String currency;
     private String operationDescription;
 
-    private ZonedDateTime effectiveDate;
+    private LocalDateTime effectiveDate;
 
     @Enumerated(EnumType.STRING)
     private Month effectiveMonth;

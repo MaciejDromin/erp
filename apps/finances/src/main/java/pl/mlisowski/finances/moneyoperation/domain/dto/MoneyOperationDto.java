@@ -1,7 +1,7 @@
 package pl.mlisowski.finances.moneyoperation.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
 import pl.mlisowski.finances.common.dto.AmountDto;
@@ -16,8 +16,8 @@ public class MoneyOperationDto {
     AmountDto amount;
     String operationDescription;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm Z")
-    ZonedDateTime effectiveDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+    LocalDateTime effectiveDate;
     MoneyOperationType operationType;
     OperationCategoryDto operationCategory;
 
