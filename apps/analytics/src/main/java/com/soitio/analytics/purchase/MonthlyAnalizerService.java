@@ -7,7 +7,7 @@ import com.soitio.analytics.purchase.dto.PurchaseToAnalyzeDto;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class MonthlyAnalizerService {
 
     public MonthlyPurchaseStatisticsDto calculateMonthlyStats(List<PurchaseToAnalyzeDto> purchases) {
         MonthlyPurchaseStatisticsDto stats = new MonthlyPurchaseStatisticsDto();
-        LocalDate date = this.getDate(purchases);
+        LocalDateTime date = this.getDate(purchases);
         stats.setDate(date);
         stats.setMonth(date.getMonth());
         calculateAndSet(stats::setMin, () -> this.calculateMin(purchases));
@@ -33,7 +33,7 @@ public class MonthlyAnalizerService {
         return stats;
     }
 
-    private LocalDate getDate(List<PurchaseToAnalyzeDto> purchases) {
+    private LocalDateTime getDate(List<PurchaseToAnalyzeDto> purchases) {
         return purchases.stream()
                 .map(PurchaseToAnalyzeDto::getDate)
                 .findFirst() // TODO: Throw dedicated exception

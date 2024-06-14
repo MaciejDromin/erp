@@ -3,6 +3,7 @@ package com.soitio.analytics.purchase.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,6 @@ public class MonthlyPurchaseStatisticsDto {
     private double averageItemPerPurchase;
     private List<PurchaseStatisticsDto> purchases;
     private Month month;
-    private LocalDate date;
+    private LocalDateTime date;
 
 }
