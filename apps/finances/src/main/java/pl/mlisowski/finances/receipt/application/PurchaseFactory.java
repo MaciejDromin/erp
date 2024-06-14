@@ -28,7 +28,7 @@ public class PurchaseFactory {
                         .map(PurchaseItem::getPrice)
                         .reduce(BigDecimal.ZERO, BigDecimal::add))
                 .currency("PLN") // TODO: Make this dynamic
-                .date(receipt.getDate())
+                .date(receipt.getDate().atStartOfDay())
                 .source(receipt.getSource())
                 .build();
         purchase.setPurchaseItems(items);

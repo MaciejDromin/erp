@@ -1,12 +1,11 @@
 package pl.mlisowski.finances.receipt.statistics.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,7 @@ public class MonthlyStatistics extends BaseEntity {
     private List<PurchaseStatistics> purchases = new ArrayList<>();
     private Month month;
     private int year;
-    private LocalDate date;
+    private LocalDateTime date;
 
     public void addPurchaseStatistics(PurchaseStatistics purchaseStatistics) {
         if (!this.purchases.contains(purchaseStatistics)) {

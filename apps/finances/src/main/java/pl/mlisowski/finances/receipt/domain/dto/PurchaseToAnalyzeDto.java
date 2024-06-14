@@ -1,7 +1,7 @@
 package pl.mlisowski.finances.receipt.domain.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ public class PurchaseToAnalyzeDto {
     private String id;
     private BigDecimal amount;
     private String currency;
-    private LocalDate date;
+    private LocalDateTime date;
     private List<PurchaseItemToAnalyzeDto> items;
 
 }
