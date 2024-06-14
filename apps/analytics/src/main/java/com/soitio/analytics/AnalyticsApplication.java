@@ -8,11 +8,11 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableFeignClients(basePackages = {
     "com.soitio.analytics",
-//    "com.soitio.selfregister"
+    "com.soitio.selfregister"
 })
 @ComponentScan(basePackages = {
     "com.soitio.analytics",
-//    "com.soitio.selfregister"
+    "com.soitio.selfregister"
 })
 public class AnalyticsApplication {
 

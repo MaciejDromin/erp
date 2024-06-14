@@ -9,12 +9,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableFeignClients(basePackages = {
     "pl.mlisowski.finances",
-//    "com.soitio.selfregister"
+    "com.soitio.selfregister"
 })
 @EnableScheduling
 @ComponentScan(basePackages = {
     "pl.mlisowski.finances",
-//    "com.soitio.selfregister"
+    "com.soitio.selfregister"
 })
 public class FinancesApplication {
 
