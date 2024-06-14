@@ -36,5 +36,6 @@ EXPOSE 3000
 
 ENV PORT 3000
 ENV ORIGIN "http://soitio-erp.com:8000"
+ENV BODY_SIZE_LIMIT 100000000
 
 CMD ["node", "build"]

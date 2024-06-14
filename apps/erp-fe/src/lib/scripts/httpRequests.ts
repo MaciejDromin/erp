@@ -16,4 +16,19 @@ const unsecuredExternalApiRequest = async (url: string, method: HttpMethods, bod
     return ret
 }
 
-export { unsecuredExternalApiRequest }
+const unsecuredExternalApiRequestFileUpload = async (url: string, method: HttpMethods, body: any) => {
+    const ret = await fetch(url, {
+        method: method,
+        body: body,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'multipart/form-data'
+        }
+    }).catch(e => {
+        console.log(e)
+        return new Response(null, {status: 503})
+    })
+    return ret
+}
+
+export { unsecuredExternalApiRequest, unsecuredExternalApiRequestFileUpload  }

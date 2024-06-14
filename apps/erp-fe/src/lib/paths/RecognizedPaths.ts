@@ -73,6 +73,11 @@ const RECOGNIZED_PATHS:{ [key:string]:SidebarItem } = {
                 subPaths: []
             }
         ]
+    },
+    "purchase-scanner": {
+        name: "Purchase Scanner",
+        path: "/purchase-scanner",
+        subPaths: []
     }
 }
 
