@@ -1,10 +1,10 @@
-import pysftp
+from fabric import Connection
 import configs
 
 def archive_receipts(filename):
-    cnopts = pysftp.CnOpts()
-    cnopts.hostkeys = None
-    with pysftp.Connection(configs.SFTP_HOST, username=configs.SFTP_USERNAME,
-                           password=configs.SFTP_PASSWORD, port=2222, cnopts=cnopts) as sftp:
-        with sftp.cd('/data'):
-            sftp.put(filename)
+    Connection(host=configs.SFTP_HOST, user=configs.SFTP_USERNAME, port=configs.SFTP_PORT,
+               connect_kwargs={
+                   "password": configs.SFTP_PASSWORD,
+                   "look_for_keys": False,
+                   "allow_agent": False
+                }).put(filename, remote="/data")
