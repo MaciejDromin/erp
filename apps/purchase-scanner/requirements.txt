@@ -1,11 +1,11 @@
 fastapi==0.111.0
 python-multipart==0.0.9
-pysftp==0.2.9
+fabric==3.2.2
 pika==1.3.2
 aiofiles==23.2.1
 imutils==0.5.4
 numpy==1.26.4
-opencv-python-headless==4.9.0.80
+opencv-python-headless==4.10.0.82
 regex==2024.4.16
 pytesseract==0.3.10
 scipy==1.11.1

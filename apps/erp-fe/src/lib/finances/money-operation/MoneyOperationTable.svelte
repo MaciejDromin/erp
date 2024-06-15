@@ -22,8 +22,8 @@
                 {#each data.content as moneyOperation}
                     <tr>
                         <td>{moneyOperation.uuid}</td>
-                        <td>{moneyOperation.operationCategory.operationType}</td>
-                        <td>{moneyOperation.operationCategory.operationName}</td>
+                        <td>{moneyOperation.operationType}</td>
+                        <td>{moneyOperation.operationCategory === null ? "EMPTY" : moneyOperation.operationCategory.operationName}</td>
                         <td>{moneyOperation.operationDescription}</td>
                         <td>{moneyOperation.amount.value}</td>
                         <td>{moneyOperation.amount.currencyCode}</td>

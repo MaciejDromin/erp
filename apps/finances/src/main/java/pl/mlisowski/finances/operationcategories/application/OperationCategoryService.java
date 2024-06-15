@@ -41,6 +41,7 @@ public class OperationCategoryService {
     }
 
     public OperationCategoryDto from(OperationCategory category) {
+        if (category == null) return null;
         return OperationCategoryDto.builder()
                 .uuid(category.getUuid())
                 .operationName(category.getOperationName())
