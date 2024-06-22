@@ -82,6 +82,12 @@ services:
       - erp-consul
       - erp-mongodb
     restart: unless-stopped
+  dashboard:
+    image: "erp/dashboard:latest"
+    depends_on:
+      - erp-mongodb
+      - erp-consul
+    restart: unless-stopped
   rabbit:
     image: "rabbitmq:3.13-management"
     volumes:
