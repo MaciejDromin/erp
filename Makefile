@@ -29,7 +29,12 @@ planner: self-register-quarkus
 purchase-scanner:
 	cd apps/purchase-scanner; podman build -f docker/Dockerfile -t erp/purchase-scanner:latest .
 
-all: analytics finances erp-fe inventory planner purchase-scanner
+dashboard: self-register-quarkus
+	cd apps/dashboard; export JAVA_HOME=/usr/lib/jvm/java-21-openjdk; \
+		./gradlew build -Dquarkus.package.type=native -Dquarkus.profile=docker; \
+		podman build -f src/main/docker/Dockerfile.native -t erp/dashboard:latest .
+
+all: analytics finances erp-fe inventory planner purchase-scanner dashboard
 
 clean:
 	cd libs/self-register-quarkus; ./gradlew clean
@@ -38,3 +43,4 @@ clean:
 	cd apps/finances; ./gradlew clean
 	cd apps/inventory; ./gradlew clean
 	cd apps/planner; ./gradlew clean
+	cd apps/dashboard; ./gradlew clean
