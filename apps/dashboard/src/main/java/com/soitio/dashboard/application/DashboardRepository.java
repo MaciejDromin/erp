@@ -1,6 +1,7 @@
 package com.soitio.dashboard.application;
 
 import com.soitio.dashboard.domain.Dashboard;
+import com.soitio.dashboard.domain.DashboardType;
 import com.soitio.dashboard.domain.dto.DashboardCreationDto;
 import com.soitio.dashboard.domain.dto.DashboardDto;
 import com.soitio.dashboard.widget.application.WidgetRepository;
@@ -27,11 +28,17 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
     }
 
     public DashboardDto getDashboard(String dashboardId) {
-        return null;
+        return findByIdOptional(new ObjectId(dashboardId))
+                .map(this::to)
+                .orElseThrow(); // TODO: Throw some specific exception with reason what went wrong
     }
 
+    /* Finds default widget for defined type */
     public DashboardDto getDashboardForType(String type) {
-        return null;
+        return find("type = ?1", DashboardType.valueOf(type))
+                .firstResultOptional()
+                .map(this::to)
+                .orElseThrow(); // TODO: Throw some specific exception with reason what went wrong
     }
 
     public void createDashboard(DashboardCreationDto dashboardCreation) {
