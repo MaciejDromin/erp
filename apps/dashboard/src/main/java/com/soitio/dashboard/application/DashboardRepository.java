@@ -6,4 +6,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
+
+    public Object getDashboard(String dashboardId) {
+        return null;
+    }
+
+    public Object getDashboardForType(String type) {
+        return null;
+    }
+
 }

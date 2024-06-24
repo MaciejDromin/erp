@@ -1,7 +1,7 @@
-package com.soitio.dashboard.domain;
+package com.soitio.dashboard.widget.definition.domain;
 
+import com.soitio.dashboard.common.WidgetDomain;
 import io.quarkus.mongodb.panache.common.MongoEntity;
-import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,19 +16,14 @@ import org.bson.types.ObjectId;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@MongoEntity(collection = "Dashboard")
+@MongoEntity(collection = "WidgetDefinition")
 @EqualsAndHashCode(of = "id")
-public class Dashboard {
+public class WidgetDefinition {
 
     private ObjectId id;
     private String name;
-
-    @Builder.Default
-    private Set<ObjectId> widgets = new HashSet<>();
-
-    private DashboardType type;
-
-    @Builder.Default
-    private boolean defaultForType = false;
+    private String datasource;
+    private Set<Filter> availableFilters;
+    private WidgetDomain widgetDomain;
 
 }
