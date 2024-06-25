@@ -31,4 +31,7 @@ public class Dashboard {
     @Builder.Default
     private boolean defaultForType = false;
 
+    public void addWidget(ObjectId id) {
+        this.widgets.add(id);
+    }
 }

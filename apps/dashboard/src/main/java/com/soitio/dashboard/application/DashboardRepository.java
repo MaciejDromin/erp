@@ -5,13 +5,11 @@ import com.soitio.dashboard.domain.DashboardType;
 import com.soitio.dashboard.domain.dto.DashboardCreationDto;
 import com.soitio.dashboard.domain.dto.DashboardDto;
 import com.soitio.dashboard.widget.application.WidgetRepository;
-import com.soitio.dashboard.widget.domain.Widget;
+import com.soitio.dashboard.widget.domain.dto.WidgetCreationDto;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
@@ -42,15 +40,10 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
     }
 
     public void createDashboard(DashboardCreationDto dashboardCreation) {
-        List<Widget> widgetsCreated = widgetRepository.createWidgets(dashboardCreation.getWidgets());
-        Set<ObjectId> widgetIds = widgetsCreated.stream()
-                .map(Widget::getId)
-                .collect(Collectors.toSet());
-
         Optional<Dashboard> defaultDashboard = find("type = ?1", dashboardCreation.getType()).firstResultOptional();
 
         persist(Dashboard.builder()
-                .widgets(widgetIds)
+                .widgets(widgetRepository.createWidgets(dashboardCreation.getWidgets()))
                 .name(dashboardCreation.getName())
                 .type(dashboardCreation.getType())
                 .defaultForType(defaultDashboard.isEmpty())
@@ -67,7 +60,13 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
                 .name(dashboard.getName())
                 .type(dashboard.getType())
                 .defaultForType(dashboard.isDefaultForType())
-                // .widgets() TODO
+                // .widgets() TODO: implement this for widgets
                 .build();
+    }
+
+    public void createWidgetInDashboard(WidgetCreationDto widgetCreation, String dashboardId) {
+        Dashboard dashboard = findById(new ObjectId(dashboardId));
+        dashboard.addWidget(widgetRepository.createWidget(widgetCreation));
+        update(dashboard);
     }
 }
