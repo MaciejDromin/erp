@@ -10,7 +10,11 @@ import java.util.List;
 public class WidgetRepository implements PanacheMongoRepository<Widget> {
 
     public List<Widget> createWidgets(List<WidgetCreationDto> widgets) {
-        return List.of();
+        return List.of(); // TODO: Implement this method
+    }
+
+    public void createWidget(WidgetCreationDto widgetCreation) {
+        // TODO: Implement this method
     }
 
 }
