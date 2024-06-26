@@ -1,5 +1,6 @@
 package com.soitio.dashboard.domain;
 
+import com.soitio.dashboard.common.Position;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +31,8 @@ public class Dashboard {
 
     @Builder.Default
     private boolean defaultForType = false;
+
+    private Position availableWidgetPosition;
 
     public void addWidget(ObjectId id) {
         this.widgets.add(id);

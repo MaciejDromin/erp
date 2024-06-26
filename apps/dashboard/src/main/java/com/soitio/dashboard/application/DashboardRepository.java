@@ -1,5 +1,6 @@
 package com.soitio.dashboard.application;
 
+import com.soitio.dashboard.common.Position;
 import com.soitio.dashboard.domain.Dashboard;
 import com.soitio.dashboard.domain.DashboardType;
 import com.soitio.dashboard.domain.dto.DashboardCreationDto;
@@ -43,15 +44,16 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
         Optional<Dashboard> defaultDashboard = find("type = ?1", dashboardCreation.getType()).firstResultOptional();
 
         persist(Dashboard.builder()
-                .widgets(widgetRepository.createWidgets(dashboardCreation.getWidgets()))
                 .name(dashboardCreation.getName())
                 .type(dashboardCreation.getType())
                 .defaultForType(defaultDashboard.isEmpty())
+                .availableWidgetPosition(new Position(0, 0))
                 .build());
     }
 
     public void setDashboardDefault(String dashboardId) {
-        update("defaultForType = ?1 where _id = ?2", true, new ObjectId(dashboardId));
+        update("defaultForType", true).where("_id", new ObjectId(dashboardId));
+//        update("defaultForType = ?1 where _id = ?2", true, new ObjectId(dashboardId));
     }
 
     private DashboardDto to(Dashboard dashboard) {
@@ -60,13 +62,20 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
                 .name(dashboard.getName())
                 .type(dashboard.getType())
                 .defaultForType(dashboard.isDefaultForType())
-                // .widgets() TODO: implement this for widgets
+                .widgets(widgetRepository.getWidgetsByIds(dashboard.getWidgets()))
                 .build();
     }
 
     public void createWidgetInDashboard(WidgetCreationDto widgetCreation, String dashboardId) {
         Dashboard dashboard = findById(new ObjectId(dashboardId));
-        dashboard.addWidget(widgetRepository.createWidget(widgetCreation));
+        Position widgetPosition = dashboard.getAvailableWidgetPosition();
+        dashboard.addWidget(widgetRepository.createWidget(widgetCreation, widgetPosition));
+        dashboard.setAvailableWidgetPosition(determineNextPosition(widgetPosition));
         update(dashboard);
+    }
+
+    private Position determineNextPosition(Position position) {
+        if (position.x() == 2) return new Position(0, position.y() + 1);
+        return new Position(position.x() + 1, position.y());
     }
 }
