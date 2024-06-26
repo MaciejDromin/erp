@@ -1,17 +1,16 @@
 package com.soitio.dashboard.application;
 
+import com.soitio.dashboard.common.Position;
 import com.soitio.dashboard.domain.Dashboard;
 import com.soitio.dashboard.domain.DashboardType;
 import com.soitio.dashboard.domain.dto.DashboardCreationDto;
 import com.soitio.dashboard.domain.dto.DashboardDto;
 import com.soitio.dashboard.widget.application.WidgetRepository;
-import com.soitio.dashboard.widget.domain.Widget;
+import com.soitio.dashboard.widget.domain.dto.WidgetCreationDto;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
@@ -42,23 +41,18 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
     }
 
     public void createDashboard(DashboardCreationDto dashboardCreation) {
-        List<Widget> widgetsCreated = widgetRepository.createWidgets(dashboardCreation.getWidgets());
-        Set<ObjectId> widgetIds = widgetsCreated.stream()
-                .map(Widget::getId)
-                .collect(Collectors.toSet());
-
         Optional<Dashboard> defaultDashboard = find("type = ?1", dashboardCreation.getType()).firstResultOptional();
 
         persist(Dashboard.builder()
-                .widgets(widgetIds)
                 .name(dashboardCreation.getName())
                 .type(dashboardCreation.getType())
                 .defaultForType(defaultDashboard.isEmpty())
+                .availableWidgetPosition(new Position(0, 0))
                 .build());
     }
 
     public void setDashboardDefault(String dashboardId) {
-        update("defaultForType = ?1 where _id = ?2", true, new ObjectId(dashboardId));
+        update("defaultForType", true).where("_id", new ObjectId(dashboardId));
     }
 
     private DashboardDto to(Dashboard dashboard) {
@@ -67,7 +61,20 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
                 .name(dashboard.getName())
                 .type(dashboard.getType())
                 .defaultForType(dashboard.isDefaultForType())
-                // .widgets() TODO
+                .widgets(widgetRepository.getWidgetsByIds(dashboard.getWidgets()))
                 .build();
+    }
+
+    public void createWidgetInDashboard(WidgetCreationDto widgetCreation, String dashboardId) {
+        Dashboard dashboard = findById(new ObjectId(dashboardId));
+        Position widgetPosition = dashboard.getAvailableWidgetPosition();
+        dashboard.addWidget(widgetRepository.createWidget(widgetCreation, widgetPosition));
+        dashboard.setAvailableWidgetPosition(determineNextPosition(widgetPosition));
+        update(dashboard);
+    }
+
+    private Position determineNextPosition(Position position) {
+        if (position.x() == 2) return new Position(0, position.y() + 1);
+        return new Position(position.x() + 1, position.y());
     }
 }
