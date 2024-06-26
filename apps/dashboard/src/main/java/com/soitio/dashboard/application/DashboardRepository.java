@@ -53,7 +53,6 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
 
     public void setDashboardDefault(String dashboardId) {
         update("defaultForType", true).where("_id", new ObjectId(dashboardId));
-//        update("defaultForType = ?1 where _id = ?2", true, new ObjectId(dashboardId));
     }
 
     private DashboardDto to(Dashboard dashboard) {
