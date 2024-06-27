@@ -1,5 +1,5 @@
 <script>
-  TODO: get items on initial dashboard open
+  // TODO: get items on initial dashboard open
   let items = [
     { label: 'Item 1', x: 0, y: 0 },
     { label: 'Item 4', x: 0, y: 1 },
