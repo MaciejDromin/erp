@@ -138,14 +138,16 @@ y: item.y }));
   }
 
   const isBetween = (itemPos, pointsPos) => {
-    if (pointsPos.start.y === pointsPos.end.y) {
-      if (itemPos.x > pointsPos.start.x && itemPos.x <= pointsPos.end.x) return true;
+    if (itemPos.y > pointsPos.end.y) return false;
+    if (itemPos.y === pointsPos.start.y) {
+      if (itemPos.x >= pointsPos.start.x) return true;
       return false;
     }
-    if (itemPos.y === pointsPos.start.y && itemPos.x > pointsPos.start.x) return true;
-    else if (itemPos.y === pointsPos.start.y) return false;
-    if (itemPos.y <= pointsPos.end.y && itemPos.x <= pointsPos.end.x) return true;
-    return false;
+    if (itemPos.y === pointsPos.end.y) {
+      if (itemPos.x <= pointsPos.end.x) return true;
+      return false;
+    }
+    return true;
   }
 
   const isNeighbour = (itemX, itemY, targetX, targetY) => {
