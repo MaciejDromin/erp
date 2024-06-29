@@ -5,6 +5,7 @@ import com.soitio.dashboard.domain.Dashboard;
 import com.soitio.dashboard.domain.DashboardType;
 import com.soitio.dashboard.domain.dto.DashboardCreationDto;
 import com.soitio.dashboard.domain.dto.DashboardDto;
+import com.soitio.dashboard.domain.dto.DashboardForSelectionDto;
 import com.soitio.dashboard.widget.application.WidgetRepository;
 import com.soitio.dashboard.widget.domain.dto.WidgetCreationDto;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
@@ -76,5 +77,19 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
     private Position determineNextPosition(Position position) {
         if (position.x() == 2) return new Position(0, position.y() + 1);
         return new Position(position.x() + 1, position.y());
+    }
+
+    public List<DashboardForSelectionDto> getDashboardForSelection(String type) {
+        return find("type = ?1", DashboardType.valueOf(type)).stream()
+                .map(this::toSelection)
+                .toList();
+    }
+
+    private DashboardForSelectionDto toSelection(Dashboard dashboard) {
+        return DashboardForSelectionDto.builder()
+                .id(dashboard.getId().toString())
+                .name(dashboard.getName())
+                .defaultForType(dashboard.isDefaultForType())
+                .build();
     }
 }
