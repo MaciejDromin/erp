@@ -1,6 +1,6 @@
 <script>
-    import Dashboard from "$lib/Dashboard.svelte";
+    import DashboardWrapper from "$lib/DashboardWrapper.svelte";
 </script>
 <div class="text-primary-content w-full h-full">
-  <Dashboard />
+  <DashboardWrapper url="/dashboards/types/FINANCES" domain="FINANCES"/>
 </div>

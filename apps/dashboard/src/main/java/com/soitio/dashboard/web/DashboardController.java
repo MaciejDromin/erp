@@ -3,6 +3,7 @@ package com.soitio.dashboard.web;
 import com.soitio.dashboard.application.DashboardRepository;
 import com.soitio.dashboard.domain.dto.DashboardCreationDto;
 import com.soitio.dashboard.domain.dto.DashboardDto;
+import com.soitio.dashboard.domain.dto.DashboardForSelectionDto;
 import com.soitio.dashboard.widget.domain.dto.WidgetCreationDto;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
@@ -33,6 +34,12 @@ public class DashboardController {
     @Path("/types/{type}")
     public DashboardDto getDashboardForType(@PathParam("type") String type) {
         return dashboardRepository.getDashboardForType(type);
+    }
+
+    @GET
+    @Path("/types/{type}/selection")
+    public List<DashboardForSelectionDto> getDashboardForSelection(@PathParam("type") String type) {
+        return dashboardRepository.getDashboardForSelection(type);
     }
 
     @POST

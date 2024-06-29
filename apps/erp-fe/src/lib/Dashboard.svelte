@@ -1,17 +1,12 @@
 <script>
   // TODO: get items on initial dashboard open
-  let items = [
-    { label: 'Item 1', x: 0, y: 0 },
-    { label: 'Item 4', x: 0, y: 1 },
-    { label: 'Item 2', x: 1, y: 0 },
-    { label: 'Item 3', x: 2, y: 0 },
-    { label: 'Item 6', x: 1, y: 1 },
-    // ... other items with their respective coordinates
-  ];
+  
+  export let data
 
+  let items = data.widgets
+  
   const onDragStart = (event, item) => {
-    event.dataTransfer.setData('text/plain', JSON.stringify({ label: item.label, x: item.x, 
-y: item.y }));
+    event.dataTransfer.setData('text/plain', JSON.stringify(item));
   };
 
   const onDrop = (event) => {
@@ -56,33 +51,33 @@ y: item.y }));
 
   const updateItems = (data, targetColumn, targetRow) => {
     // Update the items array based on user drag-and-drop actions
-    if (isNeighbour(data.x, data.y, targetColumn, targetRow)) {
+    if (isNeighbour(data.position.x, data.position.y, targetColumn, targetRow)) {
       items.forEach((item) => {
-        if (item.label === data.label) {
-          item.x = targetColumn
-          item.y = targetRow
+        if (item.id === data.id) {
+          item.position.x = targetColumn
+          item.position.y = targetRow
           return;
         }
-        if (item.x === targetColumn && item.y === targetRow) {
-          item.x = data.x;
-          item.y = data.y;
+        if (item.position.x === targetColumn && item.position.y === targetRow) {
+          item.position.x = data.position.x;
+          item.position.y = data.position.y;
           return;
         }
       })
       items = items;
       return;
     }
-    if ((targetRow === data.y && data.x < targetColumn)
-      || targetRow > data.y) {
+    if ((targetRow === data.position.y && data.position.x < targetColumn)
+      || targetRow > data.position.y) {
       items.forEach((item) => {
-        if (item.label === data.label) {
-          item.x = targetColumn
-          item.y = targetRow
+        if (item.id === data.id) {
+          item.position.x = targetColumn
+          item.position.y = targetRow
           return;
         }
-        if (item.x === targetColumn && item.y === targetRow) {
-          item.x = data.x;
-          item.y = data.y;
+        if (item.position.x === targetColumn && item.position.y === targetRow) {
+          item.position.x = data.position.x;
+          item.position.y = data.position.y;
           return;
         }
       })
@@ -90,26 +85,28 @@ y: item.y }));
       return;
     }
     items.forEach((item) => {
-      if (item.label === data.label) {
-        item.x = targetColumn
-        item.y = targetRow
+      console.log("here")
+      if (item.id === data.id) {
+        item.position.x = targetColumn
+        item.position.y = targetRow
         return;
       }
-      if (item.y === targetRow && item.x === targetColumn) {
-        if (isNeighbour(item.x, item.y, data.x, data.y)) {
-          item.x = data.x;
-          item.y = data.y;
+      if (item.position.y === targetRow && item.position.x === targetColumn) {
+        if (isNeighbour(item.position.x, item.position.y, data.position.x, data.position.y)) {
+          item.position.x = data.position.x;
+          item.position.y = data.position.y;
           return;
         }
-        const position = determineNewPosition(item.y, item.x);
-        item.x = position.x;
-        item.y = position.y;
+        const position = determineNewPosition(item.position.y, item.position.x);
+        item.position.x = position.x;
+        item.position.y = position.y;
         return;
       }
-      if (isBetween({ x: item.x, y: item.y }, positionsInOrder(data.x, data.y, targetColumn, targetRow))) {
-        const position = determineNewPosition(item.y, item.x);
-        item.x = position.x;
-        item.y = position.y;
+      if (isBetween({ x: item.position.x, y: item.position.y },
+          positionsInOrder(data.position.x, data.position.y, targetColumn, targetRow))) {
+        const position = determineNewPosition(item.position.y, item.position.x);
+        item.position.x = position.x;
+        item.position.y = position.y;
       }
     })
     items = items;
@@ -139,6 +136,7 @@ y: item.y }));
 
   const isBetween = (itemPos, pointsPos) => {
     if (itemPos.y > pointsPos.end.y) return false;
+    if (itemPos.y < pointsPos.start.y) return false;
     if (itemPos.y === pointsPos.start.y) {
       if (itemPos.x >= pointsPos.start.x) return true;
       return false;
@@ -169,9 +167,9 @@ y: item.y }));
 <div class="flex flex-wrap dnd-grid">
   {#each items as item}
     <div draggable={true} on:dragstart={() => onDragStart(event, item)} on:drop={() => 
-onDrop(event)} on:dragover={onDragOver} class="drag-item" style={`grid-column: 
-${item.x + 1}; grid-row: ${item.y + 1}`}>
-      {item.label}
+      onDrop(event)} on:dragover={onDragOver} class="drag-item" style={`grid-column: 
+      ${item.position.x + 1}; grid-row: ${item.position.y + 1}`}>
+      {item.name}
     </div>
   {/each}
 </div>

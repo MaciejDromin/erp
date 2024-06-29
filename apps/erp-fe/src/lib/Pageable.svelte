@@ -16,7 +16,6 @@
         let additionalQuery = search === undefined ? "" : search
         const ret = await apiRequest(endpoint + "?page=" + requestedPage + additionalQuery, HttpMethods.GET)
         data = await ret.json()
-        console.log(data)
         maxPage = data.totalPages
     }
 
