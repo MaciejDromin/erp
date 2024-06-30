@@ -5,6 +5,7 @@ import com.soitio.dashboard.domain.dto.DashboardCreationDto;
 import com.soitio.dashboard.domain.dto.DashboardDto;
 import com.soitio.dashboard.domain.dto.DashboardForSelectionDto;
 import com.soitio.dashboard.widget.domain.dto.WidgetCreationDto;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
@@ -12,6 +13,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 
 @Path("/dashboards")
 @RequiredArgsConstructor
@@ -57,6 +59,12 @@ public class DashboardController {
     @Path("/{dashboardId}/widgets")
     public void createWidget(@PathParam("dashboardId") String dashboardId, WidgetCreationDto widgetCreation) {
         dashboardRepository.createWidgetInDashboard(widgetCreation, dashboardId);
+    }
+
+    @DELETE
+    @Path("/{dashboardId}")
+    public void deleteDashboard(@PathParam("dashboardId") String dashboardId) {
+        dashboardRepository.deleteById(new ObjectId(dashboardId));
     }
 
 }

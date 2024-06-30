@@ -1,9 +1,14 @@
 <script>
-  // TODO: get items on initial dashboard open
+  import Modal from "$lib/Modal.svelte";
+  import AddWidget from "$lib/dashboard/AddWidget.svelte"
+  import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome'
+  import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
+  import { apiRequest } from './scripts/uiHttpRequests.ts'
+  import { HttpMethods } from "./types/httpMethods";
   
   export let data
 
-  let items = data.widgets
+  export let items
   
   const onDragStart = (event, item) => {
     event.dataTransfer.setData('text/plain', JSON.stringify(item));
@@ -162,16 +167,31 @@
     }
     return { x: itemX + 1, y: itemY }
   }
-</script>
 
-<div class="flex flex-wrap dnd-grid">
-  {#each items as item}
-    <div draggable={true} on:dragstart={() => onDragStart(event, item)} on:drop={() => 
-      onDrop(event)} on:dragover={onDragOver} class="drag-item" style={`grid-column: 
-      ${item.position.x + 1}; grid-row: ${item.position.y + 1}`}>
-      {item.name}
+  const deleteDashboard = async () => {
+    const ret = await apiRequest("/dashboards/" + data.id, HttpMethods.DELETE)
+    location.reload()
+  }
+</script>
+<div class="flex flex-col">
+  <div class="flex justify-between mb-8">
+    <h1 class="text-2xl">{data.name}</h1>
+    <div class="flex flex-row gap-4">
+      <Modal modalId="category_modal" buttonName="Add Widget">
+        <AddWidget dashboardId={data.id} />
+      </Modal>
+      <button class="btn btn-secondary" on:click={() => deleteDashboard()}><FontAwesomeIcon icon={faXmark} /> Delete Dashboard</button>
     </div>
-  {/each}
+  </div>
+  <div class="flex flex-wrap dnd-grid justify-center">
+    {#each items as item}
+      <div draggable={true} on:dragstart={() => onDragStart(event, item)} on:drop={() => 
+        onDrop(event)} on:dragover={onDragOver} class="drag-item" style={`grid-column: 
+        ${item.position.x + 1}; grid-row: ${item.position.y + 1}`}>
+        {item.name}
+      </div>
+    {/each}
+  </div>
 </div>
 <style global>
 .dnd-grid {
