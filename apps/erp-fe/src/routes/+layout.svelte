@@ -5,6 +5,10 @@
     import TopNav from "../lib/TopNav.svelte";
     import calculateBreadcrumbs from "../lib/scripts/calculateBreadcrumbs";
     import { page } from "$app/stores"
+    import '@fortawesome/fontawesome-svg-core/styles.css'
+    import { config } from '@fortawesome/fontawesome-svg-core'
+
+    config.autoAddCss = false
 
     export let data: LayoutData
 </script>
