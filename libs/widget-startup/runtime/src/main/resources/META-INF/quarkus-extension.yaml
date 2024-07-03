@@ -1,0 +1,14 @@
+name: Widget Startup
+#description: Do something useful.
+metadata:
+#  keywords:
+#    - widget-startup
+#  guide: ... # To create and publish this guide, see https://github.com/quarkiverse/quarkiverse/wiki#documenting-your-extension
+#  categories:
+#    - "miscellaneous"
+#  status: "preview"
+  codestart:
+    name: widget-startup
+    languages:
+      - "java"
+    artifact: "com.soitio.widget:widget-startup:codestarts:jar:${project.version}"

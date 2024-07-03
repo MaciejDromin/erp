@@ -1,6 +1,7 @@
 package com.soitio.dashboard.widget.definition.domain;
 
 import com.soitio.dashboard.common.WidgetDomain;
+import com.soitio.widgets.common.domain.Filter;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import org.bson.types.ObjectId;
 @Builder
 @MongoEntity(collection = "WidgetDefinition")
 @EqualsAndHashCode(of = "id")
-public class WidgetDefinition {
+public class WidgetDefinitionEntity {
 
     private ObjectId id;
     private String name;

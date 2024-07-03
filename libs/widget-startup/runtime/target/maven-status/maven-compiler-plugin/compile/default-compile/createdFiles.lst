@@ -1,0 +1,5 @@
+com/soitio/widget/startup/runtime/domain/IWidgetDefinition.class
+com/soitio/widget/startup/runtime/config/WidgetsConfiguration.class
+com/soitio/widget/startup/runtime/listener/ApplicationLifecycleListener.class
+com/soitio/widget/startup/runtime/client/DashboardClient.class
+com/soitio/widget/startup/runtime/domain/IFilter.class

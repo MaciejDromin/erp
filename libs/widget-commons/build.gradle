@@ -1,12 +1,24 @@
 plugins {
     id 'java'
+    id 'java-library'
+    id 'maven-publish'
 }
 
-group = 'com.soitio'
-version = '1.0-SNAPSHOT'
+group = 'com.soitio.widgets'
+version = '1.0.0'
 
 repositories {
+    mavenLocal()
     mavenCentral()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId "${group}"
+            artifact jar
+        }
+    }
 }
 
 dependencies {

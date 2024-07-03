@@ -16,6 +16,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-config-yaml'
 
+    implementation 'com.soitio.widgets:widget-commons:1.0.0'
 
     // SELF DISCOVERY
     implementation 'pl.mlisowski.selfregister:self-register-quarkus:1.0.0'
