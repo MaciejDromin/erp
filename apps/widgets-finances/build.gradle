@@ -11,6 +11,12 @@ repositories {
 dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'com.soitio.widgets:widget-startup:1.0.0-SNAPSHOT'
+    implementation 'io.quarkus:quarkus-config-yaml'
+
+    // SELF DISCOVERY
+    implementation 'pl.mlisowski.selfregister:self-register-quarkus:1.0.0'
+    implementation 'io.quarkus:quarkus-rest-client-jackson'
+
     implementation 'io.quarkus:quarkus-arc'
     testImplementation 'io.quarkus:quarkus-junit5'
 }

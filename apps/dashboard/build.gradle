@@ -20,7 +20,7 @@ dependencies {
 
     // SELF DISCOVERY
     implementation 'pl.mlisowski.selfregister:self-register-quarkus:1.0.0'
-    implementation 'io.quarkus:quarkus-rest-client-reactive-jackson'
+    implementation 'io.quarkus:quarkus-rest-client-jackson'
 
     testImplementation 'io.quarkus:quarkus-junit5'
 

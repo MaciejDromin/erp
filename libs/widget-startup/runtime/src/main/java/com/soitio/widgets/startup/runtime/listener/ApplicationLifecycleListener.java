@@ -6,7 +6,6 @@ import com.soitio.widgets.startup.runtime.domain.IWidgetDefinition;
 import com.soitio.widgets.common.domain.WidgetDefinition;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
-import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
