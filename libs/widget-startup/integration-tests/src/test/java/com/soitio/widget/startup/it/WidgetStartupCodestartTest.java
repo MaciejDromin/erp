@@ -1,4 +1,4 @@
-package com.soitio.widget.startup.it;
+package com.soitio.widgets.startup.it;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -11,7 +11,7 @@ public class WidgetStartupCodestartTest {
     @RegisterExtension
     public static QuarkusCodestartTest codestartTest = QuarkusCodestartTest.builder()
         .languages(Language.JAVA)
-        .setupStandaloneExtensionTest("com.soitio.widget:widget-startup")
+        .setupStandaloneExtensionTest("com.soitio.widgets:widget-startup")
         .build();
 
     /**

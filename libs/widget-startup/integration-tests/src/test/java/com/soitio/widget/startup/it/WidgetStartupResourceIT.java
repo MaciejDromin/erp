@@ -1,4 +1,4 @@
-package com.soitio.widget.startup.it;
+package com.soitio.widgets.startup.it;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 

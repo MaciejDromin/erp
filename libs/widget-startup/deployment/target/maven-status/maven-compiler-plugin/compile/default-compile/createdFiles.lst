@@ -1,3 +1,3 @@
-com/soitio/widget/startup/deployment/WidgetStartupProcessor.class
-com/soitio/widget/startup/deployment/WidgetStartupProcessor$$accessor.class
+com/soitio/widgets/startup/deployment/WidgetStartupProcessor.class
+com/soitio/widgets/startup/deployment/WidgetStartupProcessor$$accessor.class
 META-INF/quarkus-build-steps.list

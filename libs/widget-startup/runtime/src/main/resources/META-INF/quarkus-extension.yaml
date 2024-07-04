@@ -11,4 +11,4 @@ metadata:
     name: widget-startup
     languages:
       - "java"
-    artifact: "com.soitio.widget:widget-startup:codestarts:jar:${project.version}"
+    artifact: "com.soitio.widgets:widget-startup:codestarts:jar:${project.version}"

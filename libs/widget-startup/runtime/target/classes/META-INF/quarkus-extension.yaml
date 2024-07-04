@@ -1,29 +1,14 @@
----
-name: "Widget Startup"
+name: Widget Startup
+#description: Do something useful.
 metadata:
+#  keywords:
+#    - widget-startup
+#  guide: ... # To create and publish this guide, see https://github.com/quarkiverse/quarkiverse/wiki#documenting-your-extension
+#  categories:
+#    - "miscellaneous"
+#  status: "preview"
   codestart:
-    name: "widget-startup"
+    name: widget-startup
     languages:
-    - "java"
-    artifact: "com.soitio.widget:widget-startup:codestarts:jar:1.0.0-SNAPSHOT"
-  built-with-quarkus-core: "3.12.0"
-  minimum-java-version: "21"
-  extension-dependencies:
-  - "io.quarkus:quarkus-arc"
-  - "io.quarkus:quarkus-core"
-  - "io.quarkus:quarkus-rest-client-jackson"
-  - "io.quarkus:quarkus-rest-jackson-common"
-  - "io.quarkus:quarkus-rest-common"
-  - "io.quarkus:quarkus-mutiny"
-  - "io.quarkus:quarkus-smallrye-context-propagation"
-  - "io.quarkus:quarkus-vertx"
-  - "io.quarkus:quarkus-netty"
-  - "io.quarkus:quarkus-virtual-threads"
-  - "io.quarkus:quarkus-jackson"
-  - "io.quarkus:quarkus-jsonp"
-  - "io.quarkus:quarkus-rest-client"
-  - "io.quarkus:quarkus-rest-client-jaxrs"
-  - "io.quarkus:quarkus-smallrye-stork"
-  - "io.quarkus:quarkus-rest-client-config"
-  - "io.quarkus:quarkus-tls-registry"
-artifact: "com.soitio.widget:widget-startup::jar:1.0.0-SNAPSHOT"
+      - "java"
+    artifact: "com.soitio.widgets:widget-startup:codestarts:jar:${project.version}"
