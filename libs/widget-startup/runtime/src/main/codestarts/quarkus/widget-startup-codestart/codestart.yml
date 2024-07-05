@@ -1,0 +1,9 @@
+name: widget-startup-codestart
+ref: widget-startup
+type: code
+tags: extension-codestart
+metadata:
+  title: Widget Startup
+  description: Start coding with Widget Startup
+#  path: /some-path
+#  related-guide-section: TBD

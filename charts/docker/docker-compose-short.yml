@@ -88,6 +88,13 @@ services:
       - erp-mongodb
       - erp-consul
     restart: unless-stopped
+  widgets-finances:
+    image: "erp/widgets-finances:latest"
+    depends_on:
+      - erp-consul
+      - dashboard
+      - finances
+    restart: unless-stopped
   rabbit:
     image: "rabbitmq:3.13-management"
     volumes:

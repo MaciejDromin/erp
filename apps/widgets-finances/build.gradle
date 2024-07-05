@@ -10,25 +10,18 @@ repositories {
 
 dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-    implementation 'io.quarkus:quarkus-rest'
-    implementation 'io.quarkus:quarkus-mongodb-panache'
-    implementation 'io.quarkus:quarkus-rest-jackson'
-    implementation 'io.quarkus:quarkus-arc'
+    implementation 'com.soitio.widgets:widget-startup:1.0.0-SNAPSHOT'
     implementation 'io.quarkus:quarkus-config-yaml'
-
-    implementation 'com.soitio.widgets:widget-commons:1.0.0'
 
     // SELF DISCOVERY
     implementation 'pl.mlisowski.selfregister:self-register-quarkus:1.0.0'
-    implementation 'io.quarkus:quarkus-rest-client-reactive-jackson'
+    implementation 'io.quarkus:quarkus-rest-client-jackson'
 
+    implementation 'io.quarkus:quarkus-arc'
     testImplementation 'io.quarkus:quarkus-junit5'
-
-    compileOnly 'org.projectlombok:lombok:1.18.32'
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
 }
 
-group 'com.soitio'
+group 'com.soitio.widgets'
 version '1.0.0-SNAPSHOT'
 
 java {
