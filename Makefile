@@ -10,8 +10,8 @@ self-register-spring:
 widget-commons:
 	cd libs/widget-commons; ./gradlew build; ./gradlew publishToMavenLocal
 
-widget-startup:
-	cd libs/widget-startup; export JAVA_HOME=/usr/lib/jvm/java-21-openjdk; mvn install
+widget-startup: widget-commons
+	cd libs/widget-startup; export JAVA_HOME=/usr/lib/jvm/java-21-openjdk; mvn install -DskipTests
 
 analytics: self-register-spring
 	cd apps/analytics; export JAVA_HOME=/usr/lib/jvm/java-21-openjdk; ./gradlew build -x test; \
