@@ -5,11 +5,34 @@ import java.util.Set;
 
 public interface IWidgetDefinition {
 
+    /**
+     * Widget name
+     * */
     String name();
+
+    /**
+     * Widget datasource
+     * */
     String datasource();
+
+    /**
+     * Widget filters
+     * */
     Set<IFilter> availableFilters();
+
+    /**
+     * Widget domain
+     * */
     WidgetDomain widgetDomain();
+
+    /**
+     * Widget version
+     * */
     String version();
+
+    /**
+     * Widget unique code
+     * */
     String uniqueCode();
 
 }

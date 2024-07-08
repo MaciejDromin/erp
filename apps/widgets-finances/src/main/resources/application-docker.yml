@@ -13,3 +13,12 @@ service-discovery:
   service-name: widgets-finances
   host: widgets-finances
   port: 8080
+
+widgets:
+  widget-definitions:
+    -
+      name: Total Net Worth
+      datasource: http://widgets-finances:8080/widgets/total-net-worth
+      widget-domain: FINANCES
+      version: v1.0
+      unique-code: FIN001
