@@ -1,7 +1,7 @@
 package com.soitio.dashboard.widget.domain;
 
 import com.soitio.dashboard.common.Position;
-import com.soitio.dashboard.common.WidgetDomain;
+import com.soitio.widgets.common.domain.WidgetDomain;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import java.util.HashMap;
 import java.util.Map;

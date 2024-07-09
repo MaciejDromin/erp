@@ -12,6 +12,9 @@ quarkus:
     selfregister:
       group-id: pl.mlisowski.selfregister
       artifact-id: self-register-quarkus
+    widget-commons:
+      group-id: com.soitio.widgets
+      artifact-id: widget-commons
 
 service-discovery:
   service-name: dashboard

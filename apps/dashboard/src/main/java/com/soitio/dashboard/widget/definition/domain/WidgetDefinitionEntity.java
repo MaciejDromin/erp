@@ -1,7 +1,7 @@
 package com.soitio.dashboard.widget.definition.domain;
 
-import com.soitio.dashboard.common.WidgetDomain;
 import com.soitio.widgets.common.domain.Filter;
+import com.soitio.widgets.common.domain.WidgetDomain;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -26,5 +26,7 @@ public class WidgetDefinitionEntity {
     private String datasource;
     private Set<Filter> availableFilters;
     private WidgetDomain widgetDomain;
+    private String version;
+    private String uniqueCode;
 
 }
