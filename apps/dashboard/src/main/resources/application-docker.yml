@@ -7,6 +7,13 @@ quarkus:
   rest-client:
     "pl.mlisowski.selfregister.client.RegistrationClient":
       url: http://erp-consul:8500
+  index-dependency:
+    selfregister:
+      group-id: pl.mlisowski.selfregister
+      artifact-id: self-register-quarkus
+    widget-commons:
+      group-id: com.soitio.widgets
+      artifact-id: widget-commons
   shutdown:
     timeout: PT5S
 

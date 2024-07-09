@@ -25,15 +25,13 @@ class WidgetStartupProcessor {
     }
 
     @BuildStep
-    void declareMessageTransformersAsBean(CombinedIndexBuildItem index,
+    void declareWidgetStartupsAsBean(CombinedIndexBuildItem index,
                                           BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
         List<String> allBeans = index.getIndex().getKnownClasses().stream()
                 .filter(ci -> !Modifier.isAbstract(ci.flags()))
                 .map(ci -> ci.name().toString())
-                .filter(c -> c.startsWith("com.soitio."))
+                .filter(c -> c.startsWith("com.soitio.widgets.startup"))
                 .toList();
-
-        allBeans.forEach(System.out::println);
 
         additionalBeans.produce(new AdditionalBeanBuildItem.Builder()
                 .addBeanClasses(allBeans)
@@ -41,21 +39,5 @@ class WidgetStartupProcessor {
                 .setDefaultScope(DotNames.APPLICATION_SCOPED)
                 .build());
     }
-
-//    @BuildStep
-//    AdditionalIndexedClassesBuildItem configurationBuildItem() {
-//        return new AdditionalIndexedClassesBuildItem(WidgetsConfiguration.class.getName());
-//    }
-//
-//    @BuildStep
-//    AdditionalIndexedClassesBuildItem restClient() {
-//        return new AdditionalIndexedClassesBuildItem(DashboardClient.class.getName());
-//    }
-//
-//    @BuildStep
-//    AdditionalIndexedClassesBuildItem applicationStarter() {
-//        return new AdditionalIndexedClassesBuildItem(ApplicationLifecycleListener.class.getName());
-//    }
-
 
 }

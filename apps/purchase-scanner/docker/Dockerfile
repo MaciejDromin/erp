@@ -6,6 +6,7 @@ RUN apt-get install libpoppler-cpp-dev -y
 RUN apt-get install pkg-config -y
 RUN apt-get install tesseract-ocr -y
 RUN apt-get install tesseract-ocr-pol -y
+RUN apt-get install openjdk-17-jre-headless -y
 
 WORKDIR /code
 

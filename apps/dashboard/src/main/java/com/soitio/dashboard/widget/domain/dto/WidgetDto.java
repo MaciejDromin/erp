@@ -1,8 +1,8 @@
 package com.soitio.dashboard.widget.domain.dto;
 
 import com.soitio.dashboard.common.Position;
-import com.soitio.dashboard.common.WidgetDomain;
 import com.soitio.dashboard.widget.domain.WidgetType;
+import com.soitio.widgets.common.domain.WidgetDomain;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;

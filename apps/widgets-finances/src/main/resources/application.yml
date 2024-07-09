@@ -5,9 +5,18 @@ quarkus:
     "pl.mlisowski.selfregister.client.RegistrationClient":
       url: http://localhost:8080
     "com.soitio.widgets.startup.runtime.client.DashboardClient":
-      url: http://localhost:8080
+      url: http://localhost:8083
 
 service-discovery:
   service-name: widgets-finances
   host: localhost
   port: 8080
+
+widgets:
+  widget-definitions:
+    -
+      name: Total Net Worth
+      datasource: http://localhost:8080/widgets/total-net-worth
+      widget-domain: FINANCES
+      version: v1.0
+      unique-code: FIN001
