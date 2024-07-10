@@ -4,9 +4,8 @@ public enum WidgetType {
 
     PIE,
     BAR,
-    COLUMN,
     LINE,
-    DONUT,
+    DOUGHNUT,
     TEXT
 
 }
