@@ -4,7 +4,6 @@
   import 'chart.js/auto'
 
   export let chartData;
-  console.log(chartData)
   export let chartType;
   
   const chartTypeMap = {
