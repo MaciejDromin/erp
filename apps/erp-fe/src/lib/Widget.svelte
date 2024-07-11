@@ -6,8 +6,6 @@
 
   export let widgetData;
   let chartData = null
-  console.log(widgetData)
-  // pass data to chart comp
 
   const fetchData = async () => {
     const ret = await apiRequest("/dashboards/widgets/data", HttpMethods.POST, {

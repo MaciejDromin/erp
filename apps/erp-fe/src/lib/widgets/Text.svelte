@@ -5,5 +5,6 @@
 </script>
 
 <div>
+  <!--- TODO: Style this text widget --->
   {data.labels[0]}
 </div>
