@@ -6,6 +6,10 @@ quarkus:
       url: http://localhost:8080
     "com.soitio.widgets.startup.runtime.client.DashboardClient":
       url: http://localhost:8083
+    "com.soitio.widgets.finances.inventory.client.InventoryClient":
+      url: http://localhost:8082
+    "com.soitio.widgets.finances.client.FinancesClient":
+      url: http://localhost:8084
 
 service-discovery:
   service-name: widgets-finances

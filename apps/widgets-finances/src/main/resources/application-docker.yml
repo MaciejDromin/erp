@@ -6,6 +6,10 @@ quarkus:
       url: http://erp-consul:8500
     "com.soitio.widgets.startup.runtime.client.DashboardClient":
       url: http://dashboard:8080
+    "com.soitio.widgets.finances.inventory.client.InventoryClient":
+      url: http://finances:8080
+    "com.soitio.widgets.finances.client.FinancesClient":
+      url: http://inventory:8080
   shutdown:
     timeout: PT5S
 

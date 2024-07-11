@@ -1,18 +1,21 @@
 <script>
   import { Line, Bar, Pie, Doughnut } from 'svelte-chartjs'
+  import Text from '$lib/widgets/Text.svelte'
+  import 'chart.js/auto'
 
   export let chartData;
+  console.log(chartData)
   export let chartType;
   
   const chartTypeMap = {
     "PIE": Pie,
     "BAR": Bar,
     "LINE": Line,
-    "DOUGHNUT": Doughnut
+    "DOUGHNUT": Doughnut,
+    "TEXT": Text
   }
 
 </script>
 <div>
-  {chartType}
   <svelte:component this={chartTypeMap[chartType]} {...{data: chartData}} />
 </div>
