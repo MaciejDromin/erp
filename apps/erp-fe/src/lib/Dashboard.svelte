@@ -1,5 +1,6 @@
 <script>
   import Modal from "$lib/Modal.svelte";
+  import Widget from "$lib/Widget.svelte";
   import AddWidget from "$lib/dashboard/AddWidget.svelte"
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome'
   import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
@@ -27,6 +28,7 @@
 
   const onDragOver = (event) => {
     event.preventDefault()
+    // TODO: when hovering starts, a lot of errors are being logged to the console
     const targetStyle = event.target.attributes.style.value;
     const targetRow = targetStyle.charAt(targetStyle.length - 1);
     const targetColumn = targetStyle.charAt(targetStyle.indexOf(";") - 1);
@@ -56,6 +58,10 @@
 
   const updateItems = (data, targetColumn, targetRow) => {
     // Update the items array based on user drag-and-drop actions
+    if (data.position.x === targetColumn && data.position.y === targetRow) {
+      items = items;
+      return;
+    }
     if (isNeighbour(data.position.x, data.position.y, targetColumn, targetRow)) {
       items.forEach((item) => {
         if (item.id === data.id) {
@@ -188,7 +194,7 @@
       <div draggable={true} on:dragstart={() => onDragStart(event, item)} on:drop={() => 
         onDrop(event)} on:dragover={onDragOver} class="drag-item" style={`grid-column: 
         ${item.position.x + 1}; grid-row: ${item.position.y + 1}`}>
-        {item.name}
+        <Widget widgetData={item} />
       </div>
     {/each}
   </div>
