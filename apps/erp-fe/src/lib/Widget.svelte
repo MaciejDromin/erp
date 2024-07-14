@@ -23,6 +23,9 @@
   <div class="flex flex-row">
     <h3 class="text-xl">{widgetData.name}</h3>
     <!--- TODO: Add here options --->
+    <div>
+    
+    </div>
   </div>
   {#if chartData !== null}
     <Chart chartData={chartData} chartType={widgetData.widgetType} />

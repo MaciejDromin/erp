@@ -42,13 +42,13 @@
       {/each}
     </select>
     <div id="options">
-      <Modal modalId="category_modal" buttonName="Add Dashboard">
+      <Modal modalId="add_dashboard_modal" buttonName="Add Dashboard">
         <AddDashboard domain={domain} />
       </Modal>
       <!---<button class="btn btn-primary"><FontAwesomeIcon icon={faPlus} /> Add</button>--->
     </div>
   </div>
   {#if dashboardData !== null}
-    <Dashboard data={dashboardData} items={dashboardData.widgets}/>
+    <Dashboard data={dashboardData} items={dashboardData.widgets} domain={domain}/>
   {/if}
 </div>

@@ -8,8 +8,8 @@
   import { HttpMethods } from "./types/httpMethods";
   
   export let data
-
   export let items
+  export let domain
   
   const onDragStart = (event, item) => {
     event.dataTransfer.setData('text/plain', JSON.stringify(item));
@@ -183,8 +183,8 @@
   <div class="flex justify-between mb-8">
     <h1 class="text-2xl">{data.name}</h1>
     <div class="flex flex-row gap-4">
-      <Modal modalId="category_modal" buttonName="Add Widget">
-        <AddWidget dashboardId={data.id} />
+      <Modal modalId="add_widget_modal" buttonName="Add Widget">
+        <AddWidget dashboardId={data.id} domain={domain} />
       </Modal>
       <button class="btn btn-secondary" on:click={() => deleteDashboard()}><FontAwesomeIcon icon={faXmark} /> Delete Dashboard</button>
     </div>
