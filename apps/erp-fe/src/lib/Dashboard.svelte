@@ -44,6 +44,7 @@
     placeholder.style.cssText = `grid-column: ${targetColumn}; grid-row: ${targetRow}`
     placeholder.style.border = "4px solid #b387fa";
     placeholder.style.opacity = "0.5";
+    placeholder.style.borderRadius = "5px";
     placeholder.setAttribute('x', targetColumn)
     placeholder.setAttribute('y', targetRow)
     placeholder.addEventListener("drop", function(e) {
@@ -208,6 +209,7 @@
 
 .drag-item {
   border: 1px solid #ccc;
+  border-radius: 5px;
   padding: 10px;
   cursor: move;
   transition: transform 0.3s ease-in-out;
