@@ -116,7 +116,7 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
                 .filter(w -> applicableForPositionUpdate(position, w.getPosition()))
                 .map(w -> determineNewPositionAfterRemoval(w.getPosition()))
                 .reduce(this::determineLastPosition)
-                .orElseThrow(); // TODO: throw dedicated exception
+                .orElse(new Position(0, 0));
     }
 
     private boolean applicableForPositionUpdate(Position removedItemPosition, Position itemToUpdatePosition) {
