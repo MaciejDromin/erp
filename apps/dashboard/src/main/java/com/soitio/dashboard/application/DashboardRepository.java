@@ -7,6 +7,7 @@ import com.soitio.dashboard.domain.dto.DashboardCreationDto;
 import com.soitio.dashboard.domain.dto.DashboardDto;
 import com.soitio.dashboard.domain.dto.DashboardForSelectionDto;
 import com.soitio.dashboard.widget.application.WidgetRepository;
+import com.soitio.dashboard.widget.domain.Widget;
 import com.soitio.dashboard.widget.domain.dto.WidgetCreationDto;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -95,11 +96,38 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
 
     public void deleteWidgetFromDashboard(String widgetId, String dashboardId) {
         Dashboard dashboard = findById(new ObjectId(dashboardId));
-        // TODO: recalculate new widget positions
-        // TODO: calculate new available position
         ObjectId widgetObjId = new ObjectId(widgetId);
         dashboard.getWidgets().remove(widgetObjId);
-        update(dashboard);
+
+        Position widgetToRemovePosition = widgetRepository.findById(widgetObjId).getPosition();
         widgetRepository.deleteById(widgetObjId);
+
+        List<Widget> widgets = widgetRepository.getPlainWidgetsByIds(dashboard.getWidgets());
+        Position newAvailablePosition = recalculateWidgetPositions(widgetToRemovePosition, widgets);
+
+        dashboard.setAvailableWidgetPosition(determineNextPosition(newAvailablePosition));
+
+        update(dashboard);
+        widgetRepository.update(widgets);
+    }
+
+    public Position recalculateWidgetPositions(Position position, List<Widget> widgets) {
+        return widgets.stream()
+                .filter(w -> applicableForPositionUpdate(position, w.getPosition()))
+                .map(w -> determineNewPositionAfterRemoval(w.getPosition()))
+                .reduce(this::determineLastPosition)
+                .orElseThrow(); // TODO: throw dedicated exception
+    }
+
+    private boolean applicableForPositionUpdate(Position removedItemPosition, Position itemToUpdatePosition) {
+        return false;
+    }
+
+    private Position determineNewPositionAfterRemoval(Position position) {
+        return null;
+    }
+
+    private Position determineLastPosition(Position p1, Position p2) {
+        return null;
     }
 }
