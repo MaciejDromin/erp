@@ -1,5 +1,5 @@
-import { writable } from 'svelte/store';
+import { writable } from 'svelte/store'
 
-let storeInit:any = {}
+let storeInit: any = {}
 
-export const selectedLabours = writable(storeInit);
+export const selectedLabours = writable(storeInit)
