@@ -2,6 +2,7 @@
   import { apiRequest } from '$lib/scripts/uiHttpRequests.ts'
   import { HttpMethods } from "$lib/types/httpMethods";
   import { onMount } from "svelte";
+  import WidgetCreation from "$lib/dashboard/WidgetCreation.svelte"
 
   export let dashboardId;
   export let domain;
@@ -9,9 +10,11 @@
   let widgetOptions = []
   let widgetId = null
   let widgetDefinition = null
+  let creationData = {}
 
   const addWidget = async () => {
-    console.log("test")
+    const ret = await apiRequest(`/dashboards/${dashboardId}/widgets`, HttpMethods.POST, creationData)
+    location.reload()
   }
 
   const fetchData = async () => {
@@ -23,6 +26,10 @@
     const ret = await apiRequest("/widgets/definitions/" + widgetId, HttpMethods.GET)
     widgetDefinition = null
     widgetDefinition = await ret.json()
+    creationData = {
+      widgetDomain: domain,
+      datasource: widgetDefinition.datasource
+    }
   }
 
   onMount(async () => {
@@ -39,6 +46,7 @@
     {/each}
   </select>
   {#if widgetDefinition !== null}
+    <WidgetCreation definition={widgetDefinition} bind:creationData={creationData} />
   {/if}
   <button class="btn btn-priamry" on:click={() => addWidget()}>Add Widget</button>
 </div>
