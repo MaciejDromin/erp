@@ -6,6 +6,7 @@
   import { FontAwesomeIcon } from '@fortawesome/svelte-fontawesome'
   import { faGear, faFilter } from '@fortawesome/free-solid-svg-icons'
 
+  export let dashboardId
   export let widgetData
   let chartData = null
 
@@ -17,6 +18,14 @@
     chartData = await ret.json()
   }
 
+  const deleteWidget = async () => {
+    const ret = await apiRequest(
+      `/dashboards/${dashboardId}/widgets/${widgetData.id}`,
+      HttpMethods.DELETE
+    )
+    location.reload()
+  }
+
   onMount(async () => {
     fetchData()
   })
@@ -25,26 +34,16 @@
 <div class="flex flex-col">
   <div class="flex flex-row justify-between">
     <h3 class="text-xl">{widgetData.name}</h3>
-    <div class="flex flex-row gap-3">
+    <div class="flex flex-row gap-3 items-center">
       <!--- TODO: Finish handling this placeholder icons --->
-      <FontAwesomeIcon icon={faFilter} />
-      <FontAwesomeIcon icon={faGear} />
-      <ul class="menu lg:menu-horizontal bg-base-200 rounded-box lg:mb-64">
+      <button><FontAwesomeIcon icon={faFilter} /></button>
+      <ul class="menu menu-horizontal p-0">
         <li>
-          <details open>
-            <summary>Parent item</summary>
-            <ul>
-              <li><a>Submenu 1</a></li>
-              <li><a>Submenu 2</a></li>
-              <li>
-                <details open>
-                  <summary>Parent</summary>
-                  <ul>
-                    <li><a>item 1</a></li>
-                    <li><a>item 2</a></li>
-                  </ul>
-                </details>
-              </li>
+          <details>
+            <summary class="p-2"><FontAwesomeIcon icon={faGear} /></summary>
+            <ul class="text-white">
+              <li><button>Edit</button></li>
+              <li><button on:click={deleteWidget}>Delete</button></li>
             </ul>
           </details>
         </li>

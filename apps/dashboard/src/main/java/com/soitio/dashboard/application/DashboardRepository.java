@@ -92,4 +92,14 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
                 .defaultForType(dashboard.isDefaultForType())
                 .build();
     }
+
+    public void deleteWidgetFromDashboard(String widgetId, String dashboardId) {
+        Dashboard dashboard = findById(new ObjectId(dashboardId));
+        // TODO: recalculate new widget positions
+        // TODO: calculate new available position
+        ObjectId widgetObjId = new ObjectId(widgetId);
+        dashboard.getWidgets().remove(widgetObjId);
+        update(dashboard);
+        widgetRepository.deleteById(widgetObjId);
+    }
 }

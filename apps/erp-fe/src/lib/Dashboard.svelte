@@ -226,7 +226,7 @@
         style={`grid-column: 
         ${item.position.x + 1}; grid-row: ${item.position.y + 1}`}
       >
-        <Widget widgetData={item} />
+        <Widget dashboardId={data.id} widgetData={item} />
       </div>
     {/each}
   </div>
