@@ -15,6 +15,6 @@
   }
 
 </script>
-<div>
+<div class="w-fit mx-auto p-8">
   <svelte:component this={chartTypeMap[chartType]} {...{data: chartData}} />
 </div>

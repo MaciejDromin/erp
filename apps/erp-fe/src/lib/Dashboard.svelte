@@ -8,8 +8,8 @@
   import { HttpMethods } from "./types/httpMethods";
   
   export let data
-
   export let items
+  export let domain
   
   const onDragStart = (event, item) => {
     event.dataTransfer.setData('text/plain', JSON.stringify(item));
@@ -44,6 +44,7 @@
     placeholder.style.cssText = `grid-column: ${targetColumn}; grid-row: ${targetRow}`
     placeholder.style.border = "4px solid #b387fa";
     placeholder.style.opacity = "0.5";
+    placeholder.style.borderRadius = "5px";
     placeholder.setAttribute('x', targetColumn)
     placeholder.setAttribute('y', targetRow)
     placeholder.addEventListener("drop", function(e) {
@@ -183,8 +184,8 @@
   <div class="flex justify-between mb-8">
     <h1 class="text-2xl">{data.name}</h1>
     <div class="flex flex-row gap-4">
-      <Modal modalId="category_modal" buttonName="Add Widget">
-        <AddWidget dashboardId={data.id} />
+      <Modal modalId="add_widget_modal" buttonName="Add Widget">
+        <AddWidget dashboardId={data.id} domain={domain} />
       </Modal>
       <button class="btn btn-secondary" on:click={() => deleteDashboard()}><FontAwesomeIcon icon={faXmark} /> Delete Dashboard</button>
     </div>
@@ -208,6 +209,7 @@
 
 .drag-item {
   border: 1px solid #ccc;
+  border-radius: 5px;
   padding: 10px;
   cursor: move;
   transition: transform 0.3s ease-in-out;

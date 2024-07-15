@@ -1,9 +1,15 @@
 package com.soitio.dashboard.widget.definition.application;
 
 import com.soitio.dashboard.widget.definition.domain.WidgetDefinitionEntity;
+import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionDto;
+import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionNameDto;
+import com.soitio.dashboard.widget.domain.WidgetType;
 import com.soitio.widgets.common.domain.WidgetDefinition;
+import com.soitio.widgets.common.domain.WidgetDomain;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.bson.types.ObjectId;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,4 +60,25 @@ public class WidgetDefinitionRepository implements PanacheMongoRepository<Widget
                 .build();
     }
 
+    public List<WidgetDefinitionNameDto> getWidgetDefinitionNames(WidgetDomain widgetDomain) {
+        return find("widgetDomain = ?1", widgetDomain)
+                .project(WidgetDefinitionNameDto.class)
+                .list();
+    }
+
+    public WidgetDefinitionDto getById(String widgetDefinitionId) {
+        return to(findById(new ObjectId(widgetDefinitionId)));
+    }
+
+    private WidgetDefinitionDto to(WidgetDefinitionEntity entity) {
+        return WidgetDefinitionDto.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .datasource(entity.getDatasource())
+                .availableFilters(entity.getAvailableFilters())
+                .widgetDomain(entity.getWidgetDomain())
+                .version(entity.getVersion())
+                .uniqueCode(entity.getUniqueCode())
+                .build();
+    }
 }
