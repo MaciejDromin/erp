@@ -1,5 +1,5 @@
-import { writable } from 'svelte/store';
+import { writable } from 'svelte/store'
 
-let storeInit:string[] = []
+let storeInit: string[] = []
 
-export const categoriesStore = writable(storeInit);
+export const categoriesStore = writable(storeInit)

@@ -1,22 +1,28 @@
 <script>
   import { apiRequest } from '$lib/scripts/uiHttpRequests.ts'
-  import { HttpMethods } from "$lib/types/httpMethods";
+  import { HttpMethods } from '$lib/types/httpMethods'
 
-  export let domain;
+  export let domain
 
-  let dashboardName = ""
+  let dashboardName = ''
 
   const addDashboard = async () => {
-    const ret = await apiRequest("/dashboards", HttpMethods.POST, {
+    const ret = await apiRequest('/dashboards', HttpMethods.POST, {
       name: dashboardName,
-      type: domain
+      type: domain,
     })
     location.reload()
   }
 </script>
-<div class="flex flex-col">
-  <input type="text" placeholder="Dashboard Name" bind:value={dashboardName}
-    class="input input-bordered w-full max-w-xs mx-auto mb-6 text-white" />
-  <button class="btn btn-priamry" on:click={() => addDashboard()}>Add Dashboard</button>
-</div>
 
+<div class="flex flex-col">
+  <input
+    type="text"
+    placeholder="Dashboard Name"
+    bind:value={dashboardName}
+    class="input input-bordered w-full max-w-xs mx-auto mb-6 text-white"
+  />
+  <button class="btn btn-priamry" on:click={() => addDashboard()}
+    >Add Dashboard</button
+  >
+</div>
