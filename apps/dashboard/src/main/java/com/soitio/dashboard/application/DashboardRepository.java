@@ -105,7 +105,7 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
         List<Widget> widgets = widgetRepository.getPlainWidgetsByIds(dashboard.getWidgets());
         Position newAvailablePosition = recalculateWidgetPositions(widgetToRemovePosition, widgets);
 
-        dashboard.setAvailableWidgetPosition(determineNextPosition(newAvailablePosition));
+        dashboard.setAvailableWidgetPosition(newAvailablePosition);
 
         update(dashboard);
         widgetRepository.update(widgets);
@@ -116,6 +116,7 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
                 .filter(w -> applicableForPositionUpdate(position, w.getPosition()))
                 .map(this::determineNewPositionAfterRemoval)
                 .reduce(this::determineLastPosition)
+                .map(this::determineNextPosition)
                 .orElse(new Position(0, 0));
     }
 

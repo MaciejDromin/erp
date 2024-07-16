@@ -11,10 +11,10 @@ widget-commons:
 	cd libs/widget-commons; ./gradlew build; ./gradlew publishToMavenLocal
 
 widget-startup: widget-commons
-	cd libs/widget-startup; export JAVA_HOME=/usr/lib/jvm/java-21-openjdk; mvn install -DskipTests
+	cd libs/widget-startup; mvn install -DskipTests
 
 analytics: self-register-spring
-	cd apps/analytics; export JAVA_HOME=/usr/lib/jvm/java-21-openjdk; ./gradlew build -x test; \
+	cd apps/analytics; ./gradlew build -x test; \
 		podman build -f src/main/docker/Dockerfile -t erp/analytics:latest .
 
 finances: self-register-spring
@@ -25,27 +25,26 @@ erp-fe:
 	cd apps/erp-fe; podman build -f Dockerfile -t erp/fe:latest .
 
 inventory: self-register-quarkus
-	cd apps/inventory; ./gradlew build -Dquarkus.package.type=native -Dquarkus.profile=docker; \
+	cd apps/inventory; ./gradlew build -Dquarkus.native.enabled=true -Dquarkus.package.jar.enabled=false -Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/inventory:latest .
 
 planner: self-register-quarkus
-	cd apps/planner; ./gradlew build -Dquarkus.package.type=native -Dquarkus.profile=docker; \
+	cd apps/planner; ./gradlew build -Dquarkus.native.enabled=true -Dquarkus.package.jar.enabled=false -Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/planner:latest .
 
 purchase-scanner:
 	cd apps/purchase-scanner; podman build -f docker/Dockerfile -t erp/purchase-scanner:latest .
 
 dashboard: self-register-quarkus widget-commons
-	cd apps/dashboard; export JAVA_HOME=/usr/lib/jvm/java-21-openjdk; \
-		./gradlew build -Dquarkus.package.type=native -Dquarkus.profile=docker; \
+	cd apps/dashboard; ./gradlew build -Dquarkus.native.enabled=true -Dquarkus.package.jar.enabled=false -Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/dashboard:latest .
 
-widgets-finances: self-register-quarkus
-	cd apps/widgets-finances; export JAVA_HOME=/usr/lib/jvm/java-21-openjdk; \
-		./gradlew build -Dquarkus.package.type=native -Dquarkus.profile=docker; \
+widgets-finances: self-register-quarkus widget-startup
+	cd apps/widgets-finances; \
+		./gradlew build -Dquarkus.native.enabled=true -Dquarkus.package.jar.enabled=false -Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/widgets-finances:latest .
 
-all: analytics finances erp-fe inventory planner purchase-scanner dashboard
+all: analytics finances erp-fe inventory planner purchase-scanner dashboard widgets-finances
 
 clean:
 	cd libs/self-register-quarkus; ./gradlew clean
