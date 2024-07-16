@@ -62,6 +62,12 @@ public class DashboardController {
     }
 
     @DELETE
+    @Path("/{dashboardId}/widgets/{widgetId}")
+    public void createWidget(@PathParam("dashboardId") String dashboardId, @PathParam("widgetId") String widgetId) {
+        dashboardRepository.deleteWidgetFromDashboard(widgetId, dashboardId);
+    }
+
+    @DELETE
     @Path("/{dashboardId}")
     public void deleteDashboard(@PathParam("dashboardId") String dashboardId) {
         dashboardRepository.deleteById(new ObjectId(dashboardId));

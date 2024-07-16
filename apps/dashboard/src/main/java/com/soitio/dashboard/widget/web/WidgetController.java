@@ -40,10 +40,6 @@ public class WidgetController {
         return widgetDefinitionRepository.getById(widgetDefinitionId);
     }
 
-    public void deleteWidget(String widgetId) {
-
-    }
-
     public void updateWidget(Object toUpdate) {
 
     }

@@ -26,6 +26,11 @@ public class WidgetRepository implements PanacheMongoRepository<Widget> {
                 .toList();
     }
 
+    public List<Widget> getPlainWidgetsByIds(Set<ObjectId> widgets) {
+        return list("_id in ?1", widgets).stream()
+                .toList();
+    }
+
     private Widget to(WidgetCreationDto widgetCreation, Position position) {
         return Widget.builder()
                 .name(widgetCreation.getName())

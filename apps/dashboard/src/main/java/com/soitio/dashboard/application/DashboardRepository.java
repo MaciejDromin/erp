@@ -7,6 +7,7 @@ import com.soitio.dashboard.domain.dto.DashboardCreationDto;
 import com.soitio.dashboard.domain.dto.DashboardDto;
 import com.soitio.dashboard.domain.dto.DashboardForSelectionDto;
 import com.soitio.dashboard.widget.application.WidgetRepository;
+import com.soitio.dashboard.widget.domain.Widget;
 import com.soitio.dashboard.widget.domain.dto.WidgetCreationDto;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -91,5 +92,51 @@ public class DashboardRepository implements PanacheMongoRepository<Dashboard> {
                 .name(dashboard.getName())
                 .defaultForType(dashboard.isDefaultForType())
                 .build();
+    }
+
+    public void deleteWidgetFromDashboard(String widgetId, String dashboardId) {
+        Dashboard dashboard = findById(new ObjectId(dashboardId));
+        ObjectId widgetObjId = new ObjectId(widgetId);
+        dashboard.getWidgets().remove(widgetObjId);
+
+        Position widgetToRemovePosition = widgetRepository.findById(widgetObjId).getPosition();
+        widgetRepository.deleteById(widgetObjId);
+
+        List<Widget> widgets = widgetRepository.getPlainWidgetsByIds(dashboard.getWidgets());
+        Position newAvailablePosition = recalculateWidgetPositions(widgetToRemovePosition, widgets);
+
+        dashboard.setAvailableWidgetPosition(determineNextPosition(newAvailablePosition));
+
+        update(dashboard);
+        widgetRepository.update(widgets);
+    }
+
+    public Position recalculateWidgetPositions(Position position, List<Widget> widgets) {
+        return widgets.stream()
+                .filter(w -> applicableForPositionUpdate(position, w.getPosition()))
+                .map(this::determineNewPositionAfterRemoval)
+                .reduce(this::determineLastPosition)
+                .orElse(new Position(0, 0));
+    }
+
+    private boolean applicableForPositionUpdate(Position removedItemPosition, Position itemToUpdatePosition) {
+        return itemToUpdatePosition.y() > removedItemPosition.y()
+                || (itemToUpdatePosition.y() == removedItemPosition.y()
+                && itemToUpdatePosition.x() > removedItemPosition.x());
+    }
+
+    private Position determineNewPositionAfterRemoval(Widget widget) {
+        Position position = widget.getPosition();
+        Position newPosition;
+        if (position.x() == 0) newPosition = new Position(2, position.y() - 1);
+        else newPosition = new Position(position.x() - 1, position.y());
+        widget.setPosition(newPosition);
+        return newPosition;
+    }
+
+    private Position determineLastPosition(Position p1, Position p2) {
+        if (p1.y() > p2.y()) return p1;
+        if (p2.y() > p1.y()) return p2;
+        return p1.x() > p2.x() ? p1 : p2;
     }
 }
