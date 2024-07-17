@@ -1,4 +1,4 @@
-package pl.mlisowski.inventory.property.information.domain;
+package pl.mlisowski.inventory.property.information;
 
 public enum PropertyType {
     

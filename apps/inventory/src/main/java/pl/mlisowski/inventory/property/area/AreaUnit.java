@@ -1,4 +1,4 @@
-package pl.mlisowski.inventory.property.area.domain;
+package pl.mlisowski.inventory.property.area;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
