@@ -1,4 +1,4 @@
-package pl.mlisowski.inventory.property.information.domain;
+package pl.mlisowski.inventory.property.information;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bson.types.ObjectId;
-import pl.mlisowski.inventory.property.information.domain.PropertyInformation;
+import pl.mlisowski.inventory.property.information.PropertyInformation;
 
 @Getter
 @Setter
