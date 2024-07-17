@@ -94,6 +94,7 @@ services:
       - erp-consul
       - dashboard
       - finances
+      - inventory
     restart: unless-stopped
   rabbit:
     image: "rabbitmq:3.13-management"

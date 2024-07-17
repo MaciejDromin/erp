@@ -25,23 +25,39 @@ erp-fe:
 	cd apps/erp-fe; podman build -f Dockerfile -t erp/fe:latest .
 
 inventory: self-register-quarkus
-	cd apps/inventory; ./gradlew build -Dquarkus.native.enabled=true -Dquarkus.package.jar.enabled=false -Dquarkus.profile=docker; \
+	cd apps/inventory; ./gradlew build \
+		-Dquarkus.native.enabled=true \
+		-Dquarkus.native.container-build=true \
+		-Dquarkus.package.jar.enabled=false \
+		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/inventory:latest .
 
 planner: self-register-quarkus
-	cd apps/planner; ./gradlew build -Dquarkus.native.enabled=true -Dquarkus.package.jar.enabled=false -Dquarkus.profile=docker; \
+	cd apps/planner; ./gradlew build \
+		-Dquarkus.native.enabled=true \
+		-Dquarkus.native.container-build=true \
+		-Dquarkus.package.jar.enabled=false \
+		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/planner:latest .
 
 purchase-scanner:
 	cd apps/purchase-scanner; podman build -f docker/Dockerfile -t erp/purchase-scanner:latest .
 
 dashboard: self-register-quarkus widget-commons
-	cd apps/dashboard; ./gradlew build -Dquarkus.native.enabled=true -Dquarkus.package.jar.enabled=false -Dquarkus.profile=docker; \
+	cd apps/dashboard; ./gradlew build \
+		-Dquarkus.native.enabled=true \
+		-Dquarkus.native.container-build=true \
+		-Dquarkus.package.jar.enabled=false \
+		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/dashboard:latest .
 
 widgets-finances: self-register-quarkus widget-startup
 	cd apps/widgets-finances; \
-		./gradlew build -Dquarkus.native.enabled=true -Dquarkus.package.jar.enabled=false -Dquarkus.profile=docker; \
+		./gradlew build \
+		-Dquarkus.native.enabled=true \
+		-Dquarkus.native.container-build=true \
+		-Dquarkus.package.jar.enabled=false \
+		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/widgets-finances:latest .
 
 all: analytics finances erp-fe inventory planner purchase-scanner dashboard widgets-finances
