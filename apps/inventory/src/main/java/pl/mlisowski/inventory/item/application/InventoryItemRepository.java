@@ -12,7 +12,6 @@ import pl.mlisowski.inventory.common.PageDto;
 import pl.mlisowski.inventory.item.domain.InventoryItem;
 import pl.mlisowski.inventory.item.domain.dto.InventoryItemDto;
 import pl.mlisowski.inventory.item.domain.dto.ItemCreationDto;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
