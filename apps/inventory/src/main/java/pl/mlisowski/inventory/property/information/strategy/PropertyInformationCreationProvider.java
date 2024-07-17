@@ -1,17 +1,19 @@
 package pl.mlisowski.inventory.property.information.strategy;
 
+import io.quarkus.arc.All;
 import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
 import pl.mlisowski.inventory.property.information.PropertyInformation;
 import pl.mlisowski.inventory.property.information.dto.PropertyInformationCreationDto;
-
 import java.util.List;
 
 @ApplicationScoped
-@RequiredArgsConstructor
 public class PropertyInformationCreationProvider {
 
     private final List<PropertyInformationCreationStrategy> strategies;
+
+    public PropertyInformationCreationProvider(@All List<PropertyInformationCreationStrategy> strategies) {
+        this.strategies = strategies;
+    }
 
     public PropertyInformation map(PropertyInformationCreationDto informationCreation) {
         return strategies.stream()
