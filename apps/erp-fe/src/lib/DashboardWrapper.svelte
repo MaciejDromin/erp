@@ -21,6 +21,11 @@
     const dashboardRet = await apiRequest(url, HttpMethods.GET)
     dashboardData = await dashboardRet.json()
     selectedDashboard = dashboardData.id
+
+    // Quick hack for not handling exception properly
+    if (dashboardData.widgets === undefined) {
+      dashboardData = null
+    }
   }
 
   const changeDashboard = async () => {

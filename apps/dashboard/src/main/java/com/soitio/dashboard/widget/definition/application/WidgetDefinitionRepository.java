@@ -3,16 +3,14 @@ package com.soitio.dashboard.widget.definition.application;
 import com.soitio.dashboard.widget.definition.domain.WidgetDefinitionEntity;
 import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionDto;
 import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionNameDto;
-import com.soitio.dashboard.widget.domain.WidgetType;
 import com.soitio.widgets.common.domain.WidgetDefinition;
 import com.soitio.widgets.common.domain.WidgetDomain;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.bson.types.ObjectId;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.bson.types.ObjectId;
 
 @ApplicationScoped
 public class WidgetDefinitionRepository implements PanacheMongoRepository<WidgetDefinitionEntity> {
