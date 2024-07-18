@@ -2,7 +2,9 @@ package pl.mlisowski.inventory.property.application;
 
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
+import pl.mlisowski.inventory.common.PageDto;
 import pl.mlisowski.inventory.property.domain.Property;
 import pl.mlisowski.inventory.property.domain.dto.PropertyCreationDto;
 import pl.mlisowski.inventory.property.domain.dto.PropertyForListDto;
@@ -14,6 +16,8 @@ import java.util.List;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class PropertyRepository implements PanacheMongoRepository<Property> {
+
+    private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     private final PropertyInformationCreationProvider propertyProvider;
 
@@ -34,10 +38,15 @@ public class PropertyRepository implements PanacheMongoRepository<Property> {
         return propertyProvider.map(propertyInformation);
     }
 
-    public List<PropertyForListDto> getForList() {
-        return findAll().stream()
+    public PageDto<PropertyForListDto> getForList(UriInfo uriInfo) {
+        var params = uriInfo.getQueryParameters();
+        var requestedPage = params.getFirst("page");
+        var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
+        var properties = findAll();
+        var propertyList = properties.page(pageNum, DEFAULT_PAGE_SIZE).list();
+        return PageDto.of(propertyList.stream()
                 .map(this::to)
-                .toList();
+                .toList(), properties.pageCount());
     }
 
     private PropertyForListDto to(Property property) {
