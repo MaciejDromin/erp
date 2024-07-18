@@ -11,7 +11,6 @@ import pl.mlisowski.inventory.property.domain.dto.PropertyForListDto;
 import pl.mlisowski.inventory.property.information.PropertyInformation;
 import pl.mlisowski.inventory.property.information.dto.PropertyInformationCreationDto;
 import pl.mlisowski.inventory.property.information.strategy.PropertyInformationCreationProvider;
-import java.util.List;
 
 @ApplicationScoped
 @RequiredArgsConstructor
