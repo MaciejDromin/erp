@@ -2,16 +2,18 @@ package pl.mlisowski.inventory.property.address.application;
 
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
+import pl.mlisowski.inventory.common.PageDto;
 import pl.mlisowski.inventory.property.address.domain.PropertyAddress;
 import pl.mlisowski.inventory.property.address.domain.dto.PropertyAddressCreationDto;
 import pl.mlisowski.inventory.property.address.domain.dto.PropertyAddressDto;
 
-import java.util.List;
-
 @ApplicationScoped
 @RequiredArgsConstructor
 public class PropertyAddressRepository implements PanacheMongoRepository<PropertyAddress> {
+
+    private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     public void create(PropertyAddressCreationDto propertyAddressCreation) {
         persist(from(propertyAddressCreation));
@@ -27,10 +29,15 @@ public class PropertyAddressRepository implements PanacheMongoRepository<Propert
                 .build();
     }
 
-    public List<PropertyAddressDto> getAll() {
-        return findAll().stream()
+    public PageDto<PropertyAddressDto> getAll(UriInfo uriInfo) {
+        var params = uriInfo.getQueryParameters();
+        var requestedPage = params.getFirst("page");
+        var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
+        var addresses = findAll();
+        var addressList = addresses.page(pageNum, DEFAULT_PAGE_SIZE).list();
+        return PageDto.of(addressList.stream()
                 .map(this::to)
-                .toList();
+                .toList(), addresses.pageCount());
     }
 
     private PropertyAddressDto to(PropertyAddress propertyAddress) {
