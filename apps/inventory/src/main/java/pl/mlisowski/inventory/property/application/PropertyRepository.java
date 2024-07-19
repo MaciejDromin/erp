@@ -4,7 +4,6 @@ import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import pl.mlisowski.inventory.common.PageDto;
 import pl.mlisowski.inventory.property.domain.Property;
 import pl.mlisowski.inventory.property.domain.dto.PropertyCreationDto;
@@ -13,7 +12,6 @@ import pl.mlisowski.inventory.property.information.PropertyInformation;
 import pl.mlisowski.inventory.property.information.dto.PropertyInformationCreationDto;
 import pl.mlisowski.inventory.property.information.strategy.PropertyInformationCreationProvider;
 
-@Slf4j
 @ApplicationScoped
 @RequiredArgsConstructor
 public class PropertyRepository implements PanacheMongoRepository<Property> {
@@ -23,7 +21,6 @@ public class PropertyRepository implements PanacheMongoRepository<Property> {
     private final PropertyInformationCreationProvider propertyProvider;
 
     public void create(PropertyCreationDto propertyCreation) {
-        log.info("ML --- I was mapped! {}", propertyCreation);
         persist(from(propertyCreation));
     }
 
@@ -53,6 +50,10 @@ public class PropertyRepository implements PanacheMongoRepository<Property> {
 
     private PropertyForListDto to(Property property) {
         return PropertyForListDto.builder()
+                .id(property.getId())
+                .name(property.getName())
+                .uniqueIdentifier(property.getUniqueIdentifier())
+                .propertyType(property.getPropertyInformation().getPropertyType())
                 .build();
     }
 
