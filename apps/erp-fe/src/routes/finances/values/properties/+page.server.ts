@@ -32,7 +32,7 @@ export const load = (async ({ params }) => {
     itemIds: await objectIds.json(),
   }
   const countMap = await unsecuredExternalApiRequest(
-    INVENTORY_URL + '/inventory/properties/object-count',
+    INVENTORY_URL + '/properties/object-count',
     HttpMethods.POST,
     objectIdsBody
   )

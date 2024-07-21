@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ItemTable from '$lib/inventory/items/ItemTable.svelte'
+  import PropertyTable from '$lib/inventory/properties/PropertyTable.svelte'
   import Modal from '$lib/Modal.svelte'
   import Pageable from '$lib/Pageable.svelte'
   import { itemsStore } from '$lib/inventory/stores/selectedItems'
@@ -78,8 +78,8 @@
       <div class="mr-auto">
         <Modal modalId="item_modal" buttonName={determineButtonName(items)}>
           <Pageable
-            endpoint="/inventory/items"
-            component={ItemTable}
+            endpoint="/inventory/properties"
+            component={PropertyTable}
             additionalSearch={data.objectIds.length === 0
               ? ''
               : `&objectIds=${data.objectIds.join(',')}`}

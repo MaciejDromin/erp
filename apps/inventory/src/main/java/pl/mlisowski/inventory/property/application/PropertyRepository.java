@@ -11,6 +11,9 @@ import pl.mlisowski.inventory.property.domain.dto.PropertyForListDto;
 import pl.mlisowski.inventory.property.information.PropertyInformation;
 import pl.mlisowski.inventory.property.information.dto.PropertyInformationCreationDto;
 import pl.mlisowski.inventory.property.information.strategy.PropertyInformationCreationProvider;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -55,6 +58,11 @@ public class PropertyRepository implements PanacheMongoRepository<Property> {
                 .uniqueIdentifier(property.getUniqueIdentifier())
                 .propertyType(property.getPropertyInformation().getPropertyType())
                 .build();
+    }
+
+    public Map<String, Integer> findCountByObjectsIds(List<String> itemIds) {
+        return itemIds.stream()
+                .collect(Collectors.toMap(id -> id, id -> 1));
     }
 
 }
