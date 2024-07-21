@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import pl.mlisowski.finances.common.dto.AmountDto;
 import pl.mlisowski.finances.currency.application.CurrencyService;
 import pl.mlisowski.finances.objectvalues.application.port.ObjectValueRepository;
+import pl.mlisowski.finances.objectvalues.domain.ObjectType;
 import pl.mlisowski.finances.objectvalues.domain.ObjectValue;
 import pl.mlisowski.finances.objectvalues.domain.dto.ObjectValueCreationDto;
 import pl.mlisowski.finances.objectvalues.domain.dto.ObjectValueDto;
@@ -36,11 +37,12 @@ public class ObjectValueService {
                 .objectId(creation.getObjectId())
                 .amount(new BigDecimal(creation.getAmount()))
                 .currency(creation.getCurrencyCode())
+                .objectType(creation.getObjectType())
                 .build();
     }
 
-    public Page<ObjectValueDto> getPage(Pageable pageable) {
-        return objectValueRepository.findAll(pageable).map(this::from);
+    public Page<ObjectValueDto> getPage(Pageable pageable, ObjectType objectType) {
+        return objectValueRepository.findAllPageableByObjectType(objectType, pageable).map(this::from);
     }
 
     private ObjectValueDto from(ObjectValue objectValue) {
@@ -52,16 +54,16 @@ public class ObjectValueService {
                 .build();
     }
 
-    public TotalObjectsValueDto totalValue(Map<String, Integer> quantityByObjectMap) {
-        List<ObjectValue> projections = objectValueRepository.findAll();
-        List<String> currencies = projections.stream()
+    public TotalObjectsValueDto totalValue(Map<String, Integer> quantityByObjectMap, ObjectType objectType) {
+        List<ObjectValue> values = objectValueRepository.findAllByObjectType(objectType);
+        List<String> currencies = values.stream()
                 .map(ObjectValue::getCurrency)
                 .filter(curr -> !curr.equalsIgnoreCase("PLN"))
                 .toList();
         Map<String, BigDecimal> ratePerCurrencyCodeMap = currencyService.getRatesForCurrencies(currencies);
         Money totalAmount = Money.of(CurrencyUnit.of("PLN"), BigDecimal.ZERO);
         int objectsCount = 0;
-        for (ObjectValue obj : projections) {
+        for (ObjectValue obj : values) {
             var curr = obj.getCurrency();
             var objectQuantity = quantityByObjectMap.get(obj.getObjectId());
             var baseAmountToAdd = obj.getAmount().getAmount()
@@ -80,8 +82,8 @@ public class ObjectValueService {
                 .build();
     }
 
-    public List<String> allObjectIds() {
-        return objectValueRepository.findAllProjectedBy().stream()
+    public List<String> allObjectIds(ObjectType objectType) {
+        return objectValueRepository.findAllProjectedByObjectType(objectType).stream()
                 .map(ObjectIdProj::getObjectId)
                 .toList();
     }

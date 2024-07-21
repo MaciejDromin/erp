@@ -3,6 +3,7 @@ import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import type { PageServerLoad } from './$types'
 import { FINANCES_URL, INVENTORY_URL } from '$lib/scripts/urls'
+import { ObjectType } from '$lib/finances/types/financialTypes'
 
 export const actions = {
   default: async ({ request }) => {
@@ -11,6 +12,7 @@ export const actions = {
       amount: data.get('amount'),
       currencyCode: data.get('currencyCode'),
       objectId: data.get('itemId'),
+      objectType: ObjectType.PROPERTY,
     }
     await unsecuredExternalApiRequest(
       FINANCES_URL + '/finances/object-value',
@@ -22,19 +24,21 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const objectIds = await unsecuredExternalApiRequest(
-    FINANCES_URL + '/finances/object-value/object-ids',
+    FINANCES_URL +
+      `/finances/object-value/object-ids?objectType=${ObjectType.PROPERTY}`,
     HttpMethods.GET
   )
   const objectIdsBody = {
     itemIds: await objectIds.json(),
   }
   const countMap = await unsecuredExternalApiRequest(
-    INVENTORY_URL + '/inventory/items/object-count',
+    INVENTORY_URL + '/inventory/properties/object-count',
     HttpMethods.POST,
     objectIdsBody
   )
   const data = await unsecuredExternalApiRequest(
-    FINANCES_URL + '/finances/object-value/total-value',
+    FINANCES_URL +
+      `/finances/object-value/total-value?objectType=${ObjectType.PROPERTY}`,
     HttpMethods.POST,
     await countMap.json()
   )
