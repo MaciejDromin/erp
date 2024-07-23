@@ -76,7 +76,10 @@
         {/each}
       </select>
       <div class="mr-auto">
-        <Modal modalId="property_modal" buttonName={determineButtonName(properties)}>
+        <Modal
+          modalId="property_modal"
+          buttonName={determineButtonName(properties)}
+        >
           <Pageable
             endpoint="/inventory/properties"
             component={PropertyTable}
