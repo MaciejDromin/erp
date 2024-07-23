@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Breadcrumb, SidebarItem } from './types/types'
   import Breadcrumbs from './Breadcrumbs.svelte'
+  import SubPaths from './SubPaths.svelte'
   export let breadcrumbs: Breadcrumb[]
   export let sidebar: SidebarItem[]
 </script>
@@ -21,15 +22,7 @@
       {#each sidebar as item}
         <li>
           <a href={item.path}>{item.name}</a>
-          {#if item.subPaths.length > 0}
-            <ul>
-              {#each item.subPaths as subPath}
-                <li>
-                  <a href={subPath.path}>{subPath.name}</a>
-                </li>
-              {/each}
-            </ul>
-          {/if}
+          <SubPaths subPaths={item.subPaths} />
         </li>
       {/each}
     </ul>

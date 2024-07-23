@@ -47,9 +47,20 @@ const RECOGNIZED_PATHS: { [key: string]: SidebarItem } = {
         subPaths: [],
       },
       {
-        name: 'Object Value',
-        path: '/finances/object-value',
-        subPaths: [],
+        name: 'Values',
+        path: '/finances/values',
+        subPaths: [
+          {
+            name: 'Items',
+            path: '/finances/values/items',
+            subPaths: [],
+          },
+          {
+            name: 'Properties',
+            path: '/finances/values/properties',
+            subPaths: [],
+          },
+        ],
       },
       {
         name: 'Operation Category',

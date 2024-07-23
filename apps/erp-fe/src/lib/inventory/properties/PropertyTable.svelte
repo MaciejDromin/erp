@@ -53,6 +53,7 @@
         <th>ID</th>
         <th>Name</th>
         <th>Unique Identifier</th>
+        <th>Land Register</th>
         <th>Property Type</th>
       </tr>
     </thead>
@@ -68,6 +69,7 @@
             <td>{property.id}</td>
             <td>{property.name}</td>
             <td>{property.uniqueIdentifier}</td>
+            <td>{property.landRegister}</td>
             <td>{property.propertyType}</td>
           </tr>
         {/each}

@@ -16,6 +16,7 @@ public class PropertyCreationDto {
     private String name;
     private String uniqueIdentifier;
     private ObjectId addressId;
+    private String landRegister;
     private PropertyInformationCreationDto propertyInformation;
 
 }

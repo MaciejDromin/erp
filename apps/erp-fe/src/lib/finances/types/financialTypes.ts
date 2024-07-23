@@ -18,4 +18,10 @@ enum Month {
   DECEMBER = 'DECEMBER',
 }
 
-export { MoneyOperationType, Month }
+enum ObjectType {
+  ITEM = 'ITEM',
+  PROPERTY = 'PROPERTY',
+  VEHICLE = 'VEHICLE',
+}
+
+export { MoneyOperationType, Month, ObjectType }

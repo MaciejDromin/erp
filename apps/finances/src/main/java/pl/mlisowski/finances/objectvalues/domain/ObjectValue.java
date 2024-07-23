@@ -2,6 +2,7 @@ package pl.mlisowski.finances.objectvalues.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,9 @@ public class ObjectValue extends BaseEntity {
     private BigDecimal amount;
 
     private String currency;
+
+    @Enumerated
+    private ObjectType objectType;
 
     public Money getAmount() {
         return Money.of(CurrencyUnit.of(this.currency), this.amount, RoundingMode.DOWN);

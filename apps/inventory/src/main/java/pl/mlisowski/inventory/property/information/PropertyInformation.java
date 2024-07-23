@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 
@@ -19,6 +20,7 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
         @JsonSubTypes.Type(value = LandInformation.class)
 })
 @BsonDiscriminator
+@ToString
 public abstract class PropertyInformation {
 
     private PropertyType propertyType;

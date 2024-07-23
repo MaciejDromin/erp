@@ -6,6 +6,7 @@
   import { onMount } from 'svelte'
   import ObjectValueTable from '$lib/finances/object-value/ObjectValueTable.svelte'
   import type { PageData } from './$types'
+  import { ObjectType } from '$lib/finances/types/financialTypes'
 
   export let data: PageData
 
@@ -89,5 +90,9 @@
     </div>
   </form>
 
-  <Pageable endpoint="/finances/object-value" component={ObjectValueTable} />
+  <Pageable
+    endpoint="/finances/object-value"
+    additionalSearch={`&objectType=${ObjectType.ITEM}`}
+    component={ObjectValueTable}
+  />
 </div>

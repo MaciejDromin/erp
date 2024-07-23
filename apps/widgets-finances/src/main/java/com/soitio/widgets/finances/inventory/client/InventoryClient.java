@@ -6,12 +6,16 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import java.util.Map;
 
-@Path("/inventory")
+@Path("/")
 @RegisterRestClient
 public interface InventoryClient {
 
     @POST
-    @Path("/items/object-count")
-    public Map<String, Integer> objectCount(ObjectIdsDto objectIds);
+    @Path("/inventory/items/object-count")
+    Map<String, Integer> itemCount(ObjectIdsDto objectIds);
+
+    @POST
+    @Path("properties/object-count")
+    Map<String, Integer> propertyCount(ObjectIdsDto objectIds);
 
 }
