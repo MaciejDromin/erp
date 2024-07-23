@@ -43,6 +43,12 @@
         placeholder="Unique Identifier"
         class="input input-bordered input-primary w-full max-w-xs"
       />
+      <input
+        name="landRegister"
+        type="text"
+        placeholder="Land Register"
+        class="input input-bordered input-primary w-full max-w-xs"
+      />
     </div>
 
     <div class="flex flex-row gap-3">

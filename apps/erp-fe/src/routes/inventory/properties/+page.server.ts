@@ -10,6 +10,7 @@ export const actions = {
       name: data.get('name'),
       uniqueIdentifier: data.get('uniqueIdentifier'),
       addressId: data.get('addressId'),
+      landRegister: data.get('landRegister'),
       propertyInformation: {
         propertyType: data.get('propertyType'),
         landClassification: data.get('landClassification'),

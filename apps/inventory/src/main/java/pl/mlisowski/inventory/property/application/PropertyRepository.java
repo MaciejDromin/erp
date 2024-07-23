@@ -32,6 +32,7 @@ public class PropertyRepository implements PanacheMongoRepository<Property> {
                 .name(propertyCreation.getName())
                 .uniqueIdentifier(propertyCreation.getUniqueIdentifier())
                 .addressId(propertyCreation.getAddressId())
+                .landRegister(propertyCreation.getLandRegister())
                 .propertyInformation(fromPropertyInformation(propertyCreation.getPropertyInformation()))
                 .build();
     }
@@ -57,6 +58,7 @@ public class PropertyRepository implements PanacheMongoRepository<Property> {
                 .name(property.getName())
                 .uniqueIdentifier(property.getUniqueIdentifier())
                 .propertyType(property.getPropertyInformation().getPropertyType())
+                .landRegister(property.getLandRegister())
                 .build();
     }
 

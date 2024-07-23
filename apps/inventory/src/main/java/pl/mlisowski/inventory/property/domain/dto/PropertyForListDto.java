@@ -14,6 +14,7 @@ public class PropertyForListDto {
     private ObjectId id;
     private String name;
     private String uniqueIdentifier;
+    private String landRegister;
     private PropertyType propertyType;
 
 }
