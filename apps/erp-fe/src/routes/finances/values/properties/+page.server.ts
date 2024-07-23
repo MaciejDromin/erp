@@ -11,7 +11,7 @@ export const actions = {
     const body = {
       amount: data.get('amount'),
       currencyCode: data.get('currencyCode'),
-      objectId: data.get('itemId'),
+      objectId: data.get('propertyId'),
       objectType: ObjectType.PROPERTY,
     }
     await unsecuredExternalApiRequest(

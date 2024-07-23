@@ -2,7 +2,7 @@
   import PropertyTable from '$lib/inventory/properties/PropertyTable.svelte'
   import Modal from '$lib/Modal.svelte'
   import Pageable from '$lib/Pageable.svelte'
-  import { itemsStore } from '$lib/inventory/stores/selectedItems'
+  import { propertiesStore } from '$lib/inventory/stores/selectedProperties'
   import { onMount } from 'svelte'
   import ObjectValueTable from '$lib/finances/object-value/ObjectValueTable.svelte'
   import type { PageData } from './$types'
@@ -10,20 +10,20 @@
 
   export let data: PageData
 
-  let items: any[] = []
+  let properties: any[] = []
 
   onMount(() => {
-    $itemsStore = []
+    $propertiesStore = []
   })
 
-  itemsStore.subscribe((itm) => {
-    items = [...itm]
-    items = items
+  propertiesStore.subscribe((prop) => {
+    properties = [...prop]
+    properties = properties
   })
 
   const determineButtonName = (arr: any[]): string => {
-    if (arr.length === 0) return 'select item'
-    return `${arr.length} item selected`
+    if (arr.length === 0) return 'select property'
+    return `${arr.length} property selected`
   }
 </script>
 
@@ -67,16 +67,16 @@
     <div class="flex flex-row gap-3">
       <select
         multiple
-        name="itemId"
+        name="propertyId"
         class="p-4 mr-auto hidden"
-        bind:value={items}
+        bind:value={properties}
       >
-        {#each items as item}
-          <option value={item} />
+        {#each properties as property}
+          <option value={property} />
         {/each}
       </select>
       <div class="mr-auto">
-        <Modal modalId="item_modal" buttonName={determineButtonName(items)}>
+        <Modal modalId="property_modal" buttonName={determineButtonName(properties)}>
           <Pageable
             endpoint="/inventory/properties"
             component={PropertyTable}
