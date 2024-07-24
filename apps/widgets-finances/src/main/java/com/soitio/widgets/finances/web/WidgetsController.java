@@ -17,4 +17,11 @@ public class WidgetsController {
     public WidgetData getNetWorth() {
         return widgetService.calculateTotalNetWorth();
     }
+
+    @GET
+    @Path("/monthly-balance")
+    public WidgetData getMonthlyBalance() {
+        return widgetService.calculateMonthlyBalance();
+    }
+
 }

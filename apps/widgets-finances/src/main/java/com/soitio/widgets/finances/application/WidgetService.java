@@ -53,4 +53,7 @@ public class WidgetService {
         return financesClient.totalValue(objectCountMap, objectType);
     }
 
+    public WidgetData calculateMonthlyBalance() {
+        return WidgetData.builder().build();
+    }
 }
