@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -40,8 +39,8 @@ public class WidgetService {
 //        TotalObjectsValueDto totalValueVehicles = getTotalObjectValue(ObjectType.VEHICLE, inventoryClient::objectCount);
 
         return WidgetData.builder()
-                .labels(Set.of("Total NET Worth"))
-                .datasets(Set.of(Dataset.builder()
+                .labels(List.of("Total NET Worth"))
+                .datasets(List.of(Dataset.builder()
                         .label("%s %s".formatted(Stream.of(
                                 totalValueItems.getTotalAmount().getValue(),
                                 totalValueProperties.getTotalAmount().getValue()
@@ -63,8 +62,8 @@ public class WidgetService {
         List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(LocalDateTime.now().getYear());
         log.info("ML --- {}", operations);
         return WidgetData.builder()
-                .labels(Set.of("M1", "M2", "M3"))
-                .datasets(Set.of(Dataset.builder()
+                .labels(List.of("M1", "M2", "M3"))
+                .datasets(List.of(Dataset.builder()
                         .data(List.of(5.2, 13.3, 6.0))
                         .label(MoneyOperationType.INCOME.name())
                         .backgroundColor(List.of(
