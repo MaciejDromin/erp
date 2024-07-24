@@ -24,7 +24,7 @@ widgets:
       version: v1.0
       unique-code: FIN001
     - name: Monthly Balance
-      datasource: http://widgets-finances:8080/widgets/monthly-balance
+      datasource: http://localhost:8080/widgets/monthly-balance
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN002

@@ -1,5 +1,7 @@
 package pl.mlisowski.finances.moneyoperation.web;
 
+import java.time.Year;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,8 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.mlisowski.finances.moneyoperation.application.MoneyOperationService;
+import pl.mlisowski.finances.moneyoperation.domain.dto.MoneyOperationBalanceDto;
 import pl.mlisowski.finances.moneyoperation.domain.dto.MoneyOperationCreationDto;
 import pl.mlisowski.finances.moneyoperation.domain.dto.MoneyOperationDto;
 
@@ -28,6 +32,11 @@ public class MoneyOperationController {
     @PostMapping
     public void registerMoneyOperation(@RequestBody MoneyOperationCreationDto creation) {
         operationService.create(creation);
+    }
+
+    @GetMapping("/balance")
+    public List<MoneyOperationBalanceDto> getOperationsForBalance(@RequestParam("balanceYear") int balanceYear) {
+        return operationService.getForBalance(balanceYear);
     }
 
 }

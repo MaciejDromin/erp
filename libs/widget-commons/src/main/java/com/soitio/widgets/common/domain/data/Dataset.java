@@ -20,5 +20,8 @@ public class Dataset {
 
     private String label;
     private List<Double> data;
+    private List<Rgba> backgroundColor;
+    private List<Rgba> borderColor;
+    private int borderWidth;
 
 }

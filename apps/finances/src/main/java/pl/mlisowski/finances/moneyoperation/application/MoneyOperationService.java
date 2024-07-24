@@ -1,6 +1,7 @@
 package pl.mlisowski.finances.moneyoperation.application;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.ZoneOffset;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import pl.mlisowski.finances.common.dto.AmountDto;
 import pl.mlisowski.finances.moneyoperation.application.port.MoneyOperationRepository;
 import pl.mlisowski.finances.moneyoperation.domain.MoneyOperation;
+import pl.mlisowski.finances.moneyoperation.domain.dto.MoneyOperationBalanceDto;
 import pl.mlisowski.finances.moneyoperation.domain.dto.MoneyOperationCreationDto;
 import pl.mlisowski.finances.moneyoperation.domain.dto.MoneyOperationDto;
 import pl.mlisowski.finances.operationcategories.application.OperationCategoryService;
@@ -79,4 +81,22 @@ public class MoneyOperationService {
     public void saveAll(List<MoneyOperation> converted) {
         repository.saveAll(converted);
     }
+
+    public List<MoneyOperationBalanceDto> getForBalance(int balanceYear) {
+        return repository.findAllByEffectiveYear(balanceYear).stream()
+                .map(this::toBalance)
+                .toList();
+    }
+
+    private MoneyOperationBalanceDto toBalance(MoneyOperation moneyOperation) {
+        return MoneyOperationBalanceDto.builder()
+                .uuid(moneyOperation.getUuid())
+                .amount(AmountDto.of(moneyOperation.getAmount().getAmount(),
+                        moneyOperation.getAmount().getCurrencyUnit().getCode()))
+                .effectiveYear(moneyOperation.getEffectiveYear())
+                .effectiveMonth(moneyOperation.getEffectiveMonth())
+                .operationType(moneyOperation.getOperationType())
+                .build();
+    }
+
 }
