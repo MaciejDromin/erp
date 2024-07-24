@@ -1,5 +1,6 @@
 package com.soitio.widgets.finances.client;
 
+import com.soitio.widgets.finances.domain.MoneyOperationBalanceDto;
 import com.soitio.widgets.finances.domain.ObjectType;
 import com.soitio.widgets.finances.domain.TotalObjectsValueDto;
 import jakarta.ws.rs.GET;
@@ -22,5 +23,9 @@ public interface FinancesClient {
     @Path("/object-value/total-value")
     TotalObjectsValueDto totalValue(Map<String, Integer> quantityByObjectMap,
                                     @QueryParam("objectType") ObjectType objectType);
+
+    @GET
+    @Path("/money-operation/balance")
+    List<MoneyOperationBalanceDto> getOperationsForBalance(@QueryParam("balanceYear") int balanceYear);
 
 }

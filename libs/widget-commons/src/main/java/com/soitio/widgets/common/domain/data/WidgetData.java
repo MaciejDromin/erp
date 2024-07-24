@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +18,7 @@ import java.util.Set;
 @ToString
 public class WidgetData {
 
-    private Set<String> labels;
-    private Set<Dataset> datasets;
+    private List<String> labels;
+    private List<Dataset> datasets;
 
 }

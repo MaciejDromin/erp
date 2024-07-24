@@ -18,9 +18,13 @@ service-discovery:
 
 widgets:
   widget-definitions:
-    -
-      name: Total Net Worth
+    - name: Total Net Worth
       datasource: http://localhost:8080/widgets/total-net-worth
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN001
+    - name: Monthly Balance
+      datasource: http://localhost:8080/widgets/monthly-balance
+      widget-domain: FINANCES
+      version: v1.0
+      unique-code: FIN002
