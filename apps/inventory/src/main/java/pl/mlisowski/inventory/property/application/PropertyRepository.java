@@ -14,6 +14,8 @@ import pl.mlisowski.inventory.property.information.PropertyInformation;
 import pl.mlisowski.inventory.property.information.dto.PropertyInformationCreationDto;
 import pl.mlisowski.inventory.property.information.strategy.PropertyInformationCreationProvider;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,6 +86,19 @@ public class PropertyRepository implements PanacheMongoRepository<Property> {
     public Map<String, Integer> findCountByObjectsIds(List<String> itemIds) {
         return itemIds.stream()
                 .collect(Collectors.toMap(id -> id, id -> 1));
+    }
+
+    public Map<String, String> findAllItemNamesByIds(List<String> itemIds) {
+        Map<String, String> ret = new HashMap<>();
+        var items = findAllByIdsIn(itemIds.stream()
+                .map(ObjectId::new)
+                .collect(Collectors.toSet()));
+        items.forEach(item -> ret.put(item.getId().toString(), item.getName()));
+        return ret;
+    }
+
+    public Set<Property> findAllByIdsIn(Set<ObjectId> itemIds) {
+        return new HashSet<>(list("_id in ?1", itemIds));
     }
 
 }

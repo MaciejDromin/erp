@@ -1,18 +1,36 @@
 <script lang="ts">
   import { HttpMethods } from '$lib/types/httpMethods'
+  import { ObjectType } from '$lib/finances/types/financialTypes'
 
   export let data: any = undefined
+  export let objectType: ObjectType = undefined
+
   let objectNameMap: { [id: string]: string } = {}
 
   const getObjectNames = async (dt: any) => {
     if (dt === undefined) return
-    const res = await fetch('/api/inventory/items/object-names', {
+    const res = await fetch(`/api/inventory/${determinePath(objectType)}/object-names`, {
       method: HttpMethods.POST,
       body: JSON.stringify({
         itemIds: extractObjectIds(dt.content),
       }),
     })
     objectNameMap = await res.json()
+  }
+
+  const determinePath= (objectType: ObjectType) => {
+    switch(objectType) {
+      case ObjectType.ITEM:
+        return "items"
+        break;
+      case ObjectType.PROPERTY:
+        return "properties"
+        break;
+      case ObjectType.VEHICLE:
+        return "vehicles"
+        break;
+    }
+    return 'none';
   }
 
   const extractObjectIds = (items: any[]): string[] => {

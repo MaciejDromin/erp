@@ -36,4 +36,10 @@ public class PropertyController {
         return propertyRepository.findCountByObjectsIds(objectIds.getItemIds());
     }
 
+    @POST
+    @Path("/object-names")
+    public Map<String, String> objectNames(ObjectIdsDto objectNames) {
+        return propertyRepository.findAllItemNamesByIds(objectNames.getItemIds());
+    }
+
 }

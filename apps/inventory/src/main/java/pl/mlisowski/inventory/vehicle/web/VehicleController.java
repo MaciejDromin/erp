@@ -35,4 +35,10 @@ public class VehicleController {
         return vehicleRepository.findCountByObjectsIds(objectIds.getItemIds());
     }
 
+    @POST
+    @Path("/object-names")
+    public Map<String, String> objectNames(ObjectIdsDto objectNames) {
+        return vehicleRepository.findAllItemNamesByIds(objectNames.getItemIds());
+    }
+
 }
