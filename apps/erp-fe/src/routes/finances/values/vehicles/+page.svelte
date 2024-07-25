@@ -1,8 +1,8 @@
 <script lang="ts">
-  import PropertyTable from '$lib/inventory/properties/PropertyTable.svelte'
+  import VehicleTable from '$lib/inventory/vehicles/VehicleTable.svelte'
   import Modal from '$lib/Modal.svelte'
   import Pageable from '$lib/Pageable.svelte'
-  import { propertiesStore } from '$lib/inventory/stores/selectedProperties'
+  import { vehiclesStore } from '$lib/inventory/stores/selectedVehicles'
   import { onMount } from 'svelte'
   import ObjectValueTable from '$lib/finances/object-value/ObjectValueTable.svelte'
   import type { PageData } from './$types'
@@ -10,20 +10,20 @@
 
   export let data: PageData
 
-  let properties: any[] = []
+  let vehicles: any[] = []
 
   onMount(() => {
-    $propertiesStore = []
+    $vehiclesStore = []
   })
 
-  propertiesStore.subscribe((prop) => {
-    properties = [...prop]
-    properties = properties
+  vehiclesStore.subscribe((veh) => {
+    vehicles = [...veh]
+    vehicles = vehicles
   })
 
   const determineButtonName = (arr: any[]): string => {
-    if (arr.length === 0) return 'select property'
-    return `${arr.length} property selected`
+    if (arr.length === 0) return 'select vehicle'
+    return `${arr.length} vehicle selected`
   }
 </script>
 
@@ -67,22 +67,22 @@
     <div class="flex flex-row gap-3">
       <select
         multiple
-        name="propertyId"
+        name="vehicleId"
         class="p-4 mr-auto hidden"
-        bind:value={properties}
+        bind:value={vehicles}
       >
-        {#each properties as property}
-          <option value={property} />
+        {#each vehicles as vehicle}
+          <option value={vehicle} />
         {/each}
       </select>
       <div class="mr-auto">
         <Modal
-          modalId="property_modal"
-          buttonName={determineButtonName(properties)}
+          modalId="vehicle_modal"
+          buttonName={determineButtonName(vehicles)}
         >
           <Pageable
-            endpoint="/inventory/properties"
-            component={PropertyTable}
+            endpoint="/inventory/vehicles"
+            component={VehicleTable}
             additionalSearch={data.objectIds.length === 0
               ? ''
               : `&objectIds=${data.objectIds.join(',')}`}
@@ -95,7 +95,7 @@
 
   <Pageable
     endpoint="/finances/object-value"
-    additionalSearch={`&objectType=${ObjectType.PROPERTY}`}
+    additionalSearch={`&objectType=${ObjectType.VEHICLE}`}
     component={ObjectValueTable}
   />
 </div>

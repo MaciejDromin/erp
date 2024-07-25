@@ -11,8 +11,8 @@ export const actions = {
     const body = {
       amount: data.get('amount'),
       currencyCode: data.get('currencyCode'),
-      objectId: data.get('propertyId'),
-      objectType: ObjectType.PROPERTY,
+      objectId: data.get('vehicleId'),
+      objectType: ObjectType.VEHICLE,
     }
     await unsecuredExternalApiRequest(
       FINANCES_URL + '/finances/object-value',
@@ -25,20 +25,20 @@ export const actions = {
 export const load = (async ({ params }) => {
   const objectIds = await unsecuredExternalApiRequest(
     FINANCES_URL +
-      `/finances/object-value/object-ids?objectType=${ObjectType.PROPERTY}`,
+      `/finances/object-value/object-ids?objectType=${ObjectType.VEHICLE}`,
     HttpMethods.GET
   )
   const objectIdsBody = {
     itemIds: await objectIds.json(),
   }
   const countMap = await unsecuredExternalApiRequest(
-    INVENTORY_URL + '/properties/object-count',
+    INVENTORY_URL + '/vehicles/object-count',
     HttpMethods.POST,
     objectIdsBody
   )
   const data = await unsecuredExternalApiRequest(
     FINANCES_URL +
-      `/finances/object-value/total-value?objectType=${ObjectType.PROPERTY}`,
+      `/finances/object-value/total-value?objectType=${ObjectType.VEHICLE}`,
     HttpMethods.POST,
     await countMap.json()
   )
