@@ -13,12 +13,7 @@
     $propertiesStore = Array.from(selectedPropertiesIds.keys())
   })
 
-  const convertCategories = (categories: any[]): string => {
-    let categoryNames = categories.map((category: any) => category['name'])
-    return categoryNames.toString()
-  }
-
-  const updateCategoriesList = (propertyId: string) => {
+  const updatePropertiesList = (propertyId: string) => {
     if (selectedPropertiesIds.has(propertyId)) {
       selectedPropertiesIds.delete(propertyId)
     } else {
@@ -64,7 +59,7 @@
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
                 ${propertySelectedStyles(selectedPropertiesIds, property.id)}
                 ${determineEvenBgColor(selectedPropertiesIds, property.id)}`}
-            on:click={() => updateCategoriesList(property.id)}
+            on:click={() => updatePropertiesList(property.id)}
           >
             <td>{property.id}</td>
             <td>{property.name}</td>

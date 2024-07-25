@@ -8,21 +8,20 @@ export const actions = {
     const data = await request.formData()
     const body = {
       name: data.get('name'),
-      uniqueIdentifier: data.get('uniqueIdentifier'),
-      addressId: data.get('addressId'),
-      landRegister: data.get('landRegister'),
-      propertyInformation: {
-        propertyType: data.get('propertyType'),
-        landClassification: data.get('landClassification'),
-        landArea: {
-          area: parseInt(parseFloat(data.get('area')) * 100),
-          unit: data.get('areaUnit'),
-        },
-      },
+      year: data.get('year'),
+      odometer: data.get('odometer'),
+      bodyStyle: data.get('bodyStyle'),
+      make: data.get('make'),
+      model: data.get('model'),
+      fuelType: data.get('fuelType'),
+      driveTrain: data.get('driveTrain'),
+      transmission: data.get('transmission'),
+      engineType: data.get('engineType'),
+      vin: data.get('vin'),
     }
     console.log(body)
     let test = await unsecuredExternalApiRequest(
-      INVENTORY_URL + '/properties',
+      INVENTORY_URL + '/vehicles',
       HttpMethods.POST,
       body
     )

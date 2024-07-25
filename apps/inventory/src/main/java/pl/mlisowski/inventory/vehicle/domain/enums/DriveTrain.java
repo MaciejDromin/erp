@@ -1,4 +1,4 @@
-package pl.mlisowski.inventory.property.domain.enums;
+package pl.mlisowski.inventory.vehicle.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import pl.mlisowski.inventory.property.domain.enums.BodyStyle;
-import pl.mlisowski.inventory.property.domain.enums.DriveTrain;
-import pl.mlisowski.inventory.property.domain.enums.FuelType;
-import pl.mlisowski.inventory.property.domain.enums.Make;
-import pl.mlisowski.inventory.property.domain.enums.Transmission;
+import pl.mlisowski.inventory.vehicle.domain.enums.BodyStyle;
+import pl.mlisowski.inventory.vehicle.domain.enums.DriveTrain;
+import pl.mlisowski.inventory.vehicle.domain.enums.FuelType;
+import pl.mlisowski.inventory.vehicle.domain.enums.Make;
+import pl.mlisowski.inventory.vehicle.domain.enums.Transmission;
 
 @Builder
 @AllArgsConstructor
