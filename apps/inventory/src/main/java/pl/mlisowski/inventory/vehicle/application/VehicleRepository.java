@@ -43,6 +43,7 @@ public class VehicleRepository implements PanacheMongoRepository<Vehicle> {
     }
 
     public void create(VehicleCreationDto vehicleCreation) {
+        persist(from(vehicleCreation));
     }
 
     public Map<String, Integer> findCountByObjectsIds(List<String> vehicleIds) {
@@ -55,7 +56,30 @@ public class VehicleRepository implements PanacheMongoRepository<Vehicle> {
     }
 
     private VehicleForListDto to(Vehicle vehicle) {
-        return null;
+        return VehicleForListDto.builder()
+                .id(vehicle.getId())
+                .name(vehicle.getName())
+                .year(vehicle.getYear())
+                .make(vehicle.getMake())
+                .model(vehicle.getModel())
+                .odometer(vehicle.getOdometer())
+                .build();
+    }
+
+    private Vehicle from(VehicleCreationDto vehicleCreation) {
+        return Vehicle.builder()
+                .name(vehicleCreation.getName())
+                .year(vehicleCreation.getYear())
+                .odometer(vehicleCreation.getOdometer())
+                .bodyStyle(vehicleCreation.getBodyStyle())
+                .make(vehicleCreation.getMake())
+                .model(vehicleCreation.getModel())
+                .fuelType(vehicleCreation.getFuelType())
+                .driveTrain(vehicleCreation.getDriveTrain())
+                .transmission(vehicleCreation.getTransmission())
+                .engineType(vehicleCreation.getEngineType())
+                .vin(vehicleCreation.getVin())
+                .build();
     }
     
 }
