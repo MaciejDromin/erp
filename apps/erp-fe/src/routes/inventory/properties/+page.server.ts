@@ -20,7 +20,6 @@ export const actions = {
         },
       },
     }
-    console.log(body)
     let test = await unsecuredExternalApiRequest(
       INVENTORY_URL + '/properties',
       HttpMethods.POST,

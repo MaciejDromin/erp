@@ -19,7 +19,6 @@ export const actions = {
       engineType: data.get('engineType'),
       vin: data.get('vin'),
     }
-    console.log(body)
     let test = await unsecuredExternalApiRequest(
       INVENTORY_URL + '/vehicles',
       HttpMethods.POST,
