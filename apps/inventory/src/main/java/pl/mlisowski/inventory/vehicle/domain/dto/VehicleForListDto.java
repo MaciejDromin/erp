@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
-import pl.mlisowski.inventory.property.domain.enums.Make;
+import pl.mlisowski.inventory.vehicle.domain.enums.Make;
 
 @Builder
 @AllArgsConstructor

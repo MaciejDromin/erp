@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
-import pl.mlisowski.inventory.property.domain.enums.BodyStyle;
-import pl.mlisowski.inventory.property.domain.enums.DriveTrain;
-import pl.mlisowski.inventory.property.domain.enums.FuelType;
-import pl.mlisowski.inventory.property.domain.enums.Make;
-import pl.mlisowski.inventory.property.domain.enums.Transmission;
+import pl.mlisowski.inventory.vehicle.domain.enums.BodyStyle;
+import pl.mlisowski.inventory.vehicle.domain.enums.DriveTrain;
+import pl.mlisowski.inventory.vehicle.domain.enums.FuelType;
+import pl.mlisowski.inventory.vehicle.domain.enums.Make;
+import pl.mlisowski.inventory.vehicle.domain.enums.Transmission;
 
 @Getter
 @Setter

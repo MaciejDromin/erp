@@ -25,6 +25,11 @@ const RECOGNIZED_PATHS: { [key: string]: SidebarItem } = {
         path: '/inventory/properties',
         subPaths: [],
       },
+      {
+        name: 'Vehicles',
+        path: '/inventory/vehicles',
+        subPaths: [],
+      },
     ],
   },
   finances: {
@@ -58,6 +63,11 @@ const RECOGNIZED_PATHS: { [key: string]: SidebarItem } = {
           {
             name: 'Properties',
             path: '/finances/values/properties',
+            subPaths: [],
+          },
+          {
+            name: 'Vehicles',
+            path: '/finances/values/vehicles',
             subPaths: [],
           },
         ],
