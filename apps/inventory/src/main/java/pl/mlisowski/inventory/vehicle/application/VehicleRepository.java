@@ -10,6 +10,8 @@ import pl.mlisowski.inventory.vehicle.domain.Vehicle;
 import pl.mlisowski.inventory.vehicle.domain.dto.VehicleCreationDto;
 import pl.mlisowski.inventory.vehicle.domain.dto.VehicleForListDto;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -81,5 +83,18 @@ public class VehicleRepository implements PanacheMongoRepository<Vehicle> {
                 .vin(vehicleCreation.getVin())
                 .build();
     }
-    
+
+    public Map<String, String> findAllItemNamesByIds(List<String> itemIds) {
+        Map<String, String> ret = new HashMap<>();
+        var items = findAllByIdsIn(itemIds.stream()
+                .map(ObjectId::new)
+                .collect(Collectors.toSet()));
+        items.forEach(item -> ret.put(item.getId().toString(), item.getName()));
+        return ret;
+    }
+
+    public Set<Vehicle> findAllByIdsIn(Set<ObjectId> itemIds) {
+        return new HashSet<>(list("_id in ?1", itemIds));
+    }
+
 }

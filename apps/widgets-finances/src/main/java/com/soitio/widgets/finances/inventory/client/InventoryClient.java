@@ -18,4 +18,8 @@ public interface InventoryClient {
     @Path("properties/object-count")
     Map<String, Integer> propertyCount(ObjectIdsDto objectIds);
 
+    @POST
+    @Path("vehicles/object-count")
+    Map<String, Integer> vehicleCount(ObjectIdsDto objectIds);
+
 }

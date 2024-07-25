@@ -40,15 +40,15 @@ public class WidgetService {
     public WidgetData calculateTotalNetWorth() {
         TotalObjectsValueDto totalValueItems = getTotalObjectValue(ObjectType.ITEM, inventoryClient::itemCount);
         TotalObjectsValueDto totalValueProperties = getTotalObjectValue(ObjectType.PROPERTY, inventoryClient::propertyCount);
-//        TotalObjectsValueDto totalValueVehicles = getTotalObjectValue(ObjectType.VEHICLE, inventoryClient::objectCount);
+        TotalObjectsValueDto totalValueVehicles = getTotalObjectValue(ObjectType.VEHICLE, inventoryClient::vehicleCount);
 
         return WidgetData.builder()
                 .labels(List.of("Total NET Worth"))
                 .datasets(List.of(Dataset.builder()
                         .label("%s %s".formatted(Stream.of(
                                 totalValueItems.getTotalAmount().getValue(),
-                                totalValueProperties.getTotalAmount().getValue()
-//                                totalValueVehicles.getTotalAmount().getValue()
+                                totalValueProperties.getTotalAmount().getValue(),
+                                totalValueVehicles.getTotalAmount().getValue()
                                 ).reduce(BigDecimal.ZERO, BigDecimal::add),
                                 totalValueItems.getTotalAmount().getCurrencyCode()))
                         .build()))
