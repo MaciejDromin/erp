@@ -65,6 +65,7 @@ public class VehicleRepository implements PanacheMongoRepository<Vehicle> {
                 .make(vehicle.getMake())
                 .model(vehicle.getModel())
                 .odometer(vehicle.getOdometer())
+                .registrationPlate(vehicle.getRegistrationPlate())
                 .build();
     }
 
@@ -81,6 +82,7 @@ public class VehicleRepository implements PanacheMongoRepository<Vehicle> {
                 .transmission(vehicleCreation.getTransmission())
                 .engineType(vehicleCreation.getEngineType())
                 .vin(vehicleCreation.getVin())
+                .registrationPlate(vehicleCreation.getRegistrationPlate())
                 .build();
     }
 

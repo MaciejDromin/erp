@@ -96,7 +96,7 @@
   <Pageable
     endpoint="/finances/object-value"
     additionalSearch={`&objectType=${ObjectType.VEHICLE}`}
-    additionalParams={{objectType: ObjectType.VEHICLE}}
+    additionalParams={{ objectType: ObjectType.VEHICLE }}
     component={ObjectValueTable}
   />
 </div>

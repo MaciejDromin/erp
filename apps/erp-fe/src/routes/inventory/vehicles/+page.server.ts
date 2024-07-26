@@ -18,8 +18,9 @@ export const actions = {
       transmission: data.get('transmission'),
       engineType: data.get('engineType'),
       vin: data.get('vin'),
+      registrationPlate: data.get('registrationPlate'),
     }
-    let test = await unsecuredExternalApiRequest(
+    await unsecuredExternalApiRequest(
       INVENTORY_URL + '/vehicles',
       HttpMethods.POST,
       body
