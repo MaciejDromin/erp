@@ -9,28 +9,31 @@
 
   const getObjectNames = async (dt: any) => {
     if (dt === undefined) return
-    const res = await fetch(`/api/inventory/${determinePath(objectType)}/object-names`, {
-      method: HttpMethods.POST,
-      body: JSON.stringify({
-        itemIds: extractObjectIds(dt.content),
-      }),
-    })
+    const res = await fetch(
+      `/api/inventory/${determinePath(objectType)}/object-names`,
+      {
+        method: HttpMethods.POST,
+        body: JSON.stringify({
+          itemIds: extractObjectIds(dt.content),
+        }),
+      }
+    )
     objectNameMap = await res.json()
   }
 
-  const determinePath= (objectType: ObjectType) => {
-    switch(objectType) {
+  const determinePath = (objectType: ObjectType) => {
+    switch (objectType) {
       case ObjectType.ITEM:
-        return "items"
-        break;
+        return 'items'
+        break
       case ObjectType.PROPERTY:
-        return "properties"
-        break;
+        return 'properties'
+        break
       case ObjectType.VEHICLE:
-        return "vehicles"
-        break;
+        return 'vehicles'
+        break
     }
-    return 'none';
+    return 'none'
   }
 
   const extractObjectIds = (items: any[]): string[] => {

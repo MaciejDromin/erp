@@ -51,6 +51,7 @@
         <th>Make</th>
         <th>Model</th>
         <th>Odometer</th>
+        <th>Registration Plate</th>
       </tr>
     </thead>
     <tbody>
@@ -68,6 +69,7 @@
             <td>{vehicle.make}</td>
             <td>{vehicle.model}</td>
             <td>{vehicle.odometer}</td>
+            <td>{vehicle.registrationPlate}</td>
           </tr>
         {/each}
       {/if}

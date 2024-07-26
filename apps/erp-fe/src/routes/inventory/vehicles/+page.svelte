@@ -78,6 +78,12 @@
         placeholder="VIN"
         class="input input-bordered input-primary w-full max-w-xs"
       />
+      <input
+        name="registrationPlate"
+        type="text"
+        placeholder="Registration Plate"
+        class="input input-bordered input-primary w-full max-w-xs"
+      />
       <button class="btn btn-primary">Add Row</button>
     </div>
   </form>

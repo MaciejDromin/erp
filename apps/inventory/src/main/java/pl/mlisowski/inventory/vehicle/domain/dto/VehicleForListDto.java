@@ -19,5 +19,6 @@ public class VehicleForListDto {
     private Make make;
     private String model;
     private int odometer;
+    private String registrationPlate;
 
 }

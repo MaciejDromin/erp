@@ -27,5 +27,6 @@ public class VehicleCreationDto {
     private Transmission transmission;
     private String engineType;
     private String vin;
+    private String registrationPlate;
 
 }
