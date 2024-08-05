@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
+import pl.mlisowski.inventory.maintenance.domain.dto.PartQuantity;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class MaintenanceRecord {
     private ObjectId id;
     private LocalDate date;
     private int odometer;
-    private List<ObjectId> partsIds;
+    private List<PartQuantity> parts;
     private ObjectId contractorId;
 
 }

@@ -46,6 +46,7 @@ public class PartRepository implements PanacheMongoRepository<Part> {
     }
 
     public void create(PartCreationDto partCreation) {
+        persist(from(partCreation));
     }
 
     private Part from(PartCreationDto part) {
@@ -58,8 +59,10 @@ public class PartRepository implements PanacheMongoRepository<Part> {
 
     private PartDto to(Part part) {
         return PartDto.builder()
+                .id(part.getId())
                 .name(part.getName())
                 .partNumber(part.getPartNumber())
+                .manufacturerId(part.getManufacturerId())
                 .build();
     }
 }

@@ -20,7 +20,7 @@ public class MaintenanceRepository implements PanacheMongoRepository<Maintenance
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     public void create(MaintenanceCreationDto maintenanceCreation) {
-        
+        persist(from(maintenanceCreation));
     }
 
     public PageDto<MaintenanceForListDto> getForList(UriInfo uriInfo) {
@@ -61,7 +61,7 @@ public class MaintenanceRepository implements PanacheMongoRepository<Maintenance
         return MaintenanceRecord.builder()
                 .date(maintenanceCreation.getDate())
                 .odometer(maintenanceCreation.getOdometer())
-                .partsIds(maintenanceCreation.getPartsIds())
+                .parts(maintenanceCreation.getParts())
                 .contractorId(maintenanceCreation.getContractorId())
                 .build();
     }
