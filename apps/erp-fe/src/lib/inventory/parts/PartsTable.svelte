@@ -1,40 +1,40 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { vehiclesStore } from '../stores/selectedVehicles'
+  import { partsStore } from '../stores/selectedParts'
 
   export let data: any = undefined
-  let selectedVehiclesIds: Map<string, string> = new Map()
+  let selectedPartsIds: Map<string, string> = new Map()
 
   onMount(() => {
-    $vehiclesStore.forEach((veh) => selectedVehiclesIds.set(veh, 'ok'))
+    $partsStore.forEach((veh) => selectedPartsIds.set(veh, 'ok'))
   })
 
   onDestroy(() => {
-    $vehiclesStore = Array.from(selectedVehiclesIds.keys())
+    $partsStore = Array.from(selectedPartsIds.keys())
   })
 
-  const updateVehiclesList = (vehicleId: string) => {
-    if (selectedVehiclesIds.has(vehicleId)) {
-      selectedVehiclesIds.delete(vehicleId)
+  const updatepartsList = (partId: string) => {
+    if (selectedPartsIds.has(partId)) {
+      selectedPartsIds.delete(partId)
     } else {
-      selectedVehiclesIds.set(vehicleId, 'ok')
+      selectedPartsIds.set(partId, 'ok')
     }
-    selectedVehiclesIds = selectedVehiclesIds
+    selectedPartsIds = selectedPartsIds
   }
 
-  const vehicleSelectedStyles = (
-    vehicleMap: Map<string, string>,
-    vehicleId: string
+  const partselectedStyles = (
+    partMap: Map<string, string>,
+    partId: string
   ): string => {
-    if (!vehicleMap.has(vehicleId)) return ''
+    if (!partMap.has(partId)) return ''
     return 'bg-indigo-600 text-white'
   }
 
   const determineEvenBgColor = (
-    vehicleMap: Map<string, string>,
-    vehicleId: string
+    partMap: Map<string, string>,
+    partId: string
   ): string => {
-    if (!vehicleMap.has(vehicleId)) return 'even:bg-black'
+    if (!partMap.has(partId)) return 'even:bg-black'
     return 'even:bg-indigo-600'
   }
 </script>
@@ -47,29 +47,23 @@
       <tr>
         <th>ID</th>
         <th>Name</th>
-        <th>Year</th>
-        <th>Make</th>
-        <th>Model</th>
-        <th>Odometer</th>
-        <th>Registration Plate</th>
+        <th>Part Number</th>
+        <th>Manufacturer ID</th>
       </tr>
     </thead>
     <tbody>
       {#if data !== undefined}
-        {#each data.content as vehicle}
+        {#each data.content as part}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-                ${vehicleSelectedStyles(selectedVehiclesIds, vehicle.id)}
-                ${determineEvenBgColor(selectedVehiclesIds, vehicle.id)}`}
-            on:click={() => updateVehiclesList(vehicle.id)}
+                ${partselectedStyles(selectedPartsIds, part.id)}
+                ${determineEvenBgColor(selectedPartsIds, part.id)}`}
+            on:click={() => updatepartsList(part.id)}
           >
-            <td>{vehicle.id}</td>
-            <td>{vehicle.name}</td>
-            <td>{vehicle.year}</td>
-            <td>{vehicle.make}</td>
-            <td>{vehicle.model}</td>
-            <td>{vehicle.odometer}</td>
-            <td>{vehicle.registrationPlate}</td>
+            <td>{part.id}</td>
+            <td>{part.name}</td>
+            <td>{part.partNumber}</td>
+            <td>{part.manufacturerId}</td>
           </tr>
         {/each}
       {/if}

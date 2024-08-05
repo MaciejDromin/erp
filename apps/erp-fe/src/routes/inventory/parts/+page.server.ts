@@ -8,20 +8,11 @@ export const actions = {
     const data = await request.formData()
     const body = {
       name: data.get('name'),
-      year: data.get('year'),
-      odometer: data.get('odometer'),
-      bodyStyle: data.get('bodyStyle'),
-      make: data.get('make'),
-      model: data.get('model'),
-      fuelType: data.get('fuelType'),
-      driveTrain: data.get('driveTrain'),
-      transmission: data.get('transmission'),
-      engineType: data.get('engineType'),
-      vin: data.get('vin'),
-      registrationPlate: data.get('registrationPlate'),
+      partNumber: data.get('partNumber'),
+      manufacturerId: data.get('manufacturerId'),
     }
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + '/vehicles',
+      INVENTORY_URL + '/parts',
       HttpMethods.POST,
       body
     )

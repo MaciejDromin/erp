@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.bson.types.ObjectId;
 
 @Builder
 @AllArgsConstructor
@@ -11,7 +12,9 @@ import lombok.ToString;
 @ToString
 public class PartDto {
 
+    private ObjectId id;
     private String name;
     private String partNumber;
+    private ObjectId manufacturerId;
 
 }
