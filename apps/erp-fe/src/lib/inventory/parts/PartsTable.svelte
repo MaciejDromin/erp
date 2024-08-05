@@ -6,14 +6,16 @@
   let selectedPartsIds: Map<string, string> = new Map()
 
   onMount(() => {
-    $partsStore.forEach((part) => selectedPartsIds.set(JSON.parse(part).id, part))
+    $partsStore.forEach((part) =>
+      selectedPartsIds.set(JSON.parse(part).id, part)
+    )
   })
 
   onDestroy(() => {
     $partsStore = Array.from(selectedPartsIds.values())
   })
 
-  const updatePartsList = (partId: string, name:string) => {
+  const updatePartsList = (partId: string, name: string) => {
     const partObj = JSON.stringify({ id: partId, name: name })
     if (selectedPartsIds.has(partId)) {
       selectedPartsIds.delete(partId)

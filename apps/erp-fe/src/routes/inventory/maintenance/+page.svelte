@@ -11,7 +11,7 @@
   let contractors: any[] = []
   let parts: any[] = []
   let partQuantity: any[] = []
-  let partVal:string = ""
+  let partVal: string = ''
 
   onMount(() => {
     $contractorsStore = []
@@ -32,9 +32,9 @@
     if (arr.length === 0) return `select ${name}`
     return `${arr.length} ${name}s selected`
   }
-  
+
   const updatePartsList = (partId: string, quantity: number) => {
-    const index = partQuantity.findIndex(p => p.id === partId)
+    const index = partQuantity.findIndex((p) => p.id === partId)
     if (index === -1) {
       partQuantity.push({ id: partId, quantity: Number(quantity) })
     } else {
@@ -74,34 +74,33 @@
       <div class="mr-auto">
         <Modal
           modalId="contractor_modal"
-          buttonName={determineButtonName(contractors, "contractor")}
+          buttonName={determineButtonName(contractors, 'contractor')}
         >
-          <Pageable endpoint="/inventory/contractors" component={ContractorsTable} />
+          <Pageable
+            endpoint="/inventory/contractors"
+            component={ContractorsTable}
+          />
         </Modal>
       </div>
       <div class="mr-auto">
         <Modal
           modalId="parts_modal"
-          buttonName={determineButtonName(parts, "part")}
+          buttonName={determineButtonName(parts, 'part')}
         >
           <Pageable endpoint="/inventory/parts" component={PartsTable} />
         </Modal>
       </div>
     </div>
     <div class="flex flex-col gap-3">
-      <input
-        name="parts"
-        type="text"
-        class="hidden"
-        bind:value={partVal}
-      />
+      <input name="parts" type="text" class="hidden" bind:value={partVal} />
       <h2 class="mx-auto my-6 text-3xl text-black">Parts</h2>
       {#each parts as part}
         <input
           type="text"
-          placeholder={JSON.parse(part).name + " quantity"}
+          placeholder={JSON.parse(part).name + ' quantity'}
           class="input input-bordered input-primary w-full max-w-xs mx-auto"
-          on:change={(e) => updatePartsList(JSON.parse(part).id, e.target.value)}
+          on:change={(e) =>
+            updatePartsList(JSON.parse(part).id, e.target.value)}
         />
       {/each}
       <button class="btn btn-primary mx-auto">Add Row</button>

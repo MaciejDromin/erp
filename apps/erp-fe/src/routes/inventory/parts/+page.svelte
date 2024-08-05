@@ -53,7 +53,10 @@
           modalId="contractor_modal"
           buttonName={determineButtonName(contractors)}
         >
-          <Pageable endpoint="/inventory/contractors" component={ContractorsTable} />
+          <Pageable
+            endpoint="/inventory/contractors"
+            component={ContractorsTable}
+          />
         </Modal>
       </div>
       <button class="btn btn-primary">Add Row</button>

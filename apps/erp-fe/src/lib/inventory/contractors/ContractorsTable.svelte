@@ -6,7 +6,9 @@
   let selectedContractorsIds: Map<string, string> = new Map()
 
   onMount(() => {
-    $contractorsStore.forEach((contr) => selectedContractorsIds.set(contr, 'ok'))
+    $contractorsStore.forEach((contr) =>
+      selectedContractorsIds.set(contr, 'ok')
+    )
   })
 
   onDestroy(() => {
