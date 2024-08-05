@@ -1,40 +1,40 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { vehiclesStore } from '../stores/selectedVehicles'
+  import { contractorsStore } from '../stores/selectedContractors'
 
   export let data: any = undefined
-  let selectedVehiclesIds: Map<string, string> = new Map()
+  let selectedContractorsIds: Map<string, string> = new Map()
 
   onMount(() => {
-    $vehiclesStore.forEach((veh) => selectedVehiclesIds.set(veh, 'ok'))
+    $contractorsStore.forEach((contr) => selectedContractorsIds.set(contr, 'ok'))
   })
 
   onDestroy(() => {
-    $vehiclesStore = Array.from(selectedVehiclesIds.keys())
+    $contractorsStore = Array.from(selectedContractorsIds.keys())
   })
 
-  const updateVehiclesList = (vehicleId: string) => {
-    if (selectedVehiclesIds.has(vehicleId)) {
-      selectedVehiclesIds.delete(vehicleId)
+  const updatecontractorsList = (contractorId: string) => {
+    if (selectedContractorsIds.has(contractorId)) {
+      selectedContractorsIds.delete(contractorId)
     } else {
-      selectedVehiclesIds.set(vehicleId, 'ok')
+      selectedContractorsIds.set(contractorId, 'ok')
     }
-    selectedVehiclesIds = selectedVehiclesIds
+    selectedContractorsIds = selectedContractorsIds
   }
 
-  const vehicleSelectedStyles = (
-    vehicleMap: Map<string, string>,
-    vehicleId: string
+  const contractorSelectedStyles = (
+    contractorMap: Map<string, string>,
+    contractorId: string
   ): string => {
-    if (!vehicleMap.has(vehicleId)) return ''
+    if (!contractorMap.has(contractorId)) return ''
     return 'bg-indigo-600 text-white'
   }
 
   const determineEvenBgColor = (
-    vehicleMap: Map<string, string>,
-    vehicleId: string
+    contractorMap: Map<string, string>,
+    contractorId: string
   ): string => {
-    if (!vehicleMap.has(vehicleId)) return 'even:bg-black'
+    if (!contractorMap.has(contractorId)) return 'even:bg-black'
     return 'even:bg-indigo-600'
   }
 </script>
@@ -47,29 +47,25 @@
       <tr>
         <th>ID</th>
         <th>Name</th>
-        <th>Year</th>
-        <th>Make</th>
-        <th>Model</th>
-        <th>Odometer</th>
-        <th>Registration Plate</th>
+        <th>Phone Number</th>
+        <th>Email</th>
+        <th>Website</th>
       </tr>
     </thead>
     <tbody>
       {#if data !== undefined}
-        {#each data.content as vehicle}
+        {#each data.content as contractor}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-                ${vehicleSelectedStyles(selectedVehiclesIds, vehicle.id)}
-                ${determineEvenBgColor(selectedVehiclesIds, vehicle.id)}`}
-            on:click={() => updateVehiclesList(vehicle.id)}
+                ${contractorSelectedStyles(selectedContractorsIds, contractor.id)}
+                ${determineEvenBgColor(selectedContractorsIds, contractor.id)}`}
+            on:click={() => updatecontractorsList(contractor.id)}
           >
-            <td>{vehicle.id}</td>
-            <td>{vehicle.name}</td>
-            <td>{vehicle.year}</td>
-            <td>{vehicle.make}</td>
-            <td>{vehicle.model}</td>
-            <td>{vehicle.odometer}</td>
-            <td>{vehicle.registrationPlate}</td>
+            <td>{contractor.id}</td>
+            <td>{contractor.name}</td>
+            <td>{contractor.contactInformation.phoneNumber}</td>
+            <td>{contractor.contactInformation.email}</td>
+            <td>{contractor.contactInformation.website}</td>
           </tr>
         {/each}
       {/if}
