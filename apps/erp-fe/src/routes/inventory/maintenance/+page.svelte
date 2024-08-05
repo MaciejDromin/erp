@@ -1,28 +1,58 @@
 <script lang="ts">
-  import VehicleTable from '$lib/inventory/vehicles/VehicleTable.svelte'
+  import MaintenanceTable from '$lib/inventory/maintenance/MaintenanceTable.svelte'
+  import ContractorsTable from '$lib/inventory/contractors/ContractorsTable.svelte'
+  import PartsTable from '$lib/inventory/parts/PartsTable.svelte'
   import Pageable from '$lib/Pageable.svelte'
-  import {
-    BodyStyle,
-    DriveTrain,
-    FuelType,
-    Make,
-    Transmission,
-  } from '$lib/inventory/types/inventoryTypes'
+  import Modal from '$lib/Modal.svelte'
+  import { contractorsStore } from '$lib/inventory/stores/selectedContractors'
+  import { partsStore } from '$lib/inventory/stores/selectedParts'
+  import { onMount } from 'svelte'
+
+  let contractors: any[] = []
+  let parts: any[] = []
+  let partQuantity: any[] = []
+  let partVal:string = ""
+
+  onMount(() => {
+    $contractorsStore = []
+    $partsStore = []
+  })
+
+  contractorsStore.subscribe((contr) => {
+    contractors = [...contr]
+    contractors = contractors
+  })
+
+  partsStore.subscribe((part) => {
+    parts = [...part]
+    parts = parts
+  })
+
+  const determineButtonName = (arr: any[], name: string): string => {
+    if (arr.length === 0) return `select ${name}`
+    return `${arr.length} ${name}s selected`
+  }
+  
+  const updatePartsList = (partId: string, quantity: number) => {
+    const index = partQuantity.findIndex(p => p.id === partId)
+    if (index === -1) {
+      partQuantity.push({ id: partId, quantity: Number(quantity) })
+    } else {
+      partQuantity[index].quantity = Number(quantity)
+    }
+    partQuantity = [...partQuantity]
+    partQuantity = partQuantity
+    partVal = JSON.stringify(partQuantity)
+  }
 </script>
 
-<div id="vehicle" class="flex flex-col gap-3 px-10 pt-10">
+<div id="maintenance" class="flex flex-col gap-3 px-10 pt-10">
   <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
     <div class="flex flex-row gap-3">
       <input
-        name="name"
+        name="date"
         type="text"
-        placeholder="Name"
-        class="input input-bordered input-primary w-full max-w-xs"
-      />
-      <input
-        name="year"
-        type="text"
-        placeholder="Year"
+        placeholder="Date"
         class="input input-bordered input-primary w-full max-w-xs"
       />
       <input
@@ -31,62 +61,52 @@
         placeholder="Odometer"
         class="input input-bordered input-primary w-full max-w-xs"
       />
-      <select name="bodyStyle" class="select select-primary w-full max-w-xs">
-        {#each Object.values(BodyStyle) as bodyStyle}
-          <option value={bodyStyle}>{bodyStyle}</option>
+      <select
+        multiple
+        name="contractorId"
+        class="p-4 mr-auto hidden"
+        bind:value={contractors}
+      >
+        {#each contractors as contractor}
+          <option value={contractor}></option>
         {/each}
       </select>
+      <div class="mr-auto">
+        <Modal
+          modalId="contractor_modal"
+          buttonName={determineButtonName(contractors, "contractor")}
+        >
+          <Pageable endpoint="/inventory/contractors" component={ContractorsTable} />
+        </Modal>
+      </div>
+      <div class="mr-auto">
+        <Modal
+          modalId="parts_modal"
+          buttonName={determineButtonName(parts, "part")}
+        >
+          <Pageable endpoint="/inventory/parts" component={PartsTable} />
+        </Modal>
+      </div>
     </div>
-    <div class="flex flex-row gap-3">
-      <select name="make" class="select select-primary w-full max-w-xs">
-        {#each Object.values(Make) as make}
-          <option value={make}>{make}</option>
-        {/each}
-      </select>
+    <div class="flex flex-col gap-3">
       <input
-        name="model"
+        name="parts"
         type="text"
-        placeholder="Model"
-        class="input input-bordered input-primary w-full max-w-xs"
+        class="hidden"
+        bind:value={partVal}
       />
-      <select name="fuelType" class="select select-primary w-full max-w-xs">
-        {#each Object.values(FuelType) as fuelType}
-          <option value={fuelType}>{fuelType}</option>
-        {/each}
-      </select>
-      <select name="driveTrain" class="select select-primary w-full max-w-xs">
-        {#each Object.values(DriveTrain) as driveTrain}
-          <option value={driveTrain}>{driveTrain}</option>
-        {/each}
-      </select>
-    </div>
-    <div class="flex flex-row gap-3">
-      <select name="transmission" class="select select-primary w-full max-w-xs">
-        {#each Object.values(Transmission) as transmission}
-          <option value={transmission}>{transmission}</option>
-        {/each}
-      </select>
-      <input
-        name="engineType"
-        type="text"
-        placeholder="Engine Type"
-        class="input input-bordered input-primary w-full max-w-xs"
-      />
-      <input
-        name="vin"
-        type="text"
-        placeholder="VIN"
-        class="input input-bordered input-primary w-full max-w-xs"
-      />
-      <input
-        name="registrationPlate"
-        type="text"
-        placeholder="Registration Plate"
-        class="input input-bordered input-primary w-full max-w-xs"
-      />
-      <button class="btn btn-primary">Add Row</button>
+      <h2 class="mx-auto my-6 text-3xl text-black">Parts</h2>
+      {#each parts as part}
+        <input
+          type="text"
+          placeholder={JSON.parse(part).name + " quantity"}
+          class="input input-bordered input-primary w-full max-w-xs mx-auto"
+          on:change={(e) => updatePartsList(JSON.parse(part).id, e.target.value)}
+        />
+      {/each}
+      <button class="btn btn-primary mx-auto">Add Row</button>
     </div>
   </form>
 
-  <Pageable endpoint="/inventory/vehicles" component={VehicleTable} />
+  <Pageable endpoint="/inventory/maintenance" component={MaintenanceTable} />
 </div>

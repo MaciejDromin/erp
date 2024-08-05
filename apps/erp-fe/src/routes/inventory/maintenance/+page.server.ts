@@ -7,23 +7,17 @@ export const actions = {
   default: async ({ request }) => {
     const data = await request.formData()
     const body = {
-      name: data.get('name'),
-      year: data.get('year'),
+      date: data.get('date'),
       odometer: data.get('odometer'),
-      bodyStyle: data.get('bodyStyle'),
-      make: data.get('make'),
-      model: data.get('model'),
-      fuelType: data.get('fuelType'),
-      driveTrain: data.get('driveTrain'),
-      transmission: data.get('transmission'),
-      engineType: data.get('engineType'),
-      vin: data.get('vin'),
-      registrationPlate: data.get('registrationPlate'),
+      parts: JSON.parse(data.get('parts')),
+      contractorId: data.get('contractorId'),
     }
-    await unsecuredExternalApiRequest(
-      INVENTORY_URL + '/vehicles',
+    console.log(body)
+    let test = await unsecuredExternalApiRequest(
+      INVENTORY_URL + '/maintenance',
       HttpMethods.POST,
       body
     )
+    console.log(test)
   },
 } satisfies Actions

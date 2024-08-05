@@ -1,40 +1,40 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { vehiclesStore } from '../stores/selectedVehicles'
+  import { maintenanceStore } from '../stores/selectedMaintenance'
 
   export let data: any = undefined
-  let selectedVehiclesIds: Map<string, string> = new Map()
+  let selectedMaintenanceIds: Map<string, string> = new Map()
 
   onMount(() => {
-    $vehiclesStore.forEach((veh) => selectedVehiclesIds.set(veh, 'ok'))
+    $maintenanceStore.forEach((maint) => selectedMaintenanceIds.set(maint, 'ok'))
   })
 
   onDestroy(() => {
-    $vehiclesStore = Array.from(selectedVehiclesIds.keys())
+    $maintenanceStore = Array.from(selectedMaintenanceIds.keys())
   })
 
-  const updateVehiclesList = (vehicleId: string) => {
-    if (selectedVehiclesIds.has(vehicleId)) {
-      selectedVehiclesIds.delete(vehicleId)
+  const updateMaintenanceList = (maintenanceId: string) => {
+    if (selectedMaintenanceIds.has(maintenanceId)) {
+      selectedMaintenanceIds.delete(maintenanceId)
     } else {
-      selectedVehiclesIds.set(vehicleId, 'ok')
+      selectedMaintenanceIds.set(maintenanceId, 'ok')
     }
-    selectedVehiclesIds = selectedVehiclesIds
+    selectedMaintenanceIds = selectedMaintenanceIds
   }
 
-  const vehicleSelectedStyles = (
-    vehicleMap: Map<string, string>,
-    vehicleId: string
+  const maintenanceSelectedStyles = (
+    maintenanceMap: Map<string, string>,
+    maintenanceId: string
   ): string => {
-    if (!vehicleMap.has(vehicleId)) return ''
+    if (!maintenanceMap.has(maintenanceId)) return ''
     return 'bg-indigo-600 text-white'
   }
 
   const determineEvenBgColor = (
-    vehicleMap: Map<string, string>,
-    vehicleId: string
+    maintenanceMap: Map<string, string>,
+    maintenanceId: string
   ): string => {
-    if (!vehicleMap.has(vehicleId)) return 'even:bg-black'
+    if (!maintenanceMap.has(maintenanceId)) return 'even:bg-black'
     return 'even:bg-indigo-600'
   }
 </script>
@@ -46,30 +46,22 @@
     <thead class="text-primary-content">
       <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th>Year</th>
-        <th>Make</th>
-        <th>Model</th>
+        <th>Date</th>
         <th>Odometer</th>
-        <th>Registration Plate</th>
       </tr>
     </thead>
     <tbody>
       {#if data !== undefined}
-        {#each data.content as vehicle}
+        {#each data.content as maintenance}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-                ${vehicleSelectedStyles(selectedVehiclesIds, vehicle.id)}
-                ${determineEvenBgColor(selectedVehiclesIds, vehicle.id)}`}
-            on:click={() => updateVehiclesList(vehicle.id)}
+                ${maintenanceSelectedStyles(selectedMaintenanceIds, maintenance.id)}
+                ${determineEvenBgColor(selectedMaintenanceIds, maintenance.id)}`}
+            on:click={() => updateMaintenanceList(maintenance.id)}
           >
-            <td>{vehicle.id}</td>
-            <td>{vehicle.name}</td>
-            <td>{vehicle.year}</td>
-            <td>{vehicle.make}</td>
-            <td>{vehicle.model}</td>
-            <td>{vehicle.odometer}</td>
-            <td>{vehicle.registrationPlate}</td>
+            <td>{maintenance.id}</td>
+            <td>{maintenance.date}</td>
+            <td>{maintenance.odometer}</td>
           </tr>
         {/each}
       {/if}

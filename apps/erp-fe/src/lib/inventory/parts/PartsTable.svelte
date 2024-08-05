@@ -6,23 +6,24 @@
   let selectedPartsIds: Map<string, string> = new Map()
 
   onMount(() => {
-    $partsStore.forEach((veh) => selectedPartsIds.set(veh, 'ok'))
+    $partsStore.forEach((part) => selectedPartsIds.set(JSON.parse(part).id, part))
   })
 
   onDestroy(() => {
-    $partsStore = Array.from(selectedPartsIds.keys())
+    $partsStore = Array.from(selectedPartsIds.values())
   })
 
-  const updatepartsList = (partId: string) => {
+  const updatePartsList = (partId: string, name:string) => {
+    const partObj = JSON.stringify({ id: partId, name: name })
     if (selectedPartsIds.has(partId)) {
       selectedPartsIds.delete(partId)
     } else {
-      selectedPartsIds.set(partId, 'ok')
+      selectedPartsIds.set(partId, partObj)
     }
     selectedPartsIds = selectedPartsIds
   }
 
-  const partselectedStyles = (
+  const partSelectedStyles = (
     partMap: Map<string, string>,
     partId: string
   ): string => {
@@ -56,9 +57,9 @@
         {#each data.content as part}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-                ${partselectedStyles(selectedPartsIds, part.id)}
+                ${partSelectedStyles(selectedPartsIds, part.id)}
                 ${determineEvenBgColor(selectedPartsIds, part.id)}`}
-            on:click={() => updatepartsList(part.id)}
+            on:click={() => updatePartsList(part.id, part.name)}
           >
             <td>{part.id}</td>
             <td>{part.name}</td>

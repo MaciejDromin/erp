@@ -13,7 +13,7 @@
     $contractorsStore = Array.from(selectedContractorsIds.keys())
   })
 
-  const updatecontractorsList = (contractorId: string) => {
+  const updateContractorsList = (contractorId: string) => {
     if (selectedContractorsIds.has(contractorId)) {
       selectedContractorsIds.delete(contractorId)
     } else {
@@ -59,7 +59,7 @@
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
                 ${contractorSelectedStyles(selectedContractorsIds, contractor.id)}
                 ${determineEvenBgColor(selectedContractorsIds, contractor.id)}`}
-            on:click={() => updatecontractorsList(contractor.id)}
+            on:click={() => updateContractorsList(contractor.id)}
           >
             <td>{contractor.id}</td>
             <td>{contractor.name}</td>
