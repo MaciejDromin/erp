@@ -30,6 +30,21 @@ const RECOGNIZED_PATHS: { [key: string]: SidebarItem } = {
         path: '/inventory/vehicles',
         subPaths: [],
       },
+      {
+        name: 'Contractors',
+        path: '/inventory/contractors',
+        subPaths: [],
+      },
+      {
+        name: 'Parts',
+        path: '/inventory/parts',
+        subPaths: [],
+      },
+      {
+        name: 'Maintenance',
+        path: '/inventory/maintenance',
+        subPaths: [],
+      },
     ],
   },
   finances: {

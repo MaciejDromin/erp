@@ -61,7 +61,7 @@ public class MaintenanceRepository implements PanacheMongoRepository<Maintenance
         return MaintenanceRecord.builder()
                 .date(maintenanceCreation.getDate())
                 .odometer(maintenanceCreation.getOdometer())
-                .partsIds(maintenanceCreation.getPartsIds())
+                .parts(maintenanceCreation.getParts())
                 .contractorId(maintenanceCreation.getContractorId())
                 .build();
     }

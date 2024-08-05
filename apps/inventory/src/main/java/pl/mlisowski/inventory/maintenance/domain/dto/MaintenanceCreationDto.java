@@ -17,7 +17,7 @@ public class MaintenanceCreationDto {
 
     private LocalDate date;
     private int odometer;
-    private List<ObjectId> partsIds;
+    private List<PartQuantity> parts;
     private ObjectId contractorId;
 
 }
