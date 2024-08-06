@@ -10,7 +10,7 @@ provider = strategy_provider.StrategyProvider()
 
 async def handle_uploaded_receipts(filename, file_content):
     saved_file = await save_locally(filename, file_content)
-    archive_receipts(saved_file)
+    #archive_receipts(saved_file)
     receipts = unpack_archive(saved_file)
     grouped = group_by_extension(receipts)
     parsed_receipts = []
@@ -19,7 +19,9 @@ async def handle_uploaded_receipts(filename, file_content):
         parsed_receipts = parsed_receipts + strategy.parse_data(grouped[ext]) 
 
     filtered_receipts = filter_receipts(parsed_receipts)
-    await publish("scanned-receipts", filtered_receipts)
+    print("--- TOTAL NEW SCANNED ---")
+    print(len(filtered_receipts))
+    #await publish("scanned-receipts", filtered_receipts)
 
     clean_directories()
 

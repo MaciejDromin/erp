@@ -6,12 +6,14 @@ import argparse
 import imutils
 import cv2
 import json
+import math
 
 
 class ReceiptStrategy(scanning_strategy.ScanningStrategy):
 
 
-    ITEM_PATTERN = r'~[\p{L}0-9.,$%-?_\s\]\|]+~{0,1}[0-9|itd]{1,4}[,.]{0,1}[0-9]{0,4}\s{0,1}[SZTKGLsztkgl\.,]{0,4}\s{0,1}[«x*+]{1,2}\s{0,1}[0-9]+[,.]\s{0,1}[0-9]{2}\s[=\s]{0,2}[0-9]+[,.]\s{0,1}[0-9O]{2}\s{0,1}[a-zA-Z0-9]'
+    #ITEM_PATTERN = r'~[\p{L}0-9.,$%-?_\s\]\|]+~{0,1}[0-9|itd]{1,4}[,.]{0,1}[0-9]{0,4}\s{0,1}[SZTKGLsztkgl\.,]{0,4}\s{0,1}[«x*+]{1,2}\s{0,1}[0-9]+[,.]\s{0,1}[0-9]{2}\s[=\s]{0,2}[0-9]+[,.]\s{0,1}[0-9O]{2}\s{0,1}[a-zA-Z0-9]'
+    ITEM_PATTERN = r'(?<=~)(.*?)(?=~)'
     ADDRESS_PATTERN = r'.+\s[FISKALŁNY]{4,8}[^~]{0,2}~'
     DATE_PATTERN = r'\d{4}-\d{2}-\d{2}'
     PRICE_PATTERN = r'\d+[,.]\d{2}\s{0,1}[A-Z0-9]$'
@@ -61,6 +63,8 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
                 "source": receipt[6:]
             }
 
+            # print(parsed_receipt)
+
             ret.append(parsed_receipt)
 
         return ret
@@ -97,14 +101,25 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
             ext, quantity_unit = self.find_and_extract(ext, self.QUANTITY_UNIT_PATTERN, "1SZT")
             quantity, unit = self.find_and_extract(quantity_unit, self.UNIT_PATTERN, "SZT")
             trimmed_name = self.remove_separator(ext.strip())
+
+            converted_price = self.convert_to_double(price)
+            converted_unit_price = self.convert_to_double(unit_price)
+
+            if (math.isclose(converted_price, 1.0, rel_tol=1e-03, abs_tol=0.0) and 
+                math.isclose(converted_unit_price, 1.0, rel_tol=1e-03, abs_tol=0.0)):
+                    print("Probably not an item, skipping")
+                    continue
+
             receipt_item = {
                 "name": trimmed_name,
                 "unit": unit,
-                "unit_price": self.convert_to_double(unit_price),
-                "price": self.convert_to_double(price),
+                "unit_price": converted_unit_price,
+                "price": converted_price,
                 "quantity": self.convert_to_double(self.remove_separator(quantity))
             }
             ret.append(receipt_item)
+
+        print(ret)
 
         return ret
 
@@ -114,6 +129,8 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
 
         for receipt in scannedReceipts:
             preprocessed = receipt["data"].replace("\n", "~")
+            print("--- STRING ---")
+            print(preprocessed)
             date = re.search(self.DATE_PATTERN, preprocessed)
             source = receipt["source"]
             if date != None:
@@ -122,13 +139,17 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
                 splitted_date = source[:source.find("/")].split("-")
                 date = "{}-{}-{}".format(splitted_date[0], splitted_date[1], "01")
 
-            address = re.search(self.ADDRESS_PATTERN, preprocessed)
-            if address == None:
-                # TODO: we have an issue
-                continue
-            address = re.sub(r'P[\w\s]+Y', '', address.group())
-            preprocessed = preprocessed[len(address):]
+            # address = re.search(self.ADDRESS_PATTERN, preprocessed)
+            #if address == None:
+            #    # TODO: we have an issue
+            #    print("ISSUE")
+            #    continue
+            # address = re.sub(r'P[\w\s]+Y', '', address.group())
+            # preprocessed = preprocessed[len(address):]
+            address="dupa"
             items = re.findall(self.ITEM_PATTERN, preprocessed)
+            print("--- ITEMS ---")
+            print(items)
             processed_receipt = {
                 "address": re.sub(r'~', ';', address),
                 "items": self.parse_items(items),
@@ -136,6 +157,8 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
                 "source": source
             }
             ret.append(processed_receipt)
+
+        print(ret)
     
         return ret
 
