@@ -19,30 +19,35 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
     QUANTITY_UNIT_PATTERN = r'[\s|~]\d+,{0,1}\d{0,4}(SZT|KG|L){0,1}$'
     UNIT_PATTERN = r'(SZT|KG|L)'
     EXTENSION = "jpg"
+    
+
+    def get_contours_from_receipt(self, receipt):
+        orig = cv2.imread(receipt)
+        image = orig.copy()
+        image = imutils.resize(image, width=500)
+        ratio = orig.shape[1] / float(image.shape[1])
+
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        blurred = cv2.GaussianBlur(gray, (5, 5,), 0)
+        edged = cv2.Canny(blurred, 75, 200)
+
+        cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
+            cv2.CHAIN_APPROX_SIMPLE)
+        cnts = imutils.grab_contours(cnts)
+        return orig, ratio, sorted(cnts, key=cv2.contourArea, reverse=True)
+        
 
 
     def scan_receipts(self, receipts):
         ret = []
         for receipt in receipts:
-            orig = cv2.imread(receipt)
-            image = orig.copy()
-            image = imutils.resize(image, width=500)
-            ratio = orig.shape[1] / float(image.shape[1])
-
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            blurred = cv2.GaussianBlur(gray, (5, 5,), 0)
-            edged = cv2.Canny(blurred, 75, 200)
-
-            cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
-	            cv2.CHAIN_APPROX_SIMPLE)
-            cnts = imutils.grab_contours(cnts)
-            cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
+            orig, ratio, cnts = self.get_contours_from_receipt(receipt)
 
             receiptCnt = None
 
             for c in cnts:
 	            peri = cv2.arcLength(c, True)
-	            approx = cv2.approxPolyDP(c, 0.02 * peri, True)
+	            approx = cv2.approxPolyDP(c, 0.032 * peri, True)
 	            if len(approx) == 4:
 		            receiptCnt = approx
 		            break
