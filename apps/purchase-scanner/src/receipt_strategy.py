@@ -12,9 +12,7 @@ import math
 class ReceiptStrategy(scanning_strategy.ScanningStrategy):
 
 
-    #ITEM_PATTERN = r'~[\p{L}0-9.,$%-?_\s\]\|]+~{0,1}[0-9|itd]{1,4}[,.]{0,1}[0-9]{0,4}\s{0,1}[SZTKGLsztkgl\.,]{0,4}\s{0,1}[«x*+]{1,2}\s{0,1}[0-9]+[,.]\s{0,1}[0-9]{2}\s[=\s]{0,2}[0-9]+[,.]\s{0,1}[0-9O]{2}\s{0,1}[a-zA-Z0-9]'
     ITEM_PATTERN = r'(?<=~)(.*?)(?=~)'
-    ADDRESS_PATTERN = r'.+\s[FISKALŁNY]{4,8}[^~]{0,2}~'
     DATE_PATTERN = r'\d{4}-\d{2}-\d{2}'
     PRICE_PATTERN = r'\d+[,.]\d{2}\s{0,1}[A-Z0-9]$'
     UNIT_PRICE_PATTERN = r'\s{0,1}[x*+«]\s{0,1}\d+,\d{2}'
@@ -62,8 +60,6 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
                 "data": text,
                 "source": receipt[6:]
             }
-
-            # print(parsed_receipt)
 
             ret.append(parsed_receipt)
 
@@ -119,8 +115,6 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
             }
             ret.append(receipt_item)
 
-        print(ret)
-
         return ret
 
 
@@ -129,8 +123,6 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
 
         for receipt in scannedReceipts:
             preprocessed = receipt["data"].replace("\n", "~")
-            print("--- STRING ---")
-            print(preprocessed)
             date = re.search(self.DATE_PATTERN, preprocessed)
             source = receipt["source"]
             if date != None:
@@ -139,17 +131,8 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
                 splitted_date = source[:source.find("/")].split("-")
                 date = "{}-{}-{}".format(splitted_date[0], splitted_date[1], "01")
 
-            # address = re.search(self.ADDRESS_PATTERN, preprocessed)
-            #if address == None:
-            #    # TODO: we have an issue
-            #    print("ISSUE")
-            #    continue
-            # address = re.sub(r'P[\w\s]+Y', '', address.group())
-            # preprocessed = preprocessed[len(address):]
-            address="dupa"
+            address=preprocessed.strip()[:45]
             items = re.findall(self.ITEM_PATTERN, preprocessed)
-            print("--- ITEMS ---")
-            print(items)
             processed_receipt = {
                 "address": re.sub(r'~', ';', address),
                 "items": self.parse_items(items),
@@ -157,8 +140,6 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
                 "source": source
             }
             ret.append(processed_receipt)
-
-        print(ret)
     
         return ret
 
