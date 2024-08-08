@@ -3,7 +3,6 @@ python-multipart==0.0.9
 fabric==3.2.2
 pika==1.3.2
 aiofiles==23.2.1
-imutils==0.5.4
 numpy==1.26.4
 opencv-python-headless==4.10.0.82
 regex==2024.4.16

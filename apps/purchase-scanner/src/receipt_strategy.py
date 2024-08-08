@@ -1,12 +1,8 @@
 import regex as re
-import matplotlib.pyplot as plt
 import numpy as np
 import scanning_strategy
 import pytesseract
-import argparse
-import imutils
 import cv2
-import json
 import math
 
 
