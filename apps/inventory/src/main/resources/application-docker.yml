@@ -5,7 +5,7 @@ quarkus:
     connection-string: mongodb://erp-mongodb:27017
     database: inventory
   rest-client:
-    "pl.mlisowski.selfregister.client.RegistrationClient":
+    "com.soitio.selfregister.client.RegistrationClient":
       url: http://erp-consul:8500
   shutdown:
     timeout: PT5S

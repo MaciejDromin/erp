@@ -17,7 +17,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-config-yaml'
 
     // SELF DISCOVERY
-    implementation 'pl.mlisowski.selfregister:self-register-quarkus:1.0.0'
+    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0'
     implementation 'io.quarkus:quarkus-rest-client-jackson'
 
     implementation 'io.quarkus:quarkus-arc'

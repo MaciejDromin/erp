@@ -6,7 +6,7 @@ plugins {
 	id 'checkstyle'
 }
 
-group = 'pl.mlisowski'
+group = 'com.soitio'
 version = '0.0.1-SNAPSHOT'
 
 java {

@@ -6,11 +6,11 @@ quarkus:
     database: planner
 
   rest-client:
-    "pl.mlisowski.selfregister.client.RegistrationClient":
+    "com.soitio.selfregister.client.RegistrationClient":
       url: http://localhost:8080
   index-dependency:
     selfregister:
-      group-id: pl.mlisowski.selfregister
+      group-id: com.soitio.selfregister
       artifact-id: self-register-quarkus
 
 service-discovery:

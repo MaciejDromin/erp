@@ -18,7 +18,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-mongodb-panache'
     implementation 'org.joda:joda-money:1.0.3'
 
-    implementation 'pl.mlisowski.selfregister:self-register-quarkus:1.0.0'
+    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
@@ -27,7 +27,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
 }
 
-group 'pl.mlisowski'
+group 'com.soitio'
 version '1.0.0-SNAPSHOT'
 
 java {
