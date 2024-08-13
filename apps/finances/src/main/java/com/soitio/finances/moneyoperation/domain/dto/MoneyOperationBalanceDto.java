@@ -1,0 +1,19 @@
+package com.soitio.finances.moneyoperation.domain.dto;
+
+import java.time.Month;
+import lombok.Builder;
+import lombok.Value;
+import com.soitio.finances.common.dto.AmountDto;
+import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
+
+@Value
+@Builder
+public class MoneyOperationBalanceDto {
+
+    String uuid;
+    AmountDto amount;
+    int effectiveYear;
+    Month effectiveMonth;
+    MoneyOperationType operationType;
+
+}
