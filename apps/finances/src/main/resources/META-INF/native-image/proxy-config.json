@@ -1,0 +1,356 @@
+[
+  {
+    "interfaces": [
+      "com.soitio.finances.currency.application.port.CurrencyRepository",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.currency.application.port.CurrencyRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.currency.application.port.CurrencyRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy",
+      "java.io.Serializable"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.currency.client.CurrencySyncClient"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.currency.domain.CurrencyRateProj",
+      "org.springframework.data.projection.TargetAware",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.moneyoperation.application.port.MoneyOperationRepository",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.moneyoperation.application.port.MoneyOperationRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.moneyoperation.application.port.MoneyOperationRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy",
+      "java.io.Serializable"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.moneyoperation.periodical.application.port.PeriodicalMoneyOperationRepository",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.moneyoperation.periodical.application.port.PeriodicalMoneyOperationRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.moneyoperation.periodical.application.port.PeriodicalMoneyOperationRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy",
+      "java.io.Serializable"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.objectvalues.application.port.ObjectValueRepository",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.objectvalues.application.port.ObjectValueRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.objectvalues.application.port.ObjectValueRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy",
+      "java.io.Serializable"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.objectvalues.domain.proj.ObjectIdProj",
+      "org.springframework.data.projection.TargetAware",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.operationcategories.application.port.OperationCategoryRepository",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.operationcategories.application.port.OperationCategoryRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.operationcategories.application.port.OperationCategoryRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy",
+      "java.io.Serializable"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.plannedexpenses.application.port.PlannedExpensesRepository",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.plannedexpenses.application.port.PlannedExpensesRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.plannedexpenses.application.port.PlannedExpensesRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy",
+      "java.io.Serializable"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.application.port.PurchaseItemRepository",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.application.port.PurchaseItemRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.application.port.PurchaseItemRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy",
+      "java.io.Serializable"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.application.port.PurchaseRepository",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.application.port.PurchaseRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.application.port.PurchaseRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy",
+      "java.io.Serializable"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.statistics.application.port.MonthlyStatisticsRepository",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.statistics.application.port.MonthlyStatisticsRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.statistics.application.port.MonthlyStatisticsRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy",
+      "java.io.Serializable"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.statistics.application.port.PurchaseStatisticsRepository",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.statistics.application.port.PurchaseStatisticsRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "com.soitio.finances.receipt.statistics.application.port.PurchaseStatisticsRepository",
+      "org.springframework.data.repository.Repository",
+      "org.springframework.transaction.interceptor.TransactionalProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy",
+      "java.io.Serializable"
+    ]
+  },
+  {
+    "interfaces": [
+      "org.hibernate.Session",
+      "org.springframework.orm.jpa.EntityManagerProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "org.hibernate.SessionFactory",
+      "org.springframework.orm.jpa.EntityManagerFactoryInfo"
+    ]
+  },
+  {
+    "interfaces": [
+      "org.hibernate.query.hql.spi.SqmQueryImplementor",
+      "org.hibernate.query.sqm.internal.SqmInterpretationsKey$InterpretationsKeySource",
+      "org.hibernate.query.spi.DomainQueryExecutionContext",
+      "org.hibernate.query.SelectionQuery",
+      "org.hibernate.query.CommonQueryContract"
+    ]
+  },
+  {
+    "interfaces": [
+      "org.hibernate.query.sql.spi.NativeQueryImplementor",
+      "org.hibernate.query.spi.DomainQueryExecutionContext",
+      "org.hibernate.query.internal.ResultSetMappingResolutionContext",
+      "org.hibernate.query.spi.QueryImplementor",
+      "org.hibernate.query.SelectionQuery",
+      "org.hibernate.query.CommonQueryContract"
+    ]
+  },
+  {
+    "interfaces": [
+      "org.springframework.amqp.rabbit.connection.ChannelProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "org.springframework.amqp.rabbit.connection.ChannelProxy",
+      "org.springframework.amqp.rabbit.connection.PublisherCallbackChannel"
+    ]
+  },
+  {
+    "interfaces": [
+      "org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer$ContainerDelegate",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  },
+  {
+    "interfaces": [
+      "org.springframework.data.annotation.QueryAnnotation"
+    ]
+  },
+  {
+    "interfaces": [
+      "org.springframework.data.jpa.repository.support.CrudMethodMetadata",
+      "org.springframework.aop.SpringProxy",
+      "org.springframework.aop.framework.Advised",
+      "org.springframework.core.DecoratingProxy"
+    ]
+  }
+]
