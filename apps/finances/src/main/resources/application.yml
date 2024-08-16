@@ -7,13 +7,9 @@ spring:
     username: finances
     password: finances
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: true
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
   cloud:
     openfeign:
       client:

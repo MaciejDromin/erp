@@ -1,7 +1,10 @@
+import org.springframework.boot.gradle.tasks.aot.ProcessAot
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.5'
+	id 'org.graalvm.buildtools.native' version '0.10.2'
 }
 
 group = 'com.soitio'
@@ -54,4 +57,8 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(ProcessAot).configureEach {
+	args("--spring.profiles.active=" + (project.properties["aotProfiles"] ? project.properties["aotProfiles"] : "default"))
 }

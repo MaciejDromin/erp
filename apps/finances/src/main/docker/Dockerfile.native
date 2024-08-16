@@ -1,0 +1,10 @@
+FROM registry.access.redhat.com/ubi9-minimal:9.2
+WORKDIR /app
+RUN chown 1001 /app \
+    && chmod "g+rwX" /app \
+    && chown 1001:root /app
+COPY --chown=1001:root build/native/nativeCompile/finances app
+
+USER 1001
+
+ENTRYPOINT ["./app", "--spring.profiles.active=docker"]

@@ -16,7 +16,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-rest-client-reactive-jackson'
     implementation 'io.quarkus:quarkus-mongodb-panache'
-    implementation 'org.joda:joda-money:1.0.3'
+    implementation 'org.joda:joda-money:1.0.4'
 
     implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0'
 
