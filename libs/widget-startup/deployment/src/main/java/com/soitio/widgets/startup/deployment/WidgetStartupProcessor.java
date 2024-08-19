@@ -26,11 +26,12 @@ class WidgetStartupProcessor {
 
     @BuildStep
     void declareWidgetStartupsAsBean(CombinedIndexBuildItem index,
-                                          BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
+                                     BuildProducer<AdditionalBeanBuildItem> additionalBeans) {
         List<String> allBeans = index.getIndex().getKnownClasses().stream()
                 .filter(ci -> !Modifier.isAbstract(ci.flags()))
                 .map(ci -> ci.name().toString())
                 .filter(c -> c.startsWith("com.soitio.widgets.startup"))
+                .filter(c -> !c.startsWith("com.soitio.widgets.startup.runtime.converters"))
                 .toList();
 
         additionalBeans.produce(new AdditionalBeanBuildItem.Builder()

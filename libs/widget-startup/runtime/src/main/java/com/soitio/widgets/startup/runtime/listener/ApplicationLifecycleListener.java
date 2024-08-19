@@ -9,8 +9,8 @@ import com.soitio.widgets.common.domain.WidgetDefinition;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 @ApplicationScoped
 public class ApplicationLifecycleListener {
@@ -38,7 +38,7 @@ public class ApplicationLifecycleListener {
                 .datasource(widgetDefinition.datasource())
                 .availableFilters(widgetDefinition.availableFilters().stream()
                         .map(this::toFilter)
-                        .collect(Collectors.toSet()))
+                        .toList())
                 .widgetDomain(widgetDefinition.widgetDomain())
                 .version(widgetDefinition.version())
                 .uniqueCode(widgetDefinition.uniqueCode())
@@ -48,14 +48,18 @@ public class ApplicationLifecycleListener {
     private Filter toFilter(IFilter filter) {
         return Filter.builder()
                 .name(filter.name())
-                .dependsOn(filter.dependsOn())
+                .dependsOn(getOrNull(filter::dependsOn))
                 .min(filter.min())
                 .max(filter.max())
-                .options(filter.options())
+                .options(getOrNull(filter::options))
                 .mandatory(filter.mandatory())
-                .dynamic(filter.dynamic())
-                .datasource(filter.datasource())
+                .datasource(getOrNull(filter::datasource))
+                .filterType(filter.filterType())
                 .build();
+    }
+
+    private <T> T getOrNull(Supplier<Optional<T>> method) {
+        return method.get().orElse(null);
     }
 
 }

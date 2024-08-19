@@ -1,9 +1,11 @@
 package com.soitio.widgets.startup.runtime.domain;
 
 import com.soitio.widgets.common.domain.FilterType;
-
+import com.soitio.widgets.common.domain.data.AnyPossibleValueWrapper;
+import com.soitio.widgets.startup.runtime.converters.AnyPossibleValueConverter;
+import io.smallrye.config.WithConverter;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 public interface IFilter {
 
@@ -15,41 +17,38 @@ public interface IFilter {
     /**
      * Filter dependency
      * */
-    Set<String> dependsOn();
+    Optional<List<String>> dependsOn();
 
-     /**
+    /**
      * Filter type
      * */
     FilterType filterType();
 
-     /**
+    /**
      * Filter min value
      * */
-    Object min();
+    @WithConverter(AnyPossibleValueConverter.class)
+    AnyPossibleValueWrapper min();
 
-     /**
+    /**
      * Filter max value
      * */
-    Object max();
+    @WithConverter(AnyPossibleValueConverter.class)
+    AnyPossibleValueWrapper max();
 
-     /**
+    /**
      * Filter list of options
      * */
-    List<Object> options();
+    Optional<List<String>> options();
 
-     /**
+    /**
      * Filter is mandatory
      * */
     boolean mandatory();
 
-     /**
-     * Filter is dynamic
-     * */
-    boolean dynamic();
-
-     /**
+    /**
      * Filter datasource
      * */
-    String datasource();
+    Optional<String> datasource();
 
 }

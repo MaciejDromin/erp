@@ -28,3 +28,19 @@ widgets:
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN002
+    - name: Monthly Balance Diff
+      datasource: http://localhost:8080/widgets/monthly-balance-diff
+      widget-domain: FINANCES
+      version: v1.0
+      unique-code: FIN003
+      available-filters:
+        - name: Year
+          datasource: http://localhost:8080/widgets/balance/year
+          mandatory: true
+          filter-type: SELECT
+        - name: Month
+          depends-on:
+            - Year
+          datasource: http://localhost:8080/widgets/balance/month
+          mandatory: true
+          filter-type: SELECT
