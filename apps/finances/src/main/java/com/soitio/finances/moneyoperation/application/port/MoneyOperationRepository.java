@@ -18,4 +18,6 @@ public interface MoneyOperationRepository extends JpaRepository<MoneyOperation, 
     @Query(value = "select distinct mo.effectiveMonth from MoneyOperation mo where mo.effectiveYear = ?1")
     List<Month> findDistinctEffectiveMonthByEffectiveYear(int effectiveYear);
 
+    List<MoneyOperation> findAllByEffectiveYearAndEffectiveMonth(int balanceYear, Month balanceMonth);
+
 }

@@ -63,7 +63,7 @@ public class WidgetService {
     }
 
     public WidgetData calculateMonthlyBalance() {
-        List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(LocalDateTime.now().getYear());
+        List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(LocalDateTime.now().getYear(), null);
         return WidgetData.builder()
                 .labels(Arrays.stream(Month.values())
                         .map(Enum::name)
@@ -119,6 +119,7 @@ public class WidgetService {
     }
 
     public WidgetData calculateMonthlyBalanceDiff(int year, Month month) {
+        List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(year, month);
         return WidgetData.builder().build();
     }
 }
