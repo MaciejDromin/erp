@@ -1,6 +1,7 @@
 package com.soitio.finances.moneyoperation.application;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.Year;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -97,6 +98,14 @@ public class MoneyOperationService {
                 .effectiveMonth(moneyOperation.getEffectiveMonth())
                 .operationType(moneyOperation.getOperationType())
                 .build();
+    }
+
+    public List<Integer> findDistinctEffectiveYears() {
+        return repository.findDistinctEffectiveYearBy();
+    }
+
+    public List<Month> findDistinctEffectiveMonths(int year) {
+        return repository.findDistinctEffectiveMonthByEffectiveYear(year);
     }
 
 }

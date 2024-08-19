@@ -118,4 +118,7 @@ public class WidgetService {
                 .build();
     }
 
+    public WidgetData calculateMonthlyBalanceDiff(int year, Month month) {
+        return WidgetData.builder().build();
+    }
 }

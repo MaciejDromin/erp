@@ -2,6 +2,7 @@ package com.soitio.dashboard.widget.web;
 
 import com.soitio.dashboard.widget.application.WidgetRepository;
 import com.soitio.dashboard.widget.definition.application.WidgetDefinitionRepository;
+import com.soitio.dashboard.widget.definition.domain.WidgetDefinitionEntity;
 import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionDto;
 import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionNameDto;
 import com.soitio.widgets.common.domain.WidgetDefinition;
@@ -21,6 +22,11 @@ public class WidgetController {
 
     private final WidgetRepository widgetRepository;
     private final WidgetDefinitionRepository widgetDefinitionRepository;
+
+    @GET
+    public List<WidgetDefinitionEntity> test() {
+        return widgetDefinitionRepository.listAll();
+    }
 
     @POST
     @Path("/definitions")

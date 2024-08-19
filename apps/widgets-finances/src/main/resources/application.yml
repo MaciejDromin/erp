@@ -10,6 +10,8 @@ quarkus:
       url: http://localhost:8082
     "com.soitio.widgets.finances.client.FinancesClient":
       url: http://localhost:8084
+    "com.soitio.widgets.finances.client.FiltersDataClient":
+      url: http://localhost:8084
 
 service-discovery:
   service-name: widgets-finances
@@ -35,12 +37,12 @@ widgets:
       unique-code: FIN003
       available-filters:
         - name: Year
-          datasource: http://localhost:8080/widgets/balance/year
+          datasource: http://localhost:8080/filters/balance/year
           mandatory: true
           filter-type: SELECT
         - name: Month
           depends-on:
             - Year
-          datasource: http://localhost:8080/widgets/balance/month
+          datasource: http://localhost:8080/filters/balance/month
           mandatory: true
           filter-type: SELECT
