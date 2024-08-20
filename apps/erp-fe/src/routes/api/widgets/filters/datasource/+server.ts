@@ -1,6 +1,7 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { RequestHandler } from './$types'
+import { DASHBOARD_URL } from '$lib/scripts/urls'
 
 export const POST = (async ({ request }) => {
   const data = await request.json()
@@ -13,7 +14,7 @@ export const POST = (async ({ request }) => {
     query = query.substring(0, query.length - 1)
   }
   const ret = await unsecuredExternalApiRequest(
-    data.url + query,
+    data.datasource + query,
     HttpMethods.GET
   )
   return new Response(ret.body, { status: 200 })

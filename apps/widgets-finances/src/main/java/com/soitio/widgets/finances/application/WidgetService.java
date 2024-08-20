@@ -5,13 +5,14 @@ import com.soitio.widgets.common.domain.data.Rgba;
 import com.soitio.widgets.common.domain.data.WidgetData;
 import com.soitio.widgets.finances.client.FinancesClient;
 import com.soitio.widgets.finances.common.Pair;
+import com.soitio.widgets.finances.domain.AmountDto;
 import com.soitio.widgets.finances.domain.MoneyOperationBalanceDto;
 import com.soitio.widgets.finances.domain.MoneyOperationType;
 import com.soitio.widgets.finances.domain.ObjectType;
 import com.soitio.widgets.finances.domain.TotalObjectsValueDto;
 import com.soitio.widgets.finances.inventory.client.InventoryClient;
 import com.soitio.widgets.finances.inventory.domain.ObjectIdsDto;
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Singleton
+@ApplicationScoped
 public class WidgetService {
 
     private final FinancesClient financesClient;
@@ -63,7 +64,7 @@ public class WidgetService {
     }
 
     public WidgetData calculateMonthlyBalance() {
-        List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(LocalDateTime.now().getYear());
+        List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(LocalDateTime.now().getYear(), null);
         return WidgetData.builder()
                 .labels(Arrays.stream(Month.values())
                         .map(Enum::name)
@@ -116,6 +117,25 @@ public class WidgetService {
                 ))
                 .borderWidth(2)
                 .build();
+    }
+
+    public WidgetData calculateMonthlyBalanceDiff(int year, Month month) {
+        List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(year, month);
+        BigDecimal income = sumAmountsByType(operations, MoneyOperationType.INCOME);
+        BigDecimal expenses = sumAmountsByType(operations, MoneyOperationType.EXPENSES);
+        return WidgetData.builder()
+                .labels(List.of("Monthly Balance Diff"))
+                .datasets(List.of(Dataset.builder()
+                        .label("%s".formatted(income.subtract(expenses)))
+                        .build()))
+                .build();
+    }
+
+    private BigDecimal sumAmountsByType(List<MoneyOperationBalanceDto> moneyOperations, MoneyOperationType type) {
+        return moneyOperations.stream()
+                .filter(m -> m.getOperationType() == type)
+                .map(MoneyOperationBalanceDto::getAmount)
+                .map(AmountDto::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }

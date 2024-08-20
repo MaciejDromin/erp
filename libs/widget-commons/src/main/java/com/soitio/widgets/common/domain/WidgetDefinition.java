@@ -7,8 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +20,7 @@ public class WidgetDefinition {
 
     private String name;
     private String datasource;
-    private Set<Filter> availableFilters;
+    private List<Filter> availableFilters;
     private WidgetDomain widgetDomain;
     private String version;
     private String uniqueCode;

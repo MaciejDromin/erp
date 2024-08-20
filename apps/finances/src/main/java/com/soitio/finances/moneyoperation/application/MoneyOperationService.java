@@ -1,9 +1,12 @@
 package com.soitio.finances.moneyoperation.application;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.Year;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.function.Supplier;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -82,8 +85,13 @@ public class MoneyOperationService {
         repository.saveAll(converted);
     }
 
-    public List<MoneyOperationBalanceDto> getForBalance(int balanceYear) {
-        return repository.findAllByEffectiveYear(balanceYear).stream()
+    public List<MoneyOperationBalanceDto> getForBalance(int balanceYear, Month balanceMonth) {
+        Supplier<List<MoneyOperation>> func;
+
+        if (balanceMonth == null) func = () -> repository.findAllByEffectiveYear(balanceYear);
+        else func = () -> repository.findAllByEffectiveYearAndEffectiveMonth(balanceYear, balanceMonth);
+
+        return func.get().stream()
                 .map(this::toBalance)
                 .toList();
     }
@@ -97,6 +105,14 @@ public class MoneyOperationService {
                 .effectiveMonth(moneyOperation.getEffectiveMonth())
                 .operationType(moneyOperation.getOperationType())
                 .build();
+    }
+
+    public List<Integer> findDistinctEffectiveYears() {
+        return repository.findDistinctEffectiveYearBy();
+    }
+
+    public List<Month> findDistinctEffectiveMonths(int year) {
+        return repository.findDistinctEffectiveMonthByEffectiveYear(year);
     }
 
 }

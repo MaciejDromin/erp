@@ -4,7 +4,7 @@ import com.soitio.dashboard.widget.definition.domain.WidgetDefinitionEntity;
 import com.soitio.widgets.common.domain.Filter;
 import com.soitio.widgets.common.domain.WidgetDomain;
 import io.quarkus.mongodb.panache.common.ProjectionFor;
-import java.util.Set;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class WidgetDefinitionDto {
     private ObjectId id;
     private String name;
     private String datasource;
-    private Set<Filter> availableFilters;
+    private List<Filter> availableFilters;
     private WidgetDomain widgetDomain;
     private String version;
     private String uniqueCode;

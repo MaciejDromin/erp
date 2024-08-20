@@ -1,6 +1,10 @@
 package com.soitio.finances.moneyoperation.web;
 
-import java.time.Year;
+import com.soitio.finances.moneyoperation.application.MoneyOperationService;
+import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationBalanceDto;
+import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationCreationDto;
+import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationDto;
+import java.time.Month;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,10 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.soitio.finances.moneyoperation.application.MoneyOperationService;
-import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationBalanceDto;
-import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationCreationDto;
-import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationDto;
 
 @RestController
 @RequestMapping("/finances/money-operation")
@@ -35,8 +35,9 @@ public class MoneyOperationController {
     }
 
     @GetMapping("/balance")
-    public List<MoneyOperationBalanceDto> getOperationsForBalance(@RequestParam("balanceYear") int balanceYear) {
-        return operationService.getForBalance(balanceYear);
+    public List<MoneyOperationBalanceDto> getOperationsForBalance(@RequestParam("balanceYear") int balanceYear,
+                                                                  @RequestParam(value = "balanceMonth", required = false) Month month) {
+        return operationService.getForBalance(balanceYear, month);
     }
 
 }

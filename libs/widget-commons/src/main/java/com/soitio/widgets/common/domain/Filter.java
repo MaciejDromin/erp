@@ -1,5 +1,6 @@
 package com.soitio.widgets.common.domain;
 
+import com.soitio.widgets.common.domain.data.AnyPossibleValueWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -7,9 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -21,13 +20,12 @@ import java.util.Set;
 public class Filter {
 
     private String name;
-    private Set<String> dependsOn;
+    private List<String> dependsOn;
     private FilterType filterType;
-    private Object min;
-    private Object max;
-    private List<Object> options;
+    private AnyPossibleValueWrapper min;
+    private AnyPossibleValueWrapper max;
+    private List<String> options;
     private boolean mandatory;
-    private boolean dynamic;
     private String datasource;
 
 }
