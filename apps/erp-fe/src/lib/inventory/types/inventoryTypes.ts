@@ -1,7 +1,7 @@
 enum ItemUnit {
+  SZT = 'SZT',
   M3 = 'M3',
   M2 = 'M2',
-  SZT = 'SZT',
   L = 'L',
 }
 
