@@ -39,6 +39,7 @@ public class WidgetRepository implements PanacheMongoRepository<Widget> {
                 .widgetDomain(widgetCreation.getWidgetDomain())
                 .datasource(widgetCreation.getDatasource())
                 .position(position)
+                .widgetDefinitionId(widgetCreation.getWidgetDefinitionId())
                 .build();
     }
 

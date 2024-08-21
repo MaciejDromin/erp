@@ -1,5 +1,6 @@
 <script>
   import Chart from '$lib/Chart.svelte'
+  import Filter from '$lib/dashboard/Filter.svelte'
   import { onMount } from 'svelte'
   import { apiRequest } from './scripts/uiHttpRequests.ts'
   import { HttpMethods } from './types/httpMethods'
@@ -10,10 +11,17 @@
   export let widgetData
   let chartData = null
 
-  const fetchData = async () => {
+  let widgetDefinition
+  let filtersOpen = false
+
+  console.log(widgetData)
+
+  let widgetFilters = widgetData.filters
+
+  const fetchData = async (filters) => {
     const ret = await apiRequest('/dashboards/widgets/data', HttpMethods.POST, {
       url: widgetData.datasource,
-      filters: widgetData.filters,
+      filters: filters,
     })
     chartData = await ret.json()
   }
@@ -26,9 +34,29 @@
     location.reload()
   }
 
+  const updateFilters = async () => {
+    console.log('I was called on close!')
+    // TODO: UPDATE FILTERS
+  }
+
+  const fetchWidgetDefinitions = async () => {
+    filtersOpen = !filtersOpen
+    if (!filtersOpen) {
+      updateFilters()
+      return
+    } else if (filtersOpen && widgetDefinition !== undefined) return
+    const ret = await apiRequest(
+      `/widgets/${widgetData.id}/definition`,
+      HttpMethods.GET
+    )
+    widgetDefinition = await ret.json()
+  }
+
   onMount(async () => {
-    fetchData()
+    fetchData(widgetFilters)
   })
+
+  $: widgetFilters, fetchData(widgetFilters)
 </script>
 
 <div class="flex flex-col">
@@ -36,7 +64,23 @@
     <h3 class="text-xl">{widgetData.name}</h3>
     <div class="flex flex-row gap-3 items-center">
       <!--- TODO: Finish handling this placeholder icons --->
-      <button><FontAwesomeIcon icon={faFilter} /></button>
+      <ul class="menu menu-horizontal p-0" on:click={fetchWidgetDefinitions}>
+        <li>
+          <details>
+            <summary class="p-2"><FontAwesomeIcon icon={faFilter} /></summary>
+            <ul
+              class="text-black bg-gray-300"
+              on:click|stopPropagation={() => {}}
+            >
+              {#if widgetDefinition !== undefined && widgetDefinition.availableFilters.length >= 0}
+                {#each widgetDefinition.availableFilters as filter}
+                  <li class="min-w-52"><Filter definition={filter} bind:filters={widgetFilters} /></li>
+                {/each}
+              {/if}
+            </ul>
+          </details>
+        </li>
+      </ul>
       <ul class="menu menu-horizontal p-0">
         <li>
           <details>

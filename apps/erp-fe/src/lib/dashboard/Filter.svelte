@@ -10,6 +10,10 @@
   let dependsOn = definition.dependsOn === null ? false : true
   let selectData
 
+  if (filters[definition.name.toLowerCase()] !== undefined) {
+    val = filters[definition.name.toLowerCase()]
+  }
+
   const updateFilters = () => {
     filters[definition.name.toLowerCase()] = val
     filters = filters

@@ -12,6 +12,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 
 @Path("/widgets")
 @RequiredArgsConstructor
@@ -38,6 +39,13 @@ public class WidgetController {
     @Path("/definitions/{widgetDefinitionId}")
     public WidgetDefinitionDto getWidgetDefinition(@PathParam("widgetDefinitionId") String widgetDefinitionId) {
         return widgetDefinitionRepository.getById(widgetDefinitionId);
+    }
+    
+    @GET
+    @Path("/{widgetId}/definition")
+    public WidgetDefinitionDto getWidgetDefinitionByWidgetId(@PathParam("widgetId") String widgetId) {
+        return widgetDefinitionRepository.getById(widgetRepository
+                .findById(new ObjectId(widgetId)).getWidgetDefinitionId().toString());
     }
 
     public void updateWidget(Object toUpdate) {
