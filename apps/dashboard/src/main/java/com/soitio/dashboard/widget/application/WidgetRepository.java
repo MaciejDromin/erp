@@ -7,6 +7,7 @@ import com.soitio.dashboard.widget.domain.dto.WidgetDto;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.bson.types.ObjectId;
 
@@ -39,6 +40,7 @@ public class WidgetRepository implements PanacheMongoRepository<Widget> {
                 .widgetDomain(widgetCreation.getWidgetDomain())
                 .datasource(widgetCreation.getDatasource())
                 .position(position)
+                .widgetDefinitionId(widgetCreation.getWidgetDefinitionId())
                 .build();
     }
 
@@ -54,4 +56,9 @@ public class WidgetRepository implements PanacheMongoRepository<Widget> {
                 .build();
     }
 
+    public void updateWidgetFilters(String widgetId, Map<String, Object> filters) {
+        Widget widget = findById(new ObjectId(widgetId));
+        widget.setFilters(filters);
+        update(widget);
+    }
 }

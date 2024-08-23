@@ -39,6 +39,7 @@
     creationData = {
       widgetDomain: domain,
       datasource: widgetDefinition.datasource,
+      widgetDefinitionId: widgetDefinition.id,
     }
   }
 

@@ -7,6 +7,7 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.bson.types.ObjectId;
 
 @Builder
 @AllArgsConstructor
@@ -21,5 +22,7 @@ public class WidgetCreationDto {
     private WidgetType widgetType;
     private WidgetDomain widgetDomain;
     private String datasource;
+
+    private ObjectId widgetDefinitionId;
 
 }

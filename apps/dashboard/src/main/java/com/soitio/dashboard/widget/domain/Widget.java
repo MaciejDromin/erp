@@ -32,5 +32,6 @@ public class Widget {
     private WidgetDomain widgetDomain;
     private String datasource;
     private Position position;
+    private ObjectId widgetDefinitionId;
 
 }
