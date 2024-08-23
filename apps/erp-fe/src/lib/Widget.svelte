@@ -9,12 +9,9 @@
 
   export let dashboardId
   export let widgetData
+
   let chartData = null
-
   let widgetDefinition
-
-  console.log(widgetData)
-
   let widgetFilters = widgetData.filters
 
   const fetchData = async (filters) => {
@@ -34,7 +31,11 @@
   }
 
   const updateFilters = async (filters) => {
-    await apiRequest(`/widgets/${widgetData.id}/filters`, HttpMethods.POST, filters)
+    await apiRequest(
+      `/widgets/${widgetData.id}/filters`,
+      HttpMethods.POST,
+      filters
+    )
   }
 
   const fetchWidgetDefinitions = async () => {
@@ -69,7 +70,9 @@
             >
               {#if widgetDefinition !== undefined && widgetDefinition.availableFilters.length >= 0}
                 {#each widgetDefinition.availableFilters as filter}
-                  <li class="min-w-52"><Filter definition={filter} bind:filters={widgetFilters} /></li>
+                  <li class="min-w-52">
+                    <Filter definition={filter} bind:filters={widgetFilters} />
+                  </li>
                 {/each}
               {/if}
             </ul>
