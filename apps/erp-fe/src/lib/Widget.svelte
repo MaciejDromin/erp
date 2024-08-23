@@ -12,7 +12,6 @@
   let chartData = null
 
   let widgetDefinition
-  let filtersOpen = false
 
   console.log(widgetData)
 
@@ -34,17 +33,12 @@
     location.reload()
   }
 
-  const updateFilters = async () => {
-    console.log('I was called on close!')
-    // TODO: UPDATE FILTERS
+  const updateFilters = async (filters) => {
+    await apiRequest(`/widgets/${widgetData.id}/filters`, HttpMethods.POST, filters)
   }
 
   const fetchWidgetDefinitions = async () => {
-    filtersOpen = !filtersOpen
-    if (!filtersOpen) {
-      updateFilters()
-      return
-    } else if (filtersOpen && widgetDefinition !== undefined) return
+    if (widgetDefinition !== undefined) return
     const ret = await apiRequest(
       `/widgets/${widgetData.id}/definition`,
       HttpMethods.GET
@@ -57,6 +51,7 @@
   })
 
   $: widgetFilters, fetchData(widgetFilters)
+  $: widgetFilters, updateFilters(widgetFilters)
 </script>
 
 <div class="flex flex-col">
