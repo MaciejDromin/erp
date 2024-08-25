@@ -1,0 +1,11 @@
+quarkus:
+  http:
+    port: 8085
+  rest-client:
+    "com.soitio.selfregister.client.RegistrationClient":
+      url: http://localhost:8080
+
+service-discovery:
+  service-name: reports-generator
+  host: localhost
+  port: 8085

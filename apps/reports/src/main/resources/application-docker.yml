@@ -1,0 +1,13 @@
+quarkus:
+  http:
+    port: 8080
+  rest-client:
+    "com.soitio.selfregister.client.RegistrationClient":
+      url: http://erp-consul:8500
+  shutdown:
+    timeout: PT5S
+
+service-discovery:
+  service-name: reports-generator
+  host: reports-generator
+  port: 8080
