@@ -1,6 +1,9 @@
 quarkus:
   http:
     port: 8085
+  grpc:
+    server:
+      use-separate-server: false
   rest-client:
     "com.soitio.selfregister.client.RegistrationClient":
       url: http://localhost:8080

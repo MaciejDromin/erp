@@ -11,15 +11,17 @@ repositories {
 dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-arc'
-    implementation 'io.quarkus:quarkus-rest'
+    implementation 'io.quarkus:quarkus-grpc'
     implementation 'io.quarkus:quarkus-config-yaml'
 
-    implementation 'com.google.protobuf:protobuf-java:4.27.3'
+//    implementation 'com.google.protobuf:protobuf-java:4.27.3'
     implementation 'org.apache.pdfbox:pdfbox:3.0.3'
 
     // SELF DISCOVERY
-    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0'
+//    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0'
     implementation 'io.quarkus:quarkus-rest-client-jackson'
+
+    implementation 'com.soitio:reports-client:1.0.0'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
