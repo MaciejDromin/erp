@@ -96,6 +96,12 @@ services:
       - finances
       - inventory
     restart: unless-stopped
+  reports-generator:
+    image: "erp/reports-generator:latest"
+    depends_on:
+      - erp-consul
+      - sftp
+    restart: unless-stopped
   rabbit:
     image: "rabbitmq:3.13-management"
     volumes:
