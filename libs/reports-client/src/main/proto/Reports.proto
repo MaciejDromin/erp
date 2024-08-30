@@ -8,7 +8,11 @@ option java_outer_classname = "ReportsProto";
 package reports;
 
 service ReportsService {
-    rpc GenerateReport (ReportRequest) returns (google.protobuf.Empty) {}
+    rpc GenerateReport (ReportRequest) returns (ReportGenerationStatus) {}
+}
+
+service ReportsStatusService {
+    rpc UpdateReportStatus (ReportGenerationStatus) returns (google.protobuf.Empty) {}
 }
 
 // The request message containing the user's name.
@@ -17,6 +21,20 @@ message ReportRequest {
     string template = 2;
     map<string, Value> data = 3;
 
+}
+
+message ReportGenerationStatus {
+    string jobId = 1;
+    JobStatus jobStatus = 2;
+    optional string reason = 3;
+}
+
+enum JobStatus {
+    ACCEPTED = 0;
+    IN_PROGRESS = 1;
+    CANCELLED = 2;
+    FINISHED = 3;
+    FAILED = 4;
 }
 
 message Struct {

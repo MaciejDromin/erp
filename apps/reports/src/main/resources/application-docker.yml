@@ -14,3 +14,7 @@ service-discovery:
   service-name: reports-generator
   host: reports-generator
   port: 8080
+
+report-service:
+  host: localhost
+  port: 8086

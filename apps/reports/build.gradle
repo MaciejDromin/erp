@@ -13,9 +13,14 @@ dependencies {
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-grpc'
     implementation 'io.quarkus:quarkus-config-yaml'
+    implementation 'io.quarkus:quarkus-qute'
 
 //    implementation 'com.google.protobuf:protobuf-java:4.27.3'
-    implementation 'org.apache.pdfbox:pdfbox:3.0.3'
+
+    implementation 'org.jsoup:jsoup:1.18.1'
+    implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.9.1'
+
+    implementation 'com.github.mwiede:jsch:0.2.19'
 
     // SELF DISCOVERY
 //    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0'

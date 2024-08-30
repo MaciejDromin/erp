@@ -1,5 +1,6 @@
 package com.soitio.reports.client;
 
+import com.soitio.reports.ReportGenerationStatus;
 import com.soitio.reports.ReportRequest;
 import com.soitio.reports.ReportsServiceGrpc;
 import io.grpc.ManagedChannel;
@@ -15,8 +16,8 @@ public class ReportsClient {
         this.stub = ReportsServiceGrpc.newBlockingStub(channel);
     }
 
-    public void generateReport(ReportRequest request) {
-        this.stub.generateReport(request);
+    public ReportGenerationStatus generateReport(ReportRequest request) {
+        return this.stub.generateReport(request);
     }
 
 }
