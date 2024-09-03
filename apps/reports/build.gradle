@@ -21,6 +21,7 @@ dependencies {
     implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.9.1'
 
     implementation 'com.github.mwiede:jsch:0.2.19'
+    implementation 'org.apache.commons:commons-pool2:2.12.0'
 
     // SELF DISCOVERY
 //    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0'

@@ -15,7 +15,6 @@ service ReportsStatusService {
     rpc UpdateReportStatus (ReportGenerationStatus) returns (google.protobuf.Empty) {}
 }
 
-// The request message containing the user's name.
 message ReportRequest {
     string name = 1;
     string template = 2;

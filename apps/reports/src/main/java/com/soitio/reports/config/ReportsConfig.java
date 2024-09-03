@@ -21,6 +21,7 @@ public class ReportsConfig {
 
     @Produces
     @Named("reportExecutor")
+    @ApplicationScoped
     public ExecutorService managedExecutorService() {
         ThreadFactory threadFactory = new NamedThreadFactory("report-generator");
         return Executors.newFixedThreadPool(10, threadFactory);

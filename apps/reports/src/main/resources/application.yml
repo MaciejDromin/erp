@@ -16,3 +16,9 @@ service-discovery:
 report-service:
   host: localhost
   port: 8086
+
+sftp:
+  host: localhost
+  port: 2222
+  username: erp
+  password: admin
