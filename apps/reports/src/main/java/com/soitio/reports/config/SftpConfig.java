@@ -23,7 +23,6 @@ public class SftpConfig {
 
     @Produces
     @Named("defaultSftp")
-    @ApplicationScoped
     public SftpConnectionDetails sftpConnectionDetails() {
         return new SftpConnectionDetails(host, port, username, password);
     }

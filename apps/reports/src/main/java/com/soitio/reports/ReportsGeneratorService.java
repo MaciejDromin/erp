@@ -34,10 +34,10 @@ public class ReportsGeneratorService {
 
     public void generateReport(ReportRequest request, String jobId) {
         log.info("Starting generating report, jobId: {}", jobId);
-//        reportStatusClient.updateStatus(ReportGenerationStatus.newBuilder()
-//                .setJobId(jobId)
-//                .setJobStatus(JobStatus.IN_PROGRESS)
-//                .build());
+        reportStatusClient.updateStatus(ReportGenerationStatus.newBuilder()
+                .setJobId(jobId)
+                .setJobStatus(JobStatus.IN_PROGRESS)
+                .build());
 
         String rendered = templateService.renderFromTemplate(request.getTemplate(), request.getDataMap());
 
@@ -46,10 +46,10 @@ public class ReportsGeneratorService {
         sftpService.archiveFile(filePath, sftpConnectionDetails);
 
         log.info("Finished generating report, jobId: {}", jobId);
-//        reportStatusClient.updateStatus(ReportGenerationStatus.newBuilder()
-//                .setJobId(jobId)
-//                .setJobStatus(JobStatus.FINISHED)
-//                .build());
+        reportStatusClient.updateStatus(ReportGenerationStatus.newBuilder()
+                .setJobId(jobId)
+                .setJobStatus(JobStatus.FINISHED)
+                .build());
     }
 
 }
