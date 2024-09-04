@@ -2,7 +2,7 @@ NPROCS = $(shell grep -c 'processor' /proc/cpuinfo)
 MAKEFLAGS += -j$(NPROCS)
 
 self-register-quarkus:
-	cd libs/self-register-quarkus; ./gradlew build; ./gradlew publishToMavenLocal
+	cd libs/self-register-quarkus; mvn install -DskipTests
 
 self-register-spring:
 	cd libs/self-register-spring; ./gradlew build; ./gradlew publishToMavenLocal
@@ -75,7 +75,7 @@ all: analytics finances erp-fe inventory planner \
 	purchase-scanner dashboard widgets-finances reports-generator
 
 clean:
-	cd libs/self-register-quarkus; ./gradlew clean
+	cd libs/self-register-quarkus; mvn clean
 	cd libs/self-register-spring; ./gradlew clean
 	cd libs/widget-commons; ./gradlew clean
 	cd libs/widget-startup; mvn clean

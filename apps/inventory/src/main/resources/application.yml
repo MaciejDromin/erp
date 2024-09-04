@@ -6,12 +6,8 @@ quarkus:
     database: inventory
 
   rest-client:
-    "com.soitio.selfregister.client.RegistrationClient":
+    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
       url: http://localhost:8080
-  index-dependency:
-    selfregister:
-      group-id: com.soitio.selfregister
-      artifact-id: self-register-quarkus
 
 service-discovery:
   service-name: inventory

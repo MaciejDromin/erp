@@ -35,3 +35,5 @@ logging:
 
 service-discovery:
   service-name: finances
+  host: localhost
+  port: 8080

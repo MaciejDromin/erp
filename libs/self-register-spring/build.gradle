@@ -26,15 +26,15 @@ publishing {
 }
 
 dependencies {
-    implementation 'jakarta.annotation:jakarta.annotation-api:3.0.0'
-    implementation 'org.springframework:spring-web:6.1.8'
-    implementation 'org.springframework.cloud:spring-cloud-openfeign-core:4.1.2'
+    api 'jakarta.annotation:jakarta.annotation-api:3.0.0'
+    api 'org.springframework:spring-web:6.1.8'
+    api 'org.springframework.cloud:spring-cloud-openfeign-core:4.1.2'
 
     // JACKSON
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jackson_version}"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_version}"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
+    api "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    api "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jackson_version}"
+    api "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_version}"
+    api "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
 
     compileOnly "org.projectlombok:lombok:${lombok_version}"
     annotationProcessor "org.projectlombok:lombok:${lombok_version}"

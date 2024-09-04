@@ -17,9 +17,9 @@ import java.util.UUID;
 @Component
 public class AppLifecycleListener {
 
-    @Value("${server.address:finances}")
+    @Value("${service-discovery.host}")
     private String address;
-    @Value("${server.port}")
+    @Value("${service-discovery.port}")
     private Integer port;
     @Value("${service-discovery.service-name}")
     private String serviceName;

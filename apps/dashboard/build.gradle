@@ -19,7 +19,7 @@ dependencies {
     implementation 'com.soitio.widgets:widget-commons:1.0.0'
 
     // SELF DISCOVERY
-    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0'
+    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0-SNAPSHOT'
     implementation 'io.quarkus:quarkus-rest-client-reactive-jackson'
 
     testImplementation 'io.quarkus:quarkus-junit5'

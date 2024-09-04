@@ -21,3 +21,5 @@ logging:
 
 service-discovery:
   service-name: analytics
+  host: localhost
+  port: 8084
