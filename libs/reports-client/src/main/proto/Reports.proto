@@ -1,0 +1,72 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+option java_package = "com.soitio.reports";
+option java_outer_classname = "ReportsProto";
+
+package reports;
+
+service ReportsService {
+    rpc GenerateReport (ReportRequest) returns (ReportGenerationStatus) {}
+}
+
+service ReportsStatusService {
+    rpc UpdateReportStatus (ReportGenerationStatus) returns (google.protobuf.Empty) {}
+}
+
+message ReportRequest {
+    string name = 1;
+    string template = 2;
+    map<string, Value> data = 3;
+
+}
+
+message ReportGenerationStatus {
+    string jobId = 1;
+    JobStatus jobStatus = 2;
+    optional string reason = 3;
+}
+
+enum JobStatus {
+    ACCEPTED = 0;
+    IN_PROGRESS = 1;
+    CANCELLED = 2;
+    FINISHED = 3;
+    FAILED = 4;
+}
+
+message Struct {
+    // Unordered map of dynamically typed values.
+    map<string, Value> fields = 1;
+}
+
+message Value {
+    // The kind of value.
+    oneof kind {
+        // Represents a null value.
+        NullValue null_value = 1;
+        // Represents a int value.
+        uint32 int_value = 2;
+        // Represents a double value.
+        double double_value = 3;
+        // Represents a string value.
+        string string_value = 4;
+        // Represents a boolean value.
+        bool bool_value = 5;
+        // Represents a structured value.
+        Struct struct_value = 6;
+        // Represents a repeated `Value`.
+        ListValue list_value = 7;
+    }
+}
+
+enum NullValue {
+    // Null value.
+    NULL_VALUE = 0;
+}
+
+message ListValue {
+    // Repeated field of dynamically typed values.
+    repeated Value values = 1;
+}

@@ -1,0 +1,24 @@
+quarkus:
+  http:
+    port: 8085
+  grpc:
+    server:
+      use-separate-server: false
+  rest-client:
+    "com.soitio.selfregister.client.RegistrationClient":
+      url: http://localhost:8080
+
+service-discovery:
+  service-name: reports-generator
+  host: localhost
+  port: 8085
+
+report-service:
+  host: localhost
+  port: 8086
+
+sftp:
+  host: localhost
+  port: 2222
+  username: erp
+  password: admin
