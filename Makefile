@@ -1,5 +1,5 @@
 NPROCS = $(shell grep -c 'processor' /proc/cpuinfo)
-MAKEFLAGS += -j$(NPROCS)
+MAKEFLAGS += -j$(shell echo $$(( $(NPROCS) / 2 )))
 
 self-register-quarkus:
 	cd libs/self-register-quarkus; mvn install -DskipTests
