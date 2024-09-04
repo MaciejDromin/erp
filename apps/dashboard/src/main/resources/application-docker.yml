@@ -5,12 +5,9 @@ quarkus:
     connection-string: mongodb://erp-mongodb:27017
     database: dashboard
   rest-client:
-    "com.soitio.selfregister.client.RegistrationClient":
+    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
       url: http://erp-consul:8500
   index-dependency:
-    selfregister:
-      group-id: com.soitio.selfregister
-      artifact-id: self-register-quarkus
     widget-commons:
       group-id: com.soitio.widgets
       artifact-id: widget-commons

@@ -2,7 +2,7 @@ quarkus:
   http:
     port: 8080
   rest-client:
-    "com.soitio.selfregister.client.RegistrationClient":
+    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
       url: http://erp-consul:8500
     "com.soitio.widgets.startup.runtime.client.DashboardClient":
       url: http://dashboard:8080

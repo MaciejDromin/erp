@@ -1,0 +1,9 @@
+name: self-register-quarkus-codestart
+ref: self-register-quarkus
+type: code
+tags: extension-codestart
+metadata:
+  title: Self Register Quarkus
+  description: Start coding with Self Register Quarkus
+#  path: /some-path
+#  related-guide-section: TBD

@@ -30,3 +30,5 @@ logging:
 
 service-discovery:
   service-name: analytics
+  host: analytics
+  port: 8080

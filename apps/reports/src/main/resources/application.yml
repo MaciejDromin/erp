@@ -5,8 +5,8 @@ quarkus:
     server:
       use-separate-server: false
   rest-client:
-    "com.soitio.selfregister.client.RegistrationClient":
-      url: http://localhost:8080
+    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
+      url: http://consul.soitio-erp.com:8000
 
 service-discovery:
   service-name: reports-generator

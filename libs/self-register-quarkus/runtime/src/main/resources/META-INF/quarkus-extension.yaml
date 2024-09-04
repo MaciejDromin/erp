@@ -1,0 +1,14 @@
+name: Self Register Quarkus
+#description: Do something useful.
+metadata:
+#  keywords:
+#    - self-register-quarkus
+#  guide: ... # To create and publish this guide, see https://github.com/quarkiverse/quarkiverse/wiki#documenting-your-extension
+#  categories:
+#    - "miscellaneous"
+#  status: "preview"
+  codestart:
+    name: self-register-quarkus
+    languages:
+      - "java"
+    artifact: "com.soitio.selfregister:self-register-quarkus:codestarts:jar:${project.version}"
