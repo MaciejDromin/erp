@@ -15,8 +15,6 @@ dependencies {
     implementation 'io.quarkus:quarkus-config-yaml'
     implementation 'io.quarkus:quarkus-qute'
 
-//    implementation 'com.google.protobuf:protobuf-java:4.27.3'
-
     implementation 'org.jsoup:jsoup:1.18.1'
     implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.9.1'
 
@@ -24,7 +22,7 @@ dependencies {
     implementation 'org.apache.commons:commons-pool2:2.12.0'
 
     // SELF DISCOVERY
-//    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0'
+    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0'
     implementation 'io.quarkus:quarkus-rest-client-jackson'
 
     implementation 'com.soitio:reports-client:1.0.0'
