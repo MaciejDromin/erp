@@ -1,10 +1,10 @@
 package com.soitio.finances.receipt.application;
 
+import com.soitio.finances.receipt.application.port.PurchaseRepository;
+import com.soitio.finances.receipt.domain.Purchase;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.soitio.finances.receipt.application.port.PurchaseRepository;
-import com.soitio.finances.receipt.domain.Purchase;
 
 @Service
 @RequiredArgsConstructor

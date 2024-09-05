@@ -1,5 +1,6 @@
 package com.soitio.finances.receipt.statistics.domain;
 
+import com.soitio.finances.common.persistence.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
@@ -15,7 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import com.soitio.finances.common.persistence.BaseEntity;
 
 @Entity
 @AllArgsConstructor

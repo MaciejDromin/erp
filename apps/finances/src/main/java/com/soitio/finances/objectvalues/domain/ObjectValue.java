@@ -1,5 +1,6 @@
 package com.soitio.finances.objectvalues.domain;
 
+import com.soitio.finances.common.persistence.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
@@ -11,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
-import com.soitio.finances.common.persistence.BaseEntity;
 
 @Entity
 @AllArgsConstructor

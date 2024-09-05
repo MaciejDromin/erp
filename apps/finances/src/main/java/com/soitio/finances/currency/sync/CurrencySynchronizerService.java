@@ -1,10 +1,10 @@
 package com.soitio.finances.currency.sync;
 
+import com.soitio.finances.currency.application.CurrencyService;
+import com.soitio.finances.currency.client.CurrencySyncClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.soitio.finances.currency.application.CurrencyService;
-import com.soitio.finances.currency.client.CurrencySyncClient;
 
 @Slf4j
 @Service

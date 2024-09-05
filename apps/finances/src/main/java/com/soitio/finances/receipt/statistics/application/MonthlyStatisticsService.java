@@ -1,10 +1,10 @@
 package com.soitio.finances.receipt.statistics.application;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import com.soitio.finances.receipt.statistics.application.port.MonthlyStatisticsRepository;
 import com.soitio.finances.receipt.statistics.domain.MonthlyStatistics;
 import com.soitio.finances.receipt.statistics.domain.dto.MonthlyPurchaseStatisticsDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

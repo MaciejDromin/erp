@@ -1,5 +1,7 @@
 package com.soitio.finances.receipt.domain;
 
+import com.soitio.finances.common.persistence.BaseEntity;
+import com.soitio.finances.receipt.statistics.domain.PurchaseStatistics;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -16,8 +18,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
-import com.soitio.finances.common.persistence.BaseEntity;
-import com.soitio.finances.receipt.statistics.domain.PurchaseStatistics;
 
 @Entity
 @AllArgsConstructor
