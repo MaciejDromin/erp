@@ -1,10 +1,10 @@
 package com.soitio.finances.receipt.application;
 
+import com.soitio.finances.receipt.domain.PurchaseItem;
+import com.soitio.finances.receipt.domain.dto.ReceiptItemDto;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.stereotype.Component;
-import com.soitio.finances.receipt.domain.PurchaseItem;
-import com.soitio.finances.receipt.domain.dto.ReceiptItemDto;
 
 @Component
 public class PurchaseItemFactory {

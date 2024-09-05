@@ -1,13 +1,13 @@
 package com.soitio.finances.objectvalues.application.port;
 
+import com.soitio.finances.objectvalues.domain.ObjectType;
+import com.soitio.finances.objectvalues.domain.ObjectValue;
+import com.soitio.finances.objectvalues.domain.proj.ObjectIdProj;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.soitio.finances.objectvalues.domain.ObjectType;
-import com.soitio.finances.objectvalues.domain.ObjectValue;
-import com.soitio.finances.objectvalues.domain.proj.ObjectIdProj;
 
 @Repository
 public interface ObjectValueRepository extends JpaRepository<ObjectValue, String> {

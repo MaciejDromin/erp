@@ -1,5 +1,6 @@
 package com.soitio.finances.currency.domain;
 
+import com.soitio.finances.common.persistence.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -11,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import com.soitio.finances.common.persistence.BaseEntity;
 
 @Entity
 @AllArgsConstructor

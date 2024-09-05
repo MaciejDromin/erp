@@ -1,12 +1,12 @@
 package com.soitio.finances.receipt.application;
 
+import com.soitio.finances.receipt.domain.Purchase;
+import com.soitio.finances.receipt.domain.PurchaseItem;
+import com.soitio.finances.receipt.domain.dto.ReceiptDto;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import com.soitio.finances.receipt.domain.Purchase;
-import com.soitio.finances.receipt.domain.PurchaseItem;
-import com.soitio.finances.receipt.domain.dto.ReceiptDto;
 
 @Component
 @RequiredArgsConstructor

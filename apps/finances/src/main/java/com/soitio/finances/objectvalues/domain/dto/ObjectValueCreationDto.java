@@ -1,8 +1,8 @@
 package com.soitio.finances.objectvalues.domain.dto;
 
+import com.soitio.finances.objectvalues.domain.ObjectType;
 import lombok.Builder;
 import lombok.Value;
-import com.soitio.finances.objectvalues.domain.ObjectType;
 
 @Value
 @Builder

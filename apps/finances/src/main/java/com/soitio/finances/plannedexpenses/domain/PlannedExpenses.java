@@ -1,5 +1,8 @@
 package com.soitio.finances.plannedexpenses.domain;
 
+import com.soitio.finances.common.persistence.BaseEntity;
+import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
+import com.soitio.finances.operationcategories.domain.OperationCategory;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,9 +20,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
-import com.soitio.finances.common.persistence.BaseEntity;
-import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
-import com.soitio.finances.operationcategories.domain.OperationCategory;
 
 @Entity
 @AllArgsConstructor
