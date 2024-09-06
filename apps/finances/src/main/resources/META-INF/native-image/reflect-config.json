@@ -2185,6 +2185,114 @@
     ]
   },
   {
+    "name": "com.soitio.finances.receipt.domain.dto.PurchaseToAnalyzeDto",
+    "allDeclaredFields": true,
+    "queryAllDeclaredMethods": true,
+    "queryAllDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getId",
+        "parameterTypes": []
+      },
+      {
+        "name": "getAmount",
+        "parameterTypes": []
+      },
+      {
+        "name": "getCurrency",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDate",
+        "parameterTypes": []
+      },
+      {
+        "name": "getItems",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "com.soitio.finances.receipt.domain.dto.PurchaseItemToAnalyzeDto",
+    "allDeclaredFields": true,
+    "queryAllDeclaredMethods": true,
+    "queryAllDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getId",
+        "parameterTypes": []
+      },
+      {
+        "name": "getPrice",
+        "parameterTypes": []
+      },
+      {
+        "name": "getUnitPrice",
+        "parameterTypes": []
+      },
+      {
+        "name": "getQuantity",
+        "parameterTypes": []
+      },
+      {
+        "name": "getCurrency",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "com.soitio.finances.receipt.domain.dto.ReceiptDto",
+    "allDeclaredFields": true,
+    "queryAllDeclaredMethods": true,
+    "queryAllDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getAddress",
+        "parameterTypes": []
+      },
+      {
+        "name": "getItems",
+        "parameterTypes": []
+      },
+      {
+        "name": "getDate",
+        "parameterTypes": []
+      },
+      {
+        "name": "getSource",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
+    "name": "com.soitio.finances.receipt.domain.dto.ReceiptItemDto",
+    "allDeclaredFields": true,
+    "queryAllDeclaredMethods": true,
+    "queryAllDeclaredConstructors": true,
+    "methods": [
+      {
+        "name": "getName",
+        "parameterTypes": []
+      },
+      {
+        "name": "getUnit",
+        "parameterTypes": []
+      },
+      {
+        "name": "getUnitPrice",
+        "parameterTypes": []
+      },
+      {
+        "name": "getPrice",
+        "parameterTypes": []
+      },
+      {
+        "name": "getQuantity",
+        "parameterTypes": []
+      }
+    ]
+  },
+  {
     "name": "com.soitio.finances.receipt.application.port.PurchaseItemRepository",
     "queryAllDeclaredMethods": true,
     "queryAllPublicMethods": true

@@ -17,12 +17,12 @@ reports-client:
 	cd libs/reports-client; ./gradlew build; ./gradlew publishToMavenLocal
 
 analytics: self-register-spring
-	cd apps/analytics; ./gradlew nativeCompile -PaotProfiles=docker -x test; \
-		podman build -f src/main/docker/Dockerfile.native -t erp/analytics:latest .
+	cd apps/analytics; ./gradlew build -x test; \
+		podman build -f src/main/docker/Dockerfile -t erp/analytics:latest .
 
 finances: self-register-spring
-	cd apps/finances;  ./gradlew nativeCompile -PaotProfiles=docker -x test; \
-		podman build -f src/main/docker/Dockerfile.native -t erp/finances:latest .
+	cd apps/finances;  ./gradlew build -x test -x checkstyleAot -x checkstyleAotTest; \
+		podman build -f src/main/docker/Dockerfile -t erp/finances:latest .
 
 erp-fe:
 	cd apps/erp-fe; podman build -f Dockerfile -t erp/fe:latest .
