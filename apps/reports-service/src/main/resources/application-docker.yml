@@ -7,12 +7,14 @@ quarkus:
   rest-client:
     "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
       url: http://erp-consul:8500
+    "com.soitio.reports.service.inventory.client.InventoryClient":
+      url: http://inventory:8080
   datasource:
     db-kind: postgresql
     username: reports
     password: reports
     jdbc:
-      url: jdbc:postgresql://erp-pg:5432/finances?useUnicode=yes&characterEncoding=UTF-8
+      url: jdbc:postgresql://erp-pg:5432/reports?useUnicode=yes&characterEncoding=UTF-8
   hibernate-orm:
     database:
       generation: update

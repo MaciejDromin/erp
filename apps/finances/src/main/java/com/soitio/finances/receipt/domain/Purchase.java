@@ -30,7 +30,6 @@ public class Purchase extends BaseEntity {
     private BigDecimal amount;
     private String currency;
     private String source;
-    //    private PurchaseAnalytics analytics;
     @Builder.Default
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseItem> purchaseItems = new ArrayList<>();
