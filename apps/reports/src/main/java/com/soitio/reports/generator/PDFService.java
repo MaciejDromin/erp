@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
 @ApplicationScoped
 public class PDFService {
 
-    public String generatePdf(String name, String rendered) {
+    public String generatePdf(String name, String rendered) throws Exception {
         String filename = name + ".pdf";
         // Create an ITextRenderer instance
         ITextRenderer renderer = new ITextRenderer();
@@ -25,7 +25,7 @@ public class PDFService {
         try (FileOutputStream fos = new FileOutputStream(filename)) {
             renderer.createPDF(fos);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
         return filename;
     }

@@ -35,24 +35,41 @@ public class ReportsGeneratorService {
         this.sftpConnectionDetails = sftpConnectionDetails;
     }
 
-    public void generateReport(ReportRequest request, String jobId) {
+    public void generateReportAndNotify(ReportRequest request, String jobId) {
         log.info("Starting generating report, jobId: {}", jobId);
         reportStatusClient.updateStatus(ReportGenerationStatus.newBuilder()
                 .setJobId(jobId)
                 .setJobStatus(JobStatus.IN_PROGRESS)
                 .build());
 
-        String rendered = templateService.renderFromTemplate(request.getTemplate(), request.getDataMap());
+        String location;
 
-        String filePath = pdfService.generatePdf(request.getName(), rendered);
-
-        sftpService.archiveFile(filePath, sftpConnectionDetails);
+        try {
+            location = generateReport(request);
+        } catch (Exception e) {
+            log.warn("Failed to generate report for jobId: {}", jobId);
+            reportStatusClient.updateStatus(ReportGenerationStatus.newBuilder()
+                    .setJobId(jobId)
+                    .setJobStatus(JobStatus.FAILED)
+                    .setReason(e.getMessage())
+                    .build());
+            return;
+        }
 
         log.info("Finished generating report, jobId: {}", jobId);
         reportStatusClient.updateStatus(ReportGenerationStatus.newBuilder()
                 .setJobId(jobId)
                 .setJobStatus(JobStatus.FINISHED)
+                .setLocation(location)
                 .build());
+    }
+
+    public String generateReport(ReportRequest request) throws Exception {
+        String rendered = templateService.renderFromTemplate(request.getTemplate(), request.getDataMap());
+
+        String filePath = pdfService.generatePdf(request.getName(), rendered);
+
+        return sftpService.archiveFile(filePath, sftpConnectionDetails);
     }
 
 }

@@ -9,30 +9,41 @@ import java.io.IOException;
 @ApplicationScoped
 public class SftpService {
 
+    private static final String GENERATED_DIR = "data/generated";
+    private static final String DELIMITER = "/";
+
     private final SftpConnectionPool sftpConnectionPool;
 
     public SftpService(SftpConnectionPool sftpConnectionPool) {
         this.sftpConnectionPool = sftpConnectionPool;
     }
 
-    public void archiveFile(String filePath, SftpConnectionDetails sftpConnectionDetails) {
+    public String archiveFile(String filePath, SftpConnectionDetails sftpConnectionDetails) throws Exception {
         ChannelSftp channelSftp = sftpConnectionPool.getChannelForCreds(sftpConnectionDetails);
 
-        cd("data/generated", channelSftp);
+        cd(GENERATED_DIR, channelSftp);
+
+        String filename = extractFilename(filePath);
 
         try (FileInputStream is = new FileInputStream(filePath)){
-            put(is, filePath, channelSftp);
+            put(is, filename, channelSftp);
         } catch (IOException e) {
             throw new IllegalStateException("Could not find file to archive");
         }
 
-
         sftpConnectionPool.returnToPool(sftpConnectionDetails, channelSftp);
+        return GENERATED_DIR + DELIMITER + filename;
+    }
+
+    private String extractFilename(String filePath) {
+        int lio = filePath.lastIndexOf(DELIMITER);
+        if (lio == -1) return filePath;
+        return filePath.substring(lio + 1);
     }
 
     private void cd(String path, ChannelSftp sftp) {
         goHome(sftp);
-        for (String s : path.split("/")) {
+        for (String s : path.split(DELIMITER)) {
             try {
                 sftp.cd(s);
             } catch (SftpException e) {

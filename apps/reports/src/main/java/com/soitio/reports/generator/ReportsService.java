@@ -45,7 +45,7 @@ public class ReportsService extends ReportsServiceGrpc.ReportsServiceImplBase {
     }
 
     private void enqueueRequest(ReportRequest request, String jobId) {
-        executorService.submit(() -> reportsGeneratorService.generateReport(request, jobId));
+        executorService.submit(() -> reportsGeneratorService.generateReportAndNotify(request, jobId));
     }
 
 }

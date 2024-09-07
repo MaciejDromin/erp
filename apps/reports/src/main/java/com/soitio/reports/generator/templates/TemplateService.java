@@ -19,7 +19,7 @@ public class TemplateService {
         this.engine = engine;
     }
 
-    public String renderFromTemplate(String templateName, Map<String, Value> data) {
+    public String renderFromTemplate(String templateName, Map<String, Value> data) throws Exception {
         Template template = engine.getTemplate(templateName);
         if (template == null) {
             // try to find custom template
