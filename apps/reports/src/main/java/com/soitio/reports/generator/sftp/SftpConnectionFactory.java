@@ -1,4 +1,4 @@
-package com.soitio.reports.sftp;
+package com.soitio.reports.generator.sftp;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;

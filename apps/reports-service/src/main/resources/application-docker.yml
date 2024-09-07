@@ -1,0 +1,29 @@
+quarkus:
+  http:
+    port: 8080
+  grpc:
+    server:
+      use-separate-server: false
+  rest-client:
+    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
+      url: http://erp-consul:8500
+  datasource:
+    db-kind: postgresql
+    username: reports
+    password: reports
+    jdbc:
+      url: jdbc:postgresql://erp-pg:5432/finances?useUnicode=yes&characterEncoding=UTF-8
+  hibernate-orm:
+    database:
+      generation: update
+  shutdown:
+    timeout: PT5S
+
+service-discovery:
+  service-name: reports-service
+  host: reports-service
+  port: 8080
+
+reports-generator:
+  host: reports-generator
+  port: 8085

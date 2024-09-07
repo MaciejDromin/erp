@@ -1,4 +1,4 @@
-package com.soitio.reports;
+package com.soitio.reports.generator;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.jsoup.Jsoup;

@@ -1,9 +1,12 @@
-package com.soitio.reports;
+package com.soitio.reports.generator;
 
+import com.soitio.reports.JobStatus;
+import com.soitio.reports.ReportGenerationStatus;
+import com.soitio.reports.ReportRequest;
 import com.soitio.reports.client.ReportStatusClient;
-import com.soitio.reports.sftp.SftpConnectionDetails;
-import com.soitio.reports.sftp.SftpService;
-import com.soitio.reports.templates.TemplateService;
+import com.soitio.reports.generator.sftp.SftpConnectionDetails;
+import com.soitio.reports.generator.sftp.SftpService;
+import com.soitio.reports.generator.templates.TemplateService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
 import org.slf4j.Logger;

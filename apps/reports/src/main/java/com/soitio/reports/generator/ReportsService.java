@@ -1,5 +1,9 @@
-package com.soitio.reports;
+package com.soitio.reports.generator;
 
+import com.soitio.reports.JobStatus;
+import com.soitio.reports.ReportGenerationStatus;
+import com.soitio.reports.ReportRequest;
+import com.soitio.reports.ReportsServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import io.quarkus.grpc.GrpcService;
 import jakarta.inject.Named;

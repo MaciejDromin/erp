@@ -1,4 +1,4 @@
-package com.soitio.reports.config;
+package com.soitio.reports.service.config;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;

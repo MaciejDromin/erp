@@ -1,4 +1,4 @@
-package com.soitio.reports.sftp;
+package com.soitio.reports.generator.sftp;
 
 import com.jcraft.jsch.ChannelSftp;
 import jakarta.enterprise.context.ApplicationScoped;

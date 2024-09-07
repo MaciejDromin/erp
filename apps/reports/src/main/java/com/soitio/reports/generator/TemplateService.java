@@ -1,4 +1,4 @@
-package com.soitio.reports.templates;
+package com.soitio.reports.generator.templates;
 
 import com.soitio.reports.Value;
 import io.quarkus.qute.Engine;

@@ -1,4 +1,4 @@
-package com.soitio.reports.config;
+package com.soitio.reports.generator.config;
 
 import com.soitio.reports.client.ReportStatusClient;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -13,10 +13,10 @@ import java.util.concurrent.ThreadFactory;
 @ApplicationScoped
 public class ReportsConfig {
 
-    @ConfigProperty(name = "report-service.host")
+    @ConfigProperty(name = "reports-service.host")
     String host;
 
-    @ConfigProperty(name = "report-service.port")
+    @ConfigProperty(name = "reports-service.port")
     Integer port;
 
     @Produces

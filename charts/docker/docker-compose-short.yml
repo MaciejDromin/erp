@@ -10,6 +10,7 @@ services:
     volumes:
       - /opt/postgres/erp-data:/var/lib/postgresql/data:Z
       - ./sql/initialize_finances.sql:/docker-entrypoint-initdb.d/initialize_finances.sql:Z
+      - ./sql/initialize_reports.sql:/docker-entrypoint-initdb.d/initialize_reports.sql:Z
     restart: unless-stopped
     user: "$UID:$GID"
   erp-mongodb:
@@ -102,6 +103,12 @@ services:
       - erp-consul
       - sftp
     restart: unless-stopped
+  reports-service:
+    image: "erp/reports-service:latest"
+    depends_on:
+      - erp-consul
+      - erp-pg
+      - reports-generator
   rabbit:
     image: "rabbitmq:3.13-management"
     volumes:
