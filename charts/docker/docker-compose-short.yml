@@ -118,6 +118,7 @@ services:
     image: "nginx:latest"
     volumes:
       - ./nginx/default.conf:/etc/nginx/nginx.conf:ro
+      - /opt/sftp/erp-data:/mnt/data:ro
     restart: unless-stopped
     ports:
       - "8000:80"
