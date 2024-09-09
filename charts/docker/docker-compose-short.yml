@@ -9,8 +9,7 @@ services:
       - POSTGRES_PASSWORD=erp
     volumes:
       - /opt/postgres/erp-data:/var/lib/postgresql/data:Z
-      - ./sql/initialize_finances.sql:/docker-entrypoint-initdb.d/initialize_finances.sql:Z
-      - ./sql/initialize_reports.sql:/docker-entrypoint-initdb.d/initialize_reports.sql:Z
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:Z
     restart: unless-stopped
     user: "$UID:$GID"
   erp-mongodb:

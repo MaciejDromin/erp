@@ -1,5 +1,0 @@
-CREATE USER reports WITH PASSWORD 'reports';
-CREATE DATABASE reports;
-GRANT ALL PRIVILEGES ON DATABASE reports to reports;
-GRANT ALL ON SCHEMA public TO reports;
-ALTER DATABASE reports OWNER TO reports;
