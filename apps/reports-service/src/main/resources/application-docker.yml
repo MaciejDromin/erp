@@ -28,4 +28,4 @@ service-discovery:
 
 reports-generator:
   host: reports-generator
-  port: 8085
+  port: 8080

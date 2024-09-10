@@ -9,9 +9,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.pool2.BaseKeyedPooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class SftpConnectionFactory extends BaseKeyedPooledObjectFactory<SftpConnectionDetails, ChannelSftp> {
+
+    private static final Logger log = LoggerFactory.getLogger(SftpConnectionFactory.class);
 
     @Override
     public ChannelSftp create(SftpConnectionDetails sftpConnectionDetails) {
@@ -29,6 +33,7 @@ public class SftpConnectionFactory extends BaseKeyedPooledObjectFactory<SftpConn
             return  (ChannelSftp) channel;
         } catch (JSchException e) {
             // ERROR
+            log.warn("Could not create SFTP session, reason: {}", e.getMessage());
         }
         throw new IllegalStateException("Could not create SFTP session");
     }

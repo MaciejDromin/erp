@@ -1,10 +1,9 @@
 package com.soitio.reports.generator;
 
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.xhtmlrenderer.pdf.ITextRenderer;
-
 import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,18 +15,14 @@ public class PDFService {
 
     public String generatePdf(String name, String rendered) throws Exception {
         String filename = "%s_%s.pdf".formatted(name, getCurrentTime());
-        // Create an ITextRenderer instance
-        ITextRenderer renderer = new ITextRenderer();
 
-        // Convert HTML to XHTML
-        String htmlToXhtml = htmlToXhtml(rendered);
-        renderer.setDocumentFromString(htmlToXhtml);
-
-        // Render the document to PDF
-        renderer.layout();
+        PdfRendererBuilder builder = new PdfRendererBuilder();
+        builder.useFastMode();
+        builder.withHtmlContent(htmlToXhtml(rendered), "/");
 
         try (FileOutputStream fos = new FileOutputStream(filename)) {
-            renderer.createPDF(fos);
+            builder.toStream(fos);
+            builder.run();
         } catch (Exception e) {
             throw e;
         }

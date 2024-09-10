@@ -65,14 +65,20 @@ widgets-finances: self-register-quarkus widget-startup
 
 reports-generator: self-register-quarkus reports-client
 	cd apps/reports; ./gradlew build \
+		-Dquarkus.profile=docker; \
+		podman build -f src/main/docker/Dockerfile.jvm -t erp/reports-generator:latest .
+
+reports-service: self-register-quarkus reports-client
+	cd apps/reports-service; ./gradlew build \
 		-Dquarkus.native.enabled=true \
 		-Dquarkus.native.container-build=true \
 		-Dquarkus.package.jar.enabled=false \
 		-Dquarkus.profile=docker; \
-		podman build -f src/main/docker/Dockerfile.native -t erp/reports-generator:latest .
+		podman build -f src/main/docker/Dockerfile.native -t erp/reports-service:latest .
 
 all: analytics finances erp-fe inventory planner \
-	purchase-scanner dashboard widgets-finances reports-generator
+	purchase-scanner dashboard widgets-finances reports-generator \
+	reports-service
 
 clean:
 	cd libs/self-register-quarkus; mvn clean
@@ -87,3 +93,4 @@ clean:
 	cd apps/dashboard; ./gradlew clean
 	cd apps/widgets-finances; ./gradlew clean
 	cd apps/reports; ./gradlew clean
+	cd apps/reports-service; ./gradlew clean

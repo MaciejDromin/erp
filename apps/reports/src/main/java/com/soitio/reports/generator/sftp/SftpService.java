@@ -32,7 +32,12 @@ public class SftpService {
         }
 
         sftpConnectionPool.returnToPool(sftpConnectionDetails, channelSftp);
-        return GENERATED_DIR + DELIMITER + filename;
+        return generateLocationPath(filename);
+    }
+
+    private String generateLocationPath(String filename) {
+        String fullPath = GENERATED_DIR + DELIMITER + filename;
+        return fullPath.substring(fullPath.indexOf(DELIMITER) + 1);
     }
 
     private String extractFilename(String filePath) {

@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'io.quarkus'
+    id 'org.kordamp.gradle.jandex' version '2.0.0'
 }
 
 repositories {
@@ -50,4 +51,8 @@ compileJava {
 
 compileTestJava {
     options.encoding = 'UTF-8'
+}
+
+tasks.named("quarkusDependenciesBuild") {
+    dependsOn "jandex"
 }

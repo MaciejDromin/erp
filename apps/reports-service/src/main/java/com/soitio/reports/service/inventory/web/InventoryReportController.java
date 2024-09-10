@@ -24,6 +24,7 @@ public class InventoryReportController {
     @POST
     public void requestReportGeneration(ReportGenerationRequestDto reportGenerationRequest) {
         var data = collectorService.getAllItems();
+        log.info("Fetched {} items", data.size());
         reportRequesterService.requestReportGeneration(reportGenerationRequest, ValueDataMapper.mapToValueMap(data));
     }
 

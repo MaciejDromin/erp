@@ -19,7 +19,7 @@ public final class PageableDataFetcher {
 
     public static <T> List<T> fetchData(BiFunction<Integer, Integer, PageDto<T>> fetchFunction) {
         int totalItems = fetchFunction.apply(INITIAL_PAGE, INITIAL_SIZE).getTotalPages();
-        return IntStream.range(INITIAL_PAGE, calculateNumOfPages(totalItems)).parallel()
+        return IntStream.range(INITIAL_PAGE, calculateNumOfPages(totalItems) + 1).parallel()
                 .mapToObj(i -> fetchFunction.apply(i, SIZE))
                 .map(PageDto::getContent)
                 .flatMap(Collection::stream)
