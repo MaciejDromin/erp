@@ -6,12 +6,16 @@ import org.jsoup.nodes.Document;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.FileOutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @ApplicationScoped
 public class PDFService {
 
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyy'T'HH:mm:ss");
+
     public String generatePdf(String name, String rendered) throws Exception {
-        String filename = name + ".pdf";
+        String filename = "%s_%s.pdf".formatted(name, getCurrentTime());
         // Create an ITextRenderer instance
         ITextRenderer renderer = new ITextRenderer();
 
@@ -35,6 +39,10 @@ public class PDFService {
         Document document = Jsoup.parse(html);
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
         return document.html();
+    }
+
+    private String getCurrentTime() {
+        return LocalDateTime.now().format(DATE_TIME_FORMATTER);
     }
 
 }
