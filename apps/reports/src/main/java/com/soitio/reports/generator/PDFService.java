@@ -21,6 +21,9 @@ public class PDFService {
         builder.withHtmlContent(htmlToXhtml(rendered), "/");
 
         try (FileOutputStream fos = new FileOutputStream(filename)) {
+            builder.useFont(() -> getClass()
+                    .getClassLoader()
+                    .getResourceAsStream("fonts/WorkSans-VariableFont_wght.ttf"), "wght");
             builder.toStream(fos);
             builder.run();
         } catch (Exception e) {
