@@ -45,7 +45,9 @@ public class InventoryItemRepository implements PanacheMongoRepository<Inventory
                         .collect(Collectors.toSet()));
             }
         }
-        var itemList = items.page(pageNum, DEFAULT_PAGE_SIZE).list();
+        var requestedSize = params.getFirst("size");
+        var size = requestedSize == null ? DEFAULT_PAGE_SIZE : Integer.parseInt(requestedSize);
+        var itemList = items.page(pageNum, size).list();
         return PageDto.of(itemList.stream()
                 .map(this::convert)
                 .toList(), items.pageCount());

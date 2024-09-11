@@ -15,12 +15,12 @@ service-discovery:
   host: reports-generator
   port: 8080
 
-report-service:
-  host: localhost
-  port: 8086
+reports-service:
+  host: reports-service
+  port: 8080
 
 sftp:
   host: sftp
-  port: 2222
+  port: 22
   username: erp
   password: admin

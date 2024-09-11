@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory Report</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 6px;
+        }
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        html {
+            font-family: 'wght';
+            font-style: normal;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inventory Report</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+        </tr>
+        {#for item in data.getListValue().getValuesList()}
+            <tr>
+                <td>{item.getStructValue().getFieldsOrThrow("id").getStringValue()}</td>
+                <td>{item.getStructValue().getFieldsOrThrow("name").getStringValue()}</td>
+                <td>{item.getStructValue().getFieldsOrThrow("categories").getListValue().getValues(0).getStructValue().getFieldsOrThrow("name").getStringValue()}</td>
+                <td>{item.getStructValue().getFieldsOrThrow("quantity").getIntValue()}</td>
+                <td>{item.getStructValue().getFieldsOrThrow("unit").getStringValue()}</td>
+            </tr>
+        {/for}
+    </table>
+</body>
+</html>

@@ -12,21 +12,22 @@ repositories {
 dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-arc'
+    implementation 'io.quarkus:quarkus-rest'
+    implementation 'io.quarkus:quarkus-rest-jackson'
     implementation 'io.quarkus:quarkus-grpc'
     implementation 'io.quarkus:quarkus-config-yaml'
-    implementation 'io.quarkus:quarkus-qute'
+    implementation 'io.quarkus:quarkus-rest-client-jackson'
 
-    implementation 'org.jsoup:jsoup:1.18.1'
-    implementation 'com.openhtmltopdf:openhtmltopdf-core:1.0.10'
-    implementation 'com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10'
-
-    implementation 'com.github.mwiede:jsch:0.2.19'
-    implementation 'org.apache.commons:commons-pool2:2.12.0'
+    implementation 'io.quarkus:quarkus-hibernate-orm-panache'
+    implementation 'io.quarkus:quarkus-jdbc-postgresql'
 
     // SELF DISCOVERY
     implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0-SNAPSHOT'
 
     implementation 'com.soitio:reports-client:1.0.0'
+
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'

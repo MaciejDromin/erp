@@ -25,7 +25,8 @@ message ReportRequest {
 message ReportGenerationStatus {
     string jobId = 1;
     JobStatus jobStatus = 2;
-    optional string reason = 3;
+    optional string location = 3;
+    optional string reason = 4;
 }
 
 enum JobStatus {

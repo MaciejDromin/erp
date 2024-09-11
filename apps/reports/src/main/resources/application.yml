@@ -13,7 +13,7 @@ service-discovery:
   host: localhost
   port: 8085
 
-report-service:
+reports-service:
   host: localhost
   port: 8086
 
