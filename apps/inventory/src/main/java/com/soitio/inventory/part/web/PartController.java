@@ -6,7 +6,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
-import com.soitio.inventory.common.PageDto;
+import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.part.application.PartRepository;
 import com.soitio.inventory.part.domain.dto.PartCreationDto;
 import com.soitio.inventory.part.domain.dto.PartDto;

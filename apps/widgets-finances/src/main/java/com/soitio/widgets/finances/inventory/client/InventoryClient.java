@@ -1,6 +1,7 @@
 package com.soitio.widgets.finances.inventory.client;
 
 import com.soitio.widgets.finances.inventory.domain.ObjectIdsDto;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
@@ -15,11 +16,15 @@ public interface InventoryClient {
     Map<String, Integer> itemCount(ObjectIdsDto objectIds);
 
     @POST
-    @Path("properties/object-count")
+    @Path("/properties/object-count")
     Map<String, Integer> propertyCount(ObjectIdsDto objectIds);
 
     @POST
-    @Path("vehicles/object-count")
+    @Path("/vehicles/object-count")
     Map<String, Integer> vehicleCount(ObjectIdsDto objectIds);
+
+//    @GET
+//    @Path("/inventory/categories")
+//
 
 }

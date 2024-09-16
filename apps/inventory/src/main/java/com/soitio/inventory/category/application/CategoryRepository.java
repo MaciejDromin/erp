@@ -1,5 +1,6 @@
 package com.soitio.inventory.category.application;
 
+import com.soitio.commons.models.dto.PageDto;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
@@ -8,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import com.soitio.inventory.category.domain.Category;
 import com.soitio.inventory.category.domain.dto.CategoryDto;
-import com.soitio.inventory.common.PageDto;
 import java.util.HashSet;
 import java.util.Set;
 

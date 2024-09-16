@@ -16,6 +16,8 @@ dependencies {
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-mongodb-panache'
 
+    implementation 'com.soitio:commons:1.0-SNAPSHOT'
+
     // SELF DISCOVERY
     implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0-SNAPSHOT'
     implementation 'io.quarkus:quarkus-rest-client-reactive-jackson'

@@ -34,4 +34,10 @@ public class WidgetsController {
         return widgetService.calculateMonthlyBalanceDiff(year, month);
     }
 
+    @GET
+    @Path("/most-expensive-item-per-category")
+    public WidgetData getMostExpensiveItemPerCat() {
+        return widgetService.getMostExpensiveItemPerCat();
+    }
+
 }

@@ -138,4 +138,10 @@ public class WidgetService {
                 .map(AmountDto::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public WidgetData getMostExpensiveItemPerCat() {
+        // get categories
+        // get most expensive item by category
+        //get item name from inventory
+        return null;
+    }
 }

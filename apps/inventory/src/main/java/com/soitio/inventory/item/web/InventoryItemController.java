@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
-import com.soitio.inventory.common.PageDto;
+import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.item.application.InventoryItemRepository;
 import com.soitio.inventory.item.domain.dto.InventoryItemDto;
 import com.soitio.inventory.item.domain.dto.ItemCreationDto;

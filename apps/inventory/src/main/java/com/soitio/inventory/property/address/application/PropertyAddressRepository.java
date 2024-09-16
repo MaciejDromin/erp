@@ -4,7 +4,7 @@ import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
-import com.soitio.inventory.common.PageDto;
+import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.property.address.domain.PropertyAddress;
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressCreationDto;
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressDto;
