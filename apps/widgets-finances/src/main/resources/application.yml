@@ -51,3 +51,8 @@ widgets:
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN004
+    - name: Value Per Category
+      datasource: http://localhost:8080/widgets/value-per-category
+      widget-domain: FINANCES
+      version: v1.0
+      unique-code: FIN005

@@ -185,4 +185,7 @@ public class WidgetService {
                 .build();
     }
 
+    public WidgetData getValuePerCategory() {
+        return null;
+    }
 }

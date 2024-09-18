@@ -40,4 +40,10 @@ public class WidgetsController {
         return widgetService.getMostExpensiveItemPerCat();
     }
 
+    @GET
+    @Path("/value-per-category")
+    public WidgetData getValuePerCategory() {
+        return widgetService.getValuePerCategory();
+    }
+
 }
