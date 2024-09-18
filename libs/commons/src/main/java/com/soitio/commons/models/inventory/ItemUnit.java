@@ -1,4 +1,4 @@
-package com.soitio.inventory.item.domain;
+package com.soitio.commons.models.inventory;
 
 public enum ItemUnit {
 

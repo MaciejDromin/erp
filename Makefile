@@ -16,6 +16,9 @@ widget-startup: widget-commons
 reports-client:
 	cd libs/reports-client; ./gradlew build; ./gradlew publishToMavenLocal
 
+soitio-commons:
+	cd libs/commons; ./gradlew build; ./gradlew publishToMavenLocal
+
 analytics: self-register-spring
 	cd apps/analytics; ./gradlew build -x test; \
 		podman build -f src/main/docker/Dockerfile -t erp/analytics:latest .
@@ -27,7 +30,7 @@ finances: self-register-spring
 erp-fe:
 	cd apps/erp-fe; podman build -f Dockerfile -t erp/fe:latest .
 
-inventory: self-register-quarkus
+inventory: self-register-quarkus soitio-commons
 	cd apps/inventory; ./gradlew build \
 		-Dquarkus.native.enabled=true \
 		-Dquarkus.native.container-build=true \
@@ -35,7 +38,7 @@ inventory: self-register-quarkus
 		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/inventory:latest .
 
-planner: self-register-quarkus
+planner: self-register-quarkus soitio-commons
 	cd apps/planner; ./gradlew build \
 		-Dquarkus.native.enabled=true \
 		-Dquarkus.native.container-build=true \
@@ -54,7 +57,7 @@ dashboard: self-register-quarkus widget-commons
 		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/dashboard:latest .
 
-widgets-finances: self-register-quarkus widget-startup
+widgets-finances: self-register-quarkus widget-startup soitio-commons
 	cd apps/widgets-finances; \
 		./gradlew build \
 		-Dquarkus.native.enabled=true \
@@ -68,7 +71,7 @@ reports-generator: self-register-quarkus reports-client
 		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.jvm -t erp/reports-generator:latest .
 
-reports-service: self-register-quarkus reports-client
+reports-service: self-register-quarkus reports-client soitio-commons
 	cd apps/reports-service; ./gradlew build \
 		-Dquarkus.native.enabled=true \
 		-Dquarkus.native.container-build=true \
@@ -86,6 +89,7 @@ clean:
 	cd libs/widget-commons; ./gradlew clean
 	cd libs/widget-startup; mvn clean
 	cd libs/reports-client; ./gradlew clean
+	cd libs/commons; ./gradlew clean
 	cd apps/analytics; ./gradlew clean
 	cd apps/finances; ./gradlew clean
 	cd apps/inventory; ./gradlew clean

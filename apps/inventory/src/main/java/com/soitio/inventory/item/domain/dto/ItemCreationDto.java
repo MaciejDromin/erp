@@ -1,10 +1,9 @@
 package com.soitio.inventory.item.domain.dto;
 
+import com.soitio.commons.models.inventory.ItemUnit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import com.soitio.inventory.item.domain.ItemUnit;
-
 import java.util.Set;
 
 @Builder

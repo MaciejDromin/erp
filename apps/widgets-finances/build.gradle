@@ -16,6 +16,8 @@ dependencies {
     implementation 'io.quarkus:quarkus-rest-jackson'
     implementation 'io.quarkus:quarkus-config-yaml'
 
+    implementation 'com.soitio:commons:1.0-SNAPSHOT'
+
     // SELF DISCOVERY
     implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0-SNAPSHOT'
     implementation 'io.quarkus:quarkus-rest-client-jackson'

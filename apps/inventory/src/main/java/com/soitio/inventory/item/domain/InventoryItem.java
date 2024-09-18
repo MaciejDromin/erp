@@ -1,5 +1,6 @@
 package com.soitio.inventory.item.domain;
 
+import com.soitio.commons.models.inventory.ItemUnit;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

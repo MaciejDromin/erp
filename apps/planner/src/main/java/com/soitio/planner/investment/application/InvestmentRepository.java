@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import com.soitio.planner.common.dto.AmountDto;
-import com.soitio.planner.common.dto.PageDto;
+import com.soitio.commons.models.dto.PageDto;
 import com.soitio.planner.investment.domain.Investment;
 import com.soitio.planner.investment.domain.InvestmentPhase;
 import com.soitio.planner.investment.domain.dto.InvestmentCreationDto;

@@ -1,6 +1,6 @@
-package com.soitio.reports.service.data;
+package com.soitio.commons.utils;
 
-import com.soitio.reports.service.common.domain.PageDto;
+import com.soitio.commons.models.dto.PageDto;
 
 import java.util.Collection;
 import java.util.List;

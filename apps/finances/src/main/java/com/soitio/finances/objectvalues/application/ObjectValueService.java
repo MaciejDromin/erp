@@ -1,6 +1,7 @@
 package com.soitio.finances.objectvalues.application;
 
-import com.soitio.finances.common.dto.AmountDto;
+import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
 import com.soitio.finances.currency.application.CurrencyService;
 import com.soitio.finances.objectvalues.application.port.ObjectValueRepository;
 import com.soitio.finances.objectvalues.domain.ObjectType;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.money.CurrencyUnit;
@@ -88,4 +90,12 @@ public class ObjectValueService {
                 .toList();
     }
 
+    public TopItemByCategoryDto findTopByObjectIdsIn(Set<String> value) {
+        ObjectValue ov = objectValueRepository.findFirstByObjectIdInOrderByAmountDesc(value);
+        var amount = ov.getAmount();
+        return TopItemByCategoryDto.builder()
+                .amount(AmountDto.of(amount.getAmount(), amount.getCurrencyUnit().getCode()))
+                .objectId(ov.getObjectId())
+                .build();
+    }
 }

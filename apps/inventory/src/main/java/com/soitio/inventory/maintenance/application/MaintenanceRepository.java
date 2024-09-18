@@ -5,7 +5,7 @@ import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
 import org.bson.types.ObjectId;
-import com.soitio.inventory.common.PageDto;
+import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.maintenance.domain.MaintenanceRecord;
 import com.soitio.inventory.maintenance.domain.dto.MaintenanceCreationDto;
 import com.soitio.inventory.maintenance.domain.dto.MaintenanceForListDto;

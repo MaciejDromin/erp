@@ -1,5 +1,7 @@
 package com.soitio.inventory.category.application;
 
+import com.soitio.commons.models.dto.PageDto;
+import com.soitio.commons.models.dto.inventory.category.CategoryDto;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
@@ -7,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import com.soitio.inventory.category.domain.Category;
-import com.soitio.inventory.category.domain.dto.CategoryDto;
-import com.soitio.inventory.common.PageDto;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +24,9 @@ public class CategoryRepository implements PanacheMongoRepository<Category> {
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
         var categories = findAll();
-        var categoryList = categories.page(pageNum, DEFAULT_PAGE_SIZE).list();
+        var requestedSize = params.getFirst("size");
+        var size = requestedSize == null ? DEFAULT_PAGE_SIZE : Integer.parseInt(requestedSize);
+        var categoryList = categories.page(pageNum, size).list();
         return PageDto.of(categoryList.stream()
                 .map(this::convert)
                 .toList(), categories.pageCount());

@@ -1,6 +1,6 @@
 package com.soitio.reports.service.inventory.client;
 
-import com.soitio.reports.service.common.domain.PageDto;
+import com.soitio.commons.models.dto.PageDto;
 import com.soitio.reports.service.inventory.domain.InventoryItemDto;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

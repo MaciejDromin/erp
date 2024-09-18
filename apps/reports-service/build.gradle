@@ -21,6 +21,8 @@ dependencies {
     implementation 'io.quarkus:quarkus-hibernate-orm-panache'
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
 
+    implementation 'com.soitio:commons:1.0-SNAPSHOT'
+
     // SELF DISCOVERY
     implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0-SNAPSHOT'
 

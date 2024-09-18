@@ -48,3 +48,8 @@ widgets:
           datasource: http://widgets-finances:8080/filters/balance/month
           mandatory: true
           filter-type: SELECT
+    - name: Most Expensive Item Per Category
+      datasource: http://widgets-finances:8080/widgets/most-expensive-item-per-category
+      widget-domain: FINANCES
+      version: v1.0
+      unique-code: FIN004

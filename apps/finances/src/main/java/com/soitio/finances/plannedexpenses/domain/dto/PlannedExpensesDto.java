@@ -2,7 +2,7 @@ package com.soitio.finances.plannedexpenses.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.soitio.finances.common.dto.AmountDto;
+import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.domain.dto.OperationCategoryDto;
 import com.soitio.finances.plannedexpenses.domain.PlannedExpensesStatus;

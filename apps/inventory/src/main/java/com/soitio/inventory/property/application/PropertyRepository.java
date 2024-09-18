@@ -6,7 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import com.soitio.inventory.common.PageDto;
+import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.property.domain.Property;
 import com.soitio.inventory.property.domain.dto.PropertyCreationDto;
 import com.soitio.inventory.property.domain.dto.PropertyForListDto;

@@ -5,7 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
 import org.bson.types.ObjectId;
 import com.soitio.planner.common.dto.AmountDto;
-import com.soitio.planner.common.dto.PageDto;
+import com.soitio.commons.models.dto.PageDto;
 import com.soitio.planner.material.domain.Material;
 import com.soitio.planner.material.domain.dto.MaterialCreationDto;
 import com.soitio.planner.material.domain.dto.MaterialDto;
