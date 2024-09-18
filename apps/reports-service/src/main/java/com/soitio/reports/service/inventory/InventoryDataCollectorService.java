@@ -1,6 +1,6 @@
 package com.soitio.reports.service.inventory;
 
-import com.soitio.reports.service.data.PageableDataFetcher;
+import com.soitio.commons.utils.PageableDataFetcher;
 import com.soitio.reports.service.inventory.client.InventoryClient;
 import com.soitio.reports.service.inventory.domain.InventoryItemDto;
 import jakarta.enterprise.context.ApplicationScoped;

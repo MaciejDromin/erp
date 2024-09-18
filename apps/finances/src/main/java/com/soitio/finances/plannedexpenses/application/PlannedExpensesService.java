@@ -1,6 +1,6 @@
 package com.soitio.finances.plannedexpenses.application;
 
-import com.soitio.finances.common.dto.AmountDto;
+import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.finances.moneyoperation.application.MoneyOperationService;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
 import com.soitio.finances.plannedexpenses.application.port.PlannedExpensesRepository;

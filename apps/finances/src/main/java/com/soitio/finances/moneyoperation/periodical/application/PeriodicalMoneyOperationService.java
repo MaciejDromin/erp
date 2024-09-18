@@ -1,6 +1,6 @@
 package com.soitio.finances.moneyoperation.periodical.application;
 
-import com.soitio.finances.common.dto.AmountDto;
+import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.finances.moneyoperation.periodical.application.port.PeriodicalMoneyOperationRepository;
 import com.soitio.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperaion;
 import com.soitio.finances.moneyoperation.periodical.domain.QPeriodicalMoneyOperaion;

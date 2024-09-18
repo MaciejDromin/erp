@@ -1,5 +1,6 @@
 package com.soitio.finances.objectvalues.web;
 
+import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
 import com.soitio.finances.objectvalues.application.ObjectValueService;
 import com.soitio.finances.objectvalues.domain.ObjectType;
 import com.soitio.finances.objectvalues.domain.dto.ObjectValueCreationDto;
@@ -7,6 +8,7 @@ import com.soitio.finances.objectvalues.domain.dto.ObjectValueDto;
 import com.soitio.finances.objectvalues.domain.dto.TotalObjectsValueDto;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +47,11 @@ public class ObjectValueController {
     @GetMapping("/object-ids")
     public List<String> allObjectIds(@RequestParam("objectType") ObjectType objectType) {
         return objectValueService.allObjectIds(objectType);
+    }
+
+    @PostMapping("/top")
+    public TopItemByCategoryDto findTopByObjectIdsIn(@RequestBody Set<String> value) {
+        return objectValueService.findTopByObjectIdsIn(value);
     }
 
 }

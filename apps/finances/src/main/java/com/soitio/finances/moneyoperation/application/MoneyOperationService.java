@@ -1,6 +1,6 @@
 package com.soitio.finances.moneyoperation.application;
 
-import com.soitio.finances.common.dto.AmountDto;
+import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.finances.moneyoperation.application.port.MoneyOperationRepository;
 import com.soitio.finances.moneyoperation.domain.MoneyOperation;
 import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationBalanceDto;

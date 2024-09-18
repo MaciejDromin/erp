@@ -1,5 +1,7 @@
 package com.soitio.widgets.finances.client;
 
+import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
+import com.soitio.commons.models.dto.inventory.item.InventoryItemDto;
 import com.soitio.widgets.finances.domain.MoneyOperationBalanceDto;
 import com.soitio.widgets.finances.domain.ObjectType;
 import com.soitio.widgets.finances.domain.TotalObjectsValueDto;
@@ -12,6 +14,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import java.time.Month;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Path("/finances")
 @RegisterRestClient
@@ -31,4 +34,7 @@ public interface FinancesClient {
     List<MoneyOperationBalanceDto> getOperationsForBalance(@QueryParam("balanceYear") int balanceYear,
                                                            @QueryParam("balanceMonth")Month balanceMonth);
 
+    @POST
+    @Path("/object-value/top")
+    TopItemByCategoryDto findTopByObjectIdsIn(Set<String> value);
 }

@@ -1,5 +1,9 @@
 package com.soitio.widgets.finances.application;
 
+import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
+import com.soitio.commons.models.dto.inventory.category.CategoryDto;
+import com.soitio.commons.models.dto.inventory.item.InventoryItemDto;
+import com.soitio.commons.utils.PageableDataFetcher;
 import com.soitio.widgets.common.domain.data.Dataset;
 import com.soitio.widgets.common.domain.data.Rgba;
 import com.soitio.widgets.common.domain.data.WidgetData;
@@ -9,6 +13,7 @@ import com.soitio.widgets.finances.domain.AmountDto;
 import com.soitio.widgets.finances.domain.MoneyOperationBalanceDto;
 import com.soitio.widgets.finances.domain.MoneyOperationType;
 import com.soitio.widgets.finances.domain.ObjectType;
+import com.soitio.widgets.finances.domain.TopItemCategoryWrapper;
 import com.soitio.widgets.finances.domain.TotalObjectsValueDto;
 import com.soitio.widgets.finances.inventory.client.InventoryClient;
 import com.soitio.widgets.finances.inventory.domain.ObjectIdsDto;
@@ -17,11 +22,14 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -139,9 +147,42 @@ public class WidgetService {
     }
 
     public WidgetData getMostExpensiveItemPerCat() {
-        // get categories
-        // get most expensive item by category
-        //get item name from inventory
-        return null;
+        // Get all items
+        List<InventoryItemDto> items = PageableDataFetcher.fetchData(inventoryClient::getAllItems);
+        // grep by categories
+        Map<CategoryDto, Set<String>> itemsGrouped = new HashMap<>();
+        for (InventoryItemDto item : items) {
+            for (CategoryDto category : item.getCategories()) {
+                if (itemsGrouped.containsKey(category)) {
+                    itemsGrouped.get(category).add(item.getId());
+                    continue;
+                }
+                Set<String> tmp = new HashSet<>();
+                tmp.add(item.getId());
+                itemsGrouped.put(category, tmp);
+            }
+        }
+
+        // parallelize by category to fetch single highest value item
+        List<TopItemCategoryWrapper> wrapped = itemsGrouped.entrySet().parallelStream()
+                .map(e -> TopItemCategoryWrapper.of(e.getKey(), financesClient.findTopByObjectIdsIn(e.getValue())))
+                .toList();
+        // create chart data
+
+        List<String> labels = new ArrayList<>();
+        List<Double> data = new ArrayList<>();
+
+        for (TopItemCategoryWrapper wrapper : wrapped) {
+            labels.add(wrapper.getCategory().getName());
+            data.add(wrapper.getTopItem().getAmount().getValue().doubleValue());
+        }
+
+        return WidgetData.builder()
+                .labels(labels)
+                .datasets(List.of(Dataset.builder()
+                        .data(data)
+                        .build()))
+                .build();
     }
+
 }
