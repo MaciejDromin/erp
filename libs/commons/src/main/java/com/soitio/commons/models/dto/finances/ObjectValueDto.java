@@ -1,4 +1,4 @@
-package com.soitio.widgets.finances.domain;
+package com.soitio.commons.models.dto.finances;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import java.math.BigDecimal;
 
 @Builder
 @NoArgsConstructor
@@ -15,10 +14,11 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor(staticName = "of")
-public class AmountDto {
+@AllArgsConstructor
+public class ObjectValueDto {
 
-    private BigDecimal value;
-    private String currencyCode;
+    String uuid;
+    String objectId;
+    AmountDto amount;
 
 }

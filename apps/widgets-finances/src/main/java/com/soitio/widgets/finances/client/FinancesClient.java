@@ -1,7 +1,8 @@
 package com.soitio.widgets.finances.client;
 
+import com.soitio.commons.models.dto.PageDto;
+import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
-import com.soitio.commons.models.dto.inventory.item.InventoryItemDto;
 import com.soitio.widgets.finances.domain.MoneyOperationBalanceDto;
 import com.soitio.widgets.finances.domain.ObjectType;
 import com.soitio.widgets.finances.domain.TotalObjectsValueDto;
@@ -10,7 +11,6 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-
 import java.time.Month;
 import java.util.List;
 import java.util.Map;
@@ -37,4 +37,10 @@ public interface FinancesClient {
     @POST
     @Path("/object-value/top")
     TopItemByCategoryDto findTopByObjectIdsIn(Set<String> value);
+
+    @GET
+    @Path("/object-value")
+    PageDto<ObjectValueDto> getObjectValues(@QueryParam("size") int size,
+                                            @QueryParam("objectType") ObjectType objectType,
+                                            @QueryParam("objectIds") Set<String> objectIds);
 }

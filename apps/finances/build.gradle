@@ -67,6 +67,8 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:${queryDsl}:jakarta"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDsl}:jakarta"
 
+	implementation 'com.soitio:commons:1.0-SNAPSHOT'
+
 	// SELFREGISTER
 	implementation "com.soitio.selfregister:self-register-spring:1.0.0"
 
