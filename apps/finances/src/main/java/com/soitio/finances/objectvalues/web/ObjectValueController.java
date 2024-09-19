@@ -1,10 +1,10 @@
 package com.soitio.finances.objectvalues.web;
 
+import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
 import com.soitio.finances.objectvalues.application.ObjectValueService;
 import com.soitio.finances.objectvalues.domain.ObjectType;
 import com.soitio.finances.objectvalues.domain.dto.ObjectValueCreationDto;
-import com.soitio.finances.objectvalues.domain.dto.ObjectValueDto;
 import com.soitio.finances.objectvalues.domain.dto.TotalObjectsValueDto;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +29,9 @@ public class ObjectValueController {
 
     @GetMapping
     public Page<ObjectValueDto> getPage(@PageableDefault(size = 20) Pageable pageable,
-                                        @RequestParam("objectType") ObjectType objectType) {
-        return objectValueService.getPage(pageable, objectType);
+                                        @RequestParam("objectType") ObjectType objectType,
+                                        @RequestParam(value = "objectIds", required = false) Set<String> objectIds) {
+        return objectValueService.getPage(pageable, objectType, objectIds);
     }
 
     @PostMapping

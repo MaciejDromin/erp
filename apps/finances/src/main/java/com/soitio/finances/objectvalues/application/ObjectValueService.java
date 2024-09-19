@@ -1,19 +1,20 @@
 package com.soitio.finances.objectvalues.application;
 
 import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
 import com.soitio.finances.currency.application.CurrencyService;
 import com.soitio.finances.objectvalues.application.port.ObjectValueRepository;
 import com.soitio.finances.objectvalues.domain.ObjectType;
 import com.soitio.finances.objectvalues.domain.ObjectValue;
 import com.soitio.finances.objectvalues.domain.dto.ObjectValueCreationDto;
-import com.soitio.finances.objectvalues.domain.dto.ObjectValueDto;
 import com.soitio.finances.objectvalues.domain.dto.TotalObjectsValueDto;
 import com.soitio.finances.objectvalues.domain.proj.ObjectIdProj;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +44,11 @@ public class ObjectValueService {
                 .build();
     }
 
-    public Page<ObjectValueDto> getPage(Pageable pageable, ObjectType objectType) {
-        return objectValueRepository.findAllPageableByObjectType(objectType, pageable).map(this::from);
+    public Page<ObjectValueDto> getPage(Pageable pageable, ObjectType objectType, Set<String> objectIds) {
+        return Optional.ofNullable(objectIds)
+                .map(oi -> objectValueRepository.findAllPageableByObjectTypeAndObjectIdIn(objectType, oi, pageable))
+                .orElseGet(() -> objectValueRepository.findAllPageableByObjectType(objectType, pageable))
+                .map(this::from);
     }
 
     private ObjectValueDto from(ObjectValue objectValue) {

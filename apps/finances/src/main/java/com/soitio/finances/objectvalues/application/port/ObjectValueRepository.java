@@ -17,6 +17,10 @@ public interface ObjectValueRepository extends JpaRepository<ObjectValue, String
 
     Page<ObjectValue> findAllPageableByObjectType(ObjectType objectType, Pageable pageable);
 
+    Page<ObjectValue> findAllPageableByObjectTypeAndObjectIdIn(ObjectType objectType,
+                                                               Set<String> objectIds,
+                                                               Pageable pageable);
+
     List<ObjectValue> findAllByObjectType(ObjectType objectType);
 
     ObjectValue findFirstByObjectIdInOrderByAmountDesc(Set<String> value);

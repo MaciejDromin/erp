@@ -1,5 +1,8 @@
 package com.soitio.widgets.finances.application;
 
+import com.soitio.commons.models.dto.PageDto;
+import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
 import com.soitio.commons.models.dto.inventory.category.CategoryDto;
 import com.soitio.commons.models.dto.inventory.item.InventoryItemDto;
@@ -9,11 +12,10 @@ import com.soitio.widgets.common.domain.data.Rgba;
 import com.soitio.widgets.common.domain.data.WidgetData;
 import com.soitio.widgets.finances.client.FinancesClient;
 import com.soitio.widgets.finances.common.Pair;
-import com.soitio.widgets.finances.domain.AmountDto;
 import com.soitio.widgets.finances.domain.MoneyOperationBalanceDto;
 import com.soitio.widgets.finances.domain.MoneyOperationType;
 import com.soitio.widgets.finances.domain.ObjectType;
-import com.soitio.widgets.finances.domain.TopItemCategoryWrapper;
+import com.soitio.widgets.finances.domain.CategoryWrapper;
 import com.soitio.widgets.finances.domain.TotalObjectsValueDto;
 import com.soitio.widgets.finances.inventory.client.InventoryClient;
 import com.soitio.widgets.finances.inventory.domain.ObjectIdsDto;
@@ -150,6 +152,70 @@ public class WidgetService {
         // Get all items
         List<InventoryItemDto> items = PageableDataFetcher.fetchData(inventoryClient::getAllItems);
         // grep by categories
+        Map<CategoryDto, Set<String>> itemsGrouped = groupItems(items);
+
+        // parallelize by category to fetch single highest value item
+        List<CategoryWrapper<TopItemByCategoryDto>> wrapped = getByCategoryWrapped(itemsGrouped,
+                financesClient::findTopByObjectIdsIn);
+        // create chart data
+
+        List<String> labels = new ArrayList<>();
+        List<Double> data = new ArrayList<>();
+
+        for (CategoryWrapper<TopItemByCategoryDto> wrapper : wrapped) {
+            labels.add(wrapper.getCategory().getName());
+            data.add(wrapper.getWrapped().getAmount().getValue().doubleValue());
+        }
+
+        return WidgetData.builder()
+                .labels(labels)
+                .datasets(List.of(Dataset.builder()
+                        .data(data)
+                        .build()))
+                .build();
+    }
+
+    public WidgetData getValuePerCategory() {
+        // Get all items
+        List<InventoryItemDto> items = PageableDataFetcher.fetchData(inventoryClient::getAllItems);
+        // grep by categories
+        Map<CategoryDto, Set<String>> itemsGrouped = groupItems(items);
+
+        // parallelize by category to fetch object value by item ids
+
+        List<CategoryWrapper<PageDto<ObjectValueDto>>> wrapped = getByCategoryWrapped(itemsGrouped,
+                s -> financesClient.getObjectValues(s.size(), ObjectType.ITEM, s));
+
+        // create chart data
+
+        List<String> labels = new ArrayList<>();
+        List<Double> data = new ArrayList<>();
+
+        for (CategoryWrapper<PageDto<ObjectValueDto>> wrapper : wrapped) {
+            labels.add(wrapper.getCategory().getName());
+            data.add(wrapper.getWrapped().getContent().stream()
+                    .map(ObjectValueDto::getAmount)
+                    .map(AmountDto::getValue)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add)
+                    .doubleValue());
+        }
+
+        return WidgetData.builder()
+                .labels(labels)
+                .datasets(List.of(Dataset.builder()
+                        .data(data)
+                        .build()))
+                .build();
+    }
+
+    private <T> List<CategoryWrapper<T>> getByCategoryWrapped(Map<CategoryDto, Set<String>> itemsGrouped,
+                                                              Function<Set<String>, T> fetchFunction) {
+        return itemsGrouped.entrySet().parallelStream()
+                .map(e -> CategoryWrapper.of(e.getKey(), fetchFunction.apply(e.getValue())))
+                .toList();
+    }
+
+    private static Map<CategoryDto, Set<String>> groupItems(List<InventoryItemDto> items) {
         Map<CategoryDto, Set<String>> itemsGrouped = new HashMap<>();
         for (InventoryItemDto item : items) {
             for (CategoryDto category : item.getCategories()) {
@@ -162,27 +228,6 @@ public class WidgetService {
                 itemsGrouped.put(category, tmp);
             }
         }
-
-        // parallelize by category to fetch single highest value item
-        List<TopItemCategoryWrapper> wrapped = itemsGrouped.entrySet().parallelStream()
-                .map(e -> TopItemCategoryWrapper.of(e.getKey(), financesClient.findTopByObjectIdsIn(e.getValue())))
-                .toList();
-        // create chart data
-
-        List<String> labels = new ArrayList<>();
-        List<Double> data = new ArrayList<>();
-
-        for (TopItemCategoryWrapper wrapper : wrapped) {
-            labels.add(wrapper.getCategory().getName());
-            data.add(wrapper.getTopItem().getAmount().getValue().doubleValue());
-        }
-
-        return WidgetData.builder()
-                .labels(labels)
-                .datasets(List.of(Dataset.builder()
-                        .data(data)
-                        .build()))
-                .build();
+        return itemsGrouped;
     }
-
 }
