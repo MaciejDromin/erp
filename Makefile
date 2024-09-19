@@ -23,7 +23,7 @@ analytics: self-register-spring
 	cd apps/analytics; ./gradlew build -x test; \
 		podman build -f src/main/docker/Dockerfile -t erp/analytics:latest .
 
-finances: self-register-spring
+finances: self-register-spring soitio-commons
 	cd apps/finances;  ./gradlew build -x test -x checkstyleAot -x checkstyleAotTest; \
 		podman build -f src/main/docker/Dockerfile -t erp/finances:latest .
 
