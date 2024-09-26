@@ -6,7 +6,6 @@
   const gotoAdd = () => {
     goto(config.addButton.url)
   }
-
 </script>
 
 <div class="navbar bg-base-100 rounded shadow-xl">
@@ -19,9 +18,16 @@
         <button on:click={gotoAdd} class="btn btn-primary mr-3">Add</button>
       </li>
       <li>
-        <button disabled={config.editButton.disabled} class="btn btn-primary mr-3">Edit</button>
+        <button
+          disabled={config.editButton.disabled}
+          class="btn btn-primary mr-3">Edit</button
+        >
       </li>
-      <li><button disabled={config.deleteButton.disabled} class="btn btn-primary">Delete</button></li>
+      <li>
+        <button disabled={config.deleteButton.disabled} class="btn btn-primary"
+          >Delete</button
+        >
+      </li>
     </ul>
   </div>
 </div>
