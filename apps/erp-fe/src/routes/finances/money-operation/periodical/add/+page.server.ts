@@ -2,6 +2,7 @@ import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import { FINANCES_URL } from '$lib/scripts/urls'
+import { redirect } from '@sveltejs/kit'
 
 export const actions = {
   default: async ({ request }) => {
@@ -22,5 +23,6 @@ export const actions = {
       HttpMethods.POST,
       body
     )
+    throw redirect(303, '/finances/money-operation/periodical')
   },
 } satisfies Actions
