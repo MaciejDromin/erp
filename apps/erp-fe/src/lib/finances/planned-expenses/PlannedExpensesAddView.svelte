@@ -1,13 +1,12 @@
-<script lang="ts">
+<script lang='ts'>
+  import Pageable from '$lib/Pageable.svelte'
+  import OperationCategoryTable from '$lib/finances/operation-category/OperationCategoryTable.svelte'
+  import Modal from '$lib/Modal.svelte'
   import { operationCategoriesStore } from '$lib/finances/stores/selectedOperationCategory'
   import { onMount } from 'svelte'
   import { MoneyOperationType, Month } from '$lib/finances/types/financialTypes'
-  import Pageable from '$lib/Pageable.svelte'
-  import Modal from '$lib/Modal.svelte'
-  import OperationCategoryTable from '$lib/finances/operation-category/OperationCategoryTable.svelte'
 
   let categories: any[] = []
-  let operationType: string = MoneyOperationType.INCOME
 
   onMount(() => {
     $operationCategoriesStore = []
@@ -27,9 +26,9 @@
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
   <div class="flex flex-row gap-3">
     <input
-      name="amount"
+      name="plannedAmount"
       type="text"
-      placeholder="Amount"
+      placeholder="Planned Amount"
       class="input input-bordered input-primary w-full max-w-xs"
     />
     <input
@@ -48,32 +47,20 @@
     />
   </div>
   <div class="flex flex-row gap-3">
-    <select
-      name="nextApplicableMonth"
-      class="select select-primary w-full max-w-xs"
-    >
+    <input
+      name="plannedYear"
+      type="text"
+      placeholder="Planned Year"
+      class="input input-bordered input-primary w-full max-w-xs"
+    />
+    <select name="plannedMonth" class="select select-primary w-full max-w-xs">
       {#each Object.values(Month) as month}
         <option value={month}>{month}</option>
       {/each}
     </select>
-    <input
-      name="repetitionPeriod"
-      type="text"
-      placeholder="Repetition Period"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
   </div>
 
   <div class="flex flex-row gap-3">
-    <select
-      name="operationType"
-      class="select select-primary w-full max-w-xs"
-      bind:value={operationType}
-    >
-      {#each Object.values(MoneyOperationType) as operationType}
-        <option value={operationType}>{operationType}</option>
-      {/each}
-    </select>
     <select
       multiple
       name="categoryId"
@@ -84,7 +71,7 @@
         <option value={category}></option>
       {/each}
     </select>
-    <div class="mr-auto">
+    <div class="mx-auto">
       <Modal
         modalId="category_modal"
         buttonName={determineButtonName(categories)}
@@ -92,7 +79,7 @@
         <Pageable
           endpoint="/finances/operation-category"
           component={OperationCategoryTable}
-          additionalSearch={`&operationType=${operationType}`}
+          additionalSearch={`&operationType=${MoneyOperationType.EXPENSES}`}
         />
       </Modal>
     </div>

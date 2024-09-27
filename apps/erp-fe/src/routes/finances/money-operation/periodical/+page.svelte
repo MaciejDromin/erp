@@ -13,7 +13,7 @@
     },
     deleteButton: {
       disabled: false,
-    }
+    },
   }
 </script>
 
