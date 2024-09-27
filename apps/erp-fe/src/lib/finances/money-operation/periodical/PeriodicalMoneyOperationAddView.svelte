@@ -97,5 +97,5 @@
       </Modal>
     </div>
   </div>
-  <button class="btn btn-primary mx-auto">Add Row</button>
+  <button class="btn btn-primary mx-auto">Add</button>
 </form>
