@@ -22,7 +22,6 @@
 </script>
 
 <div id="object-value" class="flex flex-col gap-3 px-10 pt-10">
-
   <FeatureMenuBar {config} />
 
   <div class="stats shadow mx-auto my-6">

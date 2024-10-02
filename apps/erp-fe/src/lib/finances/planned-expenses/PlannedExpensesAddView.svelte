@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import Pageable from '$lib/Pageable.svelte'
   import OperationCategoryTable from '$lib/finances/operation-category/OperationCategoryTable.svelte'
   import Modal from '$lib/Modal.svelte'

@@ -1,16 +1,24 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { itemsStore } from '../stores/selectedItems'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let data: any = undefined
-  let selectedItemsIds: Map<string, string> = new Map()
+  let selectedItems: Map<string, string> = new Map()
 
   onMount(() => {
-    $itemsStore.forEach((cat) => selectedItemsIds.set(cat, 'ok'))
+    if (
+      $genericStore.inventory !== undefined &&
+      $genericStore.inventory.items !== undefined
+    ) {
+      $genericStore.inventory.items.forEach((item) =>
+        selectedItems.set(item.id, item)
+      )
+    }
   })
 
   onDestroy(() => {
-    $itemsStore = Array.from(selectedItemsIds.keys())
+    $genericStore.inventory = {}
+    $genericStore.inventory.items = Array.from(selectedItems.values())
   })
 
   const convertCategories = (categories: any[]): string => {
@@ -18,13 +26,13 @@
     return categoryNames.toString()
   }
 
-  const updateCategoriesList = (itemId: string) => {
-    if (selectedItemsIds.has(itemId)) {
-      selectedItemsIds.delete(itemId)
+  const updateCategoriesList = (item: any) => {
+    if (selectedItems.has(item.id)) {
+      selectedItems.delete(item.id)
     } else {
-      selectedItemsIds.set(itemId, 'ok')
+      selectedItems.set(item.id, item)
     }
-    selectedItemsIds = selectedItemsIds
+    selectedItems = selectedItems
   }
 
   const itemSelectedStyles = (
@@ -62,9 +70,9 @@
         {#each data.content as item}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-                ${itemSelectedStyles(selectedItemsIds, item.id)}
-                ${determineEvenBgColor(selectedItemsIds, item.id)}`}
-            on:click={() => updateCategoriesList(item.id)}
+                ${itemSelectedStyles(selectedItems, item.id)}
+                ${determineEvenBgColor(selectedItems, item.id)}`}
+            on:click={() => updateCategoriesList(item)}
           >
             <td>{item.id}</td>
             <td>{item.name}</td>

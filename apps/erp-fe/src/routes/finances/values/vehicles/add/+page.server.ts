@@ -14,21 +14,21 @@ export const actions = {
       amount: data.get('amount'),
       currencyCode: data.get('currencyCode'),
       objectId: object.id,
-      objectType: ObjectType.ITEM,
+      objectType: ObjectType.VEHICLE,
     }
     await unsecuredExternalApiRequest(
       FINANCES_URL + '/finances/object-value',
       HttpMethods.POST,
       body
     )
-    throw redirect(303, '/finances/values/items')
+    throw redirect(303, '/finances/values/vehicles')
   },
 } satisfies Actions
 
 export const load = (async ({ params }) => {
   const objectIds = await unsecuredExternalApiRequest(
     FINANCES_URL +
-      `/finances/object-value/object-ids?objectType=${ObjectType.ITEM}`,
+      `/finances/object-value/object-ids?objectType=${ObjectType.VEHICLE}`,
     HttpMethods.GET
   )
   return {

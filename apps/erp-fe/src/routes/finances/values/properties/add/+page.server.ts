@@ -14,7 +14,7 @@ export const actions = {
       amount: data.get('amount'),
       currencyCode: data.get('currencyCode'),
       objectId: object.id,
-      objectType: ObjectType.ITEM,
+      objectType: ObjectType.PROPERTY,
     }
     await unsecuredExternalApiRequest(
       FINANCES_URL + '/finances/object-value',
@@ -28,7 +28,7 @@ export const actions = {
 export const load = (async ({ params }) => {
   const objectIds = await unsecuredExternalApiRequest(
     FINANCES_URL +
-      `/finances/object-value/object-ids?objectType=${ObjectType.ITEM}`,
+      `/finances/object-value/object-ids?objectType=${ObjectType.PROPERTY}`,
     HttpMethods.GET
   )
   return {
