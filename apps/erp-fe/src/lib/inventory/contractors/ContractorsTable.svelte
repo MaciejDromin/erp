@@ -1,27 +1,33 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { contractorsStore } from '../stores/selectedContractors'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let data: any = undefined
-  let selectedContractorsIds: Map<string, string> = new Map()
+  let selectedContractors: Map<string, string> = new Map()
 
   onMount(() => {
-    $contractorsStore.forEach((contr) =>
-      selectedContractorsIds.set(contr, 'ok')
-    )
+    if (
+      $genericStore.inventory !== undefined &&
+      $genericStore.inventory.contractors !== undefined
+    ) {
+      $genericStore.inventory.contractors.forEach((contr) =>
+        selectedContractors.set(contr.id, contr)
+      )
+    }
   })
 
   onDestroy(() => {
-    $contractorsStore = Array.from(selectedContractorsIds.keys())
+    $genericStore.inventory = {}
+    $genericStore.inventory.contractors = Array.from(selectedContractors.values())
   })
 
-  const updateContractorsList = (contractorId: string) => {
-    if (selectedContractorsIds.has(contractorId)) {
-      selectedContractorsIds.delete(contractorId)
+  const updateContractorsList = (contractor: any) => {
+    if (selectedContractors.has(contractor.id)) {
+      selectedContractors.delete(contractor.id)
     } else {
-      selectedContractorsIds.set(contractorId, 'ok')
+      selectedContractors.set(contractor.id, contractor)
     }
-    selectedContractorsIds = selectedContractorsIds
+    selectedContractors = selectedContractors
   }
 
   const contractorSelectedStyles = (
@@ -59,9 +65,9 @@
         {#each data.content as contractor}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-                ${contractorSelectedStyles(selectedContractorsIds, contractor.id)}
-                ${determineEvenBgColor(selectedContractorsIds, contractor.id)}`}
-            on:click={() => updateContractorsList(contractor.id)}
+                ${contractorSelectedStyles(selectedContractors, contractor.id)}
+                ${determineEvenBgColor(selectedContractors, contractor.id)}`}
+            on:click={() => updateContractorsList(contractor)}
           >
             <td>{contractor.id}</td>
             <td>{contractor.name}</td>
