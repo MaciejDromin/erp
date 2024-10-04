@@ -17,8 +17,7 @@
   }
 </script>
 
+<FeatureMenuBar {config} />
 <div id="contractor" class="flex flex-col gap-3 px-10 pt-10">
-  <FeatureMenuBar {config} />
-
   <Pageable endpoint="/inventory/contractors" component={ContractorsTable} />
 </div>

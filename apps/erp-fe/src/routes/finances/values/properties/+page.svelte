@@ -21,9 +21,8 @@
   }
 </script>
 
+<FeatureMenuBar {config} />
 <div id="object-value" class="flex flex-col gap-3 px-10 pt-10">
-  <FeatureMenuBar {config} />
-
   <div class="stats shadow mx-auto">
     <div class="stat">
       <div class="stat-figure text-primary text-4xl">$</div>

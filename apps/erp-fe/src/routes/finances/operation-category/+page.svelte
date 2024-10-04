@@ -17,8 +17,8 @@
   }
 </script>
 
+<FeatureMenuBar {config} />
 <div id="operation-category" class="flex flex-col gap-3 px-10 pt-10">
-  <FeatureMenuBar {config} />
   <Pageable
     endpoint="/finances/operation-category"
     component={OperationCategoryTable}

@@ -17,9 +17,8 @@
   }
 </script>
 
+<FeatureMenuBar {config} />
 <div id="planned-expenses" class="flex flex-col gap-3 px-10 pt-10">
-  <FeatureMenuBar {config} />
-
   <Pageable
     endpoint="/finances/planned-expenses"
     component={PlannedExpensesTable}

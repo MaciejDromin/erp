@@ -17,8 +17,7 @@
   }
 </script>
 
+<FeatureMenuBar {config} />
 <div id="part" class="flex flex-col gap-3 px-10 pt-10">
-  <FeatureMenuBar {config} />
-
   <Pageable endpoint="/inventory/parts" component={PartsTable} />
 </div>

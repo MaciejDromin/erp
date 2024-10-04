@@ -17,8 +17,7 @@
   }
 </script>
 
+<FeatureMenuBar {config} />
 <div id="address" class="flex flex-col gap-3 px-10 pt-10">
-  <FeatureMenuBar {config} />
-
   <Pageable endpoint="/inventory/addresses" component={AddressTable} />
 </div>
