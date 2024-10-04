@@ -29,41 +29,42 @@
     return `${arr.length} manufacturers selected`
   }
 </script>
-  <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
-    <div class="flex flex-row gap-3">
-      <input
-        name="name"
-        type="text"
-        placeholder="Name"
-        class="input input-bordered input-primary w-full max-w-xs"
-      />
-      <input
-        name="partNumber"
-        type="text"
-        placeholder="Part Number"
-        class="input input-bordered input-primary w-full max-w-xs"
-      />
-      <select
-        multiple
-        name="manufacturer"
-        class="p-4 mr-auto hidden"
-        bind:value={selectedContractor}
+
+<form method="POST" class="mx-auto flex flex-col gap-3 py-6">
+  <div class="flex flex-row gap-3">
+    <input
+      name="name"
+      type="text"
+      placeholder="Name"
+      class="input input-bordered input-primary w-full max-w-xs"
+    />
+    <input
+      name="partNumber"
+      type="text"
+      placeholder="Part Number"
+      class="input input-bordered input-primary w-full max-w-xs"
+    />
+    <select
+      multiple
+      name="manufacturer"
+      class="p-4 mr-auto hidden"
+      bind:value={selectedContractor}
+    >
+      {#each contractors as contractor}
+        <option value={JSON.stringify(contractor)}></option>
+      {/each}
+    </select>
+    <div class="mr-auto">
+      <Modal
+        modalId="contractor_modal"
+        buttonName={determineButtonName(contractors)}
       >
-        {#each contractors as contractor}
-          <option value={JSON.stringify(contractor)}></option>
-        {/each}
-      </select>
-      <div class="mr-auto">
-        <Modal
-          modalId="contractor_modal"
-          buttonName={determineButtonName(contractors)}
-        >
-          <Pageable
-            endpoint="/inventory/contractors"
-            component={ContractorsTable}
-          />
-        </Modal>
-      </div>
-      <button class="btn btn-primary">Add Row</button>
+        <Pageable
+          endpoint="/inventory/contractors"
+          component={ContractorsTable}
+        />
+      </Modal>
     </div>
-  </form>
+    <button class="btn btn-primary">Add Row</button>
+  </div>
+</form>

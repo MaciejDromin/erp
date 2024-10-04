@@ -10,7 +10,7 @@
   <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content flex flex-col w-full h-full bg-white">
     <Breadcrumbs {breadcrumbs} />
-    <div class="p-3">
+    <div>
       <slot />
     </div>
   </div>

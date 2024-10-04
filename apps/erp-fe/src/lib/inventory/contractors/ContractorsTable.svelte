@@ -18,7 +18,9 @@
 
   onDestroy(() => {
     $genericStore.inventory = {}
-    $genericStore.inventory.contractors = Array.from(selectedContractors.values())
+    $genericStore.inventory.contractors = Array.from(
+      selectedContractors.values()
+    )
   })
 
   const updateContractorsList = (contractor: any) => {
