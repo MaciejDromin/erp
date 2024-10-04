@@ -1,27 +1,33 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { operationCategoriesStore } from '../stores/selectedOperationCategory'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let data: any = undefined
-  let selectedCategoryIds: Map<string, string> = new Map()
+  let selectedCategories: Map<string, string> = new Map()
 
   onMount(() => {
-    $operationCategoriesStore.forEach((cat) =>
-      selectedCategoryIds.set(cat, 'ok')
-    )
+    if (
+      $genericStore.finances !== undefined &&
+      $genericStore.finances.categories !== undefined
+    ) {
+      $genericStore.finances.categories.forEach((catg) =>
+        selectedCategories.set(catg.uuid, catg)
+      )
+    }
   })
 
   onDestroy(() => {
-    $operationCategoriesStore = Array.from(selectedCategoryIds.keys())
+    $genericStore.finances = {}
+    $genericStore.finances.categories = Array.from(selectedCategories.values())
   })
 
-  const updateCategoriesList = (categoryId: string) => {
-    if (selectedCategoryIds.has(categoryId)) {
-      selectedCategoryIds.delete(categoryId)
+  const updateCategoriesList = (category: string) => {
+    if (selectedCategories.has(category.uuid)) {
+      selectedCategories.delete(category.uuid)
     } else {
-      selectedCategoryIds.set(categoryId, 'ok')
+      selectedCategories.set(category.uuid, category)
     }
-    selectedCategoryIds = selectedCategoryIds
+    selectedCategories = selectedCategories
   }
 
   const categorySelectedStyles = (
@@ -57,9 +63,9 @@
         {#each data.content as operationCategory}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-        ${categorySelectedStyles(selectedCategoryIds, operationCategory.uuid)}
-        ${determineEvenBgColor(selectedCategoryIds, operationCategory.uuid)}`}
-            on:click={() => updateCategoriesList(operationCategory.uuid)}
+        ${categorySelectedStyles(selectedCategories, operationCategory.uuid)}
+        ${determineEvenBgColor(selectedCategories, operationCategory.uuid)}`}
+            on:click={() => updateCategoriesList(operationCategory)}
           >
             <td>{operationCategory.uuid}</td>
             <td>{operationCategory.operationName}</td>

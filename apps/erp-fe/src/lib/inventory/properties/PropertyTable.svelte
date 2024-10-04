@@ -1,25 +1,33 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { propertiesStore } from '../stores/selectedProperties'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let data: any = undefined
-  let selectedPropertiesIds: Map<string, string> = new Map()
+  let selectedProperties: Map<string, string> = new Map()
 
   onMount(() => {
-    $propertiesStore.forEach((prop) => selectedPropertiesIds.set(prop, 'ok'))
+    if (
+      $genericStore.inventory !== undefined &&
+      $genericStore.inventory.properties !== undefined
+    ) {
+      $genericStore.inventory.properties.forEach((prop) =>
+        selectedProperties.set(prop.id, prop)
+      )
+    }
   })
 
   onDestroy(() => {
-    $propertiesStore = Array.from(selectedPropertiesIds.keys())
+    $genericStore.inventory = {}
+    $genericStore.inventory.properties = Array.from(selectedProperties.values())
   })
 
-  const updatePropertiesList = (propertyId: string) => {
-    if (selectedPropertiesIds.has(propertyId)) {
-      selectedPropertiesIds.delete(propertyId)
+  const updatePropertiesList = (property: any) => {
+    if (selectedProperties.has(property.id)) {
+      selectedProperties.delete(property.id)
     } else {
-      selectedPropertiesIds.set(propertyId, 'ok')
+      selectedProperties.set(property.id, property)
     }
-    selectedPropertiesIds = selectedPropertiesIds
+    selectedProperties = selectedProperties
   }
 
   const propertySelectedStyles = (
@@ -57,9 +65,9 @@
         {#each data.content as property}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-                ${propertySelectedStyles(selectedPropertiesIds, property.id)}
-                ${determineEvenBgColor(selectedPropertiesIds, property.id)}`}
-            on:click={() => updatePropertiesList(property.id)}
+                ${propertySelectedStyles(selectedProperties, property.id)}
+                ${determineEvenBgColor(selectedProperties, property.id)}`}
+            on:click={() => updatePropertiesList(property)}
           >
             <td>{property.id}</td>
             <td>{property.name}</td>

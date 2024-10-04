@@ -1,32 +1,27 @@
 <script lang="ts">
-  import PropertyTable from '$lib/inventory/properties/PropertyTable.svelte'
-  import Modal from '$lib/Modal.svelte'
   import Pageable from '$lib/Pageable.svelte'
-  import { propertiesStore } from '$lib/inventory/stores/selectedProperties'
-  import { onMount } from 'svelte'
   import ObjectValueTable from '$lib/finances/object-value/ObjectValueTable.svelte'
   import type { PageData } from './$types'
   import { ObjectType } from '$lib/finances/types/financialTypes'
+  import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
 
   export let data: PageData
 
-  let properties: any[] = []
-
-  onMount(() => {
-    $propertiesStore = []
-  })
-
-  propertiesStore.subscribe((prop) => {
-    properties = [...prop]
-    properties = properties
-  })
-
-  const determineButtonName = (arr: any[]): string => {
-    if (arr.length === 0) return 'select property'
-    return `${arr.length} property selected`
+  let config = {
+    title: 'Item Values',
+    addButton: {
+      url: '/finances/values/properties/add',
+    },
+    editButton: {
+      disabled: false,
+    },
+    deleteButton: {
+      disabled: false,
+    },
   }
 </script>
 
+<FeatureMenuBar {config} />
 <div id="object-value" class="flex flex-col gap-3 px-10 pt-10">
   <div class="stats shadow mx-auto">
     <div class="stat">
@@ -48,50 +43,6 @@
       <div class="stat-desc">How much objects were counted</div>
     </div>
   </div>
-  <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
-    <div class="flex flex-row gap-3">
-      <input
-        name="amount"
-        type="text"
-        placeholder="Amount"
-        class="input input-bordered input-primary w-full max-w-xs"
-      />
-      <input
-        name="currencyCode"
-        type="text"
-        placeholder="Currency Code"
-        class="input input-bordered input-primary w-full max-w-xs"
-      />
-    </div>
-
-    <div class="flex flex-row gap-3">
-      <select
-        multiple
-        name="propertyId"
-        class="p-4 mr-auto hidden"
-        bind:value={properties}
-      >
-        {#each properties as property}
-          <option value={property} />
-        {/each}
-      </select>
-      <div class="mr-auto">
-        <Modal
-          modalId="property_modal"
-          buttonName={determineButtonName(properties)}
-        >
-          <Pageable
-            endpoint="/inventory/properties"
-            component={PropertyTable}
-            additionalSearch={data.objectIds.length === 0
-              ? ''
-              : `&objectIds=${data.objectIds.join(',')}`}
-          />
-        </Modal>
-      </div>
-      <button class="btn btn-primary">Add Row</button>
-    </div>
-  </form>
 
   <Pageable
     endpoint="/finances/object-value"

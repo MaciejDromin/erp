@@ -1,28 +1,33 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { partsStore } from '../stores/selectedParts'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let data: any = undefined
-  let selectedPartsIds: Map<string, string> = new Map()
+  let selectedParts: Map<string, string> = new Map()
 
   onMount(() => {
-    $partsStore.forEach((part) =>
-      selectedPartsIds.set(JSON.parse(part).id, part)
-    )
+    if (
+      $genericStore.inventory !== undefined &&
+      $genericStore.inventory.parts !== undefined
+    ) {
+      $genericStore.inventory.parts.forEach((partz) =>
+        selectedParts.set(partz.id, partz)
+      )
+    }
   })
 
   onDestroy(() => {
-    $partsStore = Array.from(selectedPartsIds.values())
+    $genericStore.inventory = {}
+    $genericStore.inventory.parts = Array.from(selectedParts.values())
   })
 
-  const updatePartsList = (partId: string, name: string) => {
-    const partObj = JSON.stringify({ id: partId, name: name })
-    if (selectedPartsIds.has(partId)) {
-      selectedPartsIds.delete(partId)
+  const updatePartsList = (part: any) => {
+    if (selectedParts.has(part.id)) {
+      selectedParts.delete(part.id)
     } else {
-      selectedPartsIds.set(partId, partObj)
+      selectedParts.set(part.id, part)
     }
-    selectedPartsIds = selectedPartsIds
+    selectedParts = selectedParts
   }
 
   const partSelectedStyles = (
@@ -59,9 +64,9 @@
         {#each data.content as part}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-                ${partSelectedStyles(selectedPartsIds, part.id)}
-                ${determineEvenBgColor(selectedPartsIds, part.id)}`}
-            on:click={() => updatePartsList(part.id, part.name)}
+                ${partSelectedStyles(selectedParts, part.id)}
+                ${determineEvenBgColor(selectedParts, part.id)}`}
+            on:click={() => updatePartsList(part)}
           >
             <td>{part.id}</td>
             <td>{part.name}</td>

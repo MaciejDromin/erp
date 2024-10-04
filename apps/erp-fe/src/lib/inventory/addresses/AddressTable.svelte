@@ -1,25 +1,33 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { addressesStore } from '../stores/selectedAddresses'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let data: any = undefined
-  let selectedAddressesIds: Map<string, string> = new Map()
+  let selectedAddresses: Map<string, string> = new Map()
 
   onMount(() => {
-    $addressesStore.forEach((cat) => selectedAddressesIds.set(cat, 'ok'))
+    if (
+      $genericStore.inventory !== undefined &&
+      $genericStore.inventory.addresses !== undefined
+    ) {
+      $genericStore.inventory.addresses.forEach((addr) =>
+        selectedAddresses.set(addr.id, addr)
+      )
+    }
   })
 
   onDestroy(() => {
-    $addressesStore = Array.from(selectedAddressesIds.keys())
+    $genericStore.inventory = {}
+    $genericStore.inventory.addresses = Array.from(selectedAddresses.values())
   })
 
-  const updateAddressesList = (addressId: string) => {
-    if (selectedAddressesIds.has(addressId)) {
-      selectedAddressesIds.delete(addressId)
+  const updateAddressesList = (address: any) => {
+    if (selectedAddresses.has(address.id)) {
+      selectedAddresses.delete(address.id)
     } else {
-      selectedAddressesIds.set(addressId, 'ok')
+      selectedAddresses.set(address.id, address)
     }
-    selectedAddressesIds = selectedAddressesIds
+    selectedAddresses = selectedAddresses
   }
 
   const addressesSelectedStyles = (
@@ -59,14 +67,11 @@
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
                         ${addressesSelectedStyles(
-                          selectedAddressesIds,
+                          selectedAddresses,
                           address.id
                         )}
-                        ${determineEvenBgColor(
-                          selectedAddressesIds,
-                          address.id
-                        )}`}
-            on:click={() => updateAddressesList(address.id)}
+                        ${determineEvenBgColor(selectedAddresses, address.id)}`}
+            on:click={() => updateAddressesList(address)}
           >
             <td>{address.id}</td>
             <td>{address.addressLine}</td>

@@ -1,27 +1,35 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { maintenanceStore } from '../stores/selectedMaintenance'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let data: any = undefined
-  let selectedMaintenanceIds: Map<string, string> = new Map()
+  let selectedMaintenance: Map<string, string> = new Map()
 
   onMount(() => {
-    $maintenanceStore.forEach((maint) =>
-      selectedMaintenanceIds.set(maint, 'ok')
-    )
+    if (
+      $genericStore.inventory !== undefined &&
+      $genericStore.inventory.maintenance !== undefined
+    ) {
+      $genericStore.inventory.maintenance.forEach((maint) =>
+        selectedMaintenance.set(maint.id, maint)
+      )
+    }
   })
 
   onDestroy(() => {
-    $maintenanceStore = Array.from(selectedMaintenanceIds.keys())
+    $genericStore.inventory = {}
+    $genericStore.inventory.maintenance = Array.from(
+      selectedMaintenance.values()
+    )
   })
 
-  const updateMaintenanceList = (maintenanceId: string) => {
-    if (selectedMaintenanceIds.has(maintenanceId)) {
-      selectedMaintenanceIds.delete(maintenanceId)
+  const updateMaintenanceList = (maintenance: any) => {
+    if (selectedMaintenance.has(maintenance.id)) {
+      selectedMaintenance.delete(maintenance.id)
     } else {
-      selectedMaintenanceIds.set(maintenanceId, 'ok')
+      selectedMaintenance.set(maintenance.id, maintenance)
     }
-    selectedMaintenanceIds = selectedMaintenanceIds
+    selectedMaintenance = selectedMaintenance
   }
 
   const maintenanceSelectedStyles = (
@@ -57,9 +65,9 @@
         {#each data.content as maintenance}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-                ${maintenanceSelectedStyles(selectedMaintenanceIds, maintenance.id)}
-                ${determineEvenBgColor(selectedMaintenanceIds, maintenance.id)}`}
-            on:click={() => updateMaintenanceList(maintenance.id)}
+                ${maintenanceSelectedStyles(selectedMaintenance, maintenance.id)}
+                ${determineEvenBgColor(selectedMaintenance, maintenance.id)}`}
+            on:click={() => updateMaintenanceList(maintenance)}
           >
             <td>{maintenance.id}</td>
             <td>{maintenance.date}</td>

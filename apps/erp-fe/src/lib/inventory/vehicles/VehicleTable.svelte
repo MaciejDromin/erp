@@ -1,25 +1,33 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
-  import { vehiclesStore } from '../stores/selectedVehicles'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let data: any = undefined
-  let selectedVehiclesIds: Map<string, string> = new Map()
+  let selectedVehicles: Map<string, string> = new Map()
 
   onMount(() => {
-    $vehiclesStore.forEach((veh) => selectedVehiclesIds.set(veh, 'ok'))
+    if (
+      $genericStore.inventory !== undefined &&
+      $genericStore.inventory.properties !== undefined
+    ) {
+      $genericStore.inventory.properties.forEach((veh) =>
+        selectedProperties.set(veh.id, veh)
+      )
+    }
   })
 
   onDestroy(() => {
-    $vehiclesStore = Array.from(selectedVehiclesIds.keys())
+    $genericStore.inventory = {}
+    $genericStore.inventory.vehicles = Array.from(selectedVehicles.values())
   })
 
-  const updateVehiclesList = (vehicleId: string) => {
-    if (selectedVehiclesIds.has(vehicleId)) {
-      selectedVehiclesIds.delete(vehicleId)
+  const updateVehiclesList = (vehicle: any) => {
+    if (selectedVehicles.has(vehicle.id)) {
+      selectedVehicles.delete(vehicle.id)
     } else {
-      selectedVehiclesIds.set(vehicleId, 'ok')
+      selectedVehicles.set(vehicle.id, vehicle)
     }
-    selectedVehiclesIds = selectedVehiclesIds
+    selectedVehicles = selectedVehicles
   }
 
   const vehicleSelectedStyles = (
@@ -59,9 +67,9 @@
         {#each data.content as vehicle}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-                ${vehicleSelectedStyles(selectedVehiclesIds, vehicle.id)}
-                ${determineEvenBgColor(selectedVehiclesIds, vehicle.id)}`}
-            on:click={() => updateVehiclesList(vehicle.id)}
+                ${vehicleSelectedStyles(selectedVehicles, vehicle.id)}
+                ${determineEvenBgColor(selectedVehicles, vehicle.id)}`}
+            on:click={() => updateVehiclesList(vehicle)}
           >
             <td>{vehicle.id}</td>
             <td>{vehicle.name}</td>
