@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { operationCategoriesStore } from '$lib/finances/stores/selectedOperationCategory'
+  import { genericStore } from '$lib/stores/genericStore.ts'
   import { onMount } from 'svelte'
   import { MoneyOperationType, Month } from '$lib/finances/types/financialTypes'
   import Pageable from '$lib/Pageable.svelte'
@@ -7,15 +7,23 @@
   import OperationCategoryTable from '$lib/finances/operation-category/OperationCategoryTable.svelte'
 
   let categories: any[] = []
+  let selectedCategory
   let operationType: string = MoneyOperationType.INCOME
 
   onMount(() => {
-    $operationCategoriesStore = []
+    $genericStore = {}
   })
 
-  operationCategoriesStore.subscribe((cat) => {
-    categories = [...cat]
-    categories = categories
+  genericStore.subscribe((catgz) => {
+    if (
+      catgz.finances !== undefined &&
+      catgz.finances.categories !== undefined &&
+      typeof catgz.finances.categories[Symbol.iterator] === 'function'
+    ) {
+      categories = [...catgz.finances.categories]
+      categories = categories
+      selectedCategory = JSON.stringify(categories[0])
+    }
   })
 
   const determineButtonName = (arr: any[]): string => {
@@ -76,12 +84,12 @@
     </select>
     <select
       multiple
-      name="categoryId"
+      name="category"
       class="p-4 mr-auto hidden"
-      bind:value={categories}
+      bind:value={selectedCategory}
     >
       {#each categories as category}
-        <option value={category}></option>
+        <option value={JSON.stringify(category)}></option>
       {/each}
     </select>
     <div class="mr-auto">

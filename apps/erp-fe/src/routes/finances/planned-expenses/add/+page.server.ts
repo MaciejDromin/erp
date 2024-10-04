@@ -8,6 +8,7 @@ import { redirect } from '@sveltejs/kit'
 export const actions = {
   default: async ({ request }) => {
     const data = await request.formData()
+    const category = JSON.parse(data.get('category'))
     const body = {
       plannedAmount: {
         value: data.get('plannedAmount'),
@@ -16,7 +17,7 @@ export const actions = {
       operationDescription: data.get('operationDescription'),
       plannedYear: data.get('plannedYear'),
       plannedMonth: data.get('plannedMonth'),
-      operationCategoryId: data.get('categoryId'),
+      operationCategoryId: category.uuid,
       operationType: MoneyOperationType.EXPENSES,
     }
     await unsecuredExternalApiRequest(
