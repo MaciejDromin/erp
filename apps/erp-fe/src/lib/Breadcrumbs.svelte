@@ -3,7 +3,7 @@
   export let breadcrumbs: Breadcrumb[]
 </script>
 
-<div class="text-sm breadcrumbs text-primary-content mr-auto pt-3 pl-3">
+<div class="text-sm breadcrumbs text-primary-content w-full pt-3 pl-3">
   <ul>
     {#each breadcrumbs as breadcrumb}
       <li><a href={breadcrumb.path}>{breadcrumb.name}</a></li>
