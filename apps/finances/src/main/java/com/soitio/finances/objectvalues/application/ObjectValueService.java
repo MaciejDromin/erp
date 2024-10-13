@@ -1,5 +1,7 @@
 package com.soitio.finances.objectvalues.application;
 
+import com.soitio.commons.dependency.DependencyCheckService;
+import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
@@ -27,7 +29,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ObjectValueService {
+public class ObjectValueService implements DependencyCheckService {
+
+    private static final String SERVICE_NAME = "ObjectValue";
+
     private final ObjectValueRepository objectValueRepository;
     private final CurrencyService currencyService;
 
@@ -101,5 +106,15 @@ public class ObjectValueService {
                 .amount(AmountDto.of(amount.getAmount(), amount.getCurrencyUnit().getCode()))
                 .objectId(ov.getObjectId())
                 .build();
+    }
+
+    @Override
+    public Set<DependencyCheckResult> dependencyCheck(Set<String> set) {
+        return null;
+    }
+
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
     }
 }
