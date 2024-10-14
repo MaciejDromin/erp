@@ -7,7 +7,9 @@ import java.util.Set;
 
 public interface ConsulStoreClient {
 
-    boolean updateKey(Set<String> services, String key, String sessionId);
+    boolean updateKey(Set<String> services, String key, String acquireId);
+
+    void relaeseKey(Set<String> services, String key, String releaseId);
 
     List<KeyValue> getCurrentValue(String key);
 

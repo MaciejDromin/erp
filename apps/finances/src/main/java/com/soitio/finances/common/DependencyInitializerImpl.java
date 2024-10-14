@@ -8,10 +8,13 @@ import com.soitio.commons.dependency.DependencyInitializerBaseService;
 import com.soitio.commons.dependency.client.ConsulStoreClient;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
+@Configuration
 @Service
 public class DependencyInitializerImpl extends DependencyInitializerBaseService {
+
     protected DependencyInitializerImpl(ConsulStoreClient consulStoreClient,
                                         ObjectMapper objectMapper,
                                         DependencyConfig dependencyConfig,
@@ -22,6 +25,7 @@ public class DependencyInitializerImpl extends DependencyInitializerBaseService 
     @Override
     @Bean
     public DependencyCheckMap produceDependencyMap() {
+        this.initializeDependencies();
         return this.dependencyCheckMap;
     }
 }

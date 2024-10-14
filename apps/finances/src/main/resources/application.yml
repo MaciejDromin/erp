@@ -15,12 +15,17 @@ spring:
       client:
         config:
           self-register:
-            url: http://localhost:8080/register
+            url: http://localhost:8080/
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
+
+jakarta:
+  persistence:
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/finances?useUnicode=yes&characterEncoding=UTF-8
 
 logging:
   level:
@@ -37,3 +42,8 @@ service-discovery:
   service-name: finances
   host: localhost
   port: 8080
+
+soitio:
+  service: "localhost:8084"
+  dependencies: >
+    com.soitio.finances.objectvalues.domain.ObjectValue

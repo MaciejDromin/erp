@@ -40,6 +40,7 @@ public abstract class DependencyInitializerBaseService implements DependencyInit
         if (!ret) {
             throw new DependencyLockException("Key is locked by another client");
         }
+        consulStoreClient.relaeseKey(services, key, session.getId());
     }
 
     @Override
