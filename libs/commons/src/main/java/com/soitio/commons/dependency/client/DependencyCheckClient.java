@@ -5,6 +5,6 @@ import com.soitio.commons.dependency.model.DependencyCheckResponse;
 
 public interface DependencyCheckClient {
 
-    DependencyCheckResponse check(DependencyCheckRequest request);
+    DependencyCheckResponse check(String url, DependencyCheckRequest request);
 
 }

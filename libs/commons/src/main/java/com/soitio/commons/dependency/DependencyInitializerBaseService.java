@@ -89,22 +89,14 @@ public abstract class DependencyInitializerBaseService implements DependencyInit
     public void getCurrentAndSet(Dependent key, Session session) {
         Set<String> tmp = new HashSet<>();
         try {
-            tmp = decodeBase64(consulStoreClient.getCurrentValue(key.getName()).getFirst().getValue());
+            tmp = DependencyUtils.decodeBase64(
+                    consulStoreClient.getCurrentValue(key.getName()).getFirst().getValue());
         } catch (Exception e) {
             // ignored
         }
         Set<String> currentVal = tmp;
         currentVal.add(dependencyConfig.getServiceName());
         Failsafe.with(dependencyConfig.getPolicy()).run(() -> createOrUpdateKey(currentVal, key.getName(), session));
-    }
-
-    private Set<String> decodeBase64(String base64Encoded) {
-        byte[] bytes = Base64.getDecoder().decode(base64Encoded);
-        try {
-            return objectMapper.readValue(bytes, new TypeReference<>() {});
-        } catch (Exception e) {
-            throw new IllegalStateException("Could not map into set");
-        }
     }
 
     private Map<String, DependencyCheckService> buildMapping(List<DependencyCheckService> dependencyCheckServices) {

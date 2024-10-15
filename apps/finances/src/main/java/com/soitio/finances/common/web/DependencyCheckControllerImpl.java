@@ -5,6 +5,7 @@ import com.soitio.commons.dependency.model.DependencyCheckRequest;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.web.DependencyCheckControllerBaseImpl;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,7 +19,7 @@ public class DependencyCheckControllerImpl extends DependencyCheckControllerBase
 
     @Override
     @PostMapping
-    public DependencyCheckResponse check(DependencyCheckRequest dependencyCheckRequest) {
+    public DependencyCheckResponse check(@RequestBody DependencyCheckRequest dependencyCheckRequest) {
         return this.handle(dependencyCheckRequest);
     }
 

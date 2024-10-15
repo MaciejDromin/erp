@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.money.CurrencyUnit;
@@ -109,12 +111,20 @@ public class ObjectValueService implements DependencyCheckService {
     }
 
     @Override
-    public Set<DependencyCheckResult> dependencyCheck(Set<String> set) {
-        return null;
+    public String getServiceName() {
+        return SERVICE_NAME;
     }
 
     @Override
-    public String getServiceName() {
-        return SERVICE_NAME;
+    public Set<DependencyCheckResult> checkForEdit(Set<String> set) {
+        return Set.of();
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
+        return objectValueRepository.findAllByObjectIdIn(set).stream()
+                .map(ObjectValue::getObjectId)
+                .map(id -> new DependencyCheckResult(id, true, "Object with id '%s' is in use".formatted(id)))
+                .collect(Collectors.toSet());
     }
 }
