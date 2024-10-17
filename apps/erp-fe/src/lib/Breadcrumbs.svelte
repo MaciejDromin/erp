@@ -3,6 +3,10 @@
   export let breadcrumbs: Breadcrumb[]
 
   const capitalize = (str) => {
+    if (str.indexOf('-') >= 0) {
+      let arr = str.split('-')
+      return arr.map((s) => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')
+    }
     return str.charAt(0).toUpperCase() + str.slice(1)
   }
 </script>

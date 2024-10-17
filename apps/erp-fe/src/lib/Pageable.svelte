@@ -31,6 +31,7 @@
     if (page == 0) return false
     return true
   }
+
   const doesHigherPageExists = (page: number, mPage: number): boolean => {
     if (page >= mPage - 1) return false
     return true

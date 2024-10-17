@@ -17,11 +17,11 @@
   <div class="drawer-side h-full">
     <label for="my-drawer-2" class="drawer-overlay" />
     <ul
-      class="hidden lg:block menu p-2 w-[17rem] min-h-full bg-base-200 text-base-content"
+      class="hidden lg:block menu p-2 min-w-[17rem] max-w-[17rem] min-h-full bg-base-200 text-base-content leading-[0.875rem]"
     >
       {#each sidebar as item}
-        <li>
-          <a href={item.path} class="text-white">{item.name}</a>
+        <li class="flex-nowrap">
+          <a href={item.path} class="text-white truncate inline-block">{item.name}</a>
           <SubPaths subPaths={item.subPaths} />
         </li>
       {/each}

@@ -7,10 +7,10 @@
 {#if subPaths.length > 0}
   <ul>
     {#each subPaths as subPath}
-      <li>
+      <li class="flex-nowrap">
         <a
           href={subPath.path}
-          class={subPath.subPaths.length <= 0 ? '' : 'text-slate-100'}
+          class={subPath.subPaths.length <= 0 ? 'truncate inline-block' : 'text-slate-100 truncate inline-block'}
           >{subPath.name}</a
         >
         <SubPaths subPaths={subPath.subPaths} />

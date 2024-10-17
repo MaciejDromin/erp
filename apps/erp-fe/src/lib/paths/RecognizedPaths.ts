@@ -59,12 +59,13 @@ const RECOGNIZED_PATHS: { [key: string]: SidebarItem } = {
       {
         name: 'Money Operation',
         path: '/finances/money-operation',
-        subPaths: [],
-      },
-      {
-        name: 'Periodical Money Operations',
-        path: '/finances/money-operation/periodical',
-        subPaths: [],
+        subPaths: [
+          {
+            name: 'Periodical Money Operations',
+            path: '/finances/money-operation/periodical',
+            subPaths: [],
+          },
+        ],
       },
       {
         name: 'Values',
