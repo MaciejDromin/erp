@@ -15,7 +15,7 @@ spring:
       client:
         config:
           self-register:
-            url: http://localhost:8080/
+            url: http://consul.soitio-erp.com:8000/
   rabbitmq:
     host: localhost
     port: 5672
@@ -44,6 +44,6 @@ service-discovery:
   port: 8080
 
 soitio:
-  service: "localhost:8084"
+  service: "http://localhost:8084"
   dependencies: >
     com.soitio.finances.objectvalues.domain.ObjectValue

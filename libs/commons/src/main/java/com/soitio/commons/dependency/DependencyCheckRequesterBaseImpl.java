@@ -7,6 +7,7 @@ import com.soitio.commons.dependency.model.DependencyCheckRequest;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.dependency.model.Dependent;
+import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,6 +24,10 @@ public abstract class DependencyCheckRequesterBaseImpl implements DependencyChec
         this.dependencyCheckClient = dependencyCheckClient;
     }
 
+    protected DependencyCheckRequesterBaseImpl() {
+        this(null, null);
+    }
+
     @Override
     public DependencyCheckResponse requestDependencyCheckForIds(Dependent dependent,
                                                                 Set<String> ids,
@@ -31,7 +36,7 @@ public abstract class DependencyCheckRequesterBaseImpl implements DependencyChec
         Set<String> services = DependencyUtils.decodeBase64(
                 consulStoreClient.getCurrentValue(dependent.getName()).getFirst().getValue());
         return services.parallelStream()
-                .map(host -> dependencyCheckClient.check(host, request))
+                .map(host -> dependencyCheckClient.check(URI.create(host), request))
                 .reduce(new DependencyCheckResponse(), this::mergeFunction);
     }
 

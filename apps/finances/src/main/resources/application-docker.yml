@@ -47,6 +47,6 @@ service-discovery:
   port: 8080
 
 soitio:
-  service: "finances:8080"
-  dependencies:
-    - com.soitio.finances.objectvalues.domain.ObjectValue
+  service: "http://finances:8080"
+  dependencies: >
+    com.soitio.finances.objectvalues.domain.ObjectValue

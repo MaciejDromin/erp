@@ -9,7 +9,6 @@ import lombok.ToString;
 import java.util.Set;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 @ToString
 @Getter
@@ -19,4 +18,8 @@ public class DependencyCheckResponse {
     private Set<DependencyCheckResult> results;
     private boolean failed;
 
+    public DependencyCheckResponse() {
+        this.results = Set.of();
+        this.failed = false;
+    }
 }

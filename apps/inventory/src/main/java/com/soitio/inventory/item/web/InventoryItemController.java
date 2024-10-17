@@ -1,5 +1,6 @@
 package com.soitio.inventory.item.web;
 
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -14,6 +15,7 @@ import com.soitio.inventory.item.application.InventoryItemRepository;
 import com.soitio.inventory.item.domain.dto.ItemCreationDto;
 import com.soitio.inventory.item.domain.dto.ObjectIdsDto;
 import java.util.Map;
+import java.util.Set;
 
 @Path("/inventory/items")
 @RequiredArgsConstructor
@@ -42,6 +44,11 @@ public class InventoryItemController {
     @Path("/object-count")
     public Map<String, Integer> objectCount(ObjectIdsDto objectIds) {
         return inventoryItemRepository.findCountByObjectsIds(objectIds.getItemIds());
+    }
+
+    @DELETE
+    public void delete(Set<String> ids) {
+        inventoryItemRepository.delete(ids);
     }
 
 }
