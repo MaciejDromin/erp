@@ -1,3 +1,4 @@
+from datetime import datetime
 import regex as re
 import numpy as np
 import scanning_strategy
@@ -166,18 +167,29 @@ class ReceiptStrategy(scanning_strategy.ScanningStrategy):
             preprocessed = receipt["data"].replace("\n", "~")
             date = re.search(self.DATE_PATTERN, preprocessed)
             source = receipt["source"]
+            splitted_date = source[:source.find("/")].split("-")
+            file_date = "{}-{}-{}".format(splitted_date[0], splitted_date[1], "01")
             if date != None:
                 date = date.group()
             else:
-                splitted_date = source[:source.find("/")].split("-")
-                date = "{}-{}-{}".format(splitted_date[0], splitted_date[1], "01")
+                date = file_date
+
+            file_date = datetime.strptime(file_date, '%Y-%m-%d')
+
+            try:
+                date = datetime.strptime(date, '%Y-%m-%d')
+            except:
+                date = file_date
+
+            if date.month != file_date.month:
+                date = file_date
 
             address=preprocessed.strip()[:45]
             items = re.findall(self.ITEM_PATTERN, preprocessed)
             processed_receipt = {
                 "address": re.sub(r'~', ';', address),
                 "items": self.parse_items(items),
-                "date": date,
+                "date": date.strftime('%Y-%m-%d'),
                 "source": source
             }
             ret.append(processed_receipt)
