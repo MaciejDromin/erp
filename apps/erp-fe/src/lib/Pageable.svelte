@@ -37,7 +37,7 @@
 </script>
 
 <div class="flex flex-col">
-  <div class="my-3">
+  <div>
     <svelte:component
       this={component}
       {...{ data: data }}
@@ -45,7 +45,7 @@
     />
   </div>
 
-  <div class="join flex mx-auto">
+  <div class="join flex mx-auto mt-3">
     <button
       class={`join-item btn disabled:opacity-75 ${!doesLowerPageExists(currentPage) ? 'btn-disable opacity-75' : ''}`}
       on:click|preventDefault={() => fetchData(--currentPage, additionalSearch)}

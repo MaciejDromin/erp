@@ -17,7 +17,7 @@
   <div class="drawer-side h-full">
     <label for="my-drawer-2" class="drawer-overlay" />
     <ul
-      class="hidden lg:block menu p-4 w-80 min-h-full bg-base-200 text-base-content"
+      class="hidden lg:block menu p-2 w-[17rem] min-h-full bg-base-200 text-base-content"
     >
       {#each sidebar as item}
         <li>

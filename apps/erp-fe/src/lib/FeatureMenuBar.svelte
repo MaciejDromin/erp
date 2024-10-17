@@ -8,7 +8,7 @@
   }
 </script>
 
-<div class="navbar bg-base-100 shadow-xl">
+<div class="navbar bg-neutral shadow-xl text-white h-8">
   <div class="flex-1">
     <a class="p-4 font-bold text-xl">{config.title}</a>
   </div>
