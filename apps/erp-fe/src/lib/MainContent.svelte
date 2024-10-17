@@ -21,13 +21,15 @@
     >
       {#each sidebar as item}
         <li>
-          <a href={item.path}>{item.name}</a>
+          <a href={item.path} class="text-white">{item.name}</a>
           <SubPaths subPaths={item.subPaths} />
         </li>
       {/each}
     </ul>
     <!-- TODO: here dynamically create list for small view -->
-    <ul class="lg:hidden menu p-4 w-20 min-h-full bg-base-200 text-base-content">
+    <ul
+      class="lg:hidden menu p-4 w-20 min-h-full bg-base-200 text-base-content"
+    >
       <!-- Sidebar content here -->
       <li><a>Small 1</a></li>
       <li><a>Small 2</a></li>

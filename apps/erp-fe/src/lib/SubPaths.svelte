@@ -8,7 +8,11 @@
   <ul>
     {#each subPaths as subPath}
       <li>
-        <a href={subPath.path}>{subPath.name}</a>
+        <a
+          href={subPath.path}
+          class={subPath.subPaths.length <= 0 ? '' : 'text-slate-100'}
+          >{subPath.name}</a
+        >
         <SubPaths subPaths={subPath.subPaths} />
       </li>
     {/each}
