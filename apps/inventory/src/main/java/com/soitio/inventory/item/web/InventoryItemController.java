@@ -1,5 +1,6 @@
 package com.soitio.inventory.item.web;
 
+import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -47,8 +48,8 @@ public class InventoryItemController {
     }
 
     @DELETE
-    public void delete(Set<String> ids) {
-        inventoryItemRepository.delete(ids);
+    public DependencyCheckResponse delete(Set<String> ids) {
+        return inventoryItemRepository.delete(ids);
     }
 
 }

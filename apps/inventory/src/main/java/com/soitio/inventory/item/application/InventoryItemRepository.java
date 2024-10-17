@@ -2,6 +2,8 @@ package com.soitio.inventory.item.application;
 
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.model.Action;
+import com.soitio.commons.dependency.model.DependencyCheckResponse;
+import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.dependency.model.Dependent;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
@@ -110,7 +112,24 @@ public class InventoryItemRepository implements PanacheMongoRepository<Inventory
                 .collect(Collectors.toMap(item -> item.getId().toString(), InventoryItem::getQuantity));
     }
 
-    public void delete(Set<String> ids) {
-        dependencyCheckRequester.requestDependencyCheckForIds(Dependent.INVENTORY_ITEM, ids, Action.DELETE);
+    public DependencyCheckResponse delete(Set<String> ids) {
+        var response = dependencyCheckRequester.requestDependencyCheckForIds(Dependent.INVENTORY_ITEM, ids, Action.DELETE);
+
+        Set<String> diff = new HashSet<>(ids);
+        response.getResults()
+                .stream()
+                .map(DependencyCheckResult::getId)
+                .toList()
+                .forEach(diff::remove);
+
+        deleteByIds(diff.stream()
+                .map(ObjectId::new)
+                .collect(Collectors.toSet()));
+
+        return response;
+    }
+
+    private void deleteByIds(Set<ObjectId> diff) {
+        delete("_id in ?1", diff);
     }
 }

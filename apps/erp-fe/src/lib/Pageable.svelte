@@ -2,6 +2,7 @@
   import { apiRequest } from './scripts/uiHttpRequests'
   import { HttpMethods } from './types/httpMethods'
   import { onMount } from 'svelte'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let endpoint: string
   export let component: any
@@ -34,6 +35,15 @@
     if (page >= mPage - 1) return false
     return true
   }
+
+  const shouldReRender = () => {
+    if ($genericStore.reload) {
+      fetchData(currentPage, additionalSearch)
+      $genericStore.reload = false
+    }
+  }
+
+  $: $genericStore, shouldReRender()
 </script>
 
 <div class="flex flex-col">
