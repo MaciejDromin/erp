@@ -1,6 +1,5 @@
 package com.soitio.finances.common;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckMap;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.DependencyConfig;
@@ -16,10 +15,9 @@ import org.springframework.stereotype.Service;
 public class DependencyInitializerImpl extends DependencyInitializerBaseService {
 
     protected DependencyInitializerImpl(ConsulStoreClient consulStoreClient,
-                                        ObjectMapper objectMapper,
                                         DependencyConfig dependencyConfig,
                                         List<DependencyCheckService> dependencyCheckServices) {
-        super(consulStoreClient, objectMapper, dependencyConfig, dependencyCheckServices);
+        super(consulStoreClient, dependencyConfig, dependencyCheckServices);
     }
 
     @Override

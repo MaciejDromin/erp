@@ -13,3 +13,8 @@ service-discovery:
   service-name: inventory
   host: localhost
   port: 8082
+
+soitio:
+  service: "http://localhost:8082"
+  dependencies: >
+    com.soitio.inventory.item.domain.InventoryItem

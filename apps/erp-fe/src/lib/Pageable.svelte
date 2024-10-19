@@ -56,7 +56,7 @@
     />
   </div>
 
-  <div class="join flex mx-auto mt-3">
+  <div class="join flex mx-auto my-3">
     <button
       class={`join-item btn disabled:opacity-75 ${!doesLowerPageExists(currentPage) ? 'btn-disable opacity-75' : ''}`}
       on:click|preventDefault={() => fetchData(--currentPage, additionalSearch)}

@@ -13,7 +13,6 @@ class DependencyInitializerBaseServiceSpec extends Specification {
     @Subject
     DependencyInitializerBaseService service = new DependencyInitializerBaseService(null,
             null,
-            null,
             [depService]) {
 
         @Override

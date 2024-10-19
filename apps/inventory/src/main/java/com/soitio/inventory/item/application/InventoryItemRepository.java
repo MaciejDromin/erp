@@ -1,15 +1,15 @@
 package com.soitio.inventory.item.application;
 
 import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.Action;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.dependency.model.Dependent;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import com.soitio.inventory.category.application.CategoryRepository;
@@ -18,6 +18,7 @@ import com.soitio.commons.models.dto.inventory.item.InventoryItemDto;
 import com.soitio.inventory.item.domain.InventoryItem;
 import com.soitio.inventory.item.domain.dto.ItemCreationDto;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,13 +28,18 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @ApplicationScoped
-@RequiredArgsConstructor
-public class InventoryItemRepository implements PanacheMongoRepository<InventoryItem> {
+public class InventoryItemRepository extends AbstractDependencyCheckRepo<InventoryItem> implements DependencyCheckService {
 
+    private static final String SERVICE_NAME = "InventoryItem";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     private final CategoryRepository categoryRepository;
-    private final DependencyCheckRequester dependencyCheckRequester;
+
+    public InventoryItemRepository(DependencyCheckRequester dependencyCheckRequester,
+                                   CategoryRepository categoryRepository) {
+        super(dependencyCheckRequester);
+        this.categoryRepository = categoryRepository;
+    }
 
     public PageDto<InventoryItemDto> listAllItems(UriInfo uriInfo) {
         var params = uriInfo.getQueryParameters();
@@ -112,24 +118,33 @@ public class InventoryItemRepository implements PanacheMongoRepository<Inventory
                 .collect(Collectors.toMap(item -> item.getId().toString(), InventoryItem::getQuantity));
     }
 
-    public DependencyCheckResponse delete(Set<String> ids) {
-        var response = dependencyCheckRequester.requestDependencyCheckForIds(Dependent.INVENTORY_ITEM, ids, Action.DELETE);
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
+    }
 
-        Set<String> diff = new HashSet<>(ids);
-        response.getResults()
+    @Override
+    public Set<DependencyCheckResult> checkForEdit(Set<String> set) {
+        return Set.of();
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
+        var objectIds = set.stream()
+                .map(ObjectId::new).collect(Collectors.toSet());
+        var allCategories = findAllByCategoryIdsIn(objectIds)
                 .stream()
-                .map(DependencyCheckResult::getId)
-                .toList()
-                .forEach(diff::remove);
-
-        deleteByIds(diff.stream()
-                .map(ObjectId::new)
-                .collect(Collectors.toSet()));
-
-        return response;
+                .map(InventoryItem::getCategories)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
+        return objectIds.stream()
+                .filter(allCategories::contains)
+                .map(oid -> new DependencyCheckResult(oid.toString(), true, "Category with id '%s' is in use".formatted(oid)))
+                .collect(Collectors.toSet());
     }
 
-    private void deleteByIds(Set<ObjectId> diff) {
-        delete("_id in ?1", diff);
+    private Set<InventoryItem> findAllByCategoryIdsIn(Set<ObjectId> categoryIds) {
+        return new HashSet<>(list("categories in ?1", categoryIds));
     }
+
 }

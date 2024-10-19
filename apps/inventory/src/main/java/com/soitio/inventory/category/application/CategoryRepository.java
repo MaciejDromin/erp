@@ -1,23 +1,29 @@
 package com.soitio.inventory.category.application;
 
+import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.dependency.DependencyCheckService;
+import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.dto.PageDto;
 import com.soitio.commons.models.dto.inventory.category.CategoryDto;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import com.soitio.inventory.category.domain.Category;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @ApplicationScoped
-@RequiredArgsConstructor
-public class CategoryRepository implements PanacheMongoRepository<Category> {
+public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
+
+    public CategoryRepository(DependencyCheckRequester dependencyCheckRequester) {
+        super(dependencyCheckRequester);
+    }
 
     public PageDto<CategoryDto> findAll(UriInfo uriInfo) {
         var params = uriInfo.getQueryParameters();

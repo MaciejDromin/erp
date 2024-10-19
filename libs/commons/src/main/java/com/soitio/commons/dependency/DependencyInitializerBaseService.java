@@ -1,14 +1,11 @@
 package com.soitio.commons.dependency;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.client.ConsulStoreClient;
 import com.soitio.commons.dependency.exception.DependencyLockException;
 import com.soitio.commons.dependency.model.Dependent;
 import com.soitio.commons.dependency.model.Session;
 import dev.failsafe.Failsafe;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,19 +16,20 @@ import java.util.stream.Collectors;
 public abstract class DependencyInitializerBaseService implements DependencyInitializer {
 
     private final ConsulStoreClient consulStoreClient;
-    private final ObjectMapper objectMapper;
     private final DependencyConfig dependencyConfig;
     private final Map<String, DependencyCheckService> checkServiceMapping;
     protected DependencyCheckMap dependencyCheckMap;
 
     protected DependencyInitializerBaseService(ConsulStoreClient consulStoreClient,
-                                               ObjectMapper objectMapper,
                                                DependencyConfig dependencyConfig,
                                                List<DependencyCheckService> dependencyCheckServices) {
         this.consulStoreClient = consulStoreClient;
-        this.objectMapper = objectMapper;
         this.dependencyConfig = dependencyConfig;
         this.checkServiceMapping = buildMapping(dependencyCheckServices);
+    }
+
+    protected DependencyInitializerBaseService() {
+        this(null, null, null);
     }
 
     @Override

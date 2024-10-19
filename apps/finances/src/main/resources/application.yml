@@ -29,8 +29,8 @@ jakarta:
 
 logging:
   level:
-    pl:
-      mlisowski: DEBUG
+    com:
+      soitio: DEBUG
 
 #feign:
 #  client:
