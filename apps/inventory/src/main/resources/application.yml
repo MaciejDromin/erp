@@ -16,5 +16,6 @@ service-discovery:
 
 soitio:
   service: "http://localhost:8082"
-  dependencies: >
-    com.soitio.inventory.item.domain.InventoryItem
+  dependencies:
+    - com.soitio.inventory.item.domain.InventoryItem
+    - com.soitio.inventory.property.domain.Property

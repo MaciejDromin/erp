@@ -6,7 +6,8 @@ import java.util.Map;
 public enum Dependent {
 
     INVENTORY_ITEM("inventory.item"),
-    INVENTORY_CATEGORY("inventory.category");
+    INVENTORY_CATEGORY("inventory.category"),
+    INVENTORY_ADDRESS("inventory.address");
 
     private final String name;
     private static final Map<String, Dependent> names = new HashMap<>();

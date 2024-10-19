@@ -18,5 +18,6 @@ service-discovery:
 
 soitio:
   service: "http://inventory:8080"
-  dependencies: >
-    com.soitio.inventory.item.domain.InventoryItem
+  dependencies:
+    - com.soitio.inventory.item.domain.InventoryItem
+    - com.soitio.inventory.property.domain.Property

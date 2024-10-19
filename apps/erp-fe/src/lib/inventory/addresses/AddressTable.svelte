@@ -28,6 +28,8 @@
       selectedAddresses.set(address.id, address)
     }
     selectedAddresses = selectedAddresses
+    $genericStore.inventory = {}
+    $genericStore.inventory.addresses = Array.from(selectedAddresses.values())
   }
 
   const addressesSelectedStyles = (

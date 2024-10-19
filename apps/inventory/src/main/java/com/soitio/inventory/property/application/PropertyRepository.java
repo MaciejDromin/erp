@@ -1,5 +1,9 @@
 package com.soitio.inventory.property.application;
 
+import com.soitio.commons.dependency.DependencyCheckService;
+import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.property.address.domain.PropertyAddress;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,8 +27,9 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class PropertyRepository implements PanacheMongoRepository<Property> {
+public class PropertyRepository extends AbstractDependencyCheckRepo<Property> implements DependencyCheckService {
 
+    private static final String SERVICE_NAME = "Property";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     private final PropertyInformationCreationProvider propertyProvider;
@@ -101,4 +106,27 @@ public class PropertyRepository implements PanacheMongoRepository<Property> {
         return new HashSet<>(list("_id in ?1", itemIds));
     }
 
+    public Set<Property> findAllByAddressIdsIn(Set<ObjectId> ids) {
+        return new HashSet<>(list("addressId in ?1", ids));
+    }
+
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForEdit(Set<String> set) {
+        return Set.of();
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
+        return findAllByAddressIdsIn(set.stream()
+                .map(ObjectId::new)
+                .collect(Collectors.toSet()))
+                .stream()
+                .map(p -> new DependencyCheckResult(p.getAddressId().toString(), true, "Property Adress with id '%s' is in use".formatted(p.getAddressId())))
+                .collect(Collectors.toSet());
+    }
 }

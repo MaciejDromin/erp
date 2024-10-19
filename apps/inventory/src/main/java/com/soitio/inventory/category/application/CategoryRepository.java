@@ -13,7 +13,6 @@ import org.bson.types.ObjectId;
 import com.soitio.inventory.category.domain.Category;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @ApplicationScoped
