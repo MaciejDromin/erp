@@ -1,5 +1,6 @@
 package com.soitio.inventory.property.application;
 
+import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
@@ -26,13 +27,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-@RequiredArgsConstructor
 public class PropertyRepository extends AbstractDependencyCheckRepo<Property> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "Property";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     private final PropertyInformationCreationProvider propertyProvider;
+
+    public PropertyRepository(DependencyCheckRequester dependencyCheckRequester,
+                              PropertyInformationCreationProvider propertyProvider) {
+        super(dependencyCheckRequester);
+        this.propertyProvider = propertyProvider;
+    }
 
     public void create(PropertyCreationDto propertyCreation) {
         persist(from(propertyCreation));

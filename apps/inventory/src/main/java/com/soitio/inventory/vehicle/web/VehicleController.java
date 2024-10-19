@@ -1,5 +1,8 @@
 package com.soitio.inventory.vehicle.web;
 
+import com.soitio.commons.dependency.model.DependencyCheckResponse;
+import com.soitio.commons.dependency.model.Dependent;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -12,6 +15,7 @@ import com.soitio.inventory.vehicle.application.VehicleRepository;
 import com.soitio.inventory.vehicle.domain.dto.VehicleCreationDto;
 import com.soitio.inventory.vehicle.domain.dto.VehicleForListDto;
 import java.util.Map;
+import java.util.Set;
 
 @Path("/vehicles")
 @RequiredArgsConstructor
@@ -39,6 +43,11 @@ public class VehicleController {
     @Path("/object-names")
     public Map<String, String> objectNames(ObjectIdsDto objectNames) {
         return vehicleRepository.findAllItemNamesByIds(objectNames.getItemIds());
+    }
+
+    @DELETE
+    public DependencyCheckResponse delete(Set<String> ids) {
+        return vehicleRepository.delete(Dependent.INVENTORY_ITEM, ids);
     }
 
 }

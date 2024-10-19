@@ -28,6 +28,8 @@
       selectedVehicles.set(vehicle.id, vehicle)
     }
     selectedVehicles = selectedVehicles
+    $genericStore.inventory = {}
+    $genericStore.inventory.vehicles = Array.from(selectedVehicles.values())
   }
 
   const vehicleSelectedStyles = (

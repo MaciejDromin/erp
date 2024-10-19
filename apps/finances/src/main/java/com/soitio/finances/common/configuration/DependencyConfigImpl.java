@@ -27,6 +27,7 @@ public class DependencyConfigImpl implements DependencyConfig {
     }
 
     @Override
+    @SuppressWarnings({"unchecked"})
     public Set<Class<? extends Dependencies>> getClassesWithDependencies() {
         Set<Class<? extends Dependencies>> ret = new HashSet<>();
         for (String dep : dependencies) {

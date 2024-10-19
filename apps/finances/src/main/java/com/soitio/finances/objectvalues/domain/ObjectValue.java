@@ -19,7 +19,7 @@ import org.joda.money.Money;
 @NoArgsConstructor
 @SuperBuilder
 @Getter
-@Dependencies(dependent = "ObjectValue", dependencies = {"inventory.item"})
+@Dependencies(dependent = "ObjectValue", dependencies = {"inventory.item", "inventory.property", "inventory.vehicle"})
 public class ObjectValue extends BaseEntity {
 
     private String objectId;
