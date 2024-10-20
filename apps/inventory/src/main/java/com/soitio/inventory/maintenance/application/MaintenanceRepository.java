@@ -1,6 +1,10 @@
 package com.soitio.inventory.maintenance.application;
 
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.dependency.DependencyCheckService;
+import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.maintenance.domain.dto.PartQuantity;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.UriInfo;
@@ -10,14 +14,21 @@ import com.soitio.inventory.maintenance.domain.MaintenanceRecord;
 import com.soitio.inventory.maintenance.domain.dto.MaintenanceCreationDto;
 import com.soitio.inventory.maintenance.domain.dto.MaintenanceForListDto;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class MaintenanceRepository implements PanacheMongoRepository<MaintenanceRecord> {
+public class MaintenanceRepository extends AbstractDependencyCheckRepo<MaintenanceRecord>  implements DependencyCheckService {
 
+    private static final String SERVICE_NAME = "MaintenanceRecord";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
+
+    public MaintenanceRepository(DependencyCheckRequester dependencyCheckRequester) {
+        super(dependencyCheckRequester);
+    }
 
     public void create(MaintenanceCreationDto maintenanceCreation) {
         persist(from(maintenanceCreation));
@@ -66,4 +77,33 @@ public class MaintenanceRepository implements PanacheMongoRepository<Maintenance
                 .build();
     }
 
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForEdit(Set<String> set) {
+        return Set.of();
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
+        var objectIds = set.stream()
+                .map(ObjectId::new).collect(Collectors.toSet());
+        var allContractors = findAllByContractorIdIn(objectIds)
+                .stream()
+                .map(MaintenanceRecord::getParts)
+                .flatMap(Collection::stream)
+                .map(PartQuantity::id)
+                .collect(Collectors.toSet());
+        return objectIds.stream()
+                .filter(allContractors::contains)
+                .map(oid -> new DependencyCheckResult(oid.toString(), true, "Contractor with id '%s' is in use".formatted(oid)))
+                .collect(Collectors.toSet());
+    }
+
+    private Set<MaintenanceRecord> findAllByContractorIdIn(Set<ObjectId> set) {
+        return new HashSet<>(list("parts.id in ?1", set));
+    }
 }

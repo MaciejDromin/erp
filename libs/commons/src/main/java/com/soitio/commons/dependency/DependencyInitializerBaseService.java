@@ -28,10 +28,6 @@ public abstract class DependencyInitializerBaseService implements DependencyInit
         this.checkServiceMapping = buildMapping(dependencyCheckServices);
     }
 
-    protected DependencyInitializerBaseService() {
-        this(null, null, null);
-    }
-
     @Override
     public void createOrUpdateKey(Set<String> services, String key, Session session) throws DependencyLockException {
         boolean ret = consulStoreClient.updateKey(services, key, session.getId());

@@ -1,5 +1,8 @@
 package com.soitio.inventory.contractor.web;
 
+import com.soitio.commons.dependency.model.DependencyCheckResponse;
+import com.soitio.commons.dependency.model.Dependent;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -10,6 +13,8 @@ import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.contractor.application.ContractorRepository;
 import com.soitio.inventory.contractor.domain.dto.ContractorCreationDto;
 import com.soitio.inventory.contractor.domain.dto.ContractorDto;
+
+import java.util.Set;
 
 @Path("/contractors")
 @RequiredArgsConstructor
@@ -25,6 +30,11 @@ public class ContractorController {
     @POST
     public void createContractor(ContractorCreationDto contractorCreation) {
         contractorRepository.create(contractorCreation);
+    }
+
+    @DELETE
+    public DependencyCheckResponse delete(Set<String> ids) {
+        return contractorRepository.delete(Dependent.INVENTORY_CONTRACTOR, ids);
     }
 
 }

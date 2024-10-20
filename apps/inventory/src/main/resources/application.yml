@@ -19,3 +19,5 @@ soitio:
   dependencies:
     - com.soitio.inventory.item.domain.InventoryItem
     - com.soitio.inventory.property.domain.Property
+    - com.soitio.inventory.maintenance.domain.MaintenanceRecord
+    - com.soitio.inventory.part.domain.Part

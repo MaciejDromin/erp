@@ -30,6 +30,8 @@
       selectedContractors.set(contractor.id, contractor)
     }
     selectedContractors = selectedContractors
+    $genericStore.inventory = {}
+    $genericStore.inventory.contractors = Array.from(selectedContractors.values())
   }
 
   const contractorSelectedStyles = (

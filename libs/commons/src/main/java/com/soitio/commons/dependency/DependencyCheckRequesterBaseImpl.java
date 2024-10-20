@@ -24,10 +24,6 @@ public abstract class DependencyCheckRequesterBaseImpl implements DependencyChec
         this.dependencyCheckClient = dependencyCheckClient;
     }
 
-    protected DependencyCheckRequesterBaseImpl() {
-        this(null, null);
-    }
-
     @Override
     public DependencyCheckResponse requestDependencyCheckForIds(Dependent dependent,
                                                                 Set<String> ids,

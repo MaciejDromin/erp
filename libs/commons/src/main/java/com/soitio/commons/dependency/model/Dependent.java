@@ -9,7 +9,10 @@ public enum Dependent {
     INVENTORY_CATEGORY("inventory.category"),
     INVENTORY_ADDRESS("inventory.address"),
     INVENTORY_PROPERTY("inventory.property"),
-    INVENTORY_VEHICLE("inventory.vehicle");
+    INVENTORY_VEHICLE("inventory.vehicle"),
+    INVENTORY_CONTRACTOR("inventory.contractor"),
+    INVENTORY_MAINTENANCE("inventory.maintenance"),
+    INVENTORY_PART("inventory.part");
 
     private final String name;
     private static final Map<String, Dependent> names = new HashMap<>();
