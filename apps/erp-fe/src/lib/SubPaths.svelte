@@ -10,8 +10,9 @@
       <li class="flex-nowrap">
         <a
           href={subPath.path}
-          class={subPath.subPaths.length <= 0 ? 'truncate inline-block' : 'text-slate-100 truncate inline-block'}
-          >{subPath.name}</a
+          class={subPath.subPaths.length <= 0
+            ? 'truncate inline-block'
+            : 'text-slate-100 truncate inline-block'}>{subPath.name}</a
         >
         <SubPaths subPaths={subPath.subPaths} />
       </li>

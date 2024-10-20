@@ -1,8 +1,10 @@
 package com.soitio.finances.moneyoperation.periodical.application;
 
+import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.periodical.application.port.PeriodicalMoneyOperationRepository;
 import com.soitio.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperation;
 import com.soitio.finances.moneyoperation.periodical.domain.QPeriodicalMoneyOperation;
@@ -15,18 +17,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-public class PeriodicalMoneyOperationService implements DependencyCheckService {
+public class PeriodicalMoneyOperationService extends AbstractDependencyCheckService implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "PeriodicalMoneyOperation";
     private final OperationCategoryService operationCategoryService;
     private final PeriodicalMoneyOperationRepository repository;
+
+    public PeriodicalMoneyOperationService(DependencyCheckRequester dependencyCheckRequester,
+                                           OperationCategoryService operationCategoryService,
+                                           PeriodicalMoneyOperationRepository repository) {
+        super(dependencyCheckRequester);
+        this.operationCategoryService = operationCategoryService;
+        this.repository = repository;
+    }
 
     public Page<PeriodicalMoneyOperationDto> getPage(Pageable pageable) {
         return repository.findAll(pageable).map(this::from);
@@ -91,5 +99,10 @@ public class PeriodicalMoneyOperationService implements DependencyCheckService {
                 .map(OperationCategory::getUuid)
                 .map(id -> new DependencyCheckResult(id, true, "Operation category with id '%s' is in use!".formatted(id)))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void deleteByIds(Set<String> collect) {
+        repository.deleteAllById(collect);
     }
 }

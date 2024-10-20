@@ -31,7 +31,9 @@
     }
     selectedContractors = selectedContractors
     $genericStore.inventory = {}
-    $genericStore.inventory.contractors = Array.from(selectedContractors.values())
+    $genericStore.inventory.contractors = Array.from(
+      selectedContractors.values()
+    )
   }
 
   const contractorSelectedStyles = (

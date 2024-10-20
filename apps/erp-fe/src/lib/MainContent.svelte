@@ -21,7 +21,9 @@
     >
       {#each sidebar as item}
         <li class="flex-nowrap">
-          <a href={item.path} class="text-white truncate inline-block">{item.name}</a>
+          <a href={item.path} class="text-white truncate inline-block"
+            >{item.name}</a
+          >
           <SubPaths subPaths={item.subPaths} />
         </li>
       {/each}

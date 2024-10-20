@@ -1,13 +1,17 @@
 package com.soitio.finances.plannedexpenses.web;
 
+import com.soitio.commons.dependency.model.DependencyCheckResponse;
+import com.soitio.commons.dependency.model.Dependent;
 import com.soitio.finances.plannedexpenses.application.PlannedExpensesService;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCompletionDto;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCreationDto;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesDto;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +45,11 @@ public class PlannedExpensesController {
     @PatchMapping("/{plannedExpenseId}/complete")
     public void complete(@PathVariable String plannedExpenseId, @RequestBody PlannedExpensesCompletionDto completion) {
         service.complete(plannedExpenseId, completion);
+    }
+
+    @DeleteMapping
+    public DependencyCheckResponse delete(@RequestBody Set<String> ids) {
+        return service.delete(Dependent.FINANCES_MONEY_OPERATION, ids);
     }
 
 }
