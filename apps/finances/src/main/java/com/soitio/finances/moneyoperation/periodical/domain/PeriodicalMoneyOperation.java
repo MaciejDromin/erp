@@ -1,5 +1,6 @@
 package com.soitio.finances.moneyoperation.periodical.domain;
 
+import com.soitio.commons.dependency.Dependencies;
 import com.soitio.finances.common.persistence.BaseEntity;
 import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
@@ -32,7 +33,8 @@ import org.joda.money.Money;
 @Table(indexes = {
     @Index(name = "nextApplicableMonth", columnList = "nextApplicableMonth")
 })
-public class PeriodicalMoneyOperaion extends BaseEntity {
+@Dependencies(dependent = "PeriodicalMoneyOperation", dependencies = {"finances.category"})
+public class PeriodicalMoneyOperation extends BaseEntity {
 
     private BigDecimal amount;
 

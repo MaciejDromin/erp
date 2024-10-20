@@ -101,7 +101,6 @@
       return
     }
     items.forEach((item) => {
-      console.log('here')
       if (item.id === data.id) {
         item.position.x = targetColumn
         item.position.y = targetRow

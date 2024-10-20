@@ -15,17 +15,22 @@ spring:
       client:
         config:
           self-register:
-            url: http://localhost:8080/register
+            url: http://consul.soitio-erp.com:8000/
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
 
+jakarta:
+  persistence:
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/finances?useUnicode=yes&characterEncoding=UTF-8
+
 logging:
   level:
-    pl:
-      mlisowski: DEBUG
+    com:
+      soitio: DEBUG
 
 #feign:
 #  client:
@@ -37,3 +42,11 @@ service-discovery:
   service-name: finances
   host: localhost
   port: 8080
+
+soitio:
+  service: "http://localhost:8084"
+  dependencies: >
+    com.soitio.finances.objectvalues.domain.ObjectValue,
+    com.soitio.finances.moneyoperation.domain.MoneyOperation,
+    com.soitio.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperation,
+    com.soitio.finances.plannedexpenses.domain.PlannedExpenses

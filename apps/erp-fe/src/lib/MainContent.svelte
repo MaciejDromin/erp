@@ -17,17 +17,21 @@
   <div class="drawer-side h-full">
     <label for="my-drawer-2" class="drawer-overlay" />
     <ul
-      class="hidden lg:block menu p-4 w-80 h-full bg-base-200 text-base-content h-fit"
+      class="hidden lg:block menu p-2 min-w-[17rem] max-w-[17rem] min-h-full bg-base-200 text-base-content leading-[0.875rem]"
     >
       {#each sidebar as item}
-        <li>
-          <a href={item.path}>{item.name}</a>
+        <li class="flex-nowrap">
+          <a href={item.path} class="text-white truncate inline-block"
+            >{item.name}</a
+          >
           <SubPaths subPaths={item.subPaths} />
         </li>
       {/each}
     </ul>
     <!-- TODO: here dynamically create list for small view -->
-    <ul class="lg:hidden menu p-4 w-20 h-full bg-base-200 text-base-content">
+    <ul
+      class="lg:hidden menu p-4 w-20 min-h-full bg-base-200 text-base-content"
+    >
       <!-- Sidebar content here -->
       <li><a>Small 1</a></li>
       <li><a>Small 2</a></li>

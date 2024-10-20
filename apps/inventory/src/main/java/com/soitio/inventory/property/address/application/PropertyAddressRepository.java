@@ -1,19 +1,22 @@
 package com.soitio.inventory.property.address.application;
 
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
-import jakarta.enterprise.context.ApplicationScoped;
+import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
-import lombok.RequiredArgsConstructor;
 import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.property.address.domain.PropertyAddress;
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressCreationDto;
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressDto;
 
-@ApplicationScoped
-@RequiredArgsConstructor
-public class PropertyAddressRepository implements PanacheMongoRepository<PropertyAddress> {
+@Singleton
+public class PropertyAddressRepository extends AbstractDependencyCheckRepo<PropertyAddress> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
+
+    public PropertyAddressRepository(DependencyCheckRequester dependencyCheckRequester) {
+        super(dependencyCheckRequester);
+    }
 
     public void create(PropertyAddressCreationDto propertyAddressCreation) {
         persist(from(propertyAddressCreation));

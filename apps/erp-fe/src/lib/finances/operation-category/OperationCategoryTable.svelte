@@ -28,6 +28,8 @@
       selectedCategories.set(category.uuid, category)
     }
     selectedCategories = selectedCategories
+    $genericStore.finances = {}
+    $genericStore.finances.categories = Array.from(selectedCategories.values())
   }
 
   const categorySelectedStyles = (

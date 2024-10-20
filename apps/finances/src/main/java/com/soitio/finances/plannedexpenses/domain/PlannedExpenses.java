@@ -1,5 +1,6 @@
 package com.soitio.finances.plannedexpenses.domain;
 
+import com.soitio.commons.dependency.Dependencies;
 import com.soitio.finances.common.persistence.BaseEntity;
 import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
@@ -27,6 +28,7 @@ import org.joda.money.Money;
 @SuperBuilder
 @Getter
 @Setter
+@Dependencies(dependent = "PlannedExpenses", dependencies = {"finances.category"})
 public class PlannedExpenses extends BaseEntity {
 
     private BigDecimal plannedAmount;

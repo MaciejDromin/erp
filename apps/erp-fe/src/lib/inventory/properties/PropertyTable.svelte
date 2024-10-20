@@ -28,6 +28,8 @@
       selectedProperties.set(property.id, property)
     }
     selectedProperties = selectedProperties
+    $genericStore.inventory = {}
+    $genericStore.inventory.properties = Array.from(selectedProperties.values())
   }
 
   const propertySelectedStyles = (

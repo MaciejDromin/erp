@@ -1,8 +1,11 @@
 package com.soitio.inventory.part.application;
 
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.dependency.DependencyCheckService;
+import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
 import org.bson.types.ObjectId;
 import com.soitio.commons.models.dto.PageDto;
@@ -10,14 +13,20 @@ import com.soitio.inventory.part.domain.Part;
 import com.soitio.inventory.part.domain.dto.PartCreationDto;
 import com.soitio.inventory.part.domain.dto.PartDto;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
-public class PartRepository implements PanacheMongoRepository<Part> {
+@Singleton
+public class PartRepository extends AbstractDependencyCheckRepo<Part> implements DependencyCheckService {
 
+    private static final String SERVICE_NAME = "Part";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
+
+    public PartRepository(DependencyCheckRequester dependencyCheckRequester) {
+        super(dependencyCheckRequester);
+    }
 
     public PageDto<PartDto> getParts(UriInfo uriInfo) {
         var params = uriInfo.getQueryParameters();
@@ -64,5 +73,29 @@ public class PartRepository implements PanacheMongoRepository<Part> {
                 .partNumber(part.getPartNumber())
                 .manufacturerId(part.getManufacturerId())
                 .build();
+    }
+
+    public Set<Part> findAllByManufacturerIdsIn(Set<ObjectId> itemIds) {
+        return new HashSet<>(list("manufacturerId in ?1", itemIds));
+    }
+
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForEdit(Set<String> set) {
+        return Set.of();
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
+        return findAllByManufacturerIdsIn(set.stream()
+                .map(ObjectId::new)
+                .collect(Collectors.toSet()))
+                .stream()
+                .map(p -> new DependencyCheckResult(p.getManufacturerId().toString(), true, "Contractor with id '%s' is in use!".formatted(p.getManufacturerId())))
+                .collect(Collectors.toSet());
     }
 }

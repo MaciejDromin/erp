@@ -1,5 +1,7 @@
 package com.soitio.finances.objectvalues.application;
 
+import com.soitio.commons.dependency.DependencyCheckService;
+import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.money.CurrencyUnit;
@@ -27,7 +30,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ObjectValueService {
+public class ObjectValueService implements DependencyCheckService {
+
+    private static final String SERVICE_NAME = "ObjectValue";
+
     private final ObjectValueRepository objectValueRepository;
     private final CurrencyService currencyService;
 
@@ -101,5 +107,23 @@ public class ObjectValueService {
                 .amount(AmountDto.of(amount.getAmount(), amount.getCurrencyUnit().getCode()))
                 .objectId(ov.getObjectId())
                 .build();
+    }
+
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForEdit(Set<String> set) {
+        return Set.of();
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
+        return objectValueRepository.findAllByObjectIdIn(set).stream()
+                .map(ObjectValue::getObjectId)
+                .map(id -> new DependencyCheckResult(id, true, "Object with id '%s' is in use".formatted(id)))
+                .collect(Collectors.toSet());
     }
 }

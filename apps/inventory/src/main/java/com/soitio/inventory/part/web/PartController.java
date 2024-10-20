@@ -1,5 +1,8 @@
 package com.soitio.inventory.part.web;
 
+import com.soitio.commons.dependency.model.DependencyCheckResponse;
+import com.soitio.commons.dependency.model.Dependent;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -10,6 +13,8 @@ import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.part.application.PartRepository;
 import com.soitio.inventory.part.domain.dto.PartCreationDto;
 import com.soitio.inventory.part.domain.dto.PartDto;
+
+import java.util.Set;
 
 @Path("/parts")
 @RequiredArgsConstructor
@@ -25,6 +30,11 @@ public class PartController {
     @POST
     public void createPart(PartCreationDto partCreation) {
         partRepository.create(partCreation);
+    }
+
+    @DELETE
+    public DependencyCheckResponse delete(Set<String> ids) {
+        return partRepository.delete(Dependent.INVENTORY_PART, ids);
     }
 
 }

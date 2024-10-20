@@ -1,5 +1,6 @@
 package com.soitio.inventory.category.domain;
 
+import com.soitio.commons.dependency.Dependencies;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

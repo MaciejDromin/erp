@@ -1,5 +1,6 @@
 package com.soitio.inventory.item.domain;
 
+import com.soitio.commons.dependency.Dependencies;
 import com.soitio.commons.models.inventory.ItemUnit;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @MongoEntity(collection = "Item")
+@Dependencies(dependent = "InventoryItem", dependencies = {"inventory.category"})
 public class InventoryItem {
 
     private ObjectId id;

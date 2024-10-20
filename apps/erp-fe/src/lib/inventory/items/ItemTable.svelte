@@ -33,6 +33,8 @@
       selectedItems.set(item.id, item)
     }
     selectedItems = selectedItems
+    $genericStore.inventory = {}
+    $genericStore.inventory.items = Array.from(selectedItems.values())
   }
 
   const itemSelectedStyles = (

@@ -1,8 +1,13 @@
 package com.soitio.finances.plannedexpenses.application;
 
+import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.dependency.DependencyCheckService;
+import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.application.MoneyOperationService;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
+import com.soitio.finances.operationcategories.domain.OperationCategory;
 import com.soitio.finances.plannedexpenses.application.port.PlannedExpensesRepository;
 import com.soitio.finances.plannedexpenses.domain.PlannedExpenses;
 import com.soitio.finances.plannedexpenses.domain.PlannedExpensesStatus;
@@ -11,7 +16,8 @@ import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCreationDto
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesDto;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import lombok.RequiredArgsConstructor;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,12 +25,22 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
-public class PlannedExpensesService {
+public class PlannedExpensesService extends AbstractDependencyCheckService implements DependencyCheckService {
 
+    private static final String SERVICE_NAME = "PlannedExpenses";
     private final PlannedExpensesRepository repository;
     private final OperationCategoryService operationCategoryService;
     private final MoneyOperationService moneyOperationService;
+
+    public PlannedExpensesService(DependencyCheckRequester dependencyCheckRequester,
+                                  PlannedExpensesRepository repository,
+                                  OperationCategoryService operationCategoryService,
+                                  MoneyOperationService moneyOperationService) {
+        super(dependencyCheckRequester);
+        this.repository = repository;
+        this.operationCategoryService = operationCategoryService;
+        this.moneyOperationService = moneyOperationService;
+    }
 
     public void create(PlannedExpensesCreationDto creation) {
         repository.save(convert(creation));
@@ -93,5 +109,30 @@ public class PlannedExpensesService {
         plannedExpenses.setFinalizedDate(LocalDateTime.now(ZoneOffset.UTC));
         plannedExpenses.setPlannedExpensesStatus(PlannedExpensesStatus.COMPLETED);
         return plannedExpenses;
+    }
+
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForEdit(Set<String> set) {
+        return Set.of();
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
+        return repository.findAllByOperationCategoryUuidIn(set)
+                .stream()
+                .map(PlannedExpenses::getOperationCategory)
+                .map(OperationCategory::getUuid)
+                .map(id -> new DependencyCheckResult(id, true, "Operation category with id '%s' is in use!".formatted(id)))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void deleteByIds(Set<String> collect) {
+        repository.deleteAllById(collect);
     }
 }

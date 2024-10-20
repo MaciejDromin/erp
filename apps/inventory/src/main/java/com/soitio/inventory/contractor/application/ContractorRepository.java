@@ -1,8 +1,9 @@
 package com.soitio.inventory.contractor.application;
 
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
 import org.bson.types.ObjectId;
 import com.soitio.commons.models.dto.PageDto;
@@ -16,10 +17,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
-public class ContractorRepository implements PanacheMongoRepository<Contractor> {
+@Singleton
+public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
+
+    public ContractorRepository(DependencyCheckRequester dependencyCheckRequester) {
+        super(dependencyCheckRequester);
+    }
 
     public PageDto<ContractorDto> getContractors(UriInfo uriInfo) {
         var params = uriInfo.getQueryParameters();

@@ -1,5 +1,56 @@
 <script lang="ts">
+  import { onDestroy, onMount } from 'svelte'
+  import { genericStore } from '$lib/stores/genericStore.ts'
+
   export let data: any = undefined
+  let selectedMoneyOperations: Map<string, string> = new Map()
+
+  onMount(() => {
+    if (
+      $genericStore.finances !== undefined &&
+      $genericStore.finances.moneyOperations !== undefined
+    ) {
+      $genericStore.finances.moneyOperations.forEach((catg) =>
+        selectedMoneyOperations.set(catg.uuid, catg)
+      )
+    }
+  })
+
+  onDestroy(() => {
+    $genericStore.finances = {}
+    $genericStore.finances.moneyOperations = Array.from(
+      selectedMoneyOperations.values()
+    )
+  })
+
+  const updateMoneyOperationsList = (moneyOperation: string) => {
+    if (selectedMoneyOperations.has(moneyOperation.uuid)) {
+      selectedMoneyOperations.delete(moneyOperation.uuid)
+    } else {
+      selectedMoneyOperations.set(moneyOperation.uuid, moneyOperation)
+    }
+    selectedMoneyOperations = selectedMoneyOperations
+    $genericStore.finances = {}
+    $genericStore.finances.moneyOperations = Array.from(
+      selectedMoneyOperations.values()
+    )
+  }
+
+  const moneyOperationSelectedStyles = (
+    moneyOperationMap: Map<string, string>,
+    moneyOperationId: string
+  ): string => {
+    if (!moneyOperationMap.has(moneyOperationId)) return ''
+    return 'bg-indigo-600 text-white'
+  }
+
+  const determineEvenBgColor = (
+    moneyOperationMap: Map<string, string>,
+    moneyOperationId: string
+  ): string => {
+    if (!moneyOperationMap.has(moneyOperationId)) return 'even:bg-black'
+    return 'even:bg-indigo-600'
+  }
 </script>
 
 <div class="overflow-x-auto text-primary-content mx-auto">
@@ -20,7 +71,12 @@
     <tbody>
       {#if data !== undefined}
         {#each data.content as moneyOperation}
-          <tr>
+          <tr
+            class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
+        ${moneyOperationSelectedStyles(selectedMoneyOperations, moneyOperation.uuid)}
+        ${determineEvenBgColor(selectedMoneyOperations, moneyOperation.uuid)}`}
+            on:click={() => updateMoneyOperationsList(moneyOperation)}
+          >
             <td>{moneyOperation.uuid}</td>
             <td>{moneyOperation.operationType}</td>
             <td

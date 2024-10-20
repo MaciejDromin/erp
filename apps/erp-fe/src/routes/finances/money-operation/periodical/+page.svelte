@@ -2,6 +2,7 @@
   import Pageable from '$lib/Pageable.svelte'
   import PeriodicalMoneyOperationTable from '$lib/finances/money-operation/periodical/PeriodicalMoneyOperationTable.svelte'
   import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
+  import { Services } from '$lib/types/services.ts'
 
   let config = {
     title: 'Periodical Money Operations',
@@ -14,6 +15,11 @@
     deleteButton: {
       disabled: false,
     },
+    delete: {
+      endpoint: '/finances/money-operation/periodical',
+      keys: ['finances', 'periodicals'],
+    },
+    service: Services.FINANCES,
   }
 </script>
 

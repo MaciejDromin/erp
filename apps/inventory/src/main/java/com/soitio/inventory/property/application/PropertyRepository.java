@@ -1,10 +1,12 @@
 package com.soitio.inventory.property.application;
 
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.dependency.DependencyCheckService;
+import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
-import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.property.domain.Property;
@@ -21,13 +23,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
-@RequiredArgsConstructor
-public class PropertyRepository implements PanacheMongoRepository<Property> {
+@Singleton
+public class PropertyRepository extends AbstractDependencyCheckRepo<Property> implements DependencyCheckService {
 
+    private static final String SERVICE_NAME = "Property";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     private final PropertyInformationCreationProvider propertyProvider;
+
+    public PropertyRepository(DependencyCheckRequester dependencyCheckRequester,
+                              PropertyInformationCreationProvider propertyProvider) {
+        super(dependencyCheckRequester);
+        this.propertyProvider = propertyProvider;
+    }
 
     public void create(PropertyCreationDto propertyCreation) {
         persist(from(propertyCreation));
@@ -101,4 +109,27 @@ public class PropertyRepository implements PanacheMongoRepository<Property> {
         return new HashSet<>(list("_id in ?1", itemIds));
     }
 
+    public Set<Property> findAllByAddressIdsIn(Set<ObjectId> ids) {
+        return new HashSet<>(list("addressId in ?1", ids));
+    }
+
+    @Override
+    public String getServiceName() {
+        return SERVICE_NAME;
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForEdit(Set<String> set) {
+        return Set.of();
+    }
+
+    @Override
+    public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
+        return findAllByAddressIdsIn(set.stream()
+                .map(ObjectId::new)
+                .collect(Collectors.toSet()))
+                .stream()
+                .map(p -> new DependencyCheckResult(p.getAddressId().toString(), true, "Property Adress with id '%s' is in use".formatted(p.getAddressId())))
+                .collect(Collectors.toSet());
+    }
 }
