@@ -2,6 +2,7 @@
   import PartsTable from '$lib/inventory/parts/PartsTable.svelte'
   import Pageable from '$lib/Pageable.svelte'
   import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
+  import { Services } from '$lib/types/services.ts'
 
   let config = {
     title: 'Parts',
@@ -14,6 +15,11 @@
     deleteButton: {
       disabled: false,
     },
+    delete: {
+      endpoint: '/parts',
+      keys: ['inventory', 'parts'],
+    },
+    service: Services.INVENTORY,
   }
 </script>
 

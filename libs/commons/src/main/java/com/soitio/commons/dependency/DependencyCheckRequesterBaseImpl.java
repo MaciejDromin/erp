@@ -29,8 +29,7 @@ public abstract class DependencyCheckRequesterBaseImpl implements DependencyChec
                                                                 Set<String> ids,
                                                                 Action action) {
         final DependencyCheckRequest request = new DependencyCheckRequest(dependent, action, ids);
-        Set<String> services = DependencyUtils.decodeBase64(
-                consulStoreClient.getCurrentValue(dependent.getName()).getFirst().getValue());
+        Set<String> services = getServices(dependent);
         return services.parallelStream()
                 .map(host -> dependencyCheckClient.check(URI.create(host), request))
                 .reduce(new DependencyCheckResponse(), this::mergeFunction);
@@ -44,5 +43,15 @@ public abstract class DependencyCheckRequesterBaseImpl implements DependencyChec
                         r -> r,
                         DependencyUtils::mergeResults)).values();
         return new DependencyCheckResponse(new HashSet<>(mergedResults), true);
+    }
+
+    private Set<String> getServices(Dependent dependent) {
+        try {
+            return DependencyUtils.decodeBase64(consulStoreClient.getCurrentValue(dependent.getName())
+                    .getFirst().getValue());
+        } catch (Exception e) {
+            // no key found
+        }
+        return Set.of();
     }
 }
