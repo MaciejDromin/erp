@@ -5,7 +5,7 @@ import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
-@ApplicationScoped
+@Singleton
 public class InventoryItemRepository extends AbstractDependencyCheckRepo<InventoryItem> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "InventoryItem";

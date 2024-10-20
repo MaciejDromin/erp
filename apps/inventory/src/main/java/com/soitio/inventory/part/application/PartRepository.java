@@ -5,7 +5,7 @@ import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
 import org.bson.types.ObjectId;
 import com.soitio.commons.models.dto.PageDto;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+@Singleton
 public class PartRepository extends AbstractDependencyCheckRepo<Part> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "Part";

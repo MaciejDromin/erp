@@ -1,21 +1,18 @@
-package com.soitio.inventory.dependency;
+package com.soitio.finances.common;
 
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.model.Action;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.dependency.model.Dependent;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
-import org.bson.types.ObjectId;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepository<T> {
+public abstract class AbstractDependencyCheckService {
 
     private final DependencyCheckRequester dependencyCheckRequester;
 
-    protected AbstractDependencyCheckRepo(DependencyCheckRequester dependencyCheckRequester) {
+    protected AbstractDependencyCheckService(DependencyCheckRequester dependencyCheckRequester) {
         this.dependencyCheckRequester = dependencyCheckRequester;
     }
 
@@ -23,21 +20,18 @@ public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepo
         var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, ids, Action.DELETE);
 
         Set<String> diff = new HashSet<>(ids);
+
         response.getResults()
                 .stream()
                 .map(DependencyCheckResult::getId)
                 .toList()
                 .forEach(diff::remove);
 
-        deleteByIds(diff.stream()
-                .map(ObjectId::new)
-                .collect(Collectors.toSet()));
+        deleteByIds(diff);
 
         return response;
     }
 
-    private void deleteByIds(Set<ObjectId> diff) {
-        delete("_id in ?1", diff);
-    }
+    public abstract void deleteByIds(Set<String> collect);
 
 }

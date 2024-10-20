@@ -12,7 +12,11 @@ public enum Dependent {
     INVENTORY_VEHICLE("inventory.vehicle"),
     INVENTORY_CONTRACTOR("inventory.contractor"),
     INVENTORY_MAINTENANCE("inventory.maintenance"),
-    INVENTORY_PART("inventory.part");
+    INVENTORY_PART("inventory.part"),
+    FINANCES_CATEGORY("finances.category"),
+    FINANCES_MONEY_OPERATION("finances.moneyoperation"),
+    FINANCES_PERIODICAL("finances.periodical"),
+    FINANCES_PLANNED_EXPENSES("finances.plannedexpenses");
 
     private final String name;
     private static final Map<String, Dependent> names = new HashMap<>();

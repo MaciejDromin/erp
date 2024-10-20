@@ -2,14 +2,14 @@ package com.soitio.inventory.property.address.application;
 
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
 import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.property.address.domain.PropertyAddress;
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressCreationDto;
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressDto;
 
-@ApplicationScoped
+@Singleton
 public class PropertyAddressRepository extends AbstractDependencyCheckRepo<PropertyAddress> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;

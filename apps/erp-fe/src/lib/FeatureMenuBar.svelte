@@ -15,6 +15,9 @@
     for (const key of config.delete.keys) {
       ret = ret[key]
     }
+    if (ret.id === undefined) {
+      return ret.map(({ uuid }) => uuid)
+    }
     return ret.map(({ id }) => id)
   }
 

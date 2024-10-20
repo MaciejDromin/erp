@@ -4,12 +4,9 @@ import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
-import com.soitio.inventory.property.address.domain.PropertyAddress;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import io.quarkus.mongodb.panache.PanacheQuery;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
-import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.property.domain.Property;
@@ -26,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+@Singleton
 public class PropertyRepository extends AbstractDependencyCheckRepo<Property> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "Property";

@@ -3,7 +3,7 @@ package com.soitio.finances.moneyoperation.periodical.accounting;
 import com.soitio.finances.moneyoperation.application.MoneyOperationService;
 import com.soitio.finances.moneyoperation.domain.MoneyOperation;
 import com.soitio.finances.moneyoperation.periodical.application.PeriodicalMoneyOperationService;
-import com.soitio.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperaion;
+import com.soitio.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperation;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -24,7 +24,7 @@ public class PeriodicalOperationAccountingService {
     public void accountOperationsForCurrentMonth() {
         var accountingMonth = LocalDate.now().getMonth();
         log.info("Searching operations for month: {}", accountingMonth);
-        List<PeriodicalMoneyOperaion> operationList = periodicalMoneyOperationService.getOperationsForMonth(accountingMonth);
+        List<PeriodicalMoneyOperation> operationList = periodicalMoneyOperationService.getOperationsForMonth(accountingMonth);
         List<MoneyOperation> converted = operationList.stream()
                 .map(this::convertToMoneyOperation)
                 .toList();
@@ -34,17 +34,17 @@ public class PeriodicalOperationAccountingService {
         periodicalMoneyOperationService.saveAll(operationList);
     }
 
-    private MoneyOperation convertToMoneyOperation(PeriodicalMoneyOperaion periodicalMoneyOperaion) {
+    private MoneyOperation convertToMoneyOperation(PeriodicalMoneyOperation periodicalMoneyOperation) {
         LocalDateTime effectiveDate = LocalDateTime.now(ZoneOffset.UTC);
         return MoneyOperation.builder()
-                .amount(periodicalMoneyOperaion.getAmount().getAmount())
+                .amount(periodicalMoneyOperation.getAmount().getAmount())
                 .effectiveDate(effectiveDate)
                 .effectiveMonth(effectiveDate.getMonth())
                 .effectiveYear(effectiveDate.getYear())
-                .operationDescription(periodicalMoneyOperaion.getOperationDescription())
-                .currency(periodicalMoneyOperaion.getAmount().getCurrencyUnit().getCode())
-                .operationType(periodicalMoneyOperaion.getOperationType())
-                .operationCategory(periodicalMoneyOperaion.getOperationCategory())
+                .operationDescription(periodicalMoneyOperation.getOperationDescription())
+                .currency(periodicalMoneyOperation.getAmount().getCurrencyUnit().getCode())
+                .operationType(periodicalMoneyOperation.getOperationType())
+                .operationCategory(periodicalMoneyOperation.getOperationCategory())
                 .build();
     }
 

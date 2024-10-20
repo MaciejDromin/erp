@@ -2,6 +2,7 @@
   import Pageable from '$lib/Pageable.svelte'
   import OperationCategoryTable from '$lib/finances/operation-category/OperationCategoryTable.svelte'
   import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
+  import { Services } from '$lib/types/services.ts'
 
   let config = {
     title: 'Operations Category',
@@ -14,6 +15,11 @@
     deleteButton: {
       disabled: false,
     },
+    delete: {
+      endpoint: '/finances/operation-category',
+      keys: ['finances', 'categories'],
+    },
+    service: Services.FINANCES,
   }
 </script>
 

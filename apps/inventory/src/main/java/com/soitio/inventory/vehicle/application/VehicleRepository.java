@@ -3,7 +3,7 @@ package com.soitio.inventory.vehicle.application;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
 import org.bson.types.ObjectId;
 import com.soitio.commons.models.dto.PageDto;
@@ -18,8 +18,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
-public class VehicleRepository  extends AbstractDependencyCheckRepo<Vehicle> {
+@Singleton
+public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 

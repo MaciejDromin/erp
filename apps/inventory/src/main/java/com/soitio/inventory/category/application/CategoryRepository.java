@@ -1,12 +1,10 @@
 package com.soitio.inventory.category.application;
 
 import com.soitio.commons.dependency.DependencyCheckRequester;
-import com.soitio.commons.dependency.DependencyCheckService;
-import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.dto.PageDto;
 import com.soitio.commons.models.dto.inventory.category.CategoryDto;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -15,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
-@ApplicationScoped
+@Singleton
 public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;

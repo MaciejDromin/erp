@@ -49,4 +49,7 @@ service-discovery:
 soitio:
   service: "http://finances:8080"
   dependencies: >
-    com.soitio.finances.objectvalues.domain.ObjectValue
+    com.soitio.finances.objectvalues.domain.ObjectValue,
+    com.soitio.finances.moneyoperation.domain.MoneyOperation,
+    com.soitio.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperation,
+    com.soitio.finances.plannedexpenses.domain.PlannedExpenses

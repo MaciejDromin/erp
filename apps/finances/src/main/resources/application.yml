@@ -46,4 +46,7 @@ service-discovery:
 soitio:
   service: "http://localhost:8084"
   dependencies: >
-    com.soitio.finances.objectvalues.domain.ObjectValue
+    com.soitio.finances.objectvalues.domain.ObjectValue,
+    com.soitio.finances.moneyoperation.domain.MoneyOperation,
+    com.soitio.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperation,
+    com.soitio.finances.plannedexpenses.domain.PlannedExpenses
