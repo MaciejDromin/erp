@@ -1,7 +1,55 @@
 <script lang="ts">
+  import { onDestroy, onMount } from 'svelte'
+  import { genericStore } from '$lib/stores/genericStore.ts'
+
   export let data: any = undefined
 
   let actualAmountByIdMap: { [key: string]: string } = {}
+
+  let selectedPlannedExpenses: Map<string, string> = new Map()
+
+  onMount(() => {
+    if (
+      $genericStore.finances !== undefined &&
+      $genericStore.finances.plannedexpenses !== undefined
+    ) {
+      $genericStore.finances.plannedexpenses.forEach((catg) =>
+        selectedPlannedExpenses.set(catg.uuid, catg)
+      )
+    }
+  })
+
+  onDestroy(() => {
+    $genericStore.finances = {}
+    $genericStore.finances.plannedexpenses = Array.from(selectedPlannedExpenses.values())
+  })
+
+  const updatePlannedExpensesList = (plannedExpense: string) => {
+    if (selectedPlannedExpenses.has(plannedExpense.uuid)) {
+      selectedPlannedExpenses.delete(plannedExpense.uuid)
+    } else {
+      selectedPlannedExpenses.set(plannedExpense.uuid, plannedExpense)
+    }
+    selectedPlannedExpenses = selectedPlannedExpenses
+    $genericStore.finances = {}
+    $genericStore.finances.plannedexpenses = Array.from(selectedPlannedExpenses.values())
+  }
+
+  const plannedExpenseSelectedStyles = (
+    plannedExpenseMap: Map<string, string>,
+    plannedExpenseId: string
+  ): string => {
+    if (!plannedExpenseMap.has(plannedExpenseId)) return ''
+    return 'bg-indigo-600 text-white'
+  }
+
+  const determineEvenBgColor = (
+    plannedExpenseMap: Map<string, string>,
+    plannedExpenseId: string
+  ): string => {
+    if (!plannedExpenseMap.has(plannedExpenseId)) return 'even:bg-black'
+    return 'even:bg-indigo-600'
+  }
 </script>
 
 <div class="overflow-x-auto text-primary-content mx-auto">
@@ -24,7 +72,12 @@
     <tbody>
       {#if data !== undefined}
         {#each data.content as plannedExpenses}
-          <tr>
+          <tr
+            class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
+        ${plannedExpenseSelectedStyles(selectedPlannedExpenses, plannedExpenses.uuid)}
+        ${determineEvenBgColor(selectedPlannedExpenses, plannedExpenses.uuid)}`}
+            on:click={() => updatePlannedExpensesList(plannedExpenses)}
+          >
             <td>{plannedExpenses.uuid}</td>
             <td>{plannedExpenses.operationCategory.operationName}</td>
             <td>{plannedExpenses.operationDescription}</td>

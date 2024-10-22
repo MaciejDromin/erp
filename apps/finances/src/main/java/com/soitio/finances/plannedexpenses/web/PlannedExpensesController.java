@@ -49,7 +49,7 @@ public class PlannedExpensesController {
 
     @DeleteMapping
     public DependencyCheckResponse delete(@RequestBody Set<String> ids) {
-        return service.delete(Dependent.FINANCES_MONEY_OPERATION, ids);
+        return service.delete(Dependent.FINANCES_PLANNED_EXPENSES, ids);
     }
 
 }
