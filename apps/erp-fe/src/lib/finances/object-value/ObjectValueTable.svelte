@@ -1,6 +1,8 @@
 <script lang="ts">
   import { HttpMethods } from '$lib/types/httpMethods'
   import { ObjectType } from '$lib/finances/types/financialTypes'
+  import { onDestroy, onMount } from 'svelte'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let data: any = undefined
   export let objectType: ObjectType = undefined
@@ -47,6 +49,51 @@
   const getName = (nameMap: { [id: string]: string }, objectId: string) => {
     return nameMap[objectId]
   }
+
+  let selectedObjectValues: Map<string, string> = new Map()
+
+  onMount(() => {
+    if (
+      $genericStore.finances !== undefined &&
+      $genericStore.finances.objectvalues !== undefined
+    ) {
+      $genericStore.finances.objectvalues.forEach((catg) =>
+        selectedObjectValues.set(catg.uuid, catg)
+      )
+    }
+  })
+
+  onDestroy(() => {
+    $genericStore.finances = {}
+    $genericStore.finances.objectvalues = Array.from(selectedObjectValues.values())
+  })
+
+  const updateObjectValuesList = (objectValue: string) => {
+    if (selectedObjectValues.has(objectValue.uuid)) {
+      selectedObjectValues.delete(objectValue.uuid)
+    } else {
+      selectedObjectValues.set(objectValue.uuid, objectValue)
+    }
+    selectedObjectValues = selectedObjectValues
+    $genericStore.finances = {}
+    $genericStore.finances.objectvalues = Array.from(selectedObjectValues.values())
+  }
+
+  const objectValueSelectedStyles = (
+    objectValueMap: Map<string, string>,
+    objectValueId: string
+  ): string => {
+    if (!objectValueMap.has(objectValueId)) return ''
+    return 'bg-indigo-600 text-white'
+  }
+
+  const determineEvenBgColor = (
+    objectValueMap: Map<string, string>,
+    objectValueId: string
+  ): string => {
+    if (!objectValueMap.has(objectValueId)) return 'even:bg-black'
+    return 'even:bg-indigo-600'
+  }
 </script>
 
 <div class="overflow-x-auto text-primary-content mx-auto">
@@ -64,7 +111,12 @@
     <tbody>
       {#if data !== undefined}
         {#each data.content as objectValue}
-          <tr>
+          <tr
+            class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
+        ${objectValueSelectedStyles(selectedObjectValues, objectValue.uuid)}
+        ${determineEvenBgColor(selectedObjectValues, objectValue.uuid)}`}
+            on:click={() => updateObjectValuesList(objectValue)}
+          >
             <td>{objectValue.uuid}</td>
             <td>{getName(objectNameMap, objectValue.objectId)}</td>
             <td>{objectValue.amount.value}</td>

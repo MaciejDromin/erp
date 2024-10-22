@@ -16,7 +16,8 @@ public enum Dependent {
     FINANCES_CATEGORY("finances.category"),
     FINANCES_MONEY_OPERATION("finances.moneyoperation"),
     FINANCES_PERIODICAL("finances.periodical"),
-    FINANCES_PLANNED_EXPENSES("finances.plannedexpenses");
+    FINANCES_PLANNED_EXPENSES("finances.plannedexpenses"),
+    FINANCES_OBJECT_VALUE("finances.objectvalue");
 
     private final String name;
     private static final Map<String, Dependent> names = new HashMap<>();

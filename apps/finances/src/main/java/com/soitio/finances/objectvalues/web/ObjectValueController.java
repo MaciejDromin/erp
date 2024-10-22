@@ -1,5 +1,7 @@
 package com.soitio.finances.objectvalues.web;
 
+import com.soitio.commons.dependency.model.DependencyCheckResponse;
+import com.soitio.commons.dependency.model.Dependent;
 import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
 import com.soitio.finances.objectvalues.application.ObjectValueService;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,6 +56,11 @@ public class ObjectValueController {
     @PostMapping("/top")
     public TopItemByCategoryDto findTopByObjectIdsIn(@RequestBody Set<String> value) {
         return objectValueService.findTopByObjectIdsIn(value);
+    }
+
+    @DeleteMapping
+    public DependencyCheckResponse delete(@RequestBody Set<String> ids) {
+        return objectValueService.delete(Dependent.FINANCES_PERIODICAL, ids);
     }
 
 }

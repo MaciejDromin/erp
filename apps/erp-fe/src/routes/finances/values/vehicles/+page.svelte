@@ -4,6 +4,7 @@
   import type { PageData } from './$types'
   import { ObjectType } from '$lib/finances/types/financialTypes'
   import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
+  import { Services } from '$lib/types/services.ts'
 
   export let data: PageData
 
@@ -18,6 +19,11 @@
     deleteButton: {
       disabled: false,
     },
+    delete: {
+      endpoint: '/finances/object-value',
+      keys: ['finances', 'objectvalues'],
+    },
+    service: Services.FINANCES,
   }
 </script>
 
