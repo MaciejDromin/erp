@@ -28,6 +28,8 @@
       selectedParts.set(part.id, part)
     }
     selectedParts = selectedParts
+    $genericStore.inventory = {}
+    $genericStore.inventory.parts = Array.from(selectedParts.values())
   }
 
   const partSelectedStyles = (

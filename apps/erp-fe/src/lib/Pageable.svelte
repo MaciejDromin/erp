@@ -2,6 +2,7 @@
   import { apiRequest } from './scripts/uiHttpRequests'
   import { HttpMethods } from './types/httpMethods'
   import { onMount } from 'svelte'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   export let endpoint: string
   export let component: any
@@ -30,14 +31,24 @@
     if (page == 0) return false
     return true
   }
+
   const doesHigherPageExists = (page: number, mPage: number): boolean => {
     if (page >= mPage - 1) return false
     return true
   }
+
+  const shouldReRender = () => {
+    if ($genericStore.reload) {
+      fetchData(currentPage, additionalSearch)
+      $genericStore.reload = false
+    }
+  }
+
+  $: $genericStore, shouldReRender()
 </script>
 
 <div class="flex flex-col">
-  <div class="my-3">
+  <div>
     <svelte:component
       this={component}
       {...{ data: data }}
@@ -45,7 +56,7 @@
     />
   </div>
 
-  <div class="join flex mx-auto">
+  <div class="join flex mx-auto my-3">
     <button
       class={`join-item btn disabled:opacity-75 ${!doesLowerPageExists(currentPage) ? 'btn-disable opacity-75' : ''}`}
       on:click|preventDefault={() => fetchData(--currentPage, additionalSearch)}

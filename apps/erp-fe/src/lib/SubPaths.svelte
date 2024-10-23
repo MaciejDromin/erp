@@ -7,8 +7,13 @@
 {#if subPaths.length > 0}
   <ul>
     {#each subPaths as subPath}
-      <li>
-        <a href={subPath.path}>{subPath.name}</a>
+      <li class="flex-nowrap">
+        <a
+          href={subPath.path}
+          class={subPath.subPaths.length <= 0
+            ? 'truncate inline-block'
+            : 'text-slate-100 truncate inline-block'}>{subPath.name}</a
+        >
         <SubPaths subPaths={subPath.subPaths} />
       </li>
     {/each}

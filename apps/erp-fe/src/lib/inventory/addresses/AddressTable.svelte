@@ -28,6 +28,8 @@
       selectedAddresses.set(address.id, address)
     }
     selectedAddresses = selectedAddresses
+    $genericStore.inventory = {}
+    $genericStore.inventory.addresses = Array.from(selectedAddresses.values())
   }
 
   const addressesSelectedStyles = (
@@ -76,9 +78,9 @@
             <td>{address.id}</td>
             <td>{address.addressLine}</td>
             <td>{address.city}</td>
-            <td>{address.country}</td>
-            <td>{address.province}</td>
             <td>{address.postalCode}</td>
+            <td>{address.province}</td>
+            <td>{address.country}</td>
           </tr>
         {/each}
       {/if}

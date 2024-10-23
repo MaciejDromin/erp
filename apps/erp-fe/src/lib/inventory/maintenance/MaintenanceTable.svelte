@@ -30,6 +30,10 @@
       selectedMaintenance.set(maintenance.id, maintenance)
     }
     selectedMaintenance = selectedMaintenance
+    $genericStore.inventory = {}
+    $genericStore.inventory.maintenance = Array.from(
+      selectedMaintenance.values()
+    )
   }
 
   const maintenanceSelectedStyles = (

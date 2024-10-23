@@ -25,4 +25,6 @@ public interface ObjectValueRepository extends JpaRepository<ObjectValue, String
 
     ObjectValue findFirstByObjectIdInOrderByAmountDesc(Set<String> value);
 
+    List<ObjectValue> findAllByObjectIdIn(Set<String> ids);
+
 }

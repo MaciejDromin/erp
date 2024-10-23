@@ -1,5 +1,6 @@
 package com.soitio.inventory.property.domain;
 
+import com.soitio.commons.dependency.Dependencies;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ import com.soitio.inventory.property.information.PropertyInformation;
 @MongoEntity(collection = "Property")
 @ToString
 @EqualsAndHashCode(of = "id")
+@Dependencies(dependent = "Property", dependencies = {"inventory.address"})
 public class Property {
 
     private ObjectId id;

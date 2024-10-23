@@ -1,11 +1,15 @@
 package com.soitio.finances.operationcategories.web;
 
+import com.soitio.commons.dependency.model.DependencyCheckResponse;
+import com.soitio.commons.dependency.model.Dependent;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
 import com.soitio.finances.operationcategories.domain.dto.OperationCategoryCreationDto;
 import com.soitio.finances.operationcategories.domain.dto.OperationCategoryDto;
 import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +32,11 @@ public class OperationCategoryController {
     @PostMapping
     public void create(@RequestBody OperationCategoryCreationDto creation) {
         operationCategoryService.create(creation);
+    }
+
+    @DeleteMapping
+    public DependencyCheckResponse delete(@RequestBody Set<String> ids) {
+        return operationCategoryService.delete(Dependent.FINANCES_CATEGORY, ids);
     }
 
 }

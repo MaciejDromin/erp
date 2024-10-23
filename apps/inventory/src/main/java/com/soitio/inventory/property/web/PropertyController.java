@@ -1,5 +1,8 @@
 package com.soitio.inventory.property.web;
 
+import com.soitio.commons.dependency.model.DependencyCheckResponse;
+import com.soitio.commons.dependency.model.Dependent;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -13,6 +16,7 @@ import com.soitio.inventory.property.domain.dto.PropertyCreationDto;
 import com.soitio.inventory.property.domain.dto.PropertyForListDto;
 
 import java.util.Map;
+import java.util.Set;
 
 @Path("/properties")
 @RequiredArgsConstructor
@@ -40,6 +44,11 @@ public class PropertyController {
     @Path("/object-names")
     public Map<String, String> objectNames(ObjectIdsDto objectNames) {
         return propertyRepository.findAllItemNamesByIds(objectNames.getItemIds());
+    }
+
+    @DELETE
+    public DependencyCheckResponse delete(Set<String> ids) {
+        return propertyRepository.delete(Dependent.INVENTORY_PROPERTY, ids);
     }
 
 }

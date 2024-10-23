@@ -4,6 +4,7 @@
   import ObjectValueTable from '$lib/finances/object-value/ObjectValueTable.svelte'
   import Pageable from '$lib/Pageable.svelte'
   import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
+  import { Services } from '$lib/types/services.ts'
 
   export let data: PageData
 
@@ -18,12 +19,17 @@
     deleteButton: {
       disabled: false,
     },
+    delete: {
+      endpoint: '/finances/object-value',
+      keys: ['finances', 'objectvalues'],
+    },
+    service: Services.FINANCES,
   }
 </script>
 
 <FeatureMenuBar {config} />
 <div id="object-value" class="flex flex-col gap-3 px-10 pt-10">
-  <div class="stats shadow mx-auto my-6">
+  <div class="stats shadow mx-auto">
     <div class="stat">
       <div class="stat-figure text-primary text-4xl">$</div>
       <div class="stat-title">Total Amount</div>

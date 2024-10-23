@@ -1,5 +1,6 @@
 package com.soitio.finances.objectvalues.domain;
 
+import com.soitio.commons.dependency.Dependencies;
 import com.soitio.finances.common.persistence.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ import org.joda.money.Money;
 @NoArgsConstructor
 @SuperBuilder
 @Getter
+@Dependencies(dependent = "ObjectValue", dependencies = {"inventory.item", "inventory.property", "inventory.vehicle"})
 public class ObjectValue extends BaseEntity {
 
     private String objectId;

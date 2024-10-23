@@ -4,12 +4,20 @@ quarkus:
   mongodb:
     connection-string: mongodb://localhost:27017
     database: inventory
-
   rest-client:
-    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
-      url: http://localhost:8080
+    consul-api:
+      url: http://consul.soitio-erp.com:8000/
+      scope: jakarta.inject.Singleton
 
 service-discovery:
   service-name: inventory
   host: localhost
   port: 8082
+
+soitio:
+  service: "http://localhost:8082"
+  dependencies:
+    - com.soitio.inventory.item.domain.InventoryItem
+    - com.soitio.inventory.property.domain.Property
+    - com.soitio.inventory.maintenance.domain.MaintenanceRecord
+    - com.soitio.inventory.part.domain.Part

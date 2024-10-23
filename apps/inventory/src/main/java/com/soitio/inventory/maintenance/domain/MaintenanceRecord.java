@@ -1,5 +1,6 @@
 package com.soitio.inventory.maintenance.domain;
 
+import com.soitio.commons.dependency.Dependencies;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,7 @@ import java.util.List;
 @MongoEntity(collection = "MaintenanceRecord")
 @ToString
 @EqualsAndHashCode(of = "id")
+@Dependencies(dependent = "MaintenanceRecord", dependencies = {"inventory.contractor"})
 public class MaintenanceRecord {
 
     private ObjectId id;

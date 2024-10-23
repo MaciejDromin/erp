@@ -2,6 +2,7 @@
   import MaintenanceTable from '$lib/inventory/maintenance/MaintenanceTable.svelte'
   import Pageable from '$lib/Pageable.svelte'
   import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
+  import { Services } from '$lib/types/services.ts'
 
   let config = {
     title: 'Maintenance',
@@ -14,6 +15,11 @@
     deleteButton: {
       disabled: false,
     },
+    delete: {
+      endpoint: '/maintenance',
+      keys: ['inventory', 'maintenance'],
+    },
+    service: Services.INVENTORY,
   }
 </script>
 

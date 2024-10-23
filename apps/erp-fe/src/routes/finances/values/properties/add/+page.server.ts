@@ -21,7 +21,7 @@ export const actions = {
       HttpMethods.POST,
       body
     )
-    throw redirect(303, '/finances/values/items')
+    throw redirect(303, '/finances/values/properties')
   },
 } satisfies Actions
 

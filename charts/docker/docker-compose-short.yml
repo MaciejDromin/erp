@@ -76,12 +76,6 @@ services:
     depends_on: 
       - rabbit
       - erp-consul
-  planner:
-    image: "erp/planner:latest"
-    depends_on:
-      - erp-consul
-      - erp-mongodb
-    restart: unless-stopped
   dashboard:
     image: "erp/dashboard:latest"
     depends_on:

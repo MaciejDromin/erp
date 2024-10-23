@@ -1,5 +1,8 @@
 package com.soitio.finances.operationcategories.application;
 
+import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.dependency.model.DependencyCheckResponse;
+import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.application.port.OperationCategoryRepository;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
@@ -7,16 +10,21 @@ import com.soitio.finances.operationcategories.domain.QOperationCategory;
 import com.soitio.finances.operationcategories.domain.dto.OperationCategoryCreationDto;
 import com.soitio.finances.operationcategories.domain.dto.OperationCategoryDto;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
+import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-public class OperationCategoryService {
+public class OperationCategoryService extends AbstractDependencyCheckService {
 
     private final OperationCategoryRepository repository;
+
+    public OperationCategoryService(DependencyCheckRequester dependencyCheckRequester,
+                                    OperationCategoryRepository repository) {
+        super(dependencyCheckRequester);
+        this.repository = repository;
+    }
 
     public void create(OperationCategoryCreationDto creation) {
         repository.save(createEntity(creation));
@@ -53,4 +61,8 @@ public class OperationCategoryService {
         return repository.getReferenceById(operationCategory);
     }
 
+    @Override
+    public void deleteByIds(Set<String> collect) {
+        repository.deleteAllById(collect);
+    }
 }

@@ -28,6 +28,8 @@
       selectedCategories.set(category.id, category)
     }
     selectedCategories = selectedCategories
+    $genericStore.inventory = {}
+    $genericStore.inventory.categories = Array.from(selectedCategories.values())
   }
 
   const categorySelectedStyles = (

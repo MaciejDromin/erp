@@ -25,6 +25,11 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 5s
 
+jakarta:
+  persistence:
+    jdbc:
+      url: jdbc:postgresql://erp-pg:5432/finances?useUnicode=yes&characterEncoding=UTF-8
+
 logging:
   level:
     pl:
@@ -40,3 +45,11 @@ service-discovery:
   service-name: finances
   host: finances
   port: 8080
+
+soitio:
+  service: "http://finances:8080"
+  dependencies: >
+    com.soitio.finances.objectvalues.domain.ObjectValue,
+    com.soitio.finances.moneyoperation.domain.MoneyOperation,
+    com.soitio.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperation,
+    com.soitio.finances.plannedexpenses.domain.PlannedExpenses

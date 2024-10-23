@@ -2,6 +2,7 @@
   import Pageable from '$lib/Pageable.svelte'
   import AddressTable from '$lib/inventory/addresses/AddressTable.svelte'
   import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
+  import { Services } from '$lib/types/services.ts'
 
   let config = {
     title: 'Addresses',
@@ -14,6 +15,11 @@
     deleteButton: {
       disabled: false,
     },
+    delete: {
+      endpoint: '/addresses',
+      keys: ['inventory', 'addresses'],
+    },
+    service: Services.INVENTORY,
   }
 </script>
 

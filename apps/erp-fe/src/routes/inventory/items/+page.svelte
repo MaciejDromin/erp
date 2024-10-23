@@ -2,6 +2,7 @@
   import ItemTable from '$lib/inventory/items/ItemTable.svelte'
   import Pageable from '$lib/Pageable.svelte'
   import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
+  import { Services } from '$lib/types/services.ts'
 
   let config = {
     title: 'Items',
@@ -14,6 +15,11 @@
     deleteButton: {
       disabled: false,
     },
+    delete: {
+      endpoint: '/inventory/items',
+      keys: ['inventory', 'items'],
+    },
+    service: Services.INVENTORY,
   }
 </script>
 

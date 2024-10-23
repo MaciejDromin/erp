@@ -7,7 +7,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import com.soitio.selfregister.self.register.quarkus.runtime.domain.dto.RegisterDto;
 
 @Path("/v1/agent/service")
-@RegisterRestClient
+@RegisterRestClient(configKey = "consul-api")
 public interface RegistrationClient {
 
     @PUT
