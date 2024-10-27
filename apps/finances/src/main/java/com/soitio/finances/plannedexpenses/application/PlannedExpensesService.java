@@ -105,7 +105,7 @@ public class PlannedExpensesService extends AbstractDependencyCheckService imple
     }
 
     private PlannedExpenses updateForCompletion(PlannedExpenses plannedExpenses, PlannedExpensesCompletionDto completion) {
-        plannedExpenses.setActualAmount(completion.getActualAmount().getValue());
+        plannedExpenses.setActualAmount(completion.getActualAmount());
         plannedExpenses.setFinalizedDate(LocalDateTime.now(ZoneOffset.UTC));
         plannedExpenses.setPlannedExpensesStatus(PlannedExpensesStatus.COMPLETED);
         return plannedExpenses;

@@ -21,7 +21,9 @@
 
   onDestroy(() => {
     $genericStore.finances = {}
-    $genericStore.finances.plannedexpenses = Array.from(selectedPlannedExpenses.values())
+    $genericStore.finances.plannedexpenses = Array.from(
+      selectedPlannedExpenses.values()
+    )
   })
 
   const updatePlannedExpensesList = (plannedExpense: string) => {
@@ -32,7 +34,9 @@
     }
     selectedPlannedExpenses = selectedPlannedExpenses
     $genericStore.finances = {}
-    $genericStore.finances.plannedexpenses = Array.from(selectedPlannedExpenses.values())
+    $genericStore.finances.plannedexpenses = Array.from(
+      selectedPlannedExpenses.values()
+    )
   }
 
   const plannedExpenseSelectedStyles = (
@@ -50,6 +54,15 @@
     if (!plannedExpenseMap.has(plannedExpenseId)) return 'even:bg-black'
     return 'even:bg-indigo-600'
   }
+
+  const updateAmountStore = () => {
+    if ($genericStore.finances === undefined) {
+      $genericStore.finances = {}
+    }
+    $genericStore.finances.actual = actualAmountByIdMap
+  }
+
+  $: actualAmountByIdMap, updateAmountStore()
 </script>
 
 <div class="overflow-x-auto text-primary-content mx-auto">
@@ -66,7 +79,6 @@
         <th>Planned Month</th>
         <th>Status</th>
         <th>Finalized Date</th>
-        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -103,44 +115,6 @@
                 ? 'No Value'
                 : plannedExpenses.finalizedDate}</td
             >
-            <td>
-              {#if plannedExpenses.plannedExpensesStatus !== 'PLANNED'}
-                No Actions
-              {:else}
-                <div class="flex flex-row gap-3">
-                  <form method="POST" action="?/complete">
-                    <input
-                      name="plannedExpensesId"
-                      class="hidden"
-                      value={plannedExpenses.uuid}
-                      type="text"
-                    />
-                    <input
-                      name="actualAmount"
-                      class="hidden"
-                      bind:value={actualAmountByIdMap[plannedExpenses.uuid]}
-                      type="text"
-                    />
-                    <input
-                      name="currency"
-                      class="hidden"
-                      value={plannedExpenses.plannedAmount.currencyCode}
-                      type="text"
-                    />
-                    <button class="btn btn-primary mx-auto">Complete</button>
-                  </form>
-                  <form method="POST" action="?/abandon">
-                    <input
-                      name="plannedExpensesId"
-                      class="hidden"
-                      value={plannedExpenses.uuid}
-                      type="text"
-                    />
-                    <button class="btn btn-primary mx-auto">Abandon</button>
-                  </form>
-                </div>
-              {/if}
-            </td>
           </tr>
         {/each}
       {/if}

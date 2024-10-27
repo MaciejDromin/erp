@@ -39,6 +39,7 @@
   </div>
   <div class="flex-none">
     <ul class="menu menu-horizontal px-1">
+      <slot />
       <li>
         <button on:click={gotoAdd} class="btn btn-primary mr-3">Add</button>
       </li>

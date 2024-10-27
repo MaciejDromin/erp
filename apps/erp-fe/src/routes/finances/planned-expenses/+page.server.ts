@@ -8,25 +8,26 @@ import { redirect } from '@sveltejs/kit'
 export const actions = {
   abandon: async ({ request }) => {
     const data = await request.formData()
-    await unsecuredExternalApiRequest(
-      FINANCES_URL +
-        `/finances/planned-expenses/${data.get('plannedExpensesId')}/abandon`,
-      HttpMethods.PATCH
-    )
+    const expensesArray = JSON.parse(data.get('plannedExpensesArr'))
+    for (const val of expensesArray) {
+      await unsecuredExternalApiRequest(
+        FINANCES_URL + `/finances/planned-expenses/${val.uuid}/abandon`,
+        HttpMethods.PATCH
+      )
+    }
   },
   complete: async ({ request }) => {
     const data = await request.formData()
-    const body = {
-      actualAmount: {
-        value: data.get('actualAmount'),
-        currencyCode: data.get('currency'),
-      },
+    const expensesMap = JSON.parse(data.get('plannedExpensesMap'))
+    for (const [key, val] of Object.entries(expensesMap)) {
+      const body = {
+        actualAmount: val,
+      }
+      await unsecuredExternalApiRequest(
+        FINANCES_URL + `/finances/planned-expenses/${key}/complete`,
+        HttpMethods.PATCH,
+        body
+      )
     }
-    await unsecuredExternalApiRequest(
-      FINANCES_URL +
-        `/finances/planned-expenses/${data.get('plannedExpensesId')}/complete`,
-      HttpMethods.PATCH,
-      body
-    )
   },
 } satisfies Actions

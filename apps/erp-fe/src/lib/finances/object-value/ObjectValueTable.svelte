@@ -65,7 +65,9 @@
 
   onDestroy(() => {
     $genericStore.finances = {}
-    $genericStore.finances.objectvalues = Array.from(selectedObjectValues.values())
+    $genericStore.finances.objectvalues = Array.from(
+      selectedObjectValues.values()
+    )
   })
 
   const updateObjectValuesList = (objectValue: string) => {
@@ -76,7 +78,9 @@
     }
     selectedObjectValues = selectedObjectValues
     $genericStore.finances = {}
-    $genericStore.finances.objectvalues = Array.from(selectedObjectValues.values())
+    $genericStore.finances.objectvalues = Array.from(
+      selectedObjectValues.values()
+    )
   }
 
   const objectValueSelectedStyles = (
