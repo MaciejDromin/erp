@@ -10,12 +10,17 @@ import com.soitio.inventory.property.address.domain.dto.PropertyAddressCreationD
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressDto;
 
 @Singleton
-public class PropertyAddressRepository extends AbstractDependencyCheckRepo<PropertyAddress> {
+public class PropertyAddressRepository extends AbstractDependencyCheckRepo<PropertyAddress, PropertyAddressDto> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     public PropertyAddressRepository(DependencyCheckRequester dependencyCheckRequester) {
         super(dependencyCheckRequester);
+    }
+
+    @Override
+    public void updateOne(String id, PropertyAddressDto object) {
+        // TODO: Implement
     }
 
     public void create(PropertyAddressCreationDto propertyAddressCreation) {

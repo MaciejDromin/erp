@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Singleton
-public class InventoryItemRepository extends AbstractDependencyCheckRepo<InventoryItem> implements DependencyCheckService {
+public class InventoryItemRepository extends AbstractDependencyCheckRepo<InventoryItem, InventoryItemDto> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "InventoryItem";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
@@ -144,4 +144,8 @@ public class InventoryItemRepository extends AbstractDependencyCheckRepo<Invento
         return new HashSet<>(list("categories in ?1", categoryIds));
     }
 
+    @Override
+    public void updateOne(String id, InventoryItemDto object) {
+        // TODO: Implement
+    }
 }

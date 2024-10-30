@@ -2,6 +2,7 @@ package com.soitio.inventory.vehicle.application;
 
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.vehicle.domain.dto.VehicleDto;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
@@ -19,12 +20,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
+public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle, VehicleDto> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     public VehicleRepository(DependencyCheckRequester dependencyCheckRequester) {
         super(dependencyCheckRequester);
+    }
+
+    @Override
+    public void updateOne(String id, VehicleDto object) {
+        // TODO: Finish
     }
 
     public PageDto<VehicleForListDto> getForList(UriInfo uriInfo) {

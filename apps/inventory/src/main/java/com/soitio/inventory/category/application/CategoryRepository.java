@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Slf4j
 @Singleton
-public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
+public class CategoryRepository extends AbstractDependencyCheckRepo<Category, CategoryDto> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 

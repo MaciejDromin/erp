@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepository<T> {
+public abstract class AbstractDependencyCheckRepo<T, E> implements PanacheMongoRepository<T> {
 
     private final DependencyCheckRequester dependencyCheckRequester;
 
@@ -39,5 +39,17 @@ public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepo
     private void deleteByIds(Set<ObjectId> diff) {
         delete("_id in ?1", diff);
     }
+
+    public DependencyCheckResponse update(Dependent dependent, String id, E object) {
+        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, Set.of(id), Action.EDIT);
+
+        if (response.isFailed()) return response;
+
+        updateOne(id, object);
+
+        return response;
+    }
+
+    public abstract void updateOne(String id, E object);
 
 }

@@ -4,6 +4,7 @@ import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.property.domain.dto.PropertyDto;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
@@ -24,7 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class PropertyRepository extends AbstractDependencyCheckRepo<Property> implements DependencyCheckService {
+public class PropertyRepository extends AbstractDependencyCheckRepo<Property, PropertyDto> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "Property";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
@@ -131,5 +132,10 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property> im
                 .stream()
                 .map(p -> new DependencyCheckResult(p.getAddressId().toString(), true, "Property Adress with id '%s' is in use".formatted(p.getAddressId())))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void updateOne(String id, PropertyDto object) {
+        // TODO: Implement
     }
 }

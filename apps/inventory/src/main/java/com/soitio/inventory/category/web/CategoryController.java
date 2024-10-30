@@ -47,7 +47,7 @@ public class CategoryController {
     @PATCH
     @Path("/{categoryId}")
     public void updateSingleCategory(@PathParam("categoryId") String categoryId, CategoryDto category) {
-        categoryRepository.updateOne(categoryId, category);
+        categoryRepository.update(Dependent.INVENTORY_CATEGORY, categoryId, category);
     }
 
 }

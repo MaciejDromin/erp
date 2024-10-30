@@ -4,6 +4,7 @@ import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.maintenance.domain.dto.MaintenanceRecordDto;
 import com.soitio.inventory.maintenance.domain.dto.PartQuantity;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
@@ -21,13 +22,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class MaintenanceRepository extends AbstractDependencyCheckRepo<MaintenanceRecord>  implements DependencyCheckService {
+public class MaintenanceRepository extends AbstractDependencyCheckRepo<MaintenanceRecord, MaintenanceRecordDto>  implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "MaintenanceRecord";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     public MaintenanceRepository(DependencyCheckRequester dependencyCheckRequester) {
         super(dependencyCheckRequester);
+    }
+
+    @Override
+    public void updateOne(String id, MaintenanceRecordDto object) {
+        // TODO: Implement
     }
 
     public void create(MaintenanceCreationDto maintenanceCreation) {

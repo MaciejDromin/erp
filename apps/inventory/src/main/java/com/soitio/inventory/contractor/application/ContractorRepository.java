@@ -18,12 +18,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor> {
+public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor, ContractorDto> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     public ContractorRepository(DependencyCheckRequester dependencyCheckRequester) {
         super(dependencyCheckRequester);
+    }
+
+    @Override
+    public void updateOne(String id, ContractorDto object) {
+        // TODO: Implement
     }
 
     public PageDto<ContractorDto> getContractors(UriInfo uriInfo) {

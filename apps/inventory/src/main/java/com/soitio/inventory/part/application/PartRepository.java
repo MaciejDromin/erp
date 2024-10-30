@@ -19,13 +19,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class PartRepository extends AbstractDependencyCheckRepo<Part> implements DependencyCheckService {
+public class PartRepository extends AbstractDependencyCheckRepo<Part, PartDto> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "Part";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     public PartRepository(DependencyCheckRequester dependencyCheckRequester) {
         super(dependencyCheckRequester);
+    }
+
+    @Override
+    public void updateOne(String id, PartDto object) {
+        // TODO: Implement
     }
 
     public PageDto<PartDto> getParts(UriInfo uriInfo) {
