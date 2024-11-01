@@ -27,7 +27,11 @@ public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
 
     @Override
     protected Category mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        return Category.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .name(fields.get("name").getStrValue())
+                .build();
     }
 
     public PageDto<CategoryDto> findAll(UriInfo uriInfo) {
