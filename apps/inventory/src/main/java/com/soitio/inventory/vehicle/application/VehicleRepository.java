@@ -1,8 +1,9 @@
 package com.soitio.inventory.vehicle.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
-import com.soitio.inventory.vehicle.domain.dto.VehicleDto;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
@@ -20,17 +21,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle, VehicleDto> {
+public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    public VehicleRepository(DependencyCheckRequester dependencyCheckRequester) {
-        super(dependencyCheckRequester);
-    }
-
-    @Override
-    public void updateOne(String id, VehicleDto object) {
-        // TODO: Finish
+    public VehicleRepository(ObjectMapper mapper,
+                             DependencyCheckRequester dependencyCheckRequester) {
+        super(mapper, dependencyCheckRequester);
     }
 
     public PageDto<VehicleForListDto> getForList(UriInfo uriInfo) {
@@ -110,4 +107,8 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle, Vehi
         return new HashSet<>(list("_id in ?1", itemIds));
     }
 
+    @Override
+    protected Vehicle mapToEntity(MergePatch object) {
+        return null;
+    }
 }

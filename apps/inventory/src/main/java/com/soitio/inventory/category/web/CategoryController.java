@@ -1,5 +1,6 @@
 package com.soitio.inventory.category.web;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.Dependent;
 import com.soitio.commons.models.dto.PageDto;
@@ -46,8 +47,8 @@ public class CategoryController {
 
     @PATCH
     @Path("/{categoryId}")
-    public void updateSingleCategory(@PathParam("categoryId") String categoryId, CategoryDto category) {
-        categoryRepository.update(Dependent.INVENTORY_CATEGORY, categoryId, category);
+    public void updateSingleCategory(@PathParam("categoryId") String categoryId, JsonNode node) {
+        categoryRepository.update(Dependent.INVENTORY_CATEGORY, categoryId, node);
     }
 
 }

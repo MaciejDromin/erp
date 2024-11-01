@@ -1,8 +1,11 @@
 package com.soitio.inventory.item.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
+import com.soitio.commons.models.inventory.ItemUnit;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
@@ -25,16 +28,17 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Singleton
-public class InventoryItemRepository extends AbstractDependencyCheckRepo<InventoryItem, InventoryItemDto> implements DependencyCheckService {
+public class InventoryItemRepository extends AbstractDependencyCheckRepo<InventoryItem> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "InventoryItem";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     private final CategoryRepository categoryRepository;
 
-    public InventoryItemRepository(DependencyCheckRequester dependencyCheckRequester,
+    public InventoryItemRepository(ObjectMapper mapper,
+                                   DependencyCheckRequester dependencyCheckRequester,
                                    CategoryRepository categoryRepository) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.categoryRepository = categoryRepository;
     }
 
@@ -145,7 +149,16 @@ public class InventoryItemRepository extends AbstractDependencyCheckRepo<Invento
     }
 
     @Override
-    public void updateOne(String id, InventoryItemDto object) {
-        // TODO: Implement
+    protected InventoryItem mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        return InventoryItem.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .name(fields.get("name").getStrValue())
+                .unit(ItemUnit.valueOf(fields.get("unit").getStrValue()))
+                .quantity(fields.get("quantity").getIntValue())
+                .categories(fields.get("categories").getListValue().stream()
+                        .map(mp -> new ObjectId(mp.getStrValue()))
+                        .collect(Collectors.toSet()))
+                .build();
     }
 }

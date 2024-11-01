@@ -1,10 +1,11 @@
 package com.soitio.inventory.property.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
-import com.soitio.inventory.property.domain.dto.PropertyDto;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
@@ -25,16 +26,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class PropertyRepository extends AbstractDependencyCheckRepo<Property, PropertyDto> implements DependencyCheckService {
+public class PropertyRepository extends AbstractDependencyCheckRepo<Property> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "Property";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
     private final PropertyInformationCreationProvider propertyProvider;
 
-    public PropertyRepository(DependencyCheckRequester dependencyCheckRequester,
+    public PropertyRepository(ObjectMapper mapper,
+                              DependencyCheckRequester dependencyCheckRequester,
                               PropertyInformationCreationProvider propertyProvider) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.propertyProvider = propertyProvider;
     }
 
@@ -135,7 +137,7 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property, Pr
     }
 
     @Override
-    public void updateOne(String id, PropertyDto object) {
-        // TODO: Implement
+    protected Property mapToEntity(MergePatch object) {
+        return null;
     }
 }

@@ -1,7 +1,6 @@
 package com.soitio.finances.operationcategories.application;
 
 import com.soitio.commons.dependency.DependencyCheckRequester;
-import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.application.port.OperationCategoryRepository;
@@ -16,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OperationCategoryService extends AbstractDependencyCheckService {
+public class OperationCategoryService extends AbstractDependencyCheckService { //<OperationCategory> {
 
     private final OperationCategoryRepository repository;
 
@@ -65,4 +64,5 @@ public class OperationCategoryService extends AbstractDependencyCheckService {
     public void deleteByIds(Set<String> collect) {
         repository.deleteAllById(collect);
     }
+
 }

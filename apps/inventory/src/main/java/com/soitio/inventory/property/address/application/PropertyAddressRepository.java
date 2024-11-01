@@ -1,6 +1,8 @@
 package com.soitio.inventory.property.address.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
@@ -10,17 +12,13 @@ import com.soitio.inventory.property.address.domain.dto.PropertyAddressCreationD
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressDto;
 
 @Singleton
-public class PropertyAddressRepository extends AbstractDependencyCheckRepo<PropertyAddress, PropertyAddressDto> {
+public class PropertyAddressRepository extends AbstractDependencyCheckRepo<PropertyAddress> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    public PropertyAddressRepository(DependencyCheckRequester dependencyCheckRequester) {
-        super(dependencyCheckRequester);
-    }
-
-    @Override
-    public void updateOne(String id, PropertyAddressDto object) {
-        // TODO: Implement
+    public PropertyAddressRepository(ObjectMapper mapper,
+                                     DependencyCheckRequester dependencyCheckRequester) {
+        super(mapper, dependencyCheckRequester);
     }
 
     public void create(PropertyAddressCreationDto propertyAddressCreation) {
@@ -59,4 +57,8 @@ public class PropertyAddressRepository extends AbstractDependencyCheckRepo<Prope
                 .build();
     }
 
+    @Override
+    protected PropertyAddress mapToEntity(MergePatch object) {
+        return null;
+    }
 }

@@ -1,8 +1,10 @@
 package com.soitio.inventory.part.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
@@ -19,18 +21,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class PartRepository extends AbstractDependencyCheckRepo<Part, PartDto> implements DependencyCheckService {
+public class PartRepository extends AbstractDependencyCheckRepo<Part> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "Part";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    public PartRepository(DependencyCheckRequester dependencyCheckRequester) {
-        super(dependencyCheckRequester);
-    }
-
-    @Override
-    public void updateOne(String id, PartDto object) {
-        // TODO: Implement
+    public PartRepository(ObjectMapper mapper,
+                          DependencyCheckRequester dependencyCheckRequester) {
+        super(mapper, dependencyCheckRequester);
     }
 
     public PageDto<PartDto> getParts(UriInfo uriInfo) {
@@ -102,5 +100,10 @@ public class PartRepository extends AbstractDependencyCheckRepo<Part, PartDto> i
                 .stream()
                 .map(p -> new DependencyCheckResult(p.getManufacturerId().toString(), true, "Contractor with id '%s' is in use!".formatted(p.getManufacturerId())))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    protected Part mapToEntity(MergePatch object) {
+        return null;
     }
 }

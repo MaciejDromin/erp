@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class MergePatch {
 
-    private static final MergePatch NULL;
+    public static final MergePatch NULL;
 
     static {
         MergePatch empty = new MergePatch();

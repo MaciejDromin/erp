@@ -1,6 +1,8 @@
 package com.soitio.inventory.contractor.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
@@ -18,17 +20,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor, ContractorDto> {
+public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    public ContractorRepository(DependencyCheckRequester dependencyCheckRequester) {
-        super(dependencyCheckRequester);
-    }
-
-    @Override
-    public void updateOne(String id, ContractorDto object) {
-        // TODO: Implement
+    public ContractorRepository(ObjectMapper mapper,
+                                DependencyCheckRequester dependencyCheckRequester) {
+        super(mapper, dependencyCheckRequester);
     }
 
     public PageDto<ContractorDto> getContractors(UriInfo uriInfo) {
@@ -90,4 +88,8 @@ public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor
                 contactInformation.getWebsite());
     }
 
+    @Override
+    protected Contractor mapToEntity(MergePatch object) {
+        return null;
+    }
 }

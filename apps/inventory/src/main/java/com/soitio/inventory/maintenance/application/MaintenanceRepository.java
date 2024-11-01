@@ -1,10 +1,11 @@
 package com.soitio.inventory.maintenance.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
-import com.soitio.inventory.maintenance.domain.dto.MaintenanceRecordDto;
 import com.soitio.inventory.maintenance.domain.dto.PartQuantity;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
@@ -22,18 +23,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class MaintenanceRepository extends AbstractDependencyCheckRepo<MaintenanceRecord, MaintenanceRecordDto>  implements DependencyCheckService {
+public class MaintenanceRepository extends AbstractDependencyCheckRepo<MaintenanceRecord>  implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "MaintenanceRecord";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    public MaintenanceRepository(DependencyCheckRequester dependencyCheckRequester) {
-        super(dependencyCheckRequester);
-    }
-
-    @Override
-    public void updateOne(String id, MaintenanceRecordDto object) {
-        // TODO: Implement
+    public MaintenanceRepository(ObjectMapper mapper,
+                                 DependencyCheckRequester dependencyCheckRequester) {
+        super(mapper, dependencyCheckRequester);
     }
 
     public void create(MaintenanceCreationDto maintenanceCreation) {
@@ -111,5 +108,10 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
 
     private Set<MaintenanceRecord> findAllByContractorIdIn(Set<ObjectId> set) {
         return new HashSet<>(list("parts.id in ?1", set));
+    }
+
+    @Override
+    protected MaintenanceRecord mapToEntity(MergePatch object) {
+        return null;
     }
 }

@@ -34,4 +34,18 @@ public abstract class AbstractDependencyCheckService {
 
     public abstract void deleteByIds(Set<String> collect);
 
+    public <T> DependencyCheckResponse update(Dependent dependent, String id, T object) {
+        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, Set.of(id), Action.EDIT);
+
+        if (response.isFailed()) return response;
+
+        updateOne(id, object);
+
+        return response;
+    }
+
+    public <T> void updateOne(String id, T object) {
+        // TMP
+    }
+
 }
