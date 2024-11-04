@@ -4,6 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.vehicle.domain.enums.BodyStyle;
+import com.soitio.inventory.vehicle.domain.enums.DriveTrain;
+import com.soitio.inventory.vehicle.domain.enums.FuelType;
+import com.soitio.inventory.vehicle.domain.enums.Make;
+import com.soitio.inventory.vehicle.domain.enums.Transmission;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
@@ -109,6 +114,21 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
 
     @Override
     protected Vehicle mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        return Vehicle.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .name(fields.get("name").getStrValue())
+                .year(fields.get("year").getIntValue())
+                .odometer(fields.get("odometer").getIntValue())
+                .bodyStyle(BodyStyle.valueOf(fields.get("bodyStyle").getStrValue()))
+                .make(Make.valueOf(fields.get("make").getStrValue()))
+                .model(fields.get("model").getStrValue())
+                .fuelType(FuelType.valueOf(fields.get("fuelType").getStrValue()))
+                .driveTrain(DriveTrain.valueOf(fields.get("driveTrain").getStrValue()))
+                .transmission(Transmission.valueOf(fields.get("transmission").getStrValue()))
+                .engineType(fields.get("engineType").getStrValue())
+                .vin(fields.get("vin").getStrValue())
+                .registrationPlate(fields.get("registrationPlate").getStrValue())
+                .build();
     }
 }

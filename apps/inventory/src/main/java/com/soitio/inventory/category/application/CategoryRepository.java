@@ -72,9 +72,4 @@ public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
         return convert(findById(new ObjectId(categoryId)));
     }
 
-    public void updateOne(String categoryId, CategoryDto category) {
-        var categoryOb = findById(new ObjectId(categoryId));
-        categoryOb.setName(category.getName());
-        update(categoryOb);
-    }
 }

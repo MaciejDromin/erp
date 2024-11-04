@@ -90,6 +90,16 @@ public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor
 
     @Override
     protected Contractor mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        var contactInfo = fields.get("contactInformation").getObjectValue();
+        return Contractor.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .name(fields.get("name").getStrValue())
+                .contactInformation(ContactInformation.builder()
+                        .phoneNumber(contactInfo.get("phoneNumber").getStrValue())
+                        .email(contactInfo.get("email").getStrValue())
+                        .website(contactInfo.get("website").getStrValue())
+                        .build())
+                .build();
     }
 }

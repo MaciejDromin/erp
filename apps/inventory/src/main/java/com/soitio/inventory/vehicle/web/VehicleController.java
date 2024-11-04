@@ -1,11 +1,14 @@
 package com.soitio.inventory.vehicle.web;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.Dependent;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +50,13 @@ public class VehicleController {
 
     @DELETE
     public DependencyCheckResponse delete(Set<String> ids) {
-        return vehicleRepository.delete(Dependent.INVENTORY_ITEM, ids);
+        return vehicleRepository.delete(Dependent.INVENTORY_VEHICLE, ids);
+    }
+
+    @PATCH
+    @Path("/{vehicleId}")
+    public void updateSingleVehicle(@PathParam("vehicleId") String vehicleId, JsonNode node) {
+        vehicleRepository.update(Dependent.INVENTORY_VEHICLE, vehicleId, node);
     }
 
 }

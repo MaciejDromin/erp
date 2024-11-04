@@ -104,6 +104,12 @@ public class PartRepository extends AbstractDependencyCheckRepo<Part> implements
 
     @Override
     protected Part mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        return Part.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .name(fields.get("name").getStrValue())
+                .partNumber(fields.get("partNumber").getStrValue())
+                .manufacturerId(new ObjectId(fields.get("manufacturerId").getStrValue()))
+                .build();
     }
 }

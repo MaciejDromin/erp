@@ -5,6 +5,7 @@ import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
+import com.soitio.inventory.commons.DateUtils;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import com.soitio.inventory.maintenance.domain.dto.PartQuantity;
 import io.quarkus.mongodb.panache.PanacheQuery;
@@ -112,6 +113,17 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
 
     @Override
     protected MaintenanceRecord mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        return MaintenanceRecord.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .date(DateUtils.fromString(fields.get("date").getStrValue()))
+                .odometer(fields.get("odometer").getIntValue())
+                .contractorId(new ObjectId(fields.get("contractorId").getStrValue()))
+                .parts(fields.get("parts").getListValue().stream()
+                        .map(MergePatch::getObjectValue)
+                        .map(f -> new PartQuantity(new ObjectId(f.get("id").getStrValue()),
+                                f.get("quantity").getIntValue()))
+                        .toList())
+                .build();
     }
 }

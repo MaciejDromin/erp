@@ -138,6 +138,14 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property> im
 
     @Override
     protected Property mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        return Property.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .name(fields.get("name").getStrValue())
+                .uniqueIdentifier(fields.get("uniqueIdentifier").getStrValue())
+                .addressId(new ObjectId(fields.get("addressId").getStrValue()))
+                .landRegister(fields.get("landRegister").getStrValue())
+                // .propertyInformation() TODO: NOT SUPPORTED NOW
+                .build();
     }
 }
