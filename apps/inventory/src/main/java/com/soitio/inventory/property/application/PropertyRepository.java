@@ -6,6 +6,7 @@ import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.property.domain.dto.PropertyDto;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
@@ -147,5 +148,14 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property> im
                 .landRegister(fields.get("landRegister").getStrValue())
                 // .propertyInformation() TODO: NOT SUPPORTED NOW
                 .build();
+    }
+
+    public PropertyDto getProperty(String id) {
+        return toDto(findById(new ObjectId(id)));
+    }
+
+    private PropertyDto toDto(Property byId) {
+        // TODO: FINISH
+        return null;
     }
 }

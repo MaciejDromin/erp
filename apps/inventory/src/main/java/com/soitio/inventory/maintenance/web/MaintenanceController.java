@@ -3,6 +3,7 @@ package com.soitio.inventory.maintenance.web;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.Dependent;
+import com.soitio.inventory.maintenance.domain.dto.MaintenanceRecordDto;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
@@ -33,6 +34,12 @@ public class MaintenanceController {
     @GET
     public PageDto<MaintenanceForListDto> getMaintenance(@Context UriInfo uriInfo) {
         return maintenanceRepository.getForList(uriInfo);
+    }
+
+    @GET
+    @Path("/{maintenanceId}")
+    public MaintenanceRecordDto getSingleMaintenance(@PathParam("maintenanceId") String id) {
+        return maintenanceRepository.getMaintenance(id);
     }
 
     @DELETE

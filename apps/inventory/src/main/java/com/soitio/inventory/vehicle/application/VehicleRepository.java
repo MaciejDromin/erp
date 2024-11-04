@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.vehicle.domain.dto.VehicleDto;
 import com.soitio.inventory.vehicle.domain.enums.BodyStyle;
 import com.soitio.inventory.vehicle.domain.enums.DriveTrain;
 import com.soitio.inventory.vehicle.domain.enums.FuelType;
@@ -130,5 +131,14 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
                 .vin(fields.get("vin").getStrValue())
                 .registrationPlate(fields.get("registrationPlate").getStrValue())
                 .build();
+    }
+
+    public VehicleDto getVehicle(String id) {
+        return toDto(findById(new ObjectId(id)));
+    }
+
+    private VehicleDto toDto(Vehicle byId) {
+        // TODO: FINISH
+        return null;
     }
 }

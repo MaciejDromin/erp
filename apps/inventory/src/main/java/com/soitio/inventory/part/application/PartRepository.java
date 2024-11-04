@@ -112,4 +112,8 @@ public class PartRepository extends AbstractDependencyCheckRepo<Part> implements
                 .manufacturerId(new ObjectId(fields.get("manufacturerId").getStrValue()))
                 .build();
     }
+
+    public PartDto getPart(String id) {
+        return to(findById(new ObjectId(id)));
+    }
 }

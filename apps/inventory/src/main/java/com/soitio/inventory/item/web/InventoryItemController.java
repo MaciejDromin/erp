@@ -36,6 +36,12 @@ public class InventoryItemController {
         return inventoryItemRepository.listAllItems(uriInfo);
     }
 
+    @GET
+    @Path("/{itemId}")
+    public InventoryItemDto getItem(@PathParam("itemId") String itemId) {
+        return inventoryItemRepository.getItem(itemId);
+    }
+
     @POST
     public void createItem(ItemCreationDto itemCreation) {
         inventoryItemRepository.create(itemCreation);

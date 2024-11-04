@@ -30,6 +30,12 @@ public class PartController {
         return partRepository.getParts(uriInfo);
     }
 
+    @GET
+    @Path("/{partId}")
+    public PartDto getPart(@PathParam("partId") String id) {
+        return partRepository.getPart(id);
+    }
+
     @POST
     public void createPart(PartCreationDto partCreation) {
         partRepository.create(partCreation);

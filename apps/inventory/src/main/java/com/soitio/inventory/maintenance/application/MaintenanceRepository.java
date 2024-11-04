@@ -7,6 +7,7 @@ import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.utils.DateUtils;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.maintenance.domain.dto.MaintenanceRecordDto;
 import com.soitio.inventory.maintenance.domain.dto.PartQuantity;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
@@ -72,6 +73,11 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
                 .build();
     }
 
+    private MaintenanceRecordDto toDto(MaintenanceRecord maintenanceRecord) {
+        // TODO: FINISH
+        return null;
+    }
+
     private MaintenanceRecord from(MaintenanceCreationDto maintenanceCreation) {
         return MaintenanceRecord.builder()
                 .date(maintenanceCreation.getDate())
@@ -125,5 +131,9 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
                                 f.get("quantity").getIntValue()))
                         .toList())
                 .build();
+    }
+
+    public MaintenanceRecordDto getMaintenance(String id) {
+        return toDto(findById(new ObjectId(id)));
     }
 }

@@ -3,6 +3,7 @@ package com.soitio.inventory.property.web;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.Dependent;
+import com.soitio.inventory.property.domain.dto.PropertyDto;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
@@ -30,6 +31,12 @@ public class PropertyController {
     @GET
     public PageDto<PropertyForListDto> getProperties(@Context UriInfo uriInfo) {
         return propertyRepository.getForList(uriInfo);
+    }
+
+    @GET
+    @Path("/{propertyId}")
+    public PropertyDto getProperty(@PathParam("propertyId") String id) {
+        return propertyRepository.getProperty(id);
     }
 
     @POST

@@ -161,4 +161,8 @@ public class InventoryItemRepository extends AbstractDependencyCheckRepo<Invento
                         .collect(Collectors.toSet()))
                 .build();
     }
+
+    public InventoryItemDto getItem(String itemId) {
+        return convert(findById(new ObjectId(itemId)));
+    }
 }

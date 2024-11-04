@@ -102,4 +102,8 @@ public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor
                         .build())
                 .build();
     }
+
+    public ContractorDto getContractor(String contractorId) {
+        return to(findById(new ObjectId(contractorId)));
+    }
 }

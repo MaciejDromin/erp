@@ -30,6 +30,12 @@ public class ContractorController {
         return contractorRepository.getContractors(uriInfo);
     }
 
+    @GET
+    @Path("/{contractorId}")
+    public ContractorDto getContractor(@PathParam("contractorId") String contractorId) {
+        return contractorRepository.getContractor(contractorId);
+    }
+
     @POST
     public void createContractor(ContractorCreationDto contractorCreation) {
         contractorRepository.create(contractorCreation);

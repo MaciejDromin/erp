@@ -3,6 +3,7 @@ package com.soitio.inventory.vehicle.web;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.Dependent;
+import com.soitio.inventory.vehicle.domain.dto.VehicleDto;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
@@ -27,12 +28,18 @@ public class VehicleController {
     private final VehicleRepository vehicleRepository;
 
     @GET
-    public PageDto<VehicleForListDto> getProperties(@Context UriInfo uriInfo) {
+    public PageDto<VehicleForListDto> getVehicles(@Context UriInfo uriInfo) {
         return vehicleRepository.getForList(uriInfo);
     }
 
+    @GET
+    @Path("/{vehicleId}")
+    public VehicleDto getVehicle(@PathParam("vehicleId") String id) {
+        return vehicleRepository.getVehicle(id);
+    }
+
     @POST
-    public void createProperty(VehicleCreationDto vehicleCreation) {
+    public void createVehicle(VehicleCreationDto vehicleCreation) {
         vehicleRepository.create(vehicleCreation);
     }
 
