@@ -40,6 +40,11 @@ public class ObjectValueController {
         return objectValueService.getPage(pageable, objectType, objectIds);
     }
 
+    @GetMapping("/{objectValueId}")
+    public ObjectValueDto getObjectValue(@PathVariable("objectValueId") String id) {
+        return objectValueService.getObjectValue(id);
+    }
+
     @PostMapping
     public void create(@RequestBody ObjectValueCreationDto creation) {
         objectValueService.create(creation);

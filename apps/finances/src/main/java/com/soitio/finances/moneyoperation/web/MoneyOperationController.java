@@ -36,6 +36,11 @@ public class MoneyOperationController {
         return operationService.getPage(pageable);
     }
 
+    @GetMapping("/{moneyOperationId}")
+    public MoneyOperationDto getMoneyOperation(@PathVariable("moneyOperationId") String id) {
+        return operationService.getMoneyOperation(id);
+    }
+
     @PostMapping
     public void registerMoneyOperation(@RequestBody MoneyOperationCreationDto creation) {
         operationService.create(creation);

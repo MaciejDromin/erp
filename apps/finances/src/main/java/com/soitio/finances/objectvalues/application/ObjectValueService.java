@@ -163,4 +163,8 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
     protected void updateEntity(ObjectValue entity) {
         objectValueRepository.save(entity);
     }
+
+    public ObjectValueDto getObjectValue(String id) {
+        return from(findById(id));
+    }
 }

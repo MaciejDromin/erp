@@ -33,6 +33,11 @@ public class PlannedExpensesController {
         return service.getAll(pageable);
     }
 
+    @GetMapping("/{plannedExpensesId}")
+    public PlannedExpensesDto getPlannedExpense(@PathVariable("plannedExpenseId") String id) {
+        return service.getPlannedExpense(id);
+    }
+
     @PostMapping
     public void create(@RequestBody PlannedExpensesCreationDto creation) {
         service.create(creation);

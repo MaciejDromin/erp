@@ -32,6 +32,11 @@ public class OperationCategoryController {
         return operationCategoryService.getPage(queryParams);
     }
 
+    @GetMapping("/{operationCategoryId}")
+    public OperationCategoryDto getOperationCategory(@PathVariable("operationCategoryId") String id) {
+        return operationCategoryService.getOperationCategory(id);
+    }
+
     @PostMapping
     public void create(@RequestBody OperationCategoryCreationDto creation) {
         operationCategoryService.create(creation);

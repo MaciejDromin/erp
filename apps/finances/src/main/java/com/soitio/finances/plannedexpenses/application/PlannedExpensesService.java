@@ -175,4 +175,8 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
     protected void updateEntity(PlannedExpenses entity) {
         repository.save(entity);
     }
+
+    public PlannedExpensesDto getPlannedExpense(String id) {
+        return convertToDto(findById(id));
+    }
 }

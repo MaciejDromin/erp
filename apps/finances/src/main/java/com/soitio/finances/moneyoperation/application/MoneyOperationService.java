@@ -187,4 +187,8 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
     protected void updateEntity(MoneyOperation entity) {
         repository.save(entity);
     }
+
+    public MoneyOperationDto getMoneyOperation(String id) {
+        return from(findById(id));
+    }
 }
