@@ -34,6 +34,8 @@
       config.editButton.url = `/inventory/categories/${$genericStore.inventory.categories[0].id}/edit`
       config.editButton.disabled = false
       config = config
+    } else {
+      config.editButton.disabled = true
     }
   }
 
