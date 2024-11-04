@@ -44,10 +44,7 @@ public class OperationCategoryController {
 
     @PatchMapping("/{categoryId}")
     public void update(@PathVariable("categoryId") String id, @RequestBody JsonNode node) {
-        if (node != null) {
-
-        }
-//        operationCategoryService.update(Dependent.FINANCES_CATEGORY, id, edit);
+        operationCategoryService.update(Dependent.FINANCES_CATEGORY, id, node);
     }
 
 }

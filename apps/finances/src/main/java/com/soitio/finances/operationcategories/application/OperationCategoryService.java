@@ -1,6 +1,8 @@
 package com.soitio.finances.operationcategories.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.application.port.OperationCategoryRepository;
@@ -15,13 +17,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OperationCategoryService extends AbstractDependencyCheckService { //<OperationCategory> {
+public class OperationCategoryService extends AbstractDependencyCheckService<OperationCategory> {
 
     private final OperationCategoryRepository repository;
 
-    public OperationCategoryService(DependencyCheckRequester dependencyCheckRequester,
+    public OperationCategoryService(ObjectMapper mapper,
+                                    DependencyCheckRequester dependencyCheckRequester,
                                     OperationCategoryRepository repository) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.repository = repository;
     }
 
@@ -63,6 +66,21 @@ public class OperationCategoryService extends AbstractDependencyCheckService { /
     @Override
     public void deleteByIds(Set<String> collect) {
         repository.deleteAllById(collect);
+    }
+
+    @Override
+    protected OperationCategory findById(String id) {
+        return null;
+    }
+
+    @Override
+    protected OperationCategory mapToEntity(MergePatch object) {
+        return null;
+    }
+
+    @Override
+    protected void updateEntity(OperationCategory entity) {
+
     }
 
 }

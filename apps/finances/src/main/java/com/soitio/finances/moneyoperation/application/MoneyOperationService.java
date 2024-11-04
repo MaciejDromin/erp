@@ -1,8 +1,10 @@
 package com.soitio.finances.moneyoperation.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.application.port.MoneyOperationRepository;
@@ -27,16 +29,17 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class MoneyOperationService extends AbstractDependencyCheckService implements DependencyCheckService {
+public class MoneyOperationService extends AbstractDependencyCheckService<MoneyOperation> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "MoneyOperation";
     private final OperationCategoryService operationCategoryService;
     private final MoneyOperationRepository repository;
 
-    public MoneyOperationService(DependencyCheckRequester dependencyCheckRequester,
+    public MoneyOperationService(ObjectMapper mapper,
+                                 DependencyCheckRequester dependencyCheckRequester,
                                  OperationCategoryService operationCategoryService,
                                  MoneyOperationRepository repository) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.operationCategoryService = operationCategoryService;
         this.repository = repository;
     }
@@ -150,5 +153,20 @@ public class MoneyOperationService extends AbstractDependencyCheckService implem
     @Override
     public void deleteByIds(Set<String> collect) {
         repository.deleteAllById(collect);
+    }
+
+    @Override
+    protected MoneyOperation findById(String id) {
+        return null;
+    }
+
+    @Override
+    protected MoneyOperation mapToEntity(MergePatch object) {
+        return null;
+    }
+
+    @Override
+    protected void updateEntity(MoneyOperation entity) {
+
     }
 }

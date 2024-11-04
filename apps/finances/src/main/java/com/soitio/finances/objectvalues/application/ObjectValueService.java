@@ -1,8 +1,10 @@
 package com.soitio.finances.objectvalues.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
@@ -30,17 +32,18 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class ObjectValueService extends AbstractDependencyCheckService implements DependencyCheckService {
+public class ObjectValueService extends AbstractDependencyCheckService<ObjectValue> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "ObjectValue";
 
     private final ObjectValueRepository objectValueRepository;
     private final CurrencyService currencyService;
 
-    public ObjectValueService(DependencyCheckRequester dependencyCheckRequester,
+    public ObjectValueService(ObjectMapper mapper,
+                              DependencyCheckRequester dependencyCheckRequester,
                               ObjectValueRepository objectValueRepository,
                               CurrencyService currencyService) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.objectValueRepository = objectValueRepository;
         this.currencyService = currencyService;
     }
@@ -138,5 +141,20 @@ public class ObjectValueService extends AbstractDependencyCheckService implement
     @Override
     public void deleteByIds(Set<String> collect) {
         objectValueRepository.deleteAllById(collect);
+    }
+
+    @Override
+    protected ObjectValue findById(String id) {
+        return null;
+    }
+
+    @Override
+    protected ObjectValue mapToEntity(MergePatch object) {
+        return null;
+    }
+
+    @Override
+    protected void updateEntity(ObjectValue entity) {
+
     }
 }

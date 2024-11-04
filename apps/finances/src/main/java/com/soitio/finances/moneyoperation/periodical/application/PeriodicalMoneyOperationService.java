@@ -1,8 +1,10 @@
 package com.soitio.finances.moneyoperation.periodical.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.periodical.application.port.PeriodicalMoneyOperationRepository;
@@ -22,16 +24,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PeriodicalMoneyOperationService extends AbstractDependencyCheckService implements DependencyCheckService {
+public class PeriodicalMoneyOperationService extends AbstractDependencyCheckService<PeriodicalMoneyOperation> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "PeriodicalMoneyOperation";
     private final OperationCategoryService operationCategoryService;
     private final PeriodicalMoneyOperationRepository repository;
 
-    public PeriodicalMoneyOperationService(DependencyCheckRequester dependencyCheckRequester,
+    public PeriodicalMoneyOperationService(ObjectMapper mapper,
+                                           DependencyCheckRequester dependencyCheckRequester,
                                            OperationCategoryService operationCategoryService,
                                            PeriodicalMoneyOperationRepository repository) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.operationCategoryService = operationCategoryService;
         this.repository = repository;
     }
@@ -104,5 +107,20 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
     @Override
     public void deleteByIds(Set<String> collect) {
         repository.deleteAllById(collect);
+    }
+
+    @Override
+    protected PeriodicalMoneyOperation findById(String id) {
+        return null;
+    }
+
+    @Override
+    protected PeriodicalMoneyOperation mapToEntity(MergePatch object) {
+        return null;
+    }
+
+    @Override
+    protected void updateEntity(PeriodicalMoneyOperation entity) {
+
     }
 }

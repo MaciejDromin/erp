@@ -1,8 +1,10 @@
 package com.soitio.finances.plannedexpenses.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.application.MoneyOperationService;
@@ -25,18 +27,19 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class PlannedExpensesService extends AbstractDependencyCheckService implements DependencyCheckService {
+public class PlannedExpensesService extends AbstractDependencyCheckService<PlannedExpenses> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "PlannedExpenses";
     private final PlannedExpensesRepository repository;
     private final OperationCategoryService operationCategoryService;
     private final MoneyOperationService moneyOperationService;
 
-    public PlannedExpensesService(DependencyCheckRequester dependencyCheckRequester,
+    public PlannedExpensesService(ObjectMapper mapper,
+                                  DependencyCheckRequester dependencyCheckRequester,
                                   PlannedExpensesRepository repository,
                                   OperationCategoryService operationCategoryService,
                                   MoneyOperationService moneyOperationService) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.repository = repository;
         this.operationCategoryService = operationCategoryService;
         this.moneyOperationService = moneyOperationService;
@@ -134,5 +137,20 @@ public class PlannedExpensesService extends AbstractDependencyCheckService imple
     @Override
     public void deleteByIds(Set<String> collect) {
         repository.deleteAllById(collect);
+    }
+
+    @Override
+    protected PlannedExpenses findById(String id) {
+        return null;
+    }
+
+    @Override
+    protected PlannedExpenses mapToEntity(MergePatch object) {
+        return null;
+    }
+
+    @Override
+    protected void updateEntity(PlannedExpenses entity) {
+
     }
 }
