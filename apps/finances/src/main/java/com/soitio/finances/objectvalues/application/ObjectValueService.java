@@ -145,16 +145,22 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
 
     @Override
     protected ObjectValue findById(String id) {
-        return null;
+        return objectValueRepository.getReferenceById(id);
     }
 
     @Override
     protected ObjectValue mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        return ObjectValue.builder()
+                .uuid(fields.get("uuid").getStrValue())
+                .amount(fields.get("amount").getBigNumberValue())
+                .currency(fields.get("currency").getStrValue())
+                .objectType(ObjectType.valueOf(fields.get("objectType").getStrValue()))
+                .build();
     }
 
     @Override
     protected void updateEntity(ObjectValue entity) {
-
+        objectValueRepository.save(entity);
     }
 }

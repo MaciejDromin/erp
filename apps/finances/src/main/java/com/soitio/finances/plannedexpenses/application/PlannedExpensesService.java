@@ -6,8 +6,10 @@ import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.commons.utils.DateUtils;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.application.MoneyOperationService;
+import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
 import com.soitio.finances.plannedexpenses.application.port.PlannedExpensesRepository;
@@ -17,6 +19,7 @@ import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCompletionD
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCreationDto;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesDto;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneOffset;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -141,16 +144,35 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
 
     @Override
     protected PlannedExpenses findById(String id) {
-        return null;
+        return repository.getReferenceById(id);
     }
 
     @Override
     protected PlannedExpenses mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        var opCat = fields.get("operationCategory").getObjectValue();
+        var finalizedDate = fields.get("finalizedDate").getStrValue();
+        return PlannedExpenses.builder()
+                .uuid(fields.get("uuid").getStrValue())
+                .plannedAmount(fields.get("plannedAmount").getBigNumberValue())
+                .actualAmount(fields.get("actualAmount").getBigNumberValue())
+                .currency(fields.get("currency").getStrValue())
+                .operationDescription(fields.get("operationDescription").getStrValue())
+                .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
+                .plannedExpensesStatus(PlannedExpensesStatus.valueOf(fields.get("plannedExpensesStatus").getStrValue()))
+                .finalizedDate(finalizedDate == null ? null : DateUtils.localDateTimeFromString(finalizedDate))
+                .plannedYear(fields.get("plannedYear").getIntValue())
+                .plannedMonth(Month.valueOf(fields.get("plannedMonth").getStrValue()))
+                .operationCategory(OperationCategory.builder()
+                        .uuid(opCat.get("uuid").getStrValue())
+                        .operationType(MoneyOperationType.valueOf(opCat.get("operationType").getStrValue()))
+                        .operationName(opCat.get("operationName").getStrValue())
+                        .build())
+                .build();
     }
 
     @Override
     protected void updateEntity(PlannedExpenses entity) {
-
+        repository.save(entity);
     }
 }

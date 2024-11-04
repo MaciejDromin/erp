@@ -70,17 +70,22 @@ public class OperationCategoryService extends AbstractDependencyCheckService<Ope
 
     @Override
     protected OperationCategory findById(String id) {
-        return null;
+        return repository.getReferenceById(id);
     }
 
     @Override
     protected OperationCategory mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        return OperationCategory.builder()
+                .uuid(fields.get("uuid").getStrValue())
+                .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
+                .operationName(fields.get("operationName").getStrValue())
+                .build();
     }
 
     @Override
     protected void updateEntity(OperationCategory entity) {
-
+        repository.save(entity);
     }
 
 }

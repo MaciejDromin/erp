@@ -5,7 +5,7 @@ import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
-import com.soitio.inventory.commons.DateUtils;
+import com.soitio.commons.utils.DateUtils;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import com.soitio.inventory.maintenance.domain.dto.PartQuantity;
 import io.quarkus.mongodb.panache.PanacheQuery;
@@ -116,7 +116,7 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
         var fields = object.getObjectValue();
         return MaintenanceRecord.builder()
                 .id(new ObjectId(fields.get("id").getStrValue()))
-                .date(DateUtils.fromString(fields.get("date").getStrValue()))
+                .date(DateUtils.localDateFromString(fields.get("date").getStrValue()))
                 .odometer(fields.get("odometer").getIntValue())
                 .contractorId(new ObjectId(fields.get("contractorId").getStrValue()))
                 .parts(fields.get("parts").getListValue().stream()

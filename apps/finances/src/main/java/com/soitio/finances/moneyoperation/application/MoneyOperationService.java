@@ -6,9 +6,11 @@ import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.commons.utils.DateUtils;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.application.port.MoneyOperationRepository;
 import com.soitio.finances.moneyoperation.domain.MoneyOperation;
+import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationBalanceDto;
 import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationCreationDto;
 import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationDto;
@@ -157,16 +159,32 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
 
     @Override
     protected MoneyOperation findById(String id) {
-        return null;
+        return repository.getReferenceById(id);
     }
 
     @Override
     protected MoneyOperation mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        var opCat = fields.get("operationCategory").getObjectValue();
+        return MoneyOperation.builder()
+                .uuid(fields.get("uuid").getStrValue())
+                .amount(fields.get("amount").getBigNumberValue())
+                .currency(fields.get("currency").getStrValue())
+                .operationDescription(fields.get("operationDescription").getStrValue())
+                .effectiveDate(DateUtils.localDateTimeFromString(fields.get("effectiveDate").getStrValue()))
+                .effectiveMonth(Month.valueOf(fields.get("effectiveMonth").getStrValue()))
+                .effectiveYear(fields.get("effectiveYear").getIntValue())
+                .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
+                .operationCategory(OperationCategory.builder()
+                        .uuid(opCat.get("uuid").getStrValue())
+                        .operationType(MoneyOperationType.valueOf(opCat.get("operationType").getStrValue()))
+                        .operationName(opCat.get("operationName").getStrValue())
+                        .build())
+                .build();
     }
 
     @Override
     protected void updateEntity(MoneyOperation entity) {
-
+        repository.save(entity);
     }
 }
