@@ -10,6 +10,7 @@ import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.property.address.domain.PropertyAddress;
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressCreationDto;
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressDto;
+import org.bson.types.ObjectId;
 
 @Singleton
 public class PropertyAddressRepository extends AbstractDependencyCheckRepo<PropertyAddress> {
@@ -59,6 +60,18 @@ public class PropertyAddressRepository extends AbstractDependencyCheckRepo<Prope
 
     @Override
     protected PropertyAddress mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        return PropertyAddress.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .addressLine(fields.get("addressLine").getStrValue())
+                .city(fields.get("city").getStrValue())
+                .province(fields.get("province").getStrValue())
+                .country(fields.get("country").getStrValue())
+                .postalCode(fields.get("postalCode").getStrValue())
+                .build();
+    }
+
+    public PropertyAddressDto getAddress(String id) {
+        return to(findById(new ObjectId(id)));
     }
 }
