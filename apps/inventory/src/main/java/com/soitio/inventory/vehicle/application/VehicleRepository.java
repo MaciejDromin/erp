@@ -121,12 +121,12 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
                 .name(fields.get("name").getStrValue())
                 .year(fields.get("year").getIntValue())
                 .odometer(fields.get("odometer").getIntValue())
-                .bodyStyle(BodyStyle.valueOf(fields.get("bodyStyle").getStrValue()))
-                .make(Make.valueOf(fields.get("make").getStrValue()))
+                .bodyStyle(BodyStyle.getEnum(fields.get("bodyStyle").getStrValue()))
+                .make(Make.getEnum(fields.get("make").getStrValue()))
                 .model(fields.get("model").getStrValue())
-                .fuelType(FuelType.valueOf(fields.get("fuelType").getStrValue()))
-                .driveTrain(DriveTrain.valueOf(fields.get("driveTrain").getStrValue()))
-                .transmission(Transmission.valueOf(fields.get("transmission").getStrValue()))
+                .fuelType(FuelType.getEnum(fields.get("fuelType").getStrValue()))
+                .driveTrain(DriveTrain.getEnum(fields.get("driveTrain").getStrValue()))
+                .transmission(Transmission.getEnum(fields.get("transmission").getStrValue()))
                 .engineType(fields.get("engineType").getStrValue())
                 .vin(fields.get("vin").getStrValue())
                 .registrationPlate(fields.get("registrationPlate").getStrValue())
@@ -137,8 +137,21 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
         return toDto(findById(new ObjectId(id)));
     }
 
-    private VehicleDto toDto(Vehicle byId) {
-        // TODO: FINISH
-        return null;
+    private VehicleDto toDto(Vehicle vehicle) {
+        return VehicleDto.builder()
+                .id(vehicle.getId().toString())
+                .name(vehicle.getName())
+                .year(vehicle.getYear())
+                .odometer(vehicle.getOdometer())
+                .bodyStyle(vehicle.getBodyStyle())
+                .make(vehicle.getMake())
+                .model(vehicle.getModel())
+                .fuelType(vehicle.getFuelType())
+                .driveTrain(vehicle.getDriveTrain())
+                .transmission(vehicle.getTransmission())
+                .engineType(vehicle.getEngineType())
+                .vin(vehicle.getVin())
+                .registrationPlate(vehicle.getRegistrationPlate())
+                .build();
     }
 }

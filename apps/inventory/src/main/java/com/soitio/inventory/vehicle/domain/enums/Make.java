@@ -1,6 +1,8 @@
 package com.soitio.inventory.vehicle.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum Make {
 
@@ -30,6 +32,7 @@ public enum Make {
     TOYOTA("Toyota");
 
     private final String name;
+    private static final Map<String, Make> names = new HashMap<>();
 
     Make(String name) {
         this.name = name;
@@ -38,6 +41,17 @@ public enum Make {
     @JsonValue
     public String getName() {
         return name;
+    }
+
+    public static Make getEnum(String val) {
+        if (names.isEmpty()) initializeMap();
+        return names.get(val);
+    }
+
+    private static void initializeMap() {
+        for (Make style : values()) {
+            names.put(style.name, style);
+        }
     }
 
 }
