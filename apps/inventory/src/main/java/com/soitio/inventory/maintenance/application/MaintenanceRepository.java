@@ -74,8 +74,13 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
     }
 
     private MaintenanceRecordDto toDto(MaintenanceRecord maintenanceRecord) {
-        // TODO: FINISH
-        return null;
+        return MaintenanceRecordDto.builder()
+                .id(maintenanceRecord.getId())
+                .date(maintenanceRecord.getDate())
+                .odometer(maintenanceRecord.getOdometer())
+                .parts(maintenanceRecord.getParts())
+                .contractorId(maintenanceRecord.getContractorId())
+                .build();
     }
 
     private MaintenanceRecord from(MaintenanceCreationDto maintenanceCreation) {

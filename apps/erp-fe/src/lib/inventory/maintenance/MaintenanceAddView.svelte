@@ -6,11 +6,19 @@
   import { genericStore } from '$lib/stores/genericStore.ts'
   import { onMount } from 'svelte'
 
-  let contractors: any[] = []
-  let selectedContractor
-  let parts: any[] = []
-  let partQuantity: any[] = []
-  let partVal: string = ''
+  export let data = undefined
+
+  let maintenanceId = data === undefined ? undefined : data.maintenance.id
+  let date = data === undefined ? undefined : data.maintenance.date
+  let odometer = data === undefined ? undefined : data.maintenance.odometer
+  let contractor = data === undefined ? undefined : { id: data.maintenance.contractorId }
+  let contractors: any[] = data === undefined ? [] : [contractor]
+  let selectedContractor = data === undefined ? undefined : JSON.stringify(contractor)
+  let partsQuantityMap = data === undefined ? undefined : new Map(data.maintenance.parts.map(p => [p.id, p.quantity]))
+  let parts: any[] = data === undefined ? [] : data.parts
+  let partQuantity: any[] = data === undefined ? [] : parts.map(p => ({ id: p.id, quantity: partsQuantityMap.get(p.id)}))
+  let partVal: string = data === undefined ? '' : JSON.stringify(partQuantity)
+  let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
     $genericStore = {}
@@ -52,18 +60,29 @@
     partQuantity = partQuantity
     partVal = JSON.stringify(partQuantity)
   }
+
+  const getValue = (partId: string) => {
+    const index = partQuantity.findIndex((p) => p.id === partId)
+    if (index === -1) {
+      return 0
+    }
+    return partQuantity[index].quantity
+  }
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
+  <input name="maintenanceId" type="text" class="hidden" bind:value={maintenanceId} />
   <div class="flex flex-row gap-3">
     <input
       name="date"
+      bind:value={date}
       type="text"
       placeholder="Date"
       class="input input-bordered input-primary w-full max-w-xs"
     />
     <input
       name="odometer"
+      bind:value={odometer}
       type="text"
       placeholder="Odometer"
       class="input input-bordered input-primary w-full max-w-xs"
@@ -105,10 +124,11 @@
       <input
         type="text"
         placeholder={part.name + ' quantity'}
+        value={getValue(part.id)}
         class="input input-bordered input-primary w-full max-w-xs mx-auto"
         on:change={(e) => updatePartsList(part.id, e.target.value)}
       />
     {/each}
-    <button class="btn btn-primary mx-auto">Add Row</button>
+    <button class="btn btn-primary mx-auto">{buttonName} Row</button>
   </div>
 </form>
