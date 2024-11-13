@@ -97,7 +97,7 @@
         <option value={JSON.stringify(contractor)}></option>
       {/each}
     </select>
-    <div class="mr-auto">
+    <div>
       <Modal
         modalId="contractor_modal"
         buttonName={determineButtonName(contractors, 'contractor')}
@@ -121,13 +121,18 @@
     <input name="parts" type="text" class="hidden" bind:value={partVal} />
     <h2 class="mx-auto my-6 text-3xl text-black">Parts</h2>
     {#each parts as part}
-      <input
-        type="text"
-        placeholder={part.name + ' quantity'}
-        value={getValue(part.id)}
-        class="input input-bordered input-primary w-full max-w-xs mx-auto"
-        on:change={(e) => updatePartsList(part.id, e.target.value)}
-      />
+      <label class="form-control w-full max-w-xs mx-auto">
+        <div class="label">
+          <span class="label-text text-black">{part.name}</span>
+        </div>
+        <input
+          type="text"
+          placeholder={part.name + ' quantity'}
+          value={getValue(part.id)}
+          class="input input-bordered input-primary w-full max-w-xs mx-auto"
+          on:change={(e) => updatePartsList(part.id, e.target.value)}
+        />
+      </label>
     {/each}
     <button class="btn btn-primary mx-auto">{buttonName} Row</button>
   </div>
