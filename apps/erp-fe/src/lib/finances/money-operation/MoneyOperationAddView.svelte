@@ -6,10 +6,17 @@
   import OperationCategoryTable from '$lib/finances/operation-category/OperationCategoryTable.svelte'
   import Pageable from '$lib/Pageable.svelte'
 
-  let operationType = MoneyOperationType.INCOME
+  export let data = undefined
 
-  let categories: any[] = []
-  let selectedCategory
+  let operationId = data === undefined ? undefined : data.operation.uuid
+  let category = data === undefined ? undefined : { id: data.operation.operationCategory.uuid }
+  let categories: any[] = category === undefined ? [] : [category]
+  let selectedCategory = category === undefined ? undefined : JSON.stringify(category)
+  let amount = data === undefined ? undefined : data.operation.amount.value
+  let currencyCode = data === undefined ? undefined : data.operation.amount.currencyCode
+  let operationDescription = data === undefined ? undefined : data.operation.operationDescription
+  let operationType = data === undefined ? MoneyOperationType.INCOME : data.operation.operationType
+  let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
     $genericStore = {}
@@ -34,16 +41,24 @@
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3">
+  <input
+    name="operationId"
+    type="text"
+    class="hidden"
+    bind:value={operationId}
+  />
   <div class="flex flex-row gap-3">
     <input
       name="amount"
       type="text"
+      bind:value={amount}
       placeholder="Amount"
       class="input input-bordered input-primary w-full max-w-xs"
     />
     <input
       name="currencyCode"
       type="text"
+      bind:value={currencyCode}
       placeholder="Currency Code"
       class="input input-bordered input-primary w-full max-w-xs"
     />
@@ -52,6 +67,7 @@
     <input
       name="operationDescription"
       type="text"
+      bind:value={operationDescription}
       placeholder="Operation Description"
       class="input input-bordered input-primary w-full"
     />
@@ -90,5 +106,5 @@
       </Modal>
     </div>
   </div>
-  <button class="btn btn-primary mx-auto">Add</button>
+  <button class="btn btn-primary mx-auto">{buttonName}</button>
 </form>

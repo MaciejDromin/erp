@@ -17,6 +17,8 @@ import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationDto;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
 import com.soitio.finances.plannedexpenses.domain.PlannedExpenses;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
@@ -166,14 +168,22 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
     protected MoneyOperation mapToEntity(MergePatch object) {
         var fields = object.getObjectValue();
         var opCat = fields.get("operationCategory").getObjectValue();
+        var amount = fields.get("amount").getObjectValue();
+        BigDecimal value;
+        try {
+            value = new BigDecimal(amount.get("value").getStrValue());
+        } catch (Exception e) {
+            throw new IllegalStateException("Incorrect value " + amount.get("value").getStrValue());
+        }
+        LocalDateTime effectiveDate = DateUtils.localDateTimeFromString(fields.get("effectiveDate").getStrValue());
         return MoneyOperation.builder()
                 .uuid(fields.get("uuid").getStrValue())
-                .amount(fields.get("amount").getBigNumberValue())
-                .currency(fields.get("currency").getStrValue())
+                .amount(value)
+                .currency(amount.get("currencyCode").getStrValue())
                 .operationDescription(fields.get("operationDescription").getStrValue())
-                .effectiveDate(DateUtils.localDateTimeFromString(fields.get("effectiveDate").getStrValue()))
-                .effectiveMonth(Month.valueOf(fields.get("effectiveMonth").getStrValue()))
-                .effectiveYear(fields.get("effectiveYear").getIntValue())
+                .effectiveDate(effectiveDate)
+                .effectiveMonth(effectiveDate.getMonth())
+                .effectiveYear(effectiveDate.getYear())
                 .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
                 .operationCategory(OperationCategory.builder()
                         .uuid(opCat.get("uuid").getStrValue())
@@ -190,7 +200,7 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
 
     @Override
     protected Object mapToDto(MoneyOperation entity) {
-        return null;
+        return from(entity);
     }
 
     public MoneyOperationDto getMoneyOperation(String id) {
