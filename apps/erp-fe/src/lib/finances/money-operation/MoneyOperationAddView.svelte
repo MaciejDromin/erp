@@ -9,13 +9,22 @@
   export let data = undefined
 
   let operationId = data === undefined ? undefined : data.operation.uuid
-  let category = data === undefined ? undefined : { id: data.operation.operationCategory.uuid }
+  let category =
+    data === undefined
+      ? undefined
+      : { id: data.operation.operationCategory.uuid }
   let categories: any[] = category === undefined ? [] : [category]
-  let selectedCategory = category === undefined ? undefined : JSON.stringify(category)
+  let selectedCategory =
+    category === undefined ? undefined : JSON.stringify(category)
   let amount = data === undefined ? undefined : data.operation.amount.value
-  let currencyCode = data === undefined ? undefined : data.operation.amount.currencyCode
-  let operationDescription = data === undefined ? undefined : data.operation.operationDescription
-  let operationType = data === undefined ? MoneyOperationType.INCOME : data.operation.operationType
+  let currencyCode =
+    data === undefined ? undefined : data.operation.amount.currencyCode
+  let operationDescription =
+    data === undefined ? undefined : data.operation.operationDescription
+  let operationType =
+    data === undefined
+      ? MoneyOperationType.INCOME
+      : data.operation.operationType
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
