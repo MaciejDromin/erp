@@ -2,7 +2,7 @@ import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import type { PageServerLoad } from './$types'
-import { FINANCES_URL, INVENTORY_URL } from '$lib/scripts/urls'
+import { FINANCES_URL } from '$lib/scripts/urls'
 import { ObjectType } from '$lib/finances/types/financialTypes'
 import { redirect } from '@sveltejs/kit'
 
