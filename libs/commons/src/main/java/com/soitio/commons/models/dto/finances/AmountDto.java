@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor(staticName = "of")
 public class AmountDto {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal value;
     private String currencyCode;
 

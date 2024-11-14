@@ -153,9 +153,15 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
     protected ObjectValue mapToEntity(MergePatch object) {
         var fields = object.getObjectValue();
         var amount = fields.get("amount").getObjectValue();
+        BigDecimal value;
+        try {
+            value = new BigDecimal(amount.get("value").getStrValue());
+        } catch (Exception e) {
+            throw new IllegalStateException("Incorrect value " + amount.get("value").getStrValue());
+        }
         return ObjectValue.builder()
                 .uuid(fields.get("uuid").getStrValue())
-                .amount(amount.get("value").getBigNumberValue())
+                .amount(value)
                 .currency(amount.get("currencyCode").getStrValue())
                 .objectId(fields.get("objectId").getStrValue())
                 .objectType(ObjectType.valueOf(fields.get("objectType").getStrValue()))
