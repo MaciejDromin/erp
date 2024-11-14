@@ -10,14 +10,13 @@
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
-  <input
-    name="categoryId"
-    type="text"
-    class="hidden"
-    bind:value={categoryId}
-  />
+  <input name="categoryId" type="text" class="hidden" bind:value={categoryId} />
   <div class="flex flex-row gap-3 mx-auto">
-    <select name="operationType" bind:value={type} class="select select-primary w-full max-w-xs">
+    <select
+      name="operationType"
+      bind:value={type}
+      class="select select-primary w-full max-w-xs"
+    >
       {#each Object.values(MoneyOperationType) as operationType}
         <option value={operationType}>{operationType}</option>
       {/each}
