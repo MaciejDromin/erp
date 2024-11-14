@@ -11,12 +11,20 @@
   let maintenanceId = data === undefined ? undefined : data.maintenance.id
   let date = data === undefined ? undefined : data.maintenance.date
   let odometer = data === undefined ? undefined : data.maintenance.odometer
-  let contractor = data === undefined ? undefined : { id: data.maintenance.contractorId }
+  let contractor =
+    data === undefined ? undefined : { id: data.maintenance.contractorId }
   let contractors: any[] = data === undefined ? [] : [contractor]
-  let selectedContractor = data === undefined ? undefined : JSON.stringify(contractor)
-  let partsQuantityMap = data === undefined ? undefined : new Map(data.maintenance.parts.map(p => [p.id, p.quantity]))
+  let selectedContractor =
+    data === undefined ? undefined : JSON.stringify(contractor)
+  let partsQuantityMap =
+    data === undefined
+      ? undefined
+      : new Map(data.maintenance.parts.map((p) => [p.id, p.quantity]))
   let parts: any[] = data === undefined ? [] : data.parts
-  let partQuantity: any[] = data === undefined ? [] : parts.map(p => ({ id: p.id, quantity: partsQuantityMap.get(p.id)}))
+  let partQuantity: any[] =
+    data === undefined
+      ? []
+      : parts.map((p) => ({ id: p.id, quantity: partsQuantityMap.get(p.id) }))
   let partVal: string = data === undefined ? '' : JSON.stringify(partQuantity)
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
@@ -71,7 +79,12 @@
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
-  <input name="maintenanceId" type="text" class="hidden" bind:value={maintenanceId} />
+  <input
+    name="maintenanceId"
+    type="text"
+    class="hidden"
+    bind:value={maintenanceId}
+  />
   <div class="flex flex-row gap-3">
     <input
       name="date"

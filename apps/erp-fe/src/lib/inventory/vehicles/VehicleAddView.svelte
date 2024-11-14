@@ -21,7 +21,8 @@
   let transmission = data === undefined ? undefined : data.vehicle.transmission
   let engineType = data === undefined ? undefined : data.vehicle.engineType
   let vin = data === undefined ? undefined : data.vehicle.vin
-  let registrationPlate = data === undefined ? undefined : data.vehicle.registrationPlate
+  let registrationPlate =
+    data === undefined ? undefined : data.vehicle.registrationPlate
   let buttonName = data === undefined ? 'Add' : 'Edit'
 </script>
 
@@ -49,14 +50,22 @@
       placeholder="Odometer"
       class="input input-bordered input-primary w-full max-w-xs"
     />
-    <select name="bodyStyle" bind:value={bodyStyle} class="select select-primary w-full max-w-xs">
+    <select
+      name="bodyStyle"
+      bind:value={bodyStyle}
+      class="select select-primary w-full max-w-xs"
+    >
       {#each Object.values(BodyStyle) as bodyStyle}
         <option value={bodyStyle}>{bodyStyle}</option>
       {/each}
     </select>
   </div>
   <div class="flex flex-row gap-3">
-    <select name="make" bind:value={make} class="select select-primary w-full max-w-xs">
+    <select
+      name="make"
+      bind:value={make}
+      class="select select-primary w-full max-w-xs"
+    >
       {#each Object.values(Make) as make}
         <option value={make}>{make}</option>
       {/each}
@@ -68,19 +77,31 @@
       placeholder="Model"
       class="input input-bordered input-primary w-full max-w-xs"
     />
-    <select name="fuelType" bind:value={fuelType} class="select select-primary w-full max-w-xs">
+    <select
+      name="fuelType"
+      bind:value={fuelType}
+      class="select select-primary w-full max-w-xs"
+    >
       {#each Object.values(FuelType) as fuelType}
         <option value={fuelType}>{fuelType}</option>
       {/each}
     </select>
-    <select name="driveTrain" bind:value={driveTrain} class="select select-primary w-full max-w-xs">
+    <select
+      name="driveTrain"
+      bind:value={driveTrain}
+      class="select select-primary w-full max-w-xs"
+    >
       {#each Object.values(DriveTrain) as driveTrain}
         <option value={driveTrain}>{driveTrain}</option>
       {/each}
     </select>
   </div>
   <div class="flex flex-row gap-3">
-    <select name="transmission" bind:value={transmission} class="select select-primary w-full max-w-xs">
+    <select
+      name="transmission"
+      bind:value={transmission}
+      class="select select-primary w-full max-w-xs"
+    >
       {#each Object.values(Transmission) as transmission}
         <option value={transmission}>{transmission}</option>
       {/each}

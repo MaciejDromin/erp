@@ -30,7 +30,7 @@ export const load = (async ({ params }) => {
     HttpMethods.GET
   )
   maintenance = await maintenance.json()
-  const partsIds = maintenance.parts.map(p => p.id);
+  const partsIds = maintenance.parts.map((p) => p.id)
   let partsData = await unsecuredExternalApiRequest(
     INVENTORY_URL + `/parts?partIds=${partsIds.join(',')}&size=500`,
     HttpMethods.GET

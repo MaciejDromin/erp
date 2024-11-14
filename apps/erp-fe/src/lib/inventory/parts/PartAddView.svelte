@@ -10,8 +10,10 @@
   let partId = data === undefined ? undefined : data.part.id
   let name = data === undefined ? undefined : data.part.name
   let partNumber = data === undefined ? undefined : data.part.partNumber
-  let contractor = data === undefined ? undefined : { id: data.part.manufacturerId }
-  let selectedContractor = data === undefined ? undefined : JSON.stringify(contractor)
+  let contractor =
+    data === undefined ? undefined : { id: data.part.manufacturerId }
+  let selectedContractor =
+    data === undefined ? undefined : JSON.stringify(contractor)
   let contractors: any[] = data === undefined ? [] : [contractor]
   let buttonName = data === undefined ? 'Add' : 'Edit'
 

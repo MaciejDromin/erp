@@ -13,7 +13,8 @@
   let objects: any[] = obj === undefined ? [] : [obj]
   let selectedObject = obj === undefined ? undefined : JSON.stringify(obj)
   let amount = data === undefined ? undefined : data.objectValue.amount.value
-  let currency = data === undefined ? undefined : data.objectValue.amount.currencyCode
+  let currency =
+    data === undefined ? undefined : data.objectValue.amount.currencyCode
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
@@ -39,7 +40,12 @@
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
-  <input name="objectValueId" type="text" class="hidden" bind:value={objectValueId} />
+  <input
+    name="objectValueId"
+    type="text"
+    class="hidden"
+    bind:value={objectValueId}
+  />
   <div class="flex flex-row gap-3">
     <input
       name="amount"

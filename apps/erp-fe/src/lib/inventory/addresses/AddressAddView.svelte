@@ -9,6 +9,7 @@
   let country = data === undefined ? '' : data.address.country
   let buttonName = data === undefined ? 'Add' : 'Edit'
 </script>
+
 <form method="POST" class="mx-auto flex flex-row gap-3 py-6">
   <input name="addressId" type="text" class="hidden" bind:value={addressId} />
   <input

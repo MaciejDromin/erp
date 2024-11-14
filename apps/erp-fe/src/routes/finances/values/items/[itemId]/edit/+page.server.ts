@@ -16,7 +16,7 @@ export const actions = {
         value: data.get('amount'),
         currencyCode: data.get('currencyCode'),
       },
-      objectId: object.id
+      objectId: object.id,
     }
     await unsecuredExternalApiRequest(
       FINANCES_URL + `/finances/object-value/${body.uuid}`,
