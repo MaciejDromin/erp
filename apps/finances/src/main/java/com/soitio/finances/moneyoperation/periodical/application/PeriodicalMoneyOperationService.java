@@ -123,4 +123,9 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
     protected void updateEntity(PeriodicalMoneyOperation entity) {
 
     }
+
+    @Override
+    protected Object mapToDto(PeriodicalMoneyOperation entity) {
+        return null;
+    }
 }

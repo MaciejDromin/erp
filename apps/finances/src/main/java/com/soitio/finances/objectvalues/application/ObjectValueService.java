@@ -6,12 +6,12 @@ import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.commons.models.dto.finances.ObjectType;
 import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.currency.application.CurrencyService;
 import com.soitio.finances.objectvalues.application.port.ObjectValueRepository;
-import com.soitio.finances.objectvalues.domain.ObjectType;
 import com.soitio.finances.objectvalues.domain.ObjectValue;
 import com.soitio.finances.objectvalues.domain.dto.ObjectValueCreationDto;
 import com.soitio.finances.objectvalues.domain.dto.TotalObjectsValueDto;
@@ -74,6 +74,7 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
                 .uuid(objectValue.getUuid())
                 .objectId(objectValue.getObjectId())
                 .amount(AmountDto.of(amount.getAmount(), amount.getCurrencyUnit().getCode()))
+                .objectType(objectValue.getObjectType())
                 .build();
     }
 
@@ -151,10 +152,12 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
     @Override
     protected ObjectValue mapToEntity(MergePatch object) {
         var fields = object.getObjectValue();
+        var amount = fields.get("amount").getObjectValue();
         return ObjectValue.builder()
                 .uuid(fields.get("uuid").getStrValue())
-                .amount(fields.get("amount").getBigNumberValue())
-                .currency(fields.get("currency").getStrValue())
+                .amount(amount.get("value").getBigNumberValue())
+                .currency(amount.get("currencyCode").getStrValue())
+                .objectId(fields.get("objectId").getStrValue())
                 .objectType(ObjectType.valueOf(fields.get("objectType").getStrValue()))
                 .build();
     }
@@ -162,6 +165,11 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
     @Override
     protected void updateEntity(ObjectValue entity) {
         objectValueRepository.save(entity);
+    }
+
+    @Override
+    protected Object mapToDto(ObjectValue entity) {
+        return from(entity);
     }
 
     public ObjectValueDto getObjectValue(String id) {

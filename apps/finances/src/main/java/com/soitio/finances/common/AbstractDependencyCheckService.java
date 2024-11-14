@@ -41,7 +41,7 @@ public abstract class AbstractDependencyCheckService<T> {
 
     public abstract void deleteByIds(Set<String> collect);
 
-    public <T> DependencyCheckResponse update(Dependent dependent, String id, JsonNode object) {
+    public DependencyCheckResponse update(Dependent dependent, String id, JsonNode object) {
         var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, Set.of(id), Action.EDIT);
 
         if (response.isFailed()) return response;
@@ -51,9 +51,11 @@ public abstract class AbstractDependencyCheckService<T> {
         return response;
     }
 
-    public void updateOne(String id, JsonNode node) {
+    public void updateOne(String id, JsonNode object) {
         var entity = findById(id);
-        JsonNode entityNode = mapper.valueToTree(entity);
+        Object mappedDto = mapToDto(entity);
+        JsonNode entityNode = mapper.valueToTree(mappedDto);
+        JsonNode node = mapper.valueToTree(object);
         MergePatch patch = MergePatchUtils.fromJsonNode(node);
         MergePatch target = MergePatchUtils.fromJsonNode(entityNode);
         MergePatch merged = MergePatchUtils.merge(patch, target);
@@ -65,5 +67,7 @@ public abstract class AbstractDependencyCheckService<T> {
     protected abstract T mapToEntity(MergePatch object);
 
     protected abstract void updateEntity(T entity);
+
+    protected abstract Object mapToDto(T entity);
 
 }

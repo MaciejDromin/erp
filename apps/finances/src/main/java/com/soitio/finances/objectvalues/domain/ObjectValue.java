@@ -1,6 +1,7 @@
 package com.soitio.finances.objectvalues.domain;
 
 import com.soitio.commons.dependency.Dependencies;
+import com.soitio.commons.models.dto.finances.ObjectType;
 import com.soitio.finances.common.persistence.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

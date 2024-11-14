@@ -20,5 +20,6 @@ public class ObjectValueDto {
     String uuid;
     String objectId;
     AmountDto amount;
+    ObjectType objectType;
 
 }

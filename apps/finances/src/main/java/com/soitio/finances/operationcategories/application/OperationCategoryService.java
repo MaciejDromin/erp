@@ -88,6 +88,11 @@ public class OperationCategoryService extends AbstractDependencyCheckService<Ope
         repository.save(entity);
     }
 
+    @Override
+    protected Object mapToDto(OperationCategory entity) {
+        return null;
+    }
+
     public OperationCategoryDto getOperationCategory(String id) {
         return from(findById(id));
     }

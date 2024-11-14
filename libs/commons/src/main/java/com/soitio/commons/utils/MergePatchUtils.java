@@ -2,6 +2,8 @@ package com.soitio.commons.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.models.commons.MergePatch;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,7 +48,17 @@ public class MergePatchUtils {
         patch.getObjectValue().forEach((k, v) -> {
             MergePatch to = target.getObjectValue().get(k);
             if (to == null) return;
-            if (to.getObjectType() != v.getObjectType() && !(to.getIsNull() || v.getIsNull())) throw new IllegalStateException("Object Types do not match");
+            if (to.getObjectType() != v.getObjectType() && !(to.getIsNull() || v.getIsNull())) {
+                if (to.getObjectType() == MergePatch.ObjectType.BIG_NUMBER && v.getObjectType() == MergePatch.ObjectType.STRING) {
+                    try {
+                        to.setBigNumberValue(new BigDecimal(v.getStrValue()));
+                        return;
+                    } catch (Exception e) {
+                        throw new IllegalStateException("Incorrect Big Decimal Value");
+                    }
+                }
+                throw new IllegalStateException("Object Types do not match");
+            }
             handleBasic(v, to);
             if (v.getIsNull()) {
                 to.setNull(true);

@@ -176,6 +176,11 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
         repository.save(entity);
     }
 
+    @Override
+    protected Object mapToDto(PlannedExpenses entity) {
+        return null;
+    }
+
     public PlannedExpensesDto getPlannedExpense(String id) {
         return convertToDto(findById(id));
     }

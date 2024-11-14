@@ -1,5 +1,6 @@
 package com.soitio.commons.models.dto.finances;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

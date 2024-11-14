@@ -188,6 +188,11 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
         repository.save(entity);
     }
 
+    @Override
+    protected Object mapToDto(MoneyOperation entity) {
+        return null;
+    }
+
     public MoneyOperationDto getMoneyOperation(String id) {
         return from(findById(id));
     }
