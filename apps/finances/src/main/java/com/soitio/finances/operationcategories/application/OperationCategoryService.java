@@ -90,7 +90,7 @@ public class OperationCategoryService extends AbstractDependencyCheckService<Ope
 
     @Override
     protected Object mapToDto(OperationCategory entity) {
-        return null;
+        return from(entity);
     }
 
     public OperationCategoryDto getOperationCategory(String id) {
