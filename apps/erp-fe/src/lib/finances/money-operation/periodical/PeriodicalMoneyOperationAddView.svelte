@@ -8,7 +8,8 @@
 
   export let data = undefined
 
-  let periodicalOperationId = data === undefined ? undefined : data.operation.uuid
+  let periodicalOperationId =
+    data === undefined ? undefined : data.operation.uuid
   let category =
     data === undefined
       ? undefined

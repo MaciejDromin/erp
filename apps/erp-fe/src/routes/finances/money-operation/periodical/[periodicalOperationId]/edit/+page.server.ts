@@ -32,7 +32,8 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const operation = await unsecuredExternalApiRequest(
-    FINANCES_URL + `/finances/money-operation/periodical/${params.periodicalOperationId}`,
+    FINANCES_URL +
+      `/finances/money-operation/periodical/${params.periodicalOperationId}`,
     HttpMethods.GET
   )
   return {
