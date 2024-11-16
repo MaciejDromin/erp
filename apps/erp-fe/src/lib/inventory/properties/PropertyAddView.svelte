@@ -14,16 +14,26 @@
 
   let propertyId = data === undefined ? undefined : data.property.id
   let name = data === undefined ? undefined : data.property.name
-  let uniqueIdentifier = data === undefined ? undefined : data.property.uniqueIdentifier
+  let uniqueIdentifier =
+    data === undefined ? undefined : data.property.uniqueIdentifier
   let landRegister = data === undefined ? undefined : data.property.landRegister
-  let propertyType = data === undefined ? undefined : data.property.propertyInformation.propertyType
-  let landClassification = data === undefined ? undefined : data.property.propertyInformation.landClassification
-  let area = data === undefined ? undefined : data.property.propertyInformation.landArea.area
-  let areaUnit = data === undefined ? undefined : data.property.propertyInformation.landArea.unit
-  let address =
+  let propertyType =
     data === undefined
       ? undefined
-      : { id: data.property.addressId }
+      : data.property.propertyInformation.propertyType
+  let landClassification =
+    data === undefined
+      ? undefined
+      : data.property.propertyInformation.landClassification
+  let area =
+    data === undefined
+      ? undefined
+      : data.property.propertyInformation.landArea.area
+  let areaUnit =
+    data === undefined
+      ? undefined
+      : data.property.propertyInformation.landArea.unit
+  let address = data === undefined ? undefined : { id: data.property.addressId }
   let addresses: any[] = address === undefined ? [] : [address]
   let selectedAddress =
     address === undefined ? undefined : JSON.stringify(address)
@@ -52,12 +62,7 @@
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
-  <input
-    name="propertyId"
-    type="text"
-    class="hidden"
-    bind:value={propertyId}
-  />
+  <input name="propertyId" type="text" class="hidden" bind:value={propertyId} />
   <div class="flex flex-row gap-3">
     <input
       name="name"
@@ -93,7 +98,11 @@
         <option value={JSON.stringify(address)}></option>
       {/each}
     </select>
-    <select name="propertyType" bind:value={propertyType} class="select select-primary w-full max-w-xs">
+    <select
+      name="propertyType"
+      bind:value={propertyType}
+      class="select select-primary w-full max-w-xs"
+    >
       {#each Object.values(PropertyType) as propertyType}
         <option value={propertyType}>{propertyType}</option>
       {/each}
@@ -123,7 +132,11 @@
         placeholder="100,00"
         class="input input-bordered input-primary w-full max-w-xs"
       />
-      <select name="areaUnit" bind:value={areaUnit} class="select select-primary w-full max-w-xs">
+      <select
+        name="areaUnit"
+        bind:value={areaUnit}
+        class="select select-primary w-full max-w-xs"
+      >
         {#each Object.values(AreaUnit) as areaUnit}
           <option value={areaUnit}>{areaUnit}</option>
         {/each}
