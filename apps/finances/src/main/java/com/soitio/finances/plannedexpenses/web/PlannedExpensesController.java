@@ -33,7 +33,7 @@ public class PlannedExpensesController {
         return service.getAll(pageable);
     }
 
-    @GetMapping("/{plannedExpensesId}")
+    @GetMapping("/{plannedExpenseId}")
     public PlannedExpensesDto getPlannedExpense(@PathVariable("plannedExpenseId") String id) {
         return service.getPlannedExpense(id);
     }

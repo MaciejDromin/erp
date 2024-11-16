@@ -14,6 +14,7 @@
       url: '/finances/planned-expenses/add',
     },
     editButton: {
+      url: '/finances/money-operation/periodical/edit',
       disabled: true,
     },
     deleteButton: {
@@ -35,6 +36,29 @@
       actualArray = $genericStore.finances.plannedexpenses
   }
 
+  const updateConfig = () => {
+    if ($genericStore.finances === undefined) return
+
+    if (
+      $genericStore.finances.plannedexpenses !== undefined &&
+      $genericStore.finances.plannedexpenses.length > 0
+    ) {
+      let expense = $genericStore.finances.plannedexpenses[0]
+      if (expense.plannedExpensesStatus === 'COMPLETED' || expense.plannedExpensesStatus === 'ABANDONED') {
+        config.editButton.disabled = true
+        config = config
+        return
+      }
+      config.editButton.url = `/finances/planned-expenses/${expense.uuid}/edit`
+      config.editButton.disabled = false
+      config = config
+    } else {
+      config.editButton.disabled = true
+      config = config
+    }
+  }
+
+  $: $genericStore, updateConfig()
   $: $genericStore, updateActual()
 </script>
 

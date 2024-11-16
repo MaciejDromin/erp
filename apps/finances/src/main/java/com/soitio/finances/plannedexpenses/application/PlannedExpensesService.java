@@ -18,6 +18,8 @@ import com.soitio.finances.plannedexpenses.domain.PlannedExpensesStatus;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCompletionDto;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCreationDto;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesDto;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
@@ -151,16 +153,20 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
     protected PlannedExpenses mapToEntity(MergePatch object) {
         var fields = object.getObjectValue();
         var opCat = fields.get("operationCategory").getObjectValue();
-        var finalizedDate = fields.get("finalizedDate").getStrValue();
+        var amount = fields.get("plannedAmount").getObjectValue();
+        BigDecimal value;
+        try {
+            value = new BigDecimal(amount.get("value").getStrValue());
+        } catch (Exception e) {
+            throw new IllegalStateException("Incorrect value " + amount.get("value").getStrValue());
+        }
         return PlannedExpenses.builder()
                 .uuid(fields.get("uuid").getStrValue())
-                .plannedAmount(fields.get("plannedAmount").getBigNumberValue())
-                .actualAmount(fields.get("actualAmount").getBigNumberValue())
-                .currency(fields.get("currency").getStrValue())
+                .plannedAmount(value)
+                .currency(amount.get("currencyCode").getStrValue())
                 .operationDescription(fields.get("operationDescription").getStrValue())
                 .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
                 .plannedExpensesStatus(PlannedExpensesStatus.valueOf(fields.get("plannedExpensesStatus").getStrValue()))
-                .finalizedDate(finalizedDate == null ? null : DateUtils.localDateTimeFromString(finalizedDate))
                 .plannedYear(fields.get("plannedYear").getIntValue())
                 .plannedMonth(Month.valueOf(fields.get("plannedMonth").getStrValue()))
                 .operationCategory(OperationCategory.builder()
@@ -178,7 +184,18 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
 
     @Override
     protected Object mapToDto(PlannedExpenses entity) {
-        return null;
+        return PlannedExpensesDto.builder()
+                .uuid(entity.getUuid())
+                .plannedAmount(AmountDto.of(entity.getPlannedAmount().getAmount(), entity.getCurrency()))
+                .actualAmount(AmountDto.of(entity.getActualAmount().getAmount(), entity.getCurrency()))
+                .operationDescription(entity.getOperationDescription())
+                .operationType(entity.getOperationType())
+                .plannedExpensesStatus(entity.getPlannedExpensesStatus())
+                .finalizedDate(entity.getFinalizedDate())
+                .plannedYear(entity.getPlannedYear())
+                .plannedMonth(entity.getPlannedMonth())
+                .operationCategory(operationCategoryService.from(entity.getOperationCategory()))
+                .build();
     }
 
     public PlannedExpensesDto getPlannedExpense(String id) {
