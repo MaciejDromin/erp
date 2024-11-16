@@ -1,5 +1,6 @@
 package com.soitio.inventory.property.information.strategy;
 
+import com.soitio.inventory.property.information.PropertyType;
 import io.quarkus.arc.All;
 import jakarta.enterprise.context.ApplicationScoped;
 import com.soitio.inventory.property.information.PropertyInformation;
@@ -7,18 +8,18 @@ import com.soitio.inventory.property.information.dto.PropertyInformationCreation
 import java.util.List;
 
 @ApplicationScoped
-public class PropertyInformationCreationProvider {
+public class PropertyInformationProvider {
 
-    private final List<PropertyInformationCreationStrategy> strategies;
+    private final List<PropertyInformationStrategy<?, ?>> strategies;
 
-    public PropertyInformationCreationProvider(@All List<PropertyInformationCreationStrategy> strategies) {
+    public PropertyInformationProvider(@All List<PropertyInformationStrategy<?, ?>> strategies) {
         this.strategies = strategies;
     }
 
-    public PropertyInformation map(PropertyInformationCreationDto informationCreation) {
+    public PropertyInformationStrategy<?, ?> get(final PropertyType type) {
         return strategies.stream()
-                .filter(strategy -> strategy.isApplicable(informationCreation))
-                .findFirst().map(strategy -> strategy.map(informationCreation))
+                .filter(strategy -> strategy.isApplicable(type))
+                .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Could not find implementation"));
     }
 

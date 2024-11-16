@@ -1,14 +1,15 @@
+import type { PageServerLoad } from './$types'
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
-import type { Actions } from './$types'
 import { INVENTORY_URL } from '$lib/scripts/urls'
 import { redirect } from '@sveltejs/kit'
 
 export const actions = {
-  default: async ({ request }) => {
+  default: async ({ cookies, request }) => {
     const data = await request.formData()
     const address = JSON.parse(data.get('address'))
     const body = {
+      id: data.get('propertyId'),
       name: data.get('name'),
       uniqueIdentifier: data.get('uniqueIdentifier'),
       addressId: address.id,
@@ -23,10 +24,20 @@ export const actions = {
       },
     }
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + '/properties',
-      HttpMethods.POST,
+      INVENTORY_URL + `/properties/${body.id}`,
+      HttpMethods.PATCH,
       body
     )
     throw redirect(303, '/inventory/properties')
   },
 } satisfies Actions
+
+export const load = (async ({ params }) => {
+  const property = await unsecuredExternalApiRequest(
+    INVENTORY_URL + `/properties/${params.propertyId}`,
+    HttpMethods.GET
+  )
+  return {
+    property: await property.json(),
+  }
+}) satisfies PageServerLoad

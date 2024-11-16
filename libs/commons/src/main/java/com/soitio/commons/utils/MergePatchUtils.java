@@ -20,6 +20,7 @@ public class MergePatchUtils {
         if (node.isNull()) return MergePatch.NULL;
         if (node.isTextual()) return MergePatch.strValue(node.textValue());
         if (node.isInt()) return MergePatch.intValue(node.intValue());
+        if (node.isLong()) return MergePatch.intValue(node.intValue()); // TODO: For now
         if (node.isDouble()) return MergePatch.doubleValue(node.doubleValue());
         if (node.isBoolean()) return MergePatch.boolValue(node.booleanValue());
         if (node.isBigDecimal()) return MergePatch.bigNumberValue(node.decimalValue());
