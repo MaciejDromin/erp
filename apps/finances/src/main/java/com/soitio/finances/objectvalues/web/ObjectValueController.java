@@ -1,11 +1,12 @@
 package com.soitio.finances.objectvalues.web;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.Dependent;
+import com.soitio.commons.models.dto.finances.ObjectType;
 import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
 import com.soitio.finances.objectvalues.application.ObjectValueService;
-import com.soitio.finances.objectvalues.domain.ObjectType;
 import com.soitio.finances.objectvalues.domain.dto.ObjectValueCreationDto;
 import com.soitio.finances.objectvalues.domain.dto.TotalObjectsValueDto;
 import java.util.List;
@@ -17,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +38,11 @@ public class ObjectValueController {
                                         @RequestParam("objectType") ObjectType objectType,
                                         @RequestParam(value = "objectIds", required = false) Set<String> objectIds) {
         return objectValueService.getPage(pageable, objectType, objectIds);
+    }
+
+    @GetMapping("/{objectValueId}")
+    public ObjectValueDto getObjectValue(@PathVariable("objectValueId") String id) {
+        return objectValueService.getObjectValue(id);
     }
 
     @PostMapping
@@ -60,7 +68,12 @@ public class ObjectValueController {
 
     @DeleteMapping
     public DependencyCheckResponse delete(@RequestBody Set<String> ids) {
-        return objectValueService.delete(Dependent.FINANCES_PERIODICAL, ids);
+        return objectValueService.delete(Dependent.FINANCES_OBJECT_VALUE, ids);
+    }
+
+    @PatchMapping("/{objectValueId}")
+    public void updateObjectValue(@PathVariable("objectValueId") String id, @RequestBody JsonNode node) {
+        objectValueService.update(Dependent.FINANCES_OBJECT_VALUE, id, node);
     }
 
 }

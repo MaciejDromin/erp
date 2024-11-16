@@ -1,6 +1,6 @@
 package com.soitio.finances.plannedexpenses.domain.dto;
 
-import com.soitio.commons.models.dto.finances.AmountDto;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +14,6 @@ import lombok.Setter;
 @Setter
 public class PlannedExpensesCompletionDto {
 
-    private AmountDto actualAmount;
+    private BigDecimal actualAmount;
 
 }

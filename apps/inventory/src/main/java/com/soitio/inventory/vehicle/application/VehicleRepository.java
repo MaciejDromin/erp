@@ -1,7 +1,15 @@
 package com.soitio.inventory.vehicle.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.vehicle.domain.dto.VehicleDto;
+import com.soitio.inventory.vehicle.domain.enums.BodyStyle;
+import com.soitio.inventory.vehicle.domain.enums.DriveTrain;
+import com.soitio.inventory.vehicle.domain.enums.FuelType;
+import com.soitio.inventory.vehicle.domain.enums.Make;
+import com.soitio.inventory.vehicle.domain.enums.Transmission;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
@@ -23,8 +31,9 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    public VehicleRepository(DependencyCheckRequester dependencyCheckRequester) {
-        super(dependencyCheckRequester);
+    public VehicleRepository(ObjectMapper mapper,
+                             DependencyCheckRequester dependencyCheckRequester) {
+        super(mapper, dependencyCheckRequester);
     }
 
     public PageDto<VehicleForListDto> getForList(UriInfo uriInfo) {
@@ -104,4 +113,45 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
         return new HashSet<>(list("_id in ?1", itemIds));
     }
 
+    @Override
+    protected Vehicle mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        return Vehicle.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .name(fields.get("name").getStrValue())
+                .year(fields.get("year").getIntValue())
+                .odometer(fields.get("odometer").getIntValue())
+                .bodyStyle(BodyStyle.getEnum(fields.get("bodyStyle").getStrValue()))
+                .make(Make.getEnum(fields.get("make").getStrValue()))
+                .model(fields.get("model").getStrValue())
+                .fuelType(FuelType.getEnum(fields.get("fuelType").getStrValue()))
+                .driveTrain(DriveTrain.getEnum(fields.get("driveTrain").getStrValue()))
+                .transmission(Transmission.getEnum(fields.get("transmission").getStrValue()))
+                .engineType(fields.get("engineType").getStrValue())
+                .vin(fields.get("vin").getStrValue())
+                .registrationPlate(fields.get("registrationPlate").getStrValue())
+                .build();
+    }
+
+    public VehicleDto getVehicle(String id) {
+        return toDto(findById(new ObjectId(id)));
+    }
+
+    private VehicleDto toDto(Vehicle vehicle) {
+        return VehicleDto.builder()
+                .id(vehicle.getId().toString())
+                .name(vehicle.getName())
+                .year(vehicle.getYear())
+                .odometer(vehicle.getOdometer())
+                .bodyStyle(vehicle.getBodyStyle())
+                .make(vehicle.getMake())
+                .model(vehicle.getModel())
+                .fuelType(vehicle.getFuelType())
+                .driveTrain(vehicle.getDriveTrain())
+                .transmission(vehicle.getTransmission())
+                .engineType(vehicle.getEngineType())
+                .vin(vehicle.getVin())
+                .registrationPlate(vehicle.getRegistrationPlate())
+                .build();
+    }
 }

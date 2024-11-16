@@ -17,7 +17,7 @@ export const actions = {
         propertyType: data.get('propertyType'),
         landClassification: data.get('landClassification'),
         landArea: {
-          area: parseInt(parseFloat(data.get('area')) * 100),
+          area: Number(data.get('area')),
           unit: data.get('areaUnit'),
         },
       },

@@ -6,8 +6,30 @@
   import { onMount } from 'svelte'
   import { MoneyOperationType, Month } from '$lib/finances/types/financialTypes'
 
-  let categories: any[] = []
-  let selectedCategory
+  export let data = undefined
+
+  let plannedExpenseId =
+    data === undefined ? undefined : data.plannedExpense.uuid
+  let category =
+    data === undefined
+      ? undefined
+      : { id: data.plannedExpense.operationCategory.uuid }
+  let categories: any[] = category === undefined ? [] : [category]
+  let selectedCategory =
+    category === undefined ? undefined : JSON.stringify(category)
+  let plannedAmount =
+    data === undefined ? undefined : data.plannedExpense.plannedAmount.value
+  let currencyCode =
+    data === undefined
+      ? undefined
+      : data.plannedExpense.plannedAmount.currencyCode
+  let operationDescription =
+    data === undefined ? undefined : data.plannedExpense.operationDescription
+  let plannedYear =
+    data === undefined ? undefined : data.plannedExpense.plannedYear
+  let plannedMonth =
+    data === undefined ? undefined : data.plannedExpense.plannedMonth
+  let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
     $genericStore = {}
@@ -32,16 +54,24 @@
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
+  <input
+    name="plannedExpenseId"
+    type="text"
+    class="hidden"
+    bind:value={plannedExpenseId}
+  />
   <div class="flex flex-row gap-3">
     <input
       name="plannedAmount"
       type="text"
+      bind:value={plannedAmount}
       placeholder="Planned Amount"
       class="input input-bordered input-primary w-full max-w-xs"
     />
     <input
       name="currencyCode"
       type="text"
+      bind:value={currencyCode}
       placeholder="Currency Code"
       class="input input-bordered input-primary w-full max-w-xs"
     />
@@ -50,6 +80,7 @@
     <input
       name="operationDescription"
       type="text"
+      bind:value={operationDescription}
       placeholder="Operation Description"
       class="input input-bordered input-primary w-full"
     />
@@ -58,10 +89,15 @@
     <input
       name="plannedYear"
       type="text"
+      bind:value={plannedYear}
       placeholder="Planned Year"
       class="input input-bordered input-primary w-full max-w-xs"
     />
-    <select name="plannedMonth" class="select select-primary w-full max-w-xs">
+    <select
+      name="plannedMonth"
+      bind:value={plannedMonth}
+      class="select select-primary w-full max-w-xs"
+    >
       {#each Object.values(Month) as month}
         <option value={month}>{month}</option>
       {/each}
@@ -92,5 +128,5 @@
       </Modal>
     </div>
   </div>
-  <button class="btn btn-primary mx-auto">Add</button>
+  <button class="btn btn-primary mx-auto">{buttonName}</button>
 </form>

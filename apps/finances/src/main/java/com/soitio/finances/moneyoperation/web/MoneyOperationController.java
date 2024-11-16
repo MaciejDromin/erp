@@ -1,5 +1,6 @@
 package com.soitio.finances.moneyoperation.web;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.Dependent;
 import com.soitio.finances.moneyoperation.application.MoneyOperationService;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +36,11 @@ public class MoneyOperationController {
         return operationService.getPage(pageable);
     }
 
+    @GetMapping("/{moneyOperationId}")
+    public MoneyOperationDto getMoneyOperation(@PathVariable("moneyOperationId") String id) {
+        return operationService.getMoneyOperation(id);
+    }
+
     @PostMapping
     public void registerMoneyOperation(@RequestBody MoneyOperationCreationDto creation) {
         operationService.create(creation);
@@ -47,6 +55,11 @@ public class MoneyOperationController {
     @DeleteMapping
     public DependencyCheckResponse delete(@RequestBody Set<String> ids) {
         return operationService.delete(Dependent.FINANCES_MONEY_OPERATION, ids);
+    }
+
+    @PatchMapping("/{moneyOperationId}")
+    public void updateSingleMoneyOperation(@PathVariable("moneyOperationId") String id, @RequestBody JsonNode node) {
+        operationService.update(Dependent.FINANCES_MONEY_OPERATION, id, node);
     }
 
 }

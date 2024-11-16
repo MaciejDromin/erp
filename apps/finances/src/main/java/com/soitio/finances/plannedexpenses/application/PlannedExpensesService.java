@@ -1,11 +1,15 @@
 package com.soitio.finances.plannedexpenses.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.commons.utils.DateUtils;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.application.MoneyOperationService;
+import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
 import com.soitio.finances.plannedexpenses.application.port.PlannedExpensesRepository;
@@ -14,7 +18,10 @@ import com.soitio.finances.plannedexpenses.domain.PlannedExpensesStatus;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCompletionDto;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCreationDto;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesDto;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneOffset;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,18 +32,19 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class PlannedExpensesService extends AbstractDependencyCheckService implements DependencyCheckService {
+public class PlannedExpensesService extends AbstractDependencyCheckService<PlannedExpenses> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "PlannedExpenses";
     private final PlannedExpensesRepository repository;
     private final OperationCategoryService operationCategoryService;
     private final MoneyOperationService moneyOperationService;
 
-    public PlannedExpensesService(DependencyCheckRequester dependencyCheckRequester,
+    public PlannedExpensesService(ObjectMapper mapper,
+                                  DependencyCheckRequester dependencyCheckRequester,
                                   PlannedExpensesRepository repository,
                                   OperationCategoryService operationCategoryService,
                                   MoneyOperationService moneyOperationService) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.repository = repository;
         this.operationCategoryService = operationCategoryService;
         this.moneyOperationService = moneyOperationService;
@@ -105,7 +113,7 @@ public class PlannedExpensesService extends AbstractDependencyCheckService imple
     }
 
     private PlannedExpenses updateForCompletion(PlannedExpenses plannedExpenses, PlannedExpensesCompletionDto completion) {
-        plannedExpenses.setActualAmount(completion.getActualAmount().getValue());
+        plannedExpenses.setActualAmount(completion.getActualAmount());
         plannedExpenses.setFinalizedDate(LocalDateTime.now(ZoneOffset.UTC));
         plannedExpenses.setPlannedExpensesStatus(PlannedExpensesStatus.COMPLETED);
         return plannedExpenses;
@@ -134,5 +142,63 @@ public class PlannedExpensesService extends AbstractDependencyCheckService imple
     @Override
     public void deleteByIds(Set<String> collect) {
         repository.deleteAllById(collect);
+    }
+
+    @Override
+    protected PlannedExpenses findById(String id) {
+        return repository.getReferenceById(id);
+    }
+
+    @Override
+    protected PlannedExpenses mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        var opCat = fields.get("operationCategory").getObjectValue();
+        var amount = fields.get("plannedAmount").getObjectValue();
+        BigDecimal value;
+        try {
+            value = new BigDecimal(amount.get("value").getStrValue());
+        } catch (Exception e) {
+            throw new IllegalStateException("Incorrect value " + amount.get("value").getStrValue());
+        }
+        return PlannedExpenses.builder()
+                .uuid(fields.get("uuid").getStrValue())
+                .plannedAmount(value)
+                .currency(amount.get("currencyCode").getStrValue())
+                .operationDescription(fields.get("operationDescription").getStrValue())
+                .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
+                .plannedExpensesStatus(PlannedExpensesStatus.valueOf(fields.get("plannedExpensesStatus").getStrValue()))
+                .plannedYear(fields.get("plannedYear").getIntValue())
+                .plannedMonth(Month.valueOf(fields.get("plannedMonth").getStrValue()))
+                .operationCategory(OperationCategory.builder()
+                        .uuid(opCat.get("uuid").getStrValue())
+                        .operationType(MoneyOperationType.valueOf(opCat.get("operationType").getStrValue()))
+                        .operationName(opCat.get("operationName").getStrValue())
+                        .build())
+                .build();
+    }
+
+    @Override
+    protected void updateEntity(PlannedExpenses entity) {
+        repository.save(entity);
+    }
+
+    @Override
+    protected Object mapToDto(PlannedExpenses entity) {
+        return PlannedExpensesDto.builder()
+                .uuid(entity.getUuid())
+                .plannedAmount(AmountDto.of(entity.getPlannedAmount().getAmount(), entity.getCurrency()))
+                .actualAmount(AmountDto.of(entity.getActualAmount().getAmount(), entity.getCurrency()))
+                .operationDescription(entity.getOperationDescription())
+                .operationType(entity.getOperationType())
+                .plannedExpensesStatus(entity.getPlannedExpensesStatus())
+                .finalizedDate(entity.getFinalizedDate())
+                .plannedYear(entity.getPlannedYear())
+                .plannedMonth(entity.getPlannedMonth())
+                .operationCategory(operationCategoryService.from(entity.getOperationCategory()))
+                .build();
+    }
+
+    public PlannedExpensesDto getPlannedExpense(String id) {
+        return convertToDto(findById(id));
     }
 }

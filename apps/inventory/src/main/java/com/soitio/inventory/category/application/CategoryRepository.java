@@ -1,6 +1,8 @@
 package com.soitio.inventory.category.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.PageDto;
 import com.soitio.commons.models.dto.inventory.category.CategoryDto;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
@@ -18,8 +20,18 @@ public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    public CategoryRepository(DependencyCheckRequester dependencyCheckRequester) {
-        super(dependencyCheckRequester);
+    public CategoryRepository(ObjectMapper mapper,
+                              DependencyCheckRequester dependencyCheckRequester) {
+        super(mapper, dependencyCheckRequester);
+    }
+
+    @Override
+    protected Category mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        return Category.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .name(fields.get("name").getStrValue())
+                .build();
     }
 
     public PageDto<CategoryDto> findAll(UriInfo uriInfo) {
@@ -54,6 +66,10 @@ public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
 
     public Set<Category> findAllByIdsIn(Set<ObjectId> categoryIds) {
         return new HashSet<>(list("_id in ?1", categoryIds));
+    }
+
+    public CategoryDto findOne(String categoryId) {
+        return convert(findById(new ObjectId(categoryId)));
     }
 
 }

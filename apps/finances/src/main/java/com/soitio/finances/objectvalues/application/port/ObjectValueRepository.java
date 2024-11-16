@@ -1,6 +1,6 @@
 package com.soitio.finances.objectvalues.application.port;
 
-import com.soitio.finances.objectvalues.domain.ObjectType;
+import com.soitio.commons.models.dto.finances.ObjectType;
 import com.soitio.finances.objectvalues.domain.ObjectValue;
 import com.soitio.finances.objectvalues.domain.proj.ObjectIdProj;
 import java.util.List;

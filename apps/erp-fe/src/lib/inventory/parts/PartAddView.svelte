@@ -5,8 +5,17 @@
   import { onMount } from 'svelte'
   import { genericStore } from '$lib/stores/genericStore.ts'
 
-  let contractors: any[] = []
-  let selectedContractor
+  export let data = undefined
+
+  let partId = data === undefined ? undefined : data.part.id
+  let name = data === undefined ? undefined : data.part.name
+  let partNumber = data === undefined ? undefined : data.part.partNumber
+  let contractor =
+    data === undefined ? undefined : { id: data.part.manufacturerId }
+  let selectedContractor =
+    data === undefined ? undefined : JSON.stringify(contractor)
+  let contractors: any[] = data === undefined ? [] : [contractor]
+  let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
     $genericStore = {}
@@ -31,15 +40,18 @@
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
+  <input name="partId" type="text" class="hidden" bind:value={partId} />
   <div class="flex flex-row gap-3">
     <input
       name="name"
+      bind:value={name}
       type="text"
       placeholder="Name"
       class="input input-bordered input-primary w-full max-w-xs"
     />
     <input
       name="partNumber"
+      bind:value={partNumber}
       type="text"
       placeholder="Part Number"
       class="input input-bordered input-primary w-full max-w-xs"
@@ -65,6 +77,6 @@
         />
       </Modal>
     </div>
-    <button class="btn btn-primary">Add Row</button>
+    <button class="btn btn-primary">{buttonName} Row</button>
   </div>
 </form>

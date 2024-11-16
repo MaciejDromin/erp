@@ -1,6 +1,8 @@
 package com.soitio.inventory.property.address.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
@@ -8,14 +10,16 @@ import com.soitio.commons.models.dto.PageDto;
 import com.soitio.inventory.property.address.domain.PropertyAddress;
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressCreationDto;
 import com.soitio.inventory.property.address.domain.dto.PropertyAddressDto;
+import org.bson.types.ObjectId;
 
 @Singleton
 public class PropertyAddressRepository extends AbstractDependencyCheckRepo<PropertyAddress> {
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    public PropertyAddressRepository(DependencyCheckRequester dependencyCheckRequester) {
-        super(dependencyCheckRequester);
+    public PropertyAddressRepository(ObjectMapper mapper,
+                                     DependencyCheckRequester dependencyCheckRequester) {
+        super(mapper, dependencyCheckRequester);
     }
 
     public void create(PropertyAddressCreationDto propertyAddressCreation) {
@@ -54,4 +58,20 @@ public class PropertyAddressRepository extends AbstractDependencyCheckRepo<Prope
                 .build();
     }
 
+    @Override
+    protected PropertyAddress mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        return PropertyAddress.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .addressLine(fields.get("addressLine").getStrValue())
+                .city(fields.get("city").getStrValue())
+                .province(fields.get("province").getStrValue())
+                .country(fields.get("country").getStrValue())
+                .postalCode(fields.get("postalCode").getStrValue())
+                .build();
+    }
+
+    public PropertyAddressDto getAddress(String id) {
+        return to(findById(new ObjectId(id)));
+    }
 }

@@ -1,6 +1,8 @@
 package com.soitio.inventory.contractor.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
@@ -22,8 +24,9 @@ public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor
 
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    public ContractorRepository(DependencyCheckRequester dependencyCheckRequester) {
-        super(dependencyCheckRequester);
+    public ContractorRepository(ObjectMapper mapper,
+                                DependencyCheckRequester dependencyCheckRequester) {
+        super(mapper, dependencyCheckRequester);
     }
 
     public PageDto<ContractorDto> getContractors(UriInfo uriInfo) {
@@ -85,4 +88,22 @@ public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor
                 contactInformation.getWebsite());
     }
 
+    @Override
+    protected Contractor mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        var contactInfo = fields.get("contactInformation").getObjectValue();
+        return Contractor.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .name(fields.get("name").getStrValue())
+                .contactInformation(ContactInformation.builder()
+                        .phoneNumber(contactInfo.get("phoneNumber").getStrValue())
+                        .email(contactInfo.get("email").getStrValue())
+                        .website(contactInfo.get("website").getStrValue())
+                        .build())
+                .build();
+    }
+
+    public ContractorDto getContractor(String contractorId) {
+        return to(findById(new ObjectId(contractorId)));
+    }
 }

@@ -1,5 +1,6 @@
 package com.soitio.finances.plannedexpenses.web;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.Dependent;
 import com.soitio.finances.plannedexpenses.application.PlannedExpensesService;
@@ -32,6 +33,11 @@ public class PlannedExpensesController {
         return service.getAll(pageable);
     }
 
+    @GetMapping("/{plannedExpenseId}")
+    public PlannedExpensesDto getPlannedExpense(@PathVariable("plannedExpenseId") String id) {
+        return service.getPlannedExpense(id);
+    }
+
     @PostMapping
     public void create(@RequestBody PlannedExpensesCreationDto creation) {
         service.create(creation);
@@ -50,6 +56,11 @@ public class PlannedExpensesController {
     @DeleteMapping
     public DependencyCheckResponse delete(@RequestBody Set<String> ids) {
         return service.delete(Dependent.FINANCES_PLANNED_EXPENSES, ids);
+    }
+
+    @PatchMapping("/{plannedExpensesId}")
+    public void updateSinglePlannedExpense(@PathVariable("plannedExpensesId") String id, @RequestBody JsonNode node) {
+        service.update(Dependent.FINANCES_PLANNED_EXPENSES, id, node);
     }
 
 }

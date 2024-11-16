@@ -1,18 +1,24 @@
 package com.soitio.finances.moneyoperation.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.commons.utils.DateUtils;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.application.port.MoneyOperationRepository;
 import com.soitio.finances.moneyoperation.domain.MoneyOperation;
+import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationBalanceDto;
 import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationCreationDto;
 import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationDto;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
 import com.soitio.finances.plannedexpenses.domain.PlannedExpenses;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
@@ -27,16 +33,17 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class MoneyOperationService extends AbstractDependencyCheckService implements DependencyCheckService {
+public class MoneyOperationService extends AbstractDependencyCheckService<MoneyOperation> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "MoneyOperation";
     private final OperationCategoryService operationCategoryService;
     private final MoneyOperationRepository repository;
 
-    public MoneyOperationService(DependencyCheckRequester dependencyCheckRequester,
+    public MoneyOperationService(ObjectMapper mapper,
+                                 DependencyCheckRequester dependencyCheckRequester,
                                  OperationCategoryService operationCategoryService,
                                  MoneyOperationRepository repository) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.operationCategoryService = operationCategoryService;
         this.repository = repository;
     }
@@ -150,5 +157,53 @@ public class MoneyOperationService extends AbstractDependencyCheckService implem
     @Override
     public void deleteByIds(Set<String> collect) {
         repository.deleteAllById(collect);
+    }
+
+    @Override
+    protected MoneyOperation findById(String id) {
+        return repository.getReferenceById(id);
+    }
+
+    @Override
+    protected MoneyOperation mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        var opCat = fields.get("operationCategory").getObjectValue();
+        var amount = fields.get("amount").getObjectValue();
+        BigDecimal value;
+        try {
+            value = new BigDecimal(amount.get("value").getStrValue());
+        } catch (Exception e) {
+            throw new IllegalStateException("Incorrect value " + amount.get("value").getStrValue());
+        }
+        LocalDateTime effectiveDate = DateUtils.localDateTimeFromString(fields.get("effectiveDate").getStrValue());
+        return MoneyOperation.builder()
+                .uuid(fields.get("uuid").getStrValue())
+                .amount(value)
+                .currency(amount.get("currencyCode").getStrValue())
+                .operationDescription(fields.get("operationDescription").getStrValue())
+                .effectiveDate(effectiveDate)
+                .effectiveMonth(effectiveDate.getMonth())
+                .effectiveYear(effectiveDate.getYear())
+                .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
+                .operationCategory(OperationCategory.builder()
+                        .uuid(opCat.get("uuid").getStrValue())
+                        .operationType(MoneyOperationType.valueOf(opCat.get("operationType").getStrValue()))
+                        .operationName(opCat.get("operationName").getStrValue())
+                        .build())
+                .build();
+    }
+
+    @Override
+    protected void updateEntity(MoneyOperation entity) {
+        repository.save(entity);
+    }
+
+    @Override
+    protected Object mapToDto(MoneyOperation entity) {
+        return from(entity);
+    }
+
+    public MoneyOperationDto getMoneyOperation(String id) {
+        return from(findById(id));
     }
 }

@@ -1,9 +1,13 @@
 package com.soitio.inventory.maintenance.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
+import com.soitio.commons.utils.DateUtils;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.maintenance.domain.dto.MaintenanceRecordDto;
 import com.soitio.inventory.maintenance.domain.dto.PartQuantity;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
@@ -26,8 +30,9 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
     private static final String SERVICE_NAME = "MaintenanceRecord";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    public MaintenanceRepository(DependencyCheckRequester dependencyCheckRequester) {
-        super(dependencyCheckRequester);
+    public MaintenanceRepository(ObjectMapper mapper,
+                                 DependencyCheckRequester dependencyCheckRequester) {
+        super(mapper, dependencyCheckRequester);
     }
 
     public void create(MaintenanceCreationDto maintenanceCreation) {
@@ -68,6 +73,16 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
                 .build();
     }
 
+    private MaintenanceRecordDto toDto(MaintenanceRecord maintenanceRecord) {
+        return MaintenanceRecordDto.builder()
+                .id(maintenanceRecord.getId())
+                .date(maintenanceRecord.getDate())
+                .odometer(maintenanceRecord.getOdometer())
+                .parts(maintenanceRecord.getParts())
+                .contractorId(maintenanceRecord.getContractorId())
+                .build();
+    }
+
     private MaintenanceRecord from(MaintenanceCreationDto maintenanceCreation) {
         return MaintenanceRecord.builder()
                 .date(maintenanceCreation.getDate())
@@ -105,5 +120,25 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
 
     private Set<MaintenanceRecord> findAllByContractorIdIn(Set<ObjectId> set) {
         return new HashSet<>(list("parts.id in ?1", set));
+    }
+
+    @Override
+    protected MaintenanceRecord mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        return MaintenanceRecord.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .date(DateUtils.localDateFromString(fields.get("date").getStrValue()))
+                .odometer(fields.get("odometer").getIntValue())
+                .contractorId(new ObjectId(fields.get("contractorId").getStrValue()))
+                .parts(fields.get("parts").getListValue().stream()
+                        .map(MergePatch::getObjectValue)
+                        .map(f -> new PartQuantity(new ObjectId(f.get("id").getStrValue()),
+                                f.get("quantity").getIntValue()))
+                        .toList())
+                .build();
+    }
+
+    public MaintenanceRecordDto getMaintenance(String id) {
+        return toDto(findById(new ObjectId(id)));
     }
 }

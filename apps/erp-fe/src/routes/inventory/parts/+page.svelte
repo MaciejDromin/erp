@@ -3,6 +3,7 @@
   import Pageable from '$lib/Pageable.svelte'
   import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
   import { Services } from '$lib/types/services.ts'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   let config = {
     title: 'Parts',
@@ -10,7 +11,8 @@
       url: '/inventory/parts/add',
     },
     editButton: {
-      disabled: false,
+      url: '/inventory/parts/edit',
+      disabled: true,
     },
     deleteButton: {
       disabled: false,
@@ -21,6 +23,23 @@
     },
     service: Services.INVENTORY,
   }
+
+  const updateConfig = () => {
+    if ($genericStore.inventory === undefined) return
+
+    if (
+      $genericStore.inventory.parts !== undefined &&
+      $genericStore.inventory.parts.length > 0
+    ) {
+      config.editButton.url = `/inventory/parts/${$genericStore.inventory.parts[0].id}/edit`
+      config.editButton.disabled = false
+      config = config
+    } else {
+      config.editButton.disabled = true
+    }
+  }
+
+  $: $genericStore, updateConfig()
 </script>
 
 <FeatureMenuBar {config} />

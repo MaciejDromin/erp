@@ -31,7 +31,7 @@ public enum Dependent {
     }
 
     public static boolean contains(String name) {
-        if (names.isEmpty()) initializeSet();
+        if (names.isEmpty()) initializeMap();
         return names.containsKey(name.toLowerCase());
     }
 
@@ -39,7 +39,7 @@ public enum Dependent {
         return names.get(name);
     }
 
-    private static void initializeSet() {
+    private static void initializeMap() {
         for (Dependent dep : Dependent.values()) {
             names.put(dep.name, dep);
         }

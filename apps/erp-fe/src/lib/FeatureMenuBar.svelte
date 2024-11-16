@@ -31,6 +31,10 @@
     // TODO: Print ret if something didnt pass
     $genericStore.reload = true
   }
+
+  const gotoEdit = () => {
+    goto(config.editButton.url)
+  }
 </script>
 
 <div class="navbar bg-neutral shadow-xl text-white h-8">
@@ -39,12 +43,14 @@
   </div>
   <div class="flex-none">
     <ul class="menu menu-horizontal px-1">
+      <slot />
       <li>
         <button on:click={gotoAdd} class="btn btn-primary mr-3">Add</button>
       </li>
       <li>
         <button
           disabled={config.editButton.disabled}
+          on:click={gotoEdit}
           class="btn btn-primary mr-3">Edit</button
         >
       </li>

@@ -1,9 +1,13 @@
 package com.soitio.inventory.property.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import com.soitio.inventory.property.domain.dto.PropertyDto;
+import com.soitio.inventory.property.information.PropertyType;
 import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
@@ -14,7 +18,7 @@ import com.soitio.inventory.property.domain.dto.PropertyCreationDto;
 import com.soitio.inventory.property.domain.dto.PropertyForListDto;
 import com.soitio.inventory.property.information.PropertyInformation;
 import com.soitio.inventory.property.information.dto.PropertyInformationCreationDto;
-import com.soitio.inventory.property.information.strategy.PropertyInformationCreationProvider;
+import com.soitio.inventory.property.information.strategy.PropertyInformationProvider;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,11 +33,12 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property> im
     private static final String SERVICE_NAME = "Property";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
-    private final PropertyInformationCreationProvider propertyProvider;
+    private final PropertyInformationProvider propertyProvider;
 
-    public PropertyRepository(DependencyCheckRequester dependencyCheckRequester,
-                              PropertyInformationCreationProvider propertyProvider) {
-        super(dependencyCheckRequester);
+    public PropertyRepository(ObjectMapper mapper,
+                              DependencyCheckRequester dependencyCheckRequester,
+                              PropertyInformationProvider propertyProvider) {
+        super(mapper, dependencyCheckRequester);
         this.propertyProvider = propertyProvider;
     }
 
@@ -52,7 +57,8 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property> im
     }
 
     private PropertyInformation fromPropertyInformation(PropertyInformationCreationDto propertyInformation) {
-        return propertyProvider.map(propertyInformation);
+        return propertyProvider.get(propertyInformation.getPropertyType())
+                .create(propertyInformation);
     }
 
     public PageDto<PropertyForListDto> getForList(UriInfo uriInfo) {
@@ -131,5 +137,36 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property> im
                 .stream()
                 .map(p -> new DependencyCheckResult(p.getAddressId().toString(), true, "Property Adress with id '%s' is in use".formatted(p.getAddressId())))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    protected Property mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        MergePatch propertyInformation = fields.get("propertyInformation");
+        PropertyType type = PropertyType.valueOf(propertyInformation.getObjectValue().get("propertyType").getStrValue());
+        return Property.builder()
+                .id(new ObjectId(fields.get("id").getStrValue()))
+                .name(fields.get("name").getStrValue())
+                .uniqueIdentifier(fields.get("uniqueIdentifier").getStrValue())
+                .addressId(new ObjectId(fields.get("addressId").getStrValue()))
+                .landRegister(fields.get("landRegister").getStrValue())
+                .propertyInformation(propertyProvider.get(type).jsonToEntity(propertyInformation))
+                .build();
+    }
+
+    public PropertyDto getProperty(String id) {
+        return toDto(findById(new ObjectId(id)));
+    }
+
+    private PropertyDto toDto(Property object) {
+        return PropertyDto.builder()
+                .id(object.getId())
+                .name(object.getName())
+                .uniqueIdentifier(object.getUniqueIdentifier())
+                .addressId(object.getAddressId())
+                .landRegister(object.getLandRegister())
+                .propertyInformation(propertyProvider.get(object.getPropertyInformation().getPropertyType())
+                        .from(object.getPropertyInformation()))
+                .build();
     }
 }

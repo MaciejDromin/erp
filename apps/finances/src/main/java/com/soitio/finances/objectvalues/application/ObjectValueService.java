@@ -1,15 +1,17 @@
 package com.soitio.finances.objectvalues.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.commons.models.dto.finances.ObjectType;
 import com.soitio.commons.models.dto.finances.ObjectValueDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.currency.application.CurrencyService;
 import com.soitio.finances.objectvalues.application.port.ObjectValueRepository;
-import com.soitio.finances.objectvalues.domain.ObjectType;
 import com.soitio.finances.objectvalues.domain.ObjectValue;
 import com.soitio.finances.objectvalues.domain.dto.ObjectValueCreationDto;
 import com.soitio.finances.objectvalues.domain.dto.TotalObjectsValueDto;
@@ -30,17 +32,18 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class ObjectValueService extends AbstractDependencyCheckService implements DependencyCheckService {
+public class ObjectValueService extends AbstractDependencyCheckService<ObjectValue> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "ObjectValue";
 
     private final ObjectValueRepository objectValueRepository;
     private final CurrencyService currencyService;
 
-    public ObjectValueService(DependencyCheckRequester dependencyCheckRequester,
+    public ObjectValueService(ObjectMapper mapper,
+                              DependencyCheckRequester dependencyCheckRequester,
                               ObjectValueRepository objectValueRepository,
                               CurrencyService currencyService) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.objectValueRepository = objectValueRepository;
         this.currencyService = currencyService;
     }
@@ -71,6 +74,7 @@ public class ObjectValueService extends AbstractDependencyCheckService implement
                 .uuid(objectValue.getUuid())
                 .objectId(objectValue.getObjectId())
                 .amount(AmountDto.of(amount.getAmount(), amount.getCurrencyUnit().getCode()))
+                .objectType(objectValue.getObjectType())
                 .build();
     }
 
@@ -138,5 +142,43 @@ public class ObjectValueService extends AbstractDependencyCheckService implement
     @Override
     public void deleteByIds(Set<String> collect) {
         objectValueRepository.deleteAllById(collect);
+    }
+
+    @Override
+    protected ObjectValue findById(String id) {
+        return objectValueRepository.getReferenceById(id);
+    }
+
+    @Override
+    protected ObjectValue mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        var amount = fields.get("amount").getObjectValue();
+        BigDecimal value;
+        try {
+            value = new BigDecimal(amount.get("value").getStrValue());
+        } catch (Exception e) {
+            throw new IllegalStateException("Incorrect value " + amount.get("value").getStrValue());
+        }
+        return ObjectValue.builder()
+                .uuid(fields.get("uuid").getStrValue())
+                .amount(value)
+                .currency(amount.get("currencyCode").getStrValue())
+                .objectId(fields.get("objectId").getStrValue())
+                .objectType(ObjectType.valueOf(fields.get("objectType").getStrValue()))
+                .build();
+    }
+
+    @Override
+    protected void updateEntity(ObjectValue entity) {
+        objectValueRepository.save(entity);
+    }
+
+    @Override
+    protected Object mapToDto(ObjectValue entity) {
+        return from(entity);
+    }
+
+    public ObjectValueDto getObjectValue(String id) {
+        return from(findById(id));
     }
 }

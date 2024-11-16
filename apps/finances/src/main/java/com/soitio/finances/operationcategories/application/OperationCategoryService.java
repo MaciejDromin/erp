@@ -1,7 +1,8 @@
 package com.soitio.finances.operationcategories.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
-import com.soitio.commons.dependency.model.DependencyCheckResponse;
+import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.application.port.OperationCategoryRepository;
@@ -16,13 +17,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OperationCategoryService extends AbstractDependencyCheckService {
+public class OperationCategoryService extends AbstractDependencyCheckService<OperationCategory> {
 
     private final OperationCategoryRepository repository;
 
-    public OperationCategoryService(DependencyCheckRequester dependencyCheckRequester,
+    public OperationCategoryService(ObjectMapper mapper,
+                                    DependencyCheckRequester dependencyCheckRequester,
                                     OperationCategoryRepository repository) {
-        super(dependencyCheckRequester);
+        super(mapper, dependencyCheckRequester);
         this.repository = repository;
     }
 
@@ -64,5 +66,34 @@ public class OperationCategoryService extends AbstractDependencyCheckService {
     @Override
     public void deleteByIds(Set<String> collect) {
         repository.deleteAllById(collect);
+    }
+
+    @Override
+    protected OperationCategory findById(String id) {
+        return repository.getReferenceById(id);
+    }
+
+    @Override
+    protected OperationCategory mapToEntity(MergePatch object) {
+        var fields = object.getObjectValue();
+        return OperationCategory.builder()
+                .uuid(fields.get("uuid").getStrValue())
+                .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
+                .operationName(fields.get("operationName").getStrValue())
+                .build();
+    }
+
+    @Override
+    protected void updateEntity(OperationCategory entity) {
+        repository.save(entity);
+    }
+
+    @Override
+    protected Object mapToDto(OperationCategory entity) {
+        return from(entity);
+    }
+
+    public OperationCategoryDto getOperationCategory(String id) {
+        return from(findById(id));
     }
 }

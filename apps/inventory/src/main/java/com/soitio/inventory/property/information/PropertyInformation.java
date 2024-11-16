@@ -15,7 +15,7 @@ import org.bson.codecs.pojo.annotations.BsonDiscriminator;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "@class")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = LandInformation.class)
 })
