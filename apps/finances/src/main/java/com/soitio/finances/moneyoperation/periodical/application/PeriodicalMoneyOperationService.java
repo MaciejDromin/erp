@@ -7,6 +7,7 @@ import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.finances.common.AbstractDependencyCheckService;
+import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.moneyoperation.periodical.application.port.PeriodicalMoneyOperationRepository;
 import com.soitio.finances.moneyoperation.periodical.domain.PeriodicalMoneyOperation;
 import com.soitio.finances.moneyoperation.periodical.domain.QPeriodicalMoneyOperation;
@@ -14,6 +15,8 @@ import com.soitio.finances.moneyoperation.periodical.domain.dto.PeriodicalMoneyO
 import com.soitio.finances.moneyoperation.periodical.domain.dto.PeriodicalMoneyOperationDto;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
+
+import java.math.BigDecimal;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,21 +114,55 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
 
     @Override
     protected PeriodicalMoneyOperation findById(String id) {
-        return null;
+        return repository.getReferenceById(id);
     }
 
     @Override
     protected PeriodicalMoneyOperation mapToEntity(MergePatch object) {
-        return null;
+        var fields = object.getObjectValue();
+        var opCat = fields.get("operationCategory").getObjectValue();
+        var amount = fields.get("amount").getObjectValue();
+        BigDecimal value;
+        try {
+            value = new BigDecimal(amount.get("value").getStrValue());
+        } catch (Exception e) {
+            throw new IllegalStateException("Incorrect value " + amount.get("value").getStrValue());
+        }
+        return PeriodicalMoneyOperation.builder()
+                .uuid(fields.get("uuid").getStrValue())
+                .amount(value)
+                .currency(amount.get("currencyCode").getStrValue())
+                .operationDescription(fields.get("operationDescription").getStrValue())
+                .repetitionPeriod(fields.get("repetitionPeriod").getIntValue())
+                .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
+                .nextApplicableMonth(Month.valueOf(fields.get("nextApplicableMonth").getStrValue()))
+                .operationCategory(OperationCategory.builder()
+                        .uuid(opCat.get("uuid").getStrValue())
+                        .operationType(MoneyOperationType.valueOf(opCat.get("operationType").getStrValue()))
+                        .operationName(opCat.get("operationName").getStrValue())
+                        .build())
+                .build();
     }
 
     @Override
     protected void updateEntity(PeriodicalMoneyOperation entity) {
-
+        repository.save(entity);
     }
 
     @Override
     protected Object mapToDto(PeriodicalMoneyOperation entity) {
-        return null;
+        return PeriodicalMoneyOperationDto.builder()
+                .uuid(entity.getUuid())
+                .amount(AmountDto.of(entity.getAmount().getAmount(), entity.getCurrency()))
+                .operationDescription(entity.getOperationDescription())
+                .repetitionPeriod(entity.getRepetitionPeriod())
+                .operationType(entity.getOperationType())
+                .nextApplicableMonth(entity.getNextApplicableMonth())
+                .operationCategory(operationCategoryService.from(entity.getOperationCategory()))
+                .build();
+    }
+
+    public PeriodicalMoneyOperationDto getPeriodicalOperation(String id) {
+        return from(findById(id));
     }
 }

@@ -6,9 +6,30 @@
   import Modal from '$lib/Modal.svelte'
   import OperationCategoryTable from '$lib/finances/operation-category/OperationCategoryTable.svelte'
 
-  let categories: any[] = []
-  let selectedCategory
-  let operationType: string = MoneyOperationType.INCOME
+  export let data = undefined
+
+  let periodicalOperationId = data === undefined ? undefined : data.operation.uuid
+  let category =
+    data === undefined
+      ? undefined
+      : { id: data.operation.operationCategory.uuid }
+  let categories: any[] = category === undefined ? [] : [category]
+  let selectedCategory =
+    category === undefined ? undefined : JSON.stringify(category)
+  let amount = data === undefined ? undefined : data.operation.amount.value
+  let currencyCode =
+    data === undefined ? undefined : data.operation.amount.currencyCode
+  let operationDescription =
+    data === undefined ? undefined : data.operation.operationDescription
+  let operationType =
+    data === undefined
+      ? MoneyOperationType.INCOME
+      : data.operation.operationType
+  let repetitionPeriod =
+    data === undefined ? undefined : data.operation.repetitionPeriod
+  let nextApplicableMonth =
+    data === undefined ? undefined : data.operation.nextApplicableMonth
+  let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
     $genericStore = {}
@@ -33,16 +54,24 @@
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
+  <input
+    name="periodicalOperationId"
+    type="text"
+    class="hidden"
+    bind:value={periodicalOperationId}
+  />
   <div class="flex flex-row gap-3">
     <input
       name="amount"
       type="text"
+      bind:value={amount}
       placeholder="Amount"
       class="input input-bordered input-primary w-full max-w-xs"
     />
     <input
       name="currencyCode"
       type="text"
+      bind:value={currencyCode}
       placeholder="Currency Code"
       class="input input-bordered input-primary w-full max-w-xs"
     />
@@ -51,6 +80,7 @@
     <input
       name="operationDescription"
       type="text"
+      bind:value={operationDescription}
       placeholder="Operation Description"
       class="input input-bordered input-primary w-full"
     />
@@ -58,6 +88,7 @@
   <div class="flex flex-row gap-3">
     <select
       name="nextApplicableMonth"
+      bind:value={nextApplicableMonth}
       class="select select-primary w-full max-w-xs"
     >
       {#each Object.values(Month) as month}
@@ -67,6 +98,7 @@
     <input
       name="repetitionPeriod"
       type="text"
+      bind:value={repetitionPeriod}
       placeholder="Repetition Period"
       class="input input-bordered input-primary w-full max-w-xs"
     />
@@ -105,5 +137,5 @@
       </Modal>
     </div>
   </div>
-  <button class="btn btn-primary mx-auto">Add</button>
+  <button class="btn btn-primary mx-auto">{buttonName}</button>
 </form>
