@@ -31,8 +31,7 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const plannedExpense = await unsecuredExternalApiRequest(
-    FINANCES_URL +
-      `/finances/planned-expenses/${params.plannedExpenseId}`,
+    FINANCES_URL + `/finances/planned-expenses/${params.plannedExpenseId}`,
     HttpMethods.GET
   )
   return {

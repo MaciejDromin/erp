@@ -17,11 +17,18 @@
   let categories: any[] = category === undefined ? [] : [category]
   let selectedCategory =
     category === undefined ? undefined : JSON.stringify(category)
-  let plannedAmount = data === undefined ? undefined : data.plannedExpense.plannedAmount.value
-  let currencyCode = data === undefined ? undefined : data.plannedExpense.plannedAmount.currencyCode
-  let operationDescription = data === undefined ? undefined : data.plannedExpense.operationDescription
-  let plannedYear = data === undefined ? undefined : data.plannedExpense.plannedYear
-  let plannedMonth = data === undefined ? undefined : data.plannedExpense.plannedMonth
+  let plannedAmount =
+    data === undefined ? undefined : data.plannedExpense.plannedAmount.value
+  let currencyCode =
+    data === undefined
+      ? undefined
+      : data.plannedExpense.plannedAmount.currencyCode
+  let operationDescription =
+    data === undefined ? undefined : data.plannedExpense.operationDescription
+  let plannedYear =
+    data === undefined ? undefined : data.plannedExpense.plannedYear
+  let plannedMonth =
+    data === undefined ? undefined : data.plannedExpense.plannedMonth
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
@@ -86,7 +93,11 @@
       placeholder="Planned Year"
       class="input input-bordered input-primary w-full max-w-xs"
     />
-    <select name="plannedMonth" bind:value={plannedMonth} class="select select-primary w-full max-w-xs">
+    <select
+      name="plannedMonth"
+      bind:value={plannedMonth}
+      class="select select-primary w-full max-w-xs"
+    >
       {#each Object.values(Month) as month}
         <option value={month}>{month}</option>
       {/each}

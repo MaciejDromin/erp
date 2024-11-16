@@ -44,7 +44,10 @@
       $genericStore.finances.plannedexpenses.length > 0
     ) {
       let expense = $genericStore.finances.plannedexpenses[0]
-      if (expense.plannedExpensesStatus === 'COMPLETED' || expense.plannedExpensesStatus === 'ABANDONED') {
+      if (
+        expense.plannedExpensesStatus === 'COMPLETED' ||
+        expense.plannedExpensesStatus === 'ABANDONED'
+      ) {
         config.editButton.disabled = true
         config = config
         return
