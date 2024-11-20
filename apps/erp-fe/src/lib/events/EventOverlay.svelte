@@ -3,8 +3,6 @@
   export let eventData
   export let triggerClose
 
-  console.log("Hey!")
-
   const notifyClose = () => {
     triggerClose = true
   }
