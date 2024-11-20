@@ -10,7 +10,7 @@ export const POST = (async ({ request }) => {
     HttpMethods.POST,
     {
       name: data.name,
-      template: data.template
+      template: data.template,
     }
   )
   return new Response(ret.body, { status: 200 })

@@ -8,7 +8,7 @@
   import '@fortawesome/fontawesome-svg-core/styles.css'
   import { config } from '@fortawesome/fontawesome-svg-core'
   import EventOverlay from '$lib/events/EventOverlay.svelte'
-  import { onMount } from 'svelte';
+  import { onMount } from 'svelte'
   import { REPORTS_URL } from '$lib/scripts/urls.ts'
 
   config.autoAddCss = false
@@ -20,10 +20,11 @@
 
   onMount(async () => {
     configureWs()
-  }) 
+  })
 
   const configureWs = async () => {
-    const wsUrl = "ws://" + REPORTS_URL.slice(REPORTS_URL.lastIndexOf("/") + 1) + "/reports"
+    const wsUrl =
+      'ws://' + REPORTS_URL.slice(REPORTS_URL.lastIndexOf('/') + 1) + '/reports'
     const ws = new WebSocket(wsUrl)
 
     ws.addEventListener('open', (e) => {
@@ -31,7 +32,7 @@
     })
 
     ws.addEventListener('message', (m) => {
-      if (m.data !== "Connected") {
+      if (m.data !== 'Connected') {
         eventQueue.push(JSON.parse(m.data))
         eventQueue = eventQueue
       }
@@ -42,14 +43,14 @@
     let fileLocation = event.content.fileLocation
     let eventData = {
       url: fileLocation, // TODO: Most likely need to adjust url
-      name: fileLocation.slice(fileLocation.indexOf("/") + 1)
+      name: fileLocation.slice(fileLocation.indexOf('/') + 1),
     }
 
     return eventData
   }
 
   const shouldRender = (event) => {
-    if (event.content.status !== "COMPLETED") {
+    if (event.content.status !== 'COMPLETED') {
       eventQueue.shift()
       return false
     }
