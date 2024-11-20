@@ -8,7 +8,6 @@ import com.soitio.inventory.property.information.PropertyInformation;
 import com.soitio.inventory.property.information.PropertyType;
 import com.soitio.inventory.property.information.dto.LandPropertyInformationDto;
 import com.soitio.inventory.property.information.dto.PropertyInformationCreationDto;
-import com.soitio.inventory.property.information.dto.PropertyInformationDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import com.soitio.inventory.property.information.LandInformation;
 import com.soitio.inventory.property.information.dto.LandInformationCreationDto;

@@ -1,5 +1,6 @@
 package com.soitio.reports.service;
 
+import com.soitio.commons.ws.ConcreteJobContent;
 import com.soitio.commons.ws.EventStatus;
 import com.soitio.commons.ws.WsMessage;
 import com.soitio.reports.JobStatus;
@@ -26,16 +27,20 @@ public class ReportStatusUpdaterService {
     public void updateStatus(ReportGenerationStatus reportGenerationStatus) {
         reportStatusRepository.update(reportGenerationStatus);
         switch (reportGenerationStatus.getJobStatus()) {
+            case JobStatus.IN_PROGRESS -> wsSender.send(WS_ENDPOINT,
+                    new WsMessage<>("event.reports", // TODO: extract to constant
+                            new ConcreteJobContent(EventStatus.IN_PROGRESS,
+                                    reportGenerationStatus.getJobId())));
             case JobStatus.FINISHED -> wsSender.send(WS_ENDPOINT,
-                    new WsMessage<>("event.reports", //TODO: extract to constants
-                    new CompletedReportContent(EventStatus.COMPLETED,
-                            reportGenerationStatus.getJobId(),
-                            reportGenerationStatus.getLocation())));
+                    new WsMessage<>("event.reports",
+                            new CompletedReportContent(EventStatus.COMPLETED,
+                                    reportGenerationStatus.getJobId(),
+                                    reportGenerationStatus.getLocation())));
             case JobStatus.FAILED -> wsSender.send(WS_ENDPOINT,
                     new WsMessage<>("event.reports",
-                    new FailedReportContent(EventStatus.FAILED,
-                            reportGenerationStatus.getJobId(),
-                            reportGenerationStatus.getReason())));
+                            new FailedReportContent(EventStatus.FAILED,
+                                    reportGenerationStatus.getJobId(),
+                                    reportGenerationStatus.getReason())));
         }
     }
 

@@ -43,7 +43,9 @@
 
   const requestReport = async () => {
     await apiRequest('/reports', HttpMethods.POST, {
-      // TODO: Add context
+      endpoint: "inventory",
+      name: "inventory",
+      template: "inventory-report"
     })
   }
 
