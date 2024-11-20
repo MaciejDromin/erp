@@ -4,6 +4,8 @@
   import FeatureMenuBar from '$lib/FeatureMenuBar.svelte'
   import { Services } from '$lib/types/services.ts'
   import { genericStore } from '$lib/stores/genericStore.ts'
+  import { apiRequest } from '$lib/scripts/uiHttpRequests.ts'
+  import { HttpMethods } from '$lib/types/httpMethods.ts'
 
   let config = {
     title: 'Items',
@@ -39,10 +41,20 @@
     }
   }
 
+  const requestReport = async () => {
+    await apiRequest('/reports', HttpMethods.POST, {
+      endpoint: 'inventory',
+      name: 'inventory',
+      template: 'inventory-report',
+    })
+  }
+
   $: $genericStore, updateConfig()
 </script>
 
-<FeatureMenuBar {config} />
+<FeatureMenuBar {config}>
+  <button on:click={requestReport} class="btn btn-primary mr-3">Print</button>
+</FeatureMenuBar>
 <div id="item" class="flex flex-col gap-3 px-10 pt-10">
   <Pageable endpoint="/inventory/items" component={ItemTable} />
 </div>
