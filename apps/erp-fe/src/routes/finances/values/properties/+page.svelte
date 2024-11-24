@@ -31,16 +31,19 @@
   const updateConfig = () => {
     if ($genericStore.finances === undefined) return
 
-    if (
-      $genericStore.finances.objectvalues !== undefined &&
-      $genericStore.finances.objectvalues.length > 0
-    ) {
+    if ($genericStore.finances.objectvalues === undefined) {
+      config.editButton.disabled = true
+      return
+    }
+
+    if ($genericStore.finances.objectvalues.length === 1) {
       config.editButton.url = `/finances/values/properties/${$genericStore.finances.objectvalues[0].uuid}/edit`
       config.editButton.disabled = false
       config = config
-    } else {
-      config.editButton.disabled = true
+      return
     }
+
+    config.editButton.disabled = true
   }
 
   $: $genericStore, updateConfig()
