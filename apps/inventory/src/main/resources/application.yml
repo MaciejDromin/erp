@@ -6,7 +6,7 @@ quarkus:
     database: inventory
   rest-client:
     consul-api:
-      url: http://consul.soitio-erp.com:8000/
+      url: http://localhost:8500/
       scope: jakarta.inject.Singleton
 
 service-discovery:

@@ -7,7 +7,7 @@ quarkus:
 
   rest-client:
     "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
-      url: http://localhost:8080
+      url: http://localhost:8500
   index-dependency:
     widget-commons:
       group-id: com.soitio.widgets

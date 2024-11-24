@@ -10,6 +10,13 @@
   export let data
   export let items
   export let domain
+  
+  const dashboardId = data.id
+
+  const updatePositions = (itemz) => {
+    let toUpdate = itemz.map(itm => ({ id: itm.id, position: itm.position })) 
+    apiRequest('/widgets/update-positions', HttpMethods.POST, toUpdate)
+  }
 
   const onDragStart = (event, item) => {
     event.dataTransfer.setData('text/plain', JSON.stringify(item))
@@ -20,7 +27,8 @@
     const targetAttr = event.target.attributes
     const targetRow = Number(targetAttr.y.value)
     const targetColumn = Number(targetAttr.x.value)
-    updateItems(data, targetColumn - 1, targetRow - 1)
+    let itemz = updateItems(data, targetColumn - 1, targetRow - 1)
+    updatePositions(itemz)
     document.querySelectorAll('.placeholder').forEach((placeHolder) => {
       placeHolder.remove()
     })
@@ -28,7 +36,7 @@
 
   const onDragOver = (event) => {
     event.preventDefault()
-    // TODO: when hovering starts, a lot of errors are being logged to the console
+    if (event.target.attributes.style === undefined) return
     const targetStyle = event.target.attributes.style.value
     const targetRow = targetStyle.charAt(targetStyle.length - 1)
     const targetColumn = targetStyle.charAt(targetStyle.indexOf(';') - 1)
@@ -61,7 +69,7 @@
     // Update the items array based on user drag-and-drop actions
     if (data.position.x === targetColumn && data.position.y === targetRow) {
       items = items
-      return
+      return items
     }
     if (
       isNeighbour(data.position.x, data.position.y, targetColumn, targetRow)
@@ -79,7 +87,7 @@
         }
       })
       items = items
-      return
+      return items
     }
     if (
       (targetRow === data.position.y && data.position.x < targetColumn) ||
@@ -98,7 +106,7 @@
         }
       })
       items = items
-      return
+      return items
     }
     items.forEach((item) => {
       if (item.id === data.id) {
@@ -141,7 +149,7 @@
       }
     })
     items = items
-    // TODO: at the end send new locations to backend
+    return items
   }
 
   const positionsInOrder = (dataX, dataY, targetColumn, targetRow) => {
@@ -197,7 +205,7 @@
   }
 
   const deleteDashboard = async () => {
-    const ret = await apiRequest('/dashboards/' + data.id, HttpMethods.DELETE)
+    const ret = await apiRequest('/dashboards/' + dashboardId, HttpMethods.DELETE)
     location.reload()
   }
 </script>
@@ -207,7 +215,7 @@
     <h1 class="text-2xl">{data.name}</h1>
     <div class="flex flex-row gap-4">
       <Modal modalId="add_widget_modal" buttonName="Add Widget">
-        <AddWidget dashboardId={data.id} {domain} />
+        <AddWidget dashboardId={dashboardId} {domain} />
       </Modal>
       <button class="btn btn-secondary" on:click={() => deleteDashboard()}
         ><FontAwesomeIcon icon={faXmark} /> Delete Dashboard</button
@@ -225,7 +233,7 @@
         style={`grid-column: 
         ${item.position.x + 1}; grid-row: ${item.position.y + 1}`}
       >
-        <Widget dashboardId={data.id} widgetData={item} />
+        <Widget dashboardId={dashboardId} widgetData={item} />
       </div>
     {/each}
   </div>
