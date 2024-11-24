@@ -9,7 +9,7 @@
   import { config } from '@fortawesome/fontawesome-svg-core'
   import EventOverlay from '$lib/events/EventOverlay.svelte'
   import { onMount } from 'svelte'
-  import { REPORTS_URL } from '$lib/scripts/urls.ts'
+  import { REPORTS_WS } from '$lib/scripts/urls.ts'
 
   config.autoAddCss = false
 
@@ -23,8 +23,7 @@
   })
 
   const configureWs = async () => {
-    const wsUrl =
-      'ws://' + REPORTS_URL.slice(REPORTS_URL.lastIndexOf('/') + 1) + '/reports'
+    const wsUrl = REPORTS_WS + '/reports'
     const ws = new WebSocket(wsUrl)
 
     ws.addEventListener('open', (e) => {
