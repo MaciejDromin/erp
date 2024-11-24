@@ -15,7 +15,7 @@ spring:
       client:
         config:
           self-register:
-            url: http://consul.soitio-erp.com:8000/
+            url: http://localhost:8500/
   rabbitmq:
     host: localhost
     port: 5672

@@ -4,6 +4,7 @@ import com.soitio.dashboard.widget.application.WidgetRepository;
 import com.soitio.dashboard.widget.definition.application.WidgetDefinitionRepository;
 import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionDto;
 import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionNameDto;
+import com.soitio.dashboard.widget.domain.dto.WidgetPositionUpdateDto;
 import com.soitio.widgets.common.domain.WidgetDefinition;
 import com.soitio.widgets.common.domain.WidgetDomain;
 import jakarta.ws.rs.GET;
@@ -12,15 +13,12 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import java.util.List;
 import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
 @Path("/widgets")
 @RequiredArgsConstructor
 public class WidgetController {
-
-    // TODO: Implement this class
 
     private final WidgetRepository widgetRepository;
     private final WidgetDefinitionRepository widgetDefinitionRepository;
@@ -56,8 +54,10 @@ public class WidgetController {
         widgetRepository.updateWidgetFilters(widgetId, filters);
     }
 
-    public void updateWidget(Object toUpdate) {
-
+    @POST
+    @Path("/update-positions")
+    public void updatePositions(List<WidgetPositionUpdateDto> toUpdate) {
+        widgetRepository.updatePositions(toUpdate);
     }
 
 }
