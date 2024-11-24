@@ -8,14 +8,14 @@
 
   let data = config.data
 
-  let objectValueId = data === undefined ? undefined : data.objectValue.uuid
-  let obj = data === undefined ? undefined : { id: data.objectValue.objectId }
+  let objectValueId = data.objectValue === undefined ? undefined : data.objectValue.uuid
+  let obj = data.objectValue  === undefined ? undefined : { id: data.objectValue.objectId }
   let objects: any[] = obj === undefined ? [] : [obj]
   let selectedObject = obj === undefined ? undefined : JSON.stringify(obj)
-  let amount = data === undefined ? undefined : data.objectValue.amount.value
+  let amount = data.objectValue  === undefined ? undefined : data.objectValue.amount.value
   let currency =
-    data === undefined ? undefined : data.objectValue.amount.currencyCode
-  let buttonName = data === undefined ? 'Add' : 'Edit'
+    data.objectValue  === undefined ? undefined : data.objectValue.amount.currencyCode
+  let buttonName = data.objectValue  === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
     $genericStore = {}
