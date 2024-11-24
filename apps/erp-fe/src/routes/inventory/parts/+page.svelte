@@ -27,16 +27,19 @@
   const updateConfig = () => {
     if ($genericStore.inventory === undefined) return
 
-    if (
-      $genericStore.inventory.parts !== undefined &&
-      $genericStore.inventory.parts.length > 0
-    ) {
+    if ($genericStore.inventory.parts === undefined) {
+      config.editButton.disabled = true
+      return
+    }
+
+    if ($genericStore.inventory.parts.length === 1) {
       config.editButton.url = `/inventory/parts/${$genericStore.inventory.parts[0].id}/edit`
       config.editButton.disabled = false
       config = config
-    } else {
-      config.editButton.disabled = true
+      return
     }
+
+    config.editButton.disabled = true
   }
 
   $: $genericStore, updateConfig()
