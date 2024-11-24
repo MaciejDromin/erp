@@ -29,16 +29,19 @@
   const updateConfig = () => {
     if ($genericStore.inventory === undefined) return
 
-    if (
-      $genericStore.inventory.items !== undefined &&
-      $genericStore.inventory.items.length > 0
-    ) {
+    if ($genericStore.inventory.items === undefined) {
+      config.editButton.disabled = true
+      return
+    }
+
+    if ($genericStore.inventory.items.length === 1) {
       config.editButton.url = `/inventory/items/${$genericStore.inventory.items[0].id}/edit`
       config.editButton.disabled = false
       config = config
-    } else {
-      config.editButton.disabled = true
+      return
     }
+
+    config.editButton.disabled = true
   }
 
   const requestReport = async () => {

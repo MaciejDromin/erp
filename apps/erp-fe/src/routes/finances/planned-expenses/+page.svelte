@@ -39,26 +39,30 @@
   const updateConfig = () => {
     if ($genericStore.finances === undefined) return
 
+    if ($genericStore.finances.plannedexpenses === undefined) {
+      config.editButton.disabled = true
+      return
+    }
+
+    if ($genericStore.finances.plannedexpenses.length !== 1) {
+      config.editButton.disabled = true
+      return
+    }
+
+    let expense = $genericStore.finances.plannedexpenses[0]
+
     if (
-      $genericStore.finances.plannedexpenses !== undefined &&
-      $genericStore.finances.plannedexpenses.length > 0
+      expense.plannedExpensesStatus === 'COMPLETED' ||
+      expense.plannedExpensesStatus === 'ABANDONED'
     ) {
-      let expense = $genericStore.finances.plannedexpenses[0]
-      if (
-        expense.plannedExpensesStatus === 'COMPLETED' ||
-        expense.plannedExpensesStatus === 'ABANDONED'
-      ) {
-        config.editButton.disabled = true
-        config = config
-        return
-      }
-      config.editButton.url = `/finances/planned-expenses/${expense.uuid}/edit`
-      config.editButton.disabled = false
-      config = config
-    } else {
       config.editButton.disabled = true
       config = config
+      return
     }
+
+    config.editButton.url = `/finances/planned-expenses/${expense.uuid}/edit`
+    config.editButton.disabled = false
+    config = config
   }
 
   $: $genericStore, updateConfig()

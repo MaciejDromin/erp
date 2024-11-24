@@ -10,11 +10,11 @@
   export let data
   export let items
   export let domain
-  
+
   const dashboardId = data.id
 
   const updatePositions = (itemz) => {
-    let toUpdate = itemz.map(itm => ({ id: itm.id, position: itm.position })) 
+    let toUpdate = itemz.map((itm) => ({ id: itm.id, position: itm.position }))
     apiRequest('/widgets/update-positions', HttpMethods.POST, toUpdate)
   }
 
@@ -205,7 +205,10 @@
   }
 
   const deleteDashboard = async () => {
-    const ret = await apiRequest('/dashboards/' + dashboardId, HttpMethods.DELETE)
+    const ret = await apiRequest(
+      '/dashboards/' + dashboardId,
+      HttpMethods.DELETE
+    )
     location.reload()
   }
 </script>
@@ -215,7 +218,7 @@
     <h1 class="text-2xl">{data.name}</h1>
     <div class="flex flex-row gap-4">
       <Modal modalId="add_widget_modal" buttonName="Add Widget">
-        <AddWidget dashboardId={dashboardId} {domain} />
+        <AddWidget {dashboardId} {domain} />
       </Modal>
       <button class="btn btn-secondary" on:click={() => deleteDashboard()}
         ><FontAwesomeIcon icon={faXmark} /> Delete Dashboard</button
@@ -233,7 +236,7 @@
         style={`grid-column: 
         ${item.position.x + 1}; grid-row: ${item.position.y + 1}`}
       >
-        <Widget dashboardId={dashboardId} widgetData={item} />
+        <Widget {dashboardId} widgetData={item} />
       </div>
     {/each}
   </div>
