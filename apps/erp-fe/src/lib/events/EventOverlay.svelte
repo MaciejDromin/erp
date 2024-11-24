@@ -7,7 +7,7 @@
   }
 
   const conctructHref = (fileLocation) => {
-    return "http://dl.soitio-erp.com:8000/" + fileLocation
+    return 'http://dl.soitio-erp.com:8000/' + fileLocation
   }
 </script>
 
