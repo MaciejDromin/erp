@@ -8,6 +8,7 @@ import com.soitio.reports.ReportRequest;
 import com.soitio.reports.Value;
 import com.soitio.reports.client.ReportsClient;
 import com.soitio.reports.service.application.ReportStatusRepository;
+import com.soitio.reports.service.common.MapperUtils;
 import com.soitio.reports.service.domain.ReportGenerationRequestDto;
 import com.soitio.reports.service.ws.WsSender;
 import jakarta.enterprise.context.ApplicationScoped;

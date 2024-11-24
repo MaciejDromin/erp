@@ -5,6 +5,10 @@
   const notifyClose = () => {
     triggerClose = true
   }
+
+  const conctructHref = (fileLocation) => {
+    return "http://dl.soitio-erp.com:8000/" + fileLocation
+  }
 </script>
 
 <div role="alert" class="alert max-w-[40rem] top-3/4 fixed z-[999] right-10">
@@ -22,7 +26,7 @@
     ></path>
   </svg>
   <span>Your file is ready to download!</span>
-  <a href={eventData.url}>{eventData.name}</a>
+  <a href={conctructHref(eventData.url)} target="_blank">{eventData.name}</a>
   <div>
     <button class="btn btn-sm btn-primary" on:click={notifyClose}>Close</button>
   </div>

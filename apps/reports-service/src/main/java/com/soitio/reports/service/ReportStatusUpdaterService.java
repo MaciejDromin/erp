@@ -6,6 +6,7 @@ import com.soitio.commons.ws.WsMessage;
 import com.soitio.reports.JobStatus;
 import com.soitio.reports.ReportGenerationStatus;
 import com.soitio.reports.service.application.ReportStatusRepository;
+import com.soitio.reports.service.common.MapperUtils;
 import com.soitio.reports.service.ws.WsSender;
 import com.soitio.reports.service.ws.domain.CompletedReportContent;
 import com.soitio.reports.service.ws.domain.FailedReportContent;
