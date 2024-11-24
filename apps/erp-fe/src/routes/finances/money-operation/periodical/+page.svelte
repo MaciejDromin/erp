@@ -27,16 +27,19 @@
   const updateConfig = () => {
     if ($genericStore.finances === undefined) return
 
-    if (
-      $genericStore.finances.periodicals !== undefined &&
-      $genericStore.finances.periodicals.length > 0
-    ) {
-      config.editButton.url = `/finances/money-operation/periodical/${$genericStore.finances.periodicals[0].uuid}/edit`
+    if ($genericStore.finances.periodicals === undefined) {
+      config.editButton.disabled = true
+      return
+    }
+
+    if ($genericStore.finances.periodicals.length === 1) {
+      config.editButton.url = `/finances/periodicals/${$genericStore.finances.periodicals[0].id}/edit`
       config.editButton.disabled = false
       config = config
-    } else {
-      config.editButton.disabled = true
+      return
     }
+
+    config.editButton.disabled = true
   }
 
   $: $genericStore, updateConfig()
