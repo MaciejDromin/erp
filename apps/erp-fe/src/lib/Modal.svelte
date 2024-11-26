@@ -2,7 +2,7 @@
   import { onMount } from 'svelte'
 
   export let modalId: string
-  export let buttonName: string
+  export let buttonName: string = ''
   let dialog: HTMLDialogElement
   let showModal: boolean = false
   onMount(() => {
@@ -15,13 +15,16 @@
 
 <div>
   <!-- Open the modal using ID.showModal() method -->
-  <button
-    class="btn"
+  <div
     on:click|preventDefault={() => {
       showModal = true
       dialog.showModal()
-    }}>{buttonName}</button
+    }}
   >
+    <slot name="button">
+      <button class="btn">{buttonName}</button>
+    </slot>
+  </div>
   <dialog id={modalId} class="modal">
     <form method="dialog" class="modal-box bg-white px-12 py-6">
       {#if showModal}
