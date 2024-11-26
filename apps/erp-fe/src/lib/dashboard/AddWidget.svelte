@@ -63,7 +63,7 @@
   {#if widgetDefinition !== null}
     <WidgetCreation definition={widgetDefinition} bind:creationData />
   {/if}
-  <button class="btn btn-priamry" on:click={() => addWidget()}
+  <button class="btn btn-primary" on:click={() => addWidget()}
     >Add Widget</button
   >
 </div>

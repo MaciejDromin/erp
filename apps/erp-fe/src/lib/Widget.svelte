@@ -1,5 +1,7 @@
 <script>
   import Chart from '$lib/Chart.svelte'
+  import Modal from '$lib/Modal.svelte'
+  import EditWidget from '$lib/dashboard/EditWidget.svelte'
   import Filter from '$lib/dashboard/Filter.svelte'
   import { onMount } from 'svelte'
   import { apiRequest } from './scripts/uiHttpRequests.ts'
@@ -13,6 +15,11 @@
   let chartData = null
   let widgetDefinition
   let widgetFilters = widgetData.filters
+  let editData = {
+    id: widgetData.id,
+    name: widgetData.name,
+    type: widgetData.widgetType,
+  }
 
   const fetchData = async (filters) => {
     const ret = await apiRequest('/dashboards/widgets/data', HttpMethods.POST, {
@@ -84,7 +91,12 @@
           <details>
             <summary class="p-2"><FontAwesomeIcon icon={faGear} /></summary>
             <ul class="text-white">
-              <li><button>Edit</button></li>
+              <li>
+                <Modal modalId="edit_widget_modal">
+                  <EditWidget data={editData} />
+                  <button slot="button">Edit</button>
+                </Modal>
+              </li>
               <li><button on:click={deleteWidget}>Delete</button></li>
             </ul>
           </details>
