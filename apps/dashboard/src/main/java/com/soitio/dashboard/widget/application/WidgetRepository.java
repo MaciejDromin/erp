@@ -5,6 +5,7 @@ import com.soitio.dashboard.widget.domain.Widget;
 import com.soitio.dashboard.widget.domain.dto.WidgetCreationDto;
 import com.soitio.dashboard.widget.domain.dto.WidgetDto;
 import com.soitio.dashboard.widget.domain.dto.WidgetPositionUpdateDto;
+import com.soitio.dashboard.widget.domain.dto.WidgetUpdateDto;
 import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
@@ -72,5 +73,12 @@ public class WidgetRepository implements PanacheMongoRepository<Widget> {
             w.setPosition(map.get(w.getId()).getPosition());
             update(w);
         });
+    }
+
+    public void updateWidget(String widgetId, WidgetUpdateDto update) {
+        Widget widget = findById(new ObjectId(widgetId));
+        widget.setName(update.getName());
+        widget.setWidgetType(update.getType());
+        update(widget);
     }
 }

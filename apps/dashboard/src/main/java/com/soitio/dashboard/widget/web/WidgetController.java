@@ -5,6 +5,7 @@ import com.soitio.dashboard.widget.definition.application.WidgetDefinitionReposi
 import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionDto;
 import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionNameDto;
 import com.soitio.dashboard.widget.domain.dto.WidgetPositionUpdateDto;
+import com.soitio.dashboard.widget.domain.dto.WidgetUpdateDto;
 import com.soitio.widgets.common.domain.WidgetDefinition;
 import com.soitio.widgets.common.domain.WidgetDomain;
 import jakarta.ws.rs.GET;
@@ -58,6 +59,12 @@ public class WidgetController {
     @Path("/update-positions")
     public void updatePositions(List<WidgetPositionUpdateDto> toUpdate) {
         widgetRepository.updatePositions(toUpdate);
+    }
+
+    @POST
+    @Path("/{widgetId}")
+    public void updateWidget(@PathParam("widgetId") String widgetId, WidgetUpdateDto update) {
+        widgetRepository.updateWidget(widgetId, update);
     }
 
 }

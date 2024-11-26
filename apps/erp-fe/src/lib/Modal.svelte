@@ -13,9 +13,9 @@
   })
 </script>
 
-<div>
+<div class="p-0 grid-full">
   <!-- Open the modal using ID.showModal() method -->
-  <div
+  <div class="p-b w-full"
     on:click|preventDefault={() => {
       showModal = true
       dialog.showModal()
@@ -37,3 +37,11 @@
     </form>
   </dialog>
 </div>
+<style>
+  .p-b {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+</style>
