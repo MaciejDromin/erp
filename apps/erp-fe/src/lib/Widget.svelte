@@ -15,7 +15,11 @@
   let chartData = null
   let widgetDefinition
   let widgetFilters = widgetData.filters
-  let editData = {id: widgetData.id, name: widgetData.name, type: widgetData.widgetType}
+  let editData = {
+    id: widgetData.id,
+    name: widgetData.name,
+    type: widgetData.widgetType,
+  }
 
   const fetchData = async (filters) => {
     const ret = await apiRequest('/dashboards/widgets/data', HttpMethods.POST, {

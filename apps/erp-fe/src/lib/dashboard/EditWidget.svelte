@@ -9,17 +9,14 @@
   let type = data.type
 
   const editWidget = async () => {
-    const ret = await apiRequest(
-      '/widgets/' + data.id,
-      HttpMethods.POST,
-      {
-        name: name,
-        type: type
-      }
-    )
+    const ret = await apiRequest('/widgets/' + data.id, HttpMethods.POST, {
+      name: name,
+      type: type,
+    })
     location.reload()
   }
 </script>
+
 <div class="flex flex-col">
   <h2 class="mb-4 text-2xl text-black">Edit Widget</h2>
   <label class="input input-bordered flex items-center gap-2 text-white mb-4">
