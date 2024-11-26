@@ -13,7 +13,7 @@
   })
 </script>
 
-<div class="p-0 grid-full">
+<div class="p-0">
   <!-- Open the modal using ID.showModal() method -->
   <div
     class="p-b w-full"
