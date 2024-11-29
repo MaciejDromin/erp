@@ -17,7 +17,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class ObjectValueDto {
 
-    String uuid;
+    String id;
     String objectId;
     AmountDto amount;
     ObjectType objectType;

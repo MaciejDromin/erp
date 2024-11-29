@@ -20,7 +20,7 @@ import java.time.Month;
 @EqualsAndHashCode
 public class MoneyOperationBalanceDto {
 
-    String uuid;
+    String id;
     AmountDto amount;
     int effectiveYear;
     Month effectiveMonth;

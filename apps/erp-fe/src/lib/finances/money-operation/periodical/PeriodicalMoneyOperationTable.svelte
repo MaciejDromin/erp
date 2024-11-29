@@ -11,7 +11,7 @@
       $genericStore.finances.periodicals !== undefined
     ) {
       $genericStore.finances.periodicals.forEach((catg) =>
-        selectedPeriodicals.set(catg.uuid, catg)
+        selectedPeriodicals.set(catg.id, catg)
       )
     }
   })
@@ -24,10 +24,10 @@
   })
 
   const updatePeriodicalsList = (periodical: string) => {
-    if (selectedPeriodicals.has(periodical.uuid)) {
-      selectedPeriodicals.delete(periodical.uuid)
+    if (selectedPeriodicals.has(periodical.id)) {
+      selectedPeriodicals.delete(periodical.id)
     } else {
-      selectedPeriodicals.set(periodical.uuid, periodical)
+      selectedPeriodicals.set(periodical.id, periodical)
     }
     selectedPeriodicals = selectedPeriodicals
     $genericStore.finances = {}
@@ -73,11 +73,11 @@
         {#each data.content as periodical}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-        ${periodicalSelectedStyles(selectedPeriodicals, periodical.uuid)}
-        ${determineEvenBgColor(selectedPeriodicals, periodical.uuid)}`}
+        ${periodicalSelectedStyles(selectedPeriodicals, periodical.id)}
+        ${determineEvenBgColor(selectedPeriodicals, periodical.id)}`}
             on:click={() => updatePeriodicalsList(periodical)}
           >
-            <td>{periodical.uuid}</td>
+            <td>{periodical.id}</td>
             <td>{periodical.operationCategory.operationType}</td>
             <td>{periodical.operationCategory.operationName}</td>
             <td>{periodical.operationDescription}</td>

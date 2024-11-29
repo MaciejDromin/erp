@@ -48,7 +48,7 @@ public class MoneyOperation extends BaseEntity {
     private MoneyOperationType operationType;
 
     @ManyToOne
-    @JoinColumn(name = "operation_uuid")
+    @JoinColumn(name = "operation_id")
     private OperationCategory operationCategory;
 
     public OperationCategory getOperationCategory() {

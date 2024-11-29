@@ -49,7 +49,7 @@ public class PlannedExpenses extends BaseEntity {
     private Month plannedMonth;
 
     @ManyToOne
-    @JoinColumn(name = "operation_uuid")
+    @JoinColumn(name = "operation_id")
     private OperationCategory operationCategory;
 
     public OperationCategory getOperationCategory() {

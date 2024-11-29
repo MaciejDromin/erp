@@ -21,6 +21,6 @@ public interface MoneyOperationRepository extends JpaRepository<MoneyOperation, 
 
     List<MoneyOperation> findAllByEffectiveYearAndEffectiveMonth(int balanceYear, Month balanceMonth);
 
-    List<MoneyOperation> findAllByOperationCategoryUuidIn(Set<String> ids);
+    List<MoneyOperation> findAllByOperationCategoryIdIn(Set<String> ids);
 
 }

@@ -12,7 +12,7 @@ import lombok.Value;
 @Builder
 public class MoneyOperationDto {
 
-    String uuid;
+    String id;
     AmountDto amount;
     String operationDescription;
 

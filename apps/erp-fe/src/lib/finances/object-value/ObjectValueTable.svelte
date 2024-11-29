@@ -58,7 +58,7 @@
       $genericStore.finances.objectvalues !== undefined
     ) {
       $genericStore.finances.objectvalues.forEach((catg) =>
-        selectedObjectValues.set(catg.uuid, catg)
+        selectedObjectValues.set(catg.id, catg)
       )
     }
   })
@@ -71,10 +71,10 @@
   })
 
   const updateObjectValuesList = (objectValue: string) => {
-    if (selectedObjectValues.has(objectValue.uuid)) {
-      selectedObjectValues.delete(objectValue.uuid)
+    if (selectedObjectValues.has(objectValue.id)) {
+      selectedObjectValues.delete(objectValue.id)
     } else {
-      selectedObjectValues.set(objectValue.uuid, objectValue)
+      selectedObjectValues.set(objectValue.id, objectValue)
     }
     selectedObjectValues = selectedObjectValues
     $genericStore.finances = {}
@@ -117,11 +117,11 @@
         {#each data.content as objectValue}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-        ${objectValueSelectedStyles(selectedObjectValues, objectValue.uuid)}
-        ${determineEvenBgColor(selectedObjectValues, objectValue.uuid)}`}
+        ${objectValueSelectedStyles(selectedObjectValues, objectValue.id)}
+        ${determineEvenBgColor(selectedObjectValues, objectValue.id)}`}
             on:click={() => updateObjectValuesList(objectValue)}
           >
-            <td>{objectValue.uuid}</td>
+            <td>{objectValue.id}</td>
             <td>{getName(objectNameMap, objectValue.objectId)}</td>
             <td>{objectValue.amount.value}</td>
             <td>{objectValue.amount.currencyCode}</td>

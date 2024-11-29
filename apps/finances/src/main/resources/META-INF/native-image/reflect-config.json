@@ -1135,7 +1135,7 @@
         ]
       },
       {
-        "name": "getUuid",
+        "name": "getId",
         "parameterTypes": []
       },
       {
@@ -1275,7 +1275,7 @@
         ]
       },
       {
-        "name": "setUuid",
+        "name": "setId",
         "parameterTypes": [
           "java.lang.String"
         ]
@@ -1581,7 +1581,7 @@
         "parameterTypes": []
       },
       {
-        "name": "getUuid",
+        "name": "getId",
         "parameterTypes": []
       }
     ]
@@ -1976,7 +1976,7 @@
         "parameterTypes": []
       },
       {
-        "name": "getUuid",
+        "name": "getId",
         "parameterTypes": []
       }
     ]

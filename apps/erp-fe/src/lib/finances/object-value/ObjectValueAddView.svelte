@@ -9,7 +9,7 @@
   let data = config.data
 
   let objectValueId =
-    data.objectValue === undefined ? undefined : data.objectValue.uuid
+    data.objectValue === undefined ? undefined : data.objectValue.id
   let obj =
     data.objectValue === undefined
       ? undefined

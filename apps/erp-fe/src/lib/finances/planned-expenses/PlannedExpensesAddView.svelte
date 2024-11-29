@@ -9,11 +9,11 @@
   export let data = undefined
 
   let plannedExpenseId =
-    data === undefined ? undefined : data.plannedExpense.uuid
+    data === undefined ? undefined : data.plannedExpense.id
   let category =
     data === undefined
       ? undefined
-      : { id: data.plannedExpense.operationCategory.uuid }
+      : { id: data.plannedExpense.operationCategory.id }
   let categories: any[] = category === undefined ? [] : [category]
   let selectedCategory =
     category === undefined ? undefined : JSON.stringify(category)

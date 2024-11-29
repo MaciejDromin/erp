@@ -12,7 +12,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @MappedSuperclass
-@EqualsAndHashCode(of = "uuid")
+@EqualsAndHashCode(of = "id")
 @Getter
 @Setter
 @SuperBuilder
@@ -22,6 +22,6 @@ public class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String uuid;
+    private String id;
 
 }

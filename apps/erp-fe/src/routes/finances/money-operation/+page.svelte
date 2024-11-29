@@ -33,7 +33,7 @@
     }
 
     if ($genericStore.finances.moneyOperations.length === 1) {
-      config.editButton.url = `/finances/money-operation/${$genericStore.finances.moneyOperations[0].uuid}/edit`
+      config.editButton.url = `/finances/money-operation/${$genericStore.finances.moneyOperations[0].id}/edit`
       config.editButton.disabled = false
       config = config
       return

@@ -53,7 +53,7 @@ public class OperationCategoryService extends AbstractDependencyCheckService<Ope
     public OperationCategoryDto from(OperationCategory category) {
         if (category == null) return null;
         return OperationCategoryDto.builder()
-                .uuid(category.getUuid())
+                .id(category.getId())
                 .operationName(category.getOperationName())
                 .operationType(category.getOperationType())
                 .build();
@@ -77,7 +77,7 @@ public class OperationCategoryService extends AbstractDependencyCheckService<Ope
     protected OperationCategory mapToEntity(MergePatch object) {
         var fields = object.getObjectValue();
         return OperationCategory.builder()
-                .uuid(fields.get("uuid").getStrValue())
+                .id(fields.get("id").getStrValue())
                 .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
                 .operationName(fields.get("operationName").getStrValue())
                 .build();

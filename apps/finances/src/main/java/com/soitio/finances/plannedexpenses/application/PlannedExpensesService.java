@@ -18,7 +18,6 @@ import com.soitio.finances.plannedexpenses.domain.PlannedExpensesStatus;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCompletionDto;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCreationDto;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesDto;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -76,7 +75,7 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
     // TODO: Extract to factory
     private PlannedExpensesDto convertToDto(PlannedExpenses plannedExpenses) {
         return PlannedExpensesDto.builder()
-                .uuid(plannedExpenses.getUuid())
+                .id(plannedExpenses.getId())
                 .plannedAmount(AmountDto.builder()
                         .value(plannedExpenses.getPlannedAmount().getAmount())
                         .currencyCode(plannedExpenses.getPlannedAmount().getCurrencyUnit().getCode())
@@ -131,10 +130,10 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
 
     @Override
     public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
-        return repository.findAllByOperationCategoryUuidIn(set)
+        return repository.findAllByOperationCategoryIdIn(set)
                 .stream()
                 .map(PlannedExpenses::getOperationCategory)
-                .map(OperationCategory::getUuid)
+                .map(OperationCategory::getId)
                 .map(id -> new DependencyCheckResult(id, true, "Operation category with id '%s' is in use!".formatted(id)))
                 .collect(Collectors.toSet());
     }
@@ -161,7 +160,7 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
             throw new IllegalStateException("Incorrect value " + amount.get("value").getStrValue());
         }
         return PlannedExpenses.builder()
-                .uuid(fields.get("uuid").getStrValue())
+                .id(fields.get("id").getStrValue())
                 .plannedAmount(value)
                 .currency(amount.get("currencyCode").getStrValue())
                 .operationDescription(fields.get("operationDescription").getStrValue())
@@ -170,7 +169,7 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
                 .plannedYear(fields.get("plannedYear").getIntValue())
                 .plannedMonth(Month.valueOf(fields.get("plannedMonth").getStrValue()))
                 .operationCategory(OperationCategory.builder()
-                        .uuid(opCat.get("uuid").getStrValue())
+                        .id(opCat.get("id").getStrValue())
                         .operationType(MoneyOperationType.valueOf(opCat.get("operationType").getStrValue()))
                         .operationName(opCat.get("operationName").getStrValue())
                         .build())
@@ -185,7 +184,7 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
     @Override
     protected Object mapToDto(PlannedExpenses entity) {
         return PlannedExpensesDto.builder()
-                .uuid(entity.getUuid())
+                .id(entity.getId())
                 .plannedAmount(AmountDto.of(entity.getPlannedAmount().getAmount(), entity.getCurrency()))
                 .actualAmount(AmountDto.of(entity.getActualAmount().getAmount(), entity.getCurrency()))
                 .operationDescription(entity.getOperationDescription())

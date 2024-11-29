@@ -11,7 +11,7 @@ export const actions = {
     const expensesArray = JSON.parse(data.get('plannedExpensesArr'))
     for (const val of expensesArray) {
       await unsecuredExternalApiRequest(
-        FINANCES_URL + `/finances/planned-expenses/${val.uuid}/abandon`,
+        FINANCES_URL + `/finances/planned-expenses/${val.id}/abandon`,
         HttpMethods.PATCH
       )
     }

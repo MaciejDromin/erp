@@ -71,7 +71,7 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
     private ObjectValueDto from(ObjectValue objectValue) {
         var amount = objectValue.getAmount();
         return ObjectValueDto.builder()
-                .uuid(objectValue.getUuid())
+                .id(objectValue.getId())
                 .objectId(objectValue.getObjectId())
                 .amount(AmountDto.of(amount.getAmount(), amount.getCurrencyUnit().getCode()))
                 .objectType(objectValue.getObjectType())
@@ -160,7 +160,7 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
             throw new IllegalStateException("Incorrect value " + amount.get("value").getStrValue());
         }
         return ObjectValue.builder()
-                .uuid(fields.get("uuid").getStrValue())
+                .id(fields.get("id").getStrValue())
                 .amount(value)
                 .currency(amount.get("currencyCode").getStrValue())
                 .objectId(fields.get("objectId").getStrValue())

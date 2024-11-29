@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface PeriodicalMoneyOperationRepository
         extends JpaRepository<PeriodicalMoneyOperation, String>, QuerydslPredicateExecutor<PeriodicalMoneyOperation> {
 
-    List<PeriodicalMoneyOperation> findAllByOperationCategoryUuidIn(Set<String> id);
+    List<PeriodicalMoneyOperation> findAllByOperationCategoryIdIn(Set<String> id);
 
 }
