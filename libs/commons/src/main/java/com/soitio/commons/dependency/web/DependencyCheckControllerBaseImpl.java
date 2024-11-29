@@ -2,6 +2,7 @@ package com.soitio.commons.dependency.web;
 
 import com.soitio.commons.dependency.DependencyCheckMap;
 import com.soitio.commons.dependency.DependencyUtils;
+import com.soitio.commons.dependency.model.DependencyCheckContext;
 import com.soitio.commons.dependency.model.DependencyCheckRequest;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
@@ -20,7 +21,7 @@ public abstract class DependencyCheckControllerBaseImpl implements DependencyChe
 
     protected DependencyCheckResponse handle(DependencyCheckRequest checkRequest) {
         return buildResponse(dependencyCheckMap.getServicesForDependent(checkRequest.getDependent()).stream()
-                .map(service -> service.dependencyCheck(checkRequest.getIds(), checkRequest.getAction()))
+                .map(service -> service.dependencyCheck(checkRequest.getContext(), checkRequest.getAction()))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toMap(DependencyCheckResult::getId,
                         r -> r,

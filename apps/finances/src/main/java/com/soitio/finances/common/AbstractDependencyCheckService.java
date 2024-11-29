@@ -24,7 +24,8 @@ public abstract class AbstractDependencyCheckService<T> {
     }
 
     public DependencyCheckResponse delete(Dependent dependent, Set<String> ids) {
-        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, ids, Action.DELETE);
+        // TODO: handle and pass context here
+        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, Set.of(), Action.DELETE);
 
         Set<String> diff = new HashSet<>(ids);
 
@@ -42,7 +43,8 @@ public abstract class AbstractDependencyCheckService<T> {
     public abstract void deleteByIds(Set<String> collect);
 
     public DependencyCheckResponse update(Dependent dependent, String id, JsonNode object) {
-        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, Set.of(id), Action.EDIT);
+        // TODO: handle and pass context here
+        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, Set.of(), Action.EDIT);
 
         if (response.isFailed()) return response;
 
