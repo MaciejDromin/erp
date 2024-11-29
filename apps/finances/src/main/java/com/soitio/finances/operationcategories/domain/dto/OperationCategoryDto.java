@@ -8,7 +8,7 @@ import lombok.Value;
 @Builder
 public class OperationCategoryDto {
 
-    String uuid;
+    String id;
     MoneyOperationType operationType;
     String operationName;
 

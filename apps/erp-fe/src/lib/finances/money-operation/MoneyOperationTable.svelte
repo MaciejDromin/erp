@@ -11,7 +11,7 @@
       $genericStore.finances.moneyOperations !== undefined
     ) {
       $genericStore.finances.moneyOperations.forEach((catg) =>
-        selectedMoneyOperations.set(catg.uuid, catg)
+        selectedMoneyOperations.set(catg.id, catg)
       )
     }
   })
@@ -24,10 +24,10 @@
   })
 
   const updateMoneyOperationsList = (moneyOperation: string) => {
-    if (selectedMoneyOperations.has(moneyOperation.uuid)) {
-      selectedMoneyOperations.delete(moneyOperation.uuid)
+    if (selectedMoneyOperations.has(moneyOperation.id)) {
+      selectedMoneyOperations.delete(moneyOperation.id)
     } else {
-      selectedMoneyOperations.set(moneyOperation.uuid, moneyOperation)
+      selectedMoneyOperations.set(moneyOperation.id, moneyOperation)
     }
     selectedMoneyOperations = selectedMoneyOperations
     $genericStore.finances = {}
@@ -73,11 +73,11 @@
         {#each data.content as moneyOperation}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-        ${moneyOperationSelectedStyles(selectedMoneyOperations, moneyOperation.uuid)}
-        ${determineEvenBgColor(selectedMoneyOperations, moneyOperation.uuid)}`}
+        ${moneyOperationSelectedStyles(selectedMoneyOperations, moneyOperation.id)}
+        ${determineEvenBgColor(selectedMoneyOperations, moneyOperation.id)}`}
             on:click={() => updateMoneyOperationsList(moneyOperation)}
           >
-            <td>{moneyOperation.uuid}</td>
+            <td>{moneyOperation.id}</td>
             <td>{moneyOperation.operationType}</td>
             <td
               >{moneyOperation.operationCategory === null

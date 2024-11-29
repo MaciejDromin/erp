@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public interface CurrencyRateProj {
 
-    String getUuid();
+    String getId();
 
     String getCode();
 

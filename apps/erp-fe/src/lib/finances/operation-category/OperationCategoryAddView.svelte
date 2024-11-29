@@ -3,7 +3,7 @@
 
   export let data = undefined
 
-  let categoryId = data === undefined ? undefined : data.category.uuid
+  let categoryId = data === undefined ? undefined : data.category.id
   let name = data === undefined ? undefined : data.category.operationName
   let type = data === undefined ? undefined : data.category.operationType
   let buttonName = data === undefined ? 'Add' : 'Edit'

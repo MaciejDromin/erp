@@ -35,7 +35,7 @@ public class ReceiptService {
     private List<PurchaseToAnalyzeDto> convertPurchasesToAnalyze(List<Purchase> saved) {
         return saved.stream()
                 .map(p -> PurchaseToAnalyzeDto.builder()
-                        .id(p.getUuid())
+                        .id(p.getId())
                         .amount(p.getRawAmount())
                         .currency(p.getCurrency())
                         .date(p.getDate())
@@ -47,7 +47,7 @@ public class ReceiptService {
     private List<PurchaseItemToAnalyzeDto> convertItemsToAnalyze(List<PurchaseItem> purchaseItems) {
         return purchaseItems.stream()
                 .map(i -> PurchaseItemToAnalyzeDto.builder()
-                        .id(i.getUuid())
+                        .id(i.getId())
                         .price(i.getPrice())
                         .unitPrice(i.getUnitPrice())
                         .quantity(i.getQuantity())

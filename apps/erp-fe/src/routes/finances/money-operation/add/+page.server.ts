@@ -15,7 +15,7 @@ export const actions = {
       },
       operationType: data.get('operationType'),
       operationDescription: data.get('operationDescription'),
-      operationCategoryId: category.uuid,
+      operationCategoryId: category.id,
     }
     await unsecuredExternalApiRequest(
       FINANCES_URL + '/finances/money-operation',

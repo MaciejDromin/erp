@@ -11,7 +11,7 @@ import lombok.Value;
 @Builder
 public class PeriodicalMoneyOperationDto {
 
-    String uuid;
+    String id;
     String operationDescription;
     AmountDto amount;
     int repetitionPeriod;

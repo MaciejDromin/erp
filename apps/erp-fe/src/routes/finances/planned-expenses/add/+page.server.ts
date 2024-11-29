@@ -17,7 +17,7 @@ export const actions = {
       operationDescription: data.get('operationDescription'),
       plannedYear: data.get('plannedYear'),
       plannedMonth: data.get('plannedMonth'),
-      operationCategoryId: category.uuid,
+      operationCategoryId: category.id,
       operationType: MoneyOperationType.EXPENSES,
     }
     await unsecuredExternalApiRequest(

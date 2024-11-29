@@ -10,7 +10,7 @@ import lombok.Value;
 @Builder
 public class MoneyOperationBalanceDto {
 
-    String uuid;
+    String id;
     AmountDto amount;
     int effectiveYear;
     Month effectiveMonth;

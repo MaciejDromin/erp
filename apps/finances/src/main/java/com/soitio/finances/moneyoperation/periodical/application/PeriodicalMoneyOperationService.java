@@ -15,7 +15,6 @@ import com.soitio.finances.moneyoperation.periodical.domain.dto.PeriodicalMoneyO
 import com.soitio.finances.moneyoperation.periodical.domain.dto.PeriodicalMoneyOperationDto;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
-
 import java.math.BigDecimal;
 import java.time.Month;
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
     private PeriodicalMoneyOperationDto from(PeriodicalMoneyOperation periodicalMoneyOperation) {
         var amount = periodicalMoneyOperation.getAmount();
         return PeriodicalMoneyOperationDto.builder()
-                .uuid(periodicalMoneyOperation.getUuid())
+                .id(periodicalMoneyOperation.getId())
                 .amount(AmountDto.of(amount.getAmount(), amount.getCurrencyUnit().getCode()))
                 .operationDescription(periodicalMoneyOperation.getOperationDescription())
                 .repetitionPeriod(periodicalMoneyOperation.getRepetitionPeriod())
@@ -99,10 +98,10 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
 
     @Override
     public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
-        return repository.findAllByOperationCategoryUuidIn(set)
+        return repository.findAllByOperationCategoryIdIn(set)
                 .stream()
                 .map(PeriodicalMoneyOperation::getOperationCategory)
-                .map(OperationCategory::getUuid)
+                .map(OperationCategory::getId)
                 .map(id -> new DependencyCheckResult(id, true, "Operation category with id '%s' is in use!".formatted(id)))
                 .collect(Collectors.toSet());
     }
@@ -129,7 +128,7 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
             throw new IllegalStateException("Incorrect value " + amount.get("value").getStrValue());
         }
         return PeriodicalMoneyOperation.builder()
-                .uuid(fields.get("uuid").getStrValue())
+                .id(fields.get("id").getStrValue())
                 .amount(value)
                 .currency(amount.get("currencyCode").getStrValue())
                 .operationDescription(fields.get("operationDescription").getStrValue())
@@ -137,7 +136,7 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
                 .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
                 .nextApplicableMonth(Month.valueOf(fields.get("nextApplicableMonth").getStrValue()))
                 .operationCategory(OperationCategory.builder()
-                        .uuid(opCat.get("uuid").getStrValue())
+                        .id(opCat.get("id").getStrValue())
                         .operationType(MoneyOperationType.valueOf(opCat.get("operationType").getStrValue()))
                         .operationName(opCat.get("operationName").getStrValue())
                         .build())
@@ -152,7 +151,7 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
     @Override
     protected Object mapToDto(PeriodicalMoneyOperation entity) {
         return PeriodicalMoneyOperationDto.builder()
-                .uuid(entity.getUuid())
+                .id(entity.getId())
                 .amount(AmountDto.of(entity.getAmount().getAmount(), entity.getCurrency()))
                 .operationDescription(entity.getOperationDescription())
                 .repetitionPeriod(entity.getRepetitionPeriod())

@@ -11,7 +11,7 @@ export const actions = {
     const data = await request.formData()
     const object = JSON.parse(data.get('object'))
     const body = {
-      uuid: data.get('objectValueId'),
+      id: data.get('objectValueId'),
       amount: {
         value: data.get('amount'),
         currencyCode: data.get('currencyCode'),
@@ -19,7 +19,7 @@ export const actions = {
       objectId: object.id,
     }
     await unsecuredExternalApiRequest(
-      FINANCES_URL + `/finances/object-value/${body.uuid}`,
+      FINANCES_URL + `/finances/object-value/${body.id}`,
       HttpMethods.PATCH,
       body
     )

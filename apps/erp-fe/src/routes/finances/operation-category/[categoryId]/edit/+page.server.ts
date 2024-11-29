@@ -9,12 +9,12 @@ export const actions = {
   default: async ({ request }) => {
     const data = await request.formData()
     const body = {
-      uuid: data.get('categoryId'),
+      id: data.get('categoryId'),
       operationType: data.get('operationType'),
       operationName: data.get('operationName'),
     }
     await unsecuredExternalApiRequest(
-      FINANCES_URL + `/finances/operation-category/${body.uuid}`,
+      FINANCES_URL + `/finances/operation-category/${body.id}`,
       HttpMethods.PATCH,
       body
     )

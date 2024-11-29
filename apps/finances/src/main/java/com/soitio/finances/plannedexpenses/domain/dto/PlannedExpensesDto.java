@@ -16,7 +16,7 @@ import lombok.Value;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PlannedExpensesDto {
 
-    String uuid;
+    String id;
     AmountDto plannedAmount;
     AmountDto actualAmount;
     String operationDescription;

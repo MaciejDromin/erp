@@ -11,7 +11,7 @@
       $genericStore.finances.categories !== undefined
     ) {
       $genericStore.finances.categories.forEach((catg) =>
-        selectedCategories.set(catg.uuid, catg)
+        selectedCategories.set(catg.id, catg)
       )
     }
   })
@@ -22,10 +22,10 @@
   })
 
   const updateCategoriesList = (category: string) => {
-    if (selectedCategories.has(category.uuid)) {
-      selectedCategories.delete(category.uuid)
+    if (selectedCategories.has(category.id)) {
+      selectedCategories.delete(category.id)
     } else {
-      selectedCategories.set(category.uuid, category)
+      selectedCategories.set(category.id, category)
     }
     selectedCategories = selectedCategories
     $genericStore.finances = {}
@@ -65,11 +65,11 @@
         {#each data.content as operationCategory}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-        ${categorySelectedStyles(selectedCategories, operationCategory.uuid)}
-        ${determineEvenBgColor(selectedCategories, operationCategory.uuid)}`}
+        ${categorySelectedStyles(selectedCategories, operationCategory.id)}
+        ${determineEvenBgColor(selectedCategories, operationCategory.id)}`}
             on:click={() => updateCategoriesList(operationCategory)}
           >
-            <td>{operationCategory.uuid}</td>
+            <td>{operationCategory.id}</td>
             <td>{operationCategory.operationName}</td>
             <td>{operationCategory.operationType}</td>
           </tr>

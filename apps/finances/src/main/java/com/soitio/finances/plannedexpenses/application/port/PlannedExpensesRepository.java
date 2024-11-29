@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlannedExpensesRepository extends JpaRepository<PlannedExpenses, String> {
 
-    List<PlannedExpenses> findAllByOperationCategoryUuidIn(Set<String> set);
+    List<PlannedExpenses> findAllByOperationCategoryIdIn(Set<String> set);
 
 }

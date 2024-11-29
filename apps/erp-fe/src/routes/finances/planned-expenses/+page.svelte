@@ -60,7 +60,7 @@
       return
     }
 
-    config.editButton.url = `/finances/planned-expenses/${expense.uuid}/edit`
+    config.editButton.url = `/finances/planned-expenses/${expense.id}/edit`
     config.editButton.disabled = false
     config = config
   }

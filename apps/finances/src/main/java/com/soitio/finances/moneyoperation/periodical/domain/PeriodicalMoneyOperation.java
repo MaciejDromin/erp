@@ -52,7 +52,7 @@ public class PeriodicalMoneyOperation extends BaseEntity {
     private Month nextApplicableMonth;
 
     @ManyToOne
-    @JoinColumn(name = "operation_uuid")
+    @JoinColumn(name = "operation_id")
     private OperationCategory operationCategory;
 
 

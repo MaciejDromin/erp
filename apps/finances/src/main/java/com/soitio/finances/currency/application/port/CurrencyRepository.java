@@ -12,9 +12,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CurrencyRepository extends JpaRepository<Currency, String>, QuerydslPredicateExecutor<Currency> {
 
-    @Query("SELECT c.uuid AS uuid, c.code AS code, c.rate AS rate FROM Currency AS c "
+    @Query("SELECT c.id AS id, c.code AS code, c.rate AS rate FROM Currency AS c "
         + "WHERE c.effectiveDate = (SELECT MAX(cc.effectiveDate) FROM Currency AS cc GROUP BY cc.effectiveDate "
-        + "ORDER BY cc.effectiveDate DESC limit 1) AND c.code IN (:currencies) ORDER BY c.uuid ASC")
+        + "ORDER BY cc.effectiveDate DESC limit 1) AND c.code IN (:currencies) ORDER BY c.id ASC")
     List<CurrencyRateProj> findAllLatestByCode(@Param("currencies") List<String> currencies);
 
 }

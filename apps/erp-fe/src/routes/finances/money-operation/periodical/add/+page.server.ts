@@ -17,7 +17,7 @@ export const actions = {
       operationDescription: data.get('operationDescription'),
       nextApplicableMonth: data.get('nextApplicableMonth'),
       repetitionPeriod: data.get('repetitionPeriod'),
-      operationCategoryId: category.uuid,
+      operationCategoryId: category.id,
     }
     await unsecuredExternalApiRequest(
       FINANCES_URL + '/finances/money-operation/periodical',

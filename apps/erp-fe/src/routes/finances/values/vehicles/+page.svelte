@@ -37,7 +37,7 @@
     }
 
     if ($genericStore.finances.objectvalues.length === 1) {
-      config.editButton.url = `/finances/values/vehicles/${$genericStore.finances.objectvalues[0].uuid}/edit`
+      config.editButton.url = `/finances/values/vehicles/${$genericStore.finances.objectvalues[0].id}/edit`
       config.editButton.disabled = false
       config = config
       return

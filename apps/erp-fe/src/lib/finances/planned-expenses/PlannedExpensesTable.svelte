@@ -14,7 +14,7 @@
       $genericStore.finances.plannedexpenses !== undefined
     ) {
       $genericStore.finances.plannedexpenses.forEach((catg) =>
-        selectedPlannedExpenses.set(catg.uuid, catg)
+        selectedPlannedExpenses.set(catg.id, catg)
       )
     }
   })
@@ -27,10 +27,10 @@
   })
 
   const updatePlannedExpensesList = (plannedExpense: string) => {
-    if (selectedPlannedExpenses.has(plannedExpense.uuid)) {
-      selectedPlannedExpenses.delete(plannedExpense.uuid)
+    if (selectedPlannedExpenses.has(plannedExpense.id)) {
+      selectedPlannedExpenses.delete(plannedExpense.id)
     } else {
-      selectedPlannedExpenses.set(plannedExpense.uuid, plannedExpense)
+      selectedPlannedExpenses.set(plannedExpense.id, plannedExpense)
     }
     selectedPlannedExpenses = selectedPlannedExpenses
     $genericStore.finances = {}
@@ -86,11 +86,11 @@
         {#each data.content as plannedExpenses}
           <tr
             class={`hover:bg-indigo-400 hover:text-black even:text-white hover:even:text-black hover:even:bg-indigo-400 cursor-pointer ease-in transition-all duration-200
-        ${plannedExpenseSelectedStyles(selectedPlannedExpenses, plannedExpenses.uuid)}
-        ${determineEvenBgColor(selectedPlannedExpenses, plannedExpenses.uuid)}`}
+        ${plannedExpenseSelectedStyles(selectedPlannedExpenses, plannedExpenses.id)}
+        ${determineEvenBgColor(selectedPlannedExpenses, plannedExpenses.id)}`}
             on:click={() => updatePlannedExpensesList(plannedExpenses)}
           >
-            <td>{plannedExpenses.uuid}</td>
+            <td>{plannedExpenses.id}</td>
             <td>{plannedExpenses.operationCategory.operationName}</td>
             <td>{plannedExpenses.operationDescription}</td>
             <td>{plannedExpenses.plannedAmount.value}</td>
@@ -99,7 +99,7 @@
                 <input
                   name="amountHolder"
                   class="input input-bordered input-primary w-full max-w-xs text-white"
-                  bind:value={actualAmountByIdMap[plannedExpenses.uuid]}
+                  bind:value={actualAmountByIdMap[plannedExpenses.id]}
                   type="text"
                 />
               {:else}

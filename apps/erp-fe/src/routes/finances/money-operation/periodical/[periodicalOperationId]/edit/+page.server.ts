@@ -10,7 +10,7 @@ export const actions = {
     const data = await request.formData()
     const category = JSON.parse(data.get('category'))
     const body = {
-      uuid: data.get('periodicalOperationId'),
+      id: data.get('periodicalOperationId'),
       amount: {
         value: data.get('amount'),
         currencyCode: data.get('currencyCode'),
@@ -19,10 +19,10 @@ export const actions = {
       operationDescription: data.get('operationDescription'),
       repetitionPeriod: Number(data.get('repetitionPeriod')),
       nextApplicableMonth: data.get('nextApplicableMonth'),
-      operationCategoryId: category.uuid,
+      operationCategoryId: category.id,
     }
     await unsecuredExternalApiRequest(
-      FINANCES_URL + `/finances/money-operation/periodical/${body.uuid}`,
+      FINANCES_URL + `/finances/money-operation/periodical/${body.id}`,
       HttpMethods.PATCH,
       body
     )

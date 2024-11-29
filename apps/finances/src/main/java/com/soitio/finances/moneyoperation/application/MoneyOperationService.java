@@ -17,7 +17,6 @@ import com.soitio.finances.moneyoperation.domain.dto.MoneyOperationDto;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
 import com.soitio.finances.plannedexpenses.domain.PlannedExpenses;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -73,7 +72,7 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
     private MoneyOperationDto from(MoneyOperation moneyOperation) {
         var amount = moneyOperation.getAmount();
         return MoneyOperationDto.builder()
-                .uuid(moneyOperation.getUuid())
+                .id(moneyOperation.getId())
                 .amount(AmountDto.of(amount.getAmount(), amount.getCurrencyUnit().getCode()))
                 .operationDescription(moneyOperation.getOperationDescription())
                 .effectiveDate(moneyOperation.getEffectiveDate())
@@ -117,7 +116,7 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
 
     private MoneyOperationBalanceDto toBalance(MoneyOperation moneyOperation) {
         return MoneyOperationBalanceDto.builder()
-                .uuid(moneyOperation.getUuid())
+                .id(moneyOperation.getId())
                 .amount(AmountDto.of(moneyOperation.getAmount().getAmount(),
                         moneyOperation.getAmount().getCurrencyUnit().getCode()))
                 .effectiveYear(moneyOperation.getEffectiveYear())
@@ -146,10 +145,10 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
 
     @Override
     public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
-        return repository.findAllByOperationCategoryUuidIn(set)
+        return repository.findAllByOperationCategoryIdIn(set)
                 .stream()
                 .map(MoneyOperation::getOperationCategory)
-                .map(OperationCategory::getUuid)
+                .map(OperationCategory::getId)
                 .map(id -> new DependencyCheckResult(id, true, "Operation category with id '%s' is in use!".formatted(id)))
                 .collect(Collectors.toSet());
     }
@@ -177,7 +176,7 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
         }
         LocalDateTime effectiveDate = DateUtils.localDateTimeFromString(fields.get("effectiveDate").getStrValue());
         return MoneyOperation.builder()
-                .uuid(fields.get("uuid").getStrValue())
+                .id(fields.get("id").getStrValue())
                 .amount(value)
                 .currency(amount.get("currencyCode").getStrValue())
                 .operationDescription(fields.get("operationDescription").getStrValue())
@@ -186,7 +185,7 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
                 .effectiveYear(effectiveDate.getYear())
                 .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
                 .operationCategory(OperationCategory.builder()
-                        .uuid(opCat.get("uuid").getStrValue())
+                        .id(opCat.get("id").getStrValue())
                         .operationType(MoneyOperationType.valueOf(opCat.get("operationType").getStrValue()))
                         .operationName(opCat.get("operationName").getStrValue())
                         .build())
