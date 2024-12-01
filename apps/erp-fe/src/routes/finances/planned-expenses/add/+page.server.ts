@@ -21,7 +21,7 @@ export const actions = {
       operationType: MoneyOperationType.EXPENSES,
     }
     await unsecuredExternalApiRequest(
-      FINANCES_URL + '/finances/planned-expenses',
+      FINANCES_URL + '/planned-expenses',
       HttpMethods.POST,
       body
     )

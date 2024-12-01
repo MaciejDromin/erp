@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/finances/object-value")
+@RequestMapping("/object-value")
 public class ObjectValueController {
 
     private final ObjectValueService objectValueService;

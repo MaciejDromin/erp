@@ -14,7 +14,7 @@ export const actions = {
       unit: data.get('unit'),
     }
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + `/inventory/items/${body.id}`,
+      INVENTORY_URL + `/items/${body.id}`,
       HttpMethods.PATCH,
       body
     )
@@ -24,7 +24,7 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const item = await unsecuredExternalApiRequest(
-    INVENTORY_URL + `/inventory/items/${params.itemId}`,
+    INVENTORY_URL + `/items/${params.itemId}`,
     HttpMethods.GET
   )
   return {

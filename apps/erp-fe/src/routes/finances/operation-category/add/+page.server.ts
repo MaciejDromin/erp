@@ -12,7 +12,7 @@ export const actions = {
       operationName: data.get('operationName'),
     }
     await unsecuredExternalApiRequest(
-      FINANCES_URL + '/finances/operation-category',
+      FINANCES_URL + '/operation-category',
       HttpMethods.POST,
       body
     )

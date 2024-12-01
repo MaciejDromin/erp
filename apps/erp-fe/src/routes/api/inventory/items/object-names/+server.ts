@@ -5,7 +5,7 @@ import { INVENTORY_URL } from '$lib/scripts/urls'
 
 export const POST = (async ({ request }) => {
   const ret = await unsecuredExternalApiRequest(
-    INVENTORY_URL + '/inventory/items/object-names',
+    INVENTORY_URL + '/items/object-names',
     HttpMethods.POST,
     await request.json()
   )

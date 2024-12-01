@@ -5,7 +5,7 @@ import { INVENTORY_URL } from '$lib/scripts/urls'
 
 export const GET = (async (event) => {
   const ret = await unsecuredExternalApiRequest(
-    INVENTORY_URL + '/inventory/categories' + event.url.search,
+    INVENTORY_URL + '/categories' + event.url.search,
     HttpMethods.GET
   )
   return new Response(ret.body, { status: 200 })

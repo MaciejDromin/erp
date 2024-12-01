@@ -24,7 +24,7 @@ import com.soitio.inventory.item.domain.dto.ObjectIdsDto;
 import java.util.Map;
 import java.util.Set;
 
-@Path("/inventory/items")
+@Path("/items")
 @RequiredArgsConstructor
 public class InventoryItemController {
 

@@ -17,7 +17,7 @@ export const actions = {
       objectType: ObjectType.VEHICLE,
     }
     await unsecuredExternalApiRequest(
-      FINANCES_URL + '/finances/object-value',
+      FINANCES_URL + '/object-value',
       HttpMethods.POST,
       body
     )
@@ -27,8 +27,7 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const objectIds = await unsecuredExternalApiRequest(
-    FINANCES_URL +
-      `/finances/object-value/object-ids?objectType=${ObjectType.VEHICLE}`,
+    FINANCES_URL + `/object-value/object-ids?objectType=${ObjectType.VEHICLE}`,
     HttpMethods.GET
   )
   return {

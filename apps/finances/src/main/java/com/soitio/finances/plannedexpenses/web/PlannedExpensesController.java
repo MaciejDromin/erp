@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/finances/planned-expenses")
+@RequestMapping("/planned-expenses")
 @RequiredArgsConstructor
 public class PlannedExpensesController {
 

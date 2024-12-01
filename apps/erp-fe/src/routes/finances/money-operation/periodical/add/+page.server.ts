@@ -20,7 +20,7 @@ export const actions = {
       operationCategoryId: category.id,
     }
     await unsecuredExternalApiRequest(
-      FINANCES_URL + '/finances/money-operation/periodical',
+      FINANCES_URL + '/money-operation/periodical',
       HttpMethods.POST,
       body
     )
