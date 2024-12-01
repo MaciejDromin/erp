@@ -8,8 +8,7 @@
 
   export let data = undefined
 
-  let plannedExpenseId =
-    data === undefined ? undefined : data.plannedExpense.id
+  let plannedExpenseId = data === undefined ? undefined : data.plannedExpense.id
   let category =
     data === undefined
       ? undefined
