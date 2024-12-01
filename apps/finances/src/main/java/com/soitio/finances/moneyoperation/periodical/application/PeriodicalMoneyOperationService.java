@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.model.DependencyCheckContext;
+import com.soitio.commons.dependency.model.DependencyCheckDiff;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
@@ -19,7 +20,9 @@ import com.soitio.finances.operationcategories.domain.OperationCategory;
 import java.math.BigDecimal;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
@@ -94,6 +97,23 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
 
     @Override
     public Set<DependencyCheckResult> checkForEdit(Set<DependencyCheckContext> set) {
+        Optional<DependencyCheckDiff> optDiff = set.stream()
+                .map(DependencyCheckContext::diff)
+                .flatMap(Collection::stream)
+                .filter(diff -> diff.field().equals("operationType"))
+                .findAny();
+        List<PeriodicalMoneyOperation> ops = repository.findAllByOperationCategoryIdIn(set.stream()
+                .map(DependencyCheckContext::id)
+                .collect(Collectors.toSet()));
+
+        if (optDiff.isPresent() && !ops.isEmpty()) {
+            return ops.stream()
+                    .map(PeriodicalMoneyOperation::getOperationCategory)
+                    .map(OperationCategory::getId)
+                    .map(id -> new DependencyCheckResult(id, true, "Operation category is in use"))
+                    .collect(Collectors.toSet());
+        }
+
         return Set.of();
     }
 
