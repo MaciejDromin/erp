@@ -7,7 +7,7 @@ import { ObjectType } from '$lib/finances/types/financialTypes'
 export const load = (async ({ params }) => {
   const objectIds = await unsecuredExternalApiRequest(
     FINANCES_URL +
-      `/finances/object-value/object-ids?objectType=${ObjectType.VEHICLE}`,
+      `/object-value/object-ids?objectType=${ObjectType.VEHICLE}`,
     HttpMethods.GET
   )
   const objectIdsBody = {
@@ -20,7 +20,7 @@ export const load = (async ({ params }) => {
   )
   const data = await unsecuredExternalApiRequest(
     FINANCES_URL +
-      `/finances/object-value/total-value?objectType=${ObjectType.VEHICLE}`,
+      `/object-value/total-value?objectType=${ObjectType.VEHICLE}`,
     HttpMethods.POST,
     await countMap.json()
   )

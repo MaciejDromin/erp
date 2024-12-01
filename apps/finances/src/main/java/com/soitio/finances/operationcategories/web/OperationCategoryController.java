@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/finances/operation-category")
+@RequestMapping("/operation-category")
 @RequiredArgsConstructor
 public class OperationCategoryController {
 

@@ -15,7 +15,7 @@ export const actions = {
       categoryIds: [category.id],
     }
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + '/inventory/items',
+      INVENTORY_URL + '/items',
       HttpMethods.POST,
       body
     )

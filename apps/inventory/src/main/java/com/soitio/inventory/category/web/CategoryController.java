@@ -18,7 +18,7 @@ import com.soitio.inventory.category.application.CategoryRepository;
 
 import java.util.Set;
 
-@Path("/inventory/categories")
+@Path("/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 

@@ -5,7 +5,7 @@ import { FINANCES_URL } from '$lib/scripts/urls'
 
 export const GET = (async (event) => {
   const ret = await unsecuredExternalApiRequest(
-    FINANCES_URL + '/finances/object-value' + event.url.search,
+    FINANCES_URL + '/object-value' + event.url.search,
     HttpMethods.GET
   )
   return new Response(ret.body, { status: 200 })

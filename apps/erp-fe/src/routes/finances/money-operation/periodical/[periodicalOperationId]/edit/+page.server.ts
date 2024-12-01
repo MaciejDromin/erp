@@ -22,7 +22,7 @@ export const actions = {
       operationCategoryId: category.id,
     }
     await unsecuredExternalApiRequest(
-      FINANCES_URL + `/finances/money-operation/periodical/${body.id}`,
+      FINANCES_URL + `/money-operation/periodical/${body.id}`,
       HttpMethods.PATCH,
       body
     )
@@ -33,7 +33,7 @@ export const actions = {
 export const load = (async ({ params }) => {
   const operation = await unsecuredExternalApiRequest(
     FINANCES_URL +
-      `/finances/money-operation/periodical/${params.periodicalOperationId}`,
+      `/money-operation/periodical/${params.periodicalOperationId}`,
     HttpMethods.GET
   )
   return {

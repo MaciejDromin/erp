@@ -20,7 +20,7 @@ export const actions = {
       operationCategoryId: category.id,
     }
     await unsecuredExternalApiRequest(
-      FINANCES_URL + `/finances/money-operation/${body.id}`,
+      FINANCES_URL + `/money-operation/${body.id}`,
       HttpMethods.PATCH,
       body
     )
@@ -30,7 +30,7 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const operation = await unsecuredExternalApiRequest(
-    FINANCES_URL + `/finances/money-operation/${params.operationId}`,
+    FINANCES_URL + `/money-operation/${params.operationId}`,
     HttpMethods.GET
   )
   return {

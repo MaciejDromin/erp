@@ -11,7 +11,7 @@ export const actions = {
       name: data.get('name'),
     }
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + '/inventory/categories',
+      INVENTORY_URL + '/categories',
       HttpMethods.POST,
       body
     )

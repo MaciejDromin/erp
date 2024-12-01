@@ -12,7 +12,7 @@ export const actions = {
       name: data.get('name'),
     }
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + `/inventory/categories/${body.id}`,
+      INVENTORY_URL + `/categories/${body.id}`,
       HttpMethods.PATCH,
       body
     )
@@ -22,7 +22,7 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const category = await unsecuredExternalApiRequest(
-    INVENTORY_URL + `/inventory/categories/${params.categoryId}`,
+    INVENTORY_URL + `/categories/${params.categoryId}`,
     HttpMethods.GET
   )
   return {
