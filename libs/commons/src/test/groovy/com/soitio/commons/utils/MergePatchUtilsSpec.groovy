@@ -77,7 +77,7 @@ class MergePatchUtilsSpec extends Specification {
 
     def "should properly merge two MergePatch objects"() {
         given:
-        var map = [
+        def map = [
                 "test1": MergePatch.intValue(5),
                 "test2": MergePatch.boolValue(false),
                 "test3": MergePatch.strValue("Edit test"),
@@ -85,7 +85,7 @@ class MergePatchUtilsSpec extends Specification {
                 "test5": MergePatch.listValue([MergePatch.intValue(4)])
         ]
         MergePatch patch = MergePatch.objectValue(map)
-        var map2 = [
+        def map2 = [
                 "test1": MergePatch.intValue(4),
                 "test2": MergePatch.boolValue(true),
                 "test3": MergePatch.strValue("test"),
@@ -148,6 +148,69 @@ class MergePatchUtilsSpec extends Specification {
                     strValue == "unchanged"
                 }
             }
+        }
+    }
+
+    def "should properly create diff"() {
+        given:
+        def map = [
+                "test1": MergePatch.intValue(5),
+                "test2": MergePatch.boolValue(false),
+                "test3": MergePatch.strValue("Edit test"),
+                "test4": MergePatch.objectValue([
+                        "test9": MergePatch.strValue("nested edited NEW"),
+                        "test10": MergePatch.NULL,
+                ]),
+                "test5": MergePatch.listValue([MergePatch.intValue(4)])
+        ]
+        def patch = MergePatch.objectValue(map)
+
+        def map2 = [
+                "test1": MergePatch.intValue(5),
+                "test2": MergePatch.boolValue(true),
+                "test3": MergePatch.strValue("Edit test 2"),
+                "test4": MergePatch.objectValue([
+                        "test9": MergePatch.strValue("nested edited"),
+                        "test10": MergePatch.strValue("nested edited 2"),
+                ]),
+                "test5": MergePatch.listValue([MergePatch.intValue(4), MergePatch.intValue(10)])
+        ]
+        def target = MergePatch.objectValue(map2)
+
+        when:
+        def result = MergePatchUtils.diff(patch, target)
+
+        then:
+        result.size() == 5
+        with(result.find {
+            it.field() == "test2"
+        }) {
+            it.oldValue() == "true"
+            it.newValue() == "false"
+        }
+        with(result.find {
+            it.field() == "test3"
+        }) {
+            it.oldValue() == "Edit test 2"
+            it.newValue() == "Edit test"
+        }
+        with(result.find {
+            it.field() == "test4.test9"
+        }) {
+            it.oldValue() == "nested edited"
+            it.newValue() == "nested edited NEW"
+        }
+        with(result.find {
+            it.field() == "test4.test10"
+        }) {
+            it.oldValue() == "nested edited 2"
+            it.newValue() == null
+        }
+        with(result.find {
+            it.field() == "test5"
+        }) {
+            it.oldValue() == "4,10"
+            it.newValue() == "4"
         }
     }
 

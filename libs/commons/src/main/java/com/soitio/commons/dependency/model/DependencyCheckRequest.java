@@ -18,6 +18,6 @@ public class DependencyCheckRequest {
 
     private Dependent dependent;
     private Action action;
-    private Set<String> ids;
+    private Set<DependencyCheckContext> context;
 
 }

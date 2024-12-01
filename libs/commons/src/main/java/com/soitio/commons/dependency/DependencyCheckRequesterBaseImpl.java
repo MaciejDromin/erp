@@ -3,6 +3,7 @@ package com.soitio.commons.dependency;
 import com.soitio.commons.dependency.client.ConsulStoreClient;
 import com.soitio.commons.dependency.client.DependencyCheckClient;
 import com.soitio.commons.dependency.model.Action;
+import com.soitio.commons.dependency.model.DependencyCheckContext;
 import com.soitio.commons.dependency.model.DependencyCheckRequest;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
@@ -26,9 +27,9 @@ public abstract class DependencyCheckRequesterBaseImpl implements DependencyChec
 
     @Override
     public DependencyCheckResponse requestDependencyCheckForIds(Dependent dependent,
-                                                                Set<String> ids,
+                                                                Set<DependencyCheckContext> context,
                                                                 Action action) {
-        final DependencyCheckRequest request = new DependencyCheckRequest(dependent, action, ids);
+        final DependencyCheckRequest request = new DependencyCheckRequest(dependent, action, context);
         Set<String> services = getServices(dependent);
         return services.parallelStream()
                 .map(host -> dependencyCheckClient.check(URI.create(host), request))

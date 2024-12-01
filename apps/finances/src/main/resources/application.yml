@@ -41,7 +41,7 @@ logging:
 service-discovery:
   service-name: finances
   host: localhost
-  port: 8080
+  port: 8084
 
 soitio:
   service: "http://localhost:8084"
