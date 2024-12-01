@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.model.Action;
+import com.soitio.commons.dependency.model.DependencyCheckContext;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.dependency.model.Dependent;
@@ -11,6 +12,7 @@ import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.utils.MergePatchUtils;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class AbstractDependencyCheckService<T> {
 
@@ -24,8 +26,9 @@ public abstract class AbstractDependencyCheckService<T> {
     }
 
     public DependencyCheckResponse delete(Dependent dependent, Set<String> ids) {
-        // TODO: handle and pass context here
-        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, Set.of(), Action.DELETE);
+        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, ids.stream()
+                .map(DependencyCheckContext::emptyOfId)
+                .collect(Collectors.toSet()), Action.DELETE);
 
         Set<String> diff = new HashSet<>(ids);
 
@@ -43,25 +46,22 @@ public abstract class AbstractDependencyCheckService<T> {
     public abstract void deleteByIds(Set<String> collect);
 
     public DependencyCheckResponse update(Dependent dependent, String id, JsonNode object) {
-        // TODO: handle and pass context here
-        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, Set.of(), Action.EDIT);
-
-        if (response.isFailed()) return response;
-
-        updateOne(id, object);
-
-        return response;
-    }
-
-    public void updateOne(String id, JsonNode object) {
         var entity = findById(id);
         Object mappedDto = mapToDto(entity);
         JsonNode entityNode = mapper.valueToTree(mappedDto);
         JsonNode node = mapper.valueToTree(object);
         MergePatch patch = MergePatchUtils.fromJsonNode(node);
         MergePatch target = MergePatchUtils.fromJsonNode(entityNode);
-        MergePatch merged = MergePatchUtils.merge(patch, target);
-        updateEntity(mapToEntity(merged));
+
+        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent,
+                Set.of(MergePatchUtils.buildContext(patch, target)),
+                Action.EDIT);
+
+        if (response.isFailed()) return response;
+
+        updateEntity(mapToEntity(MergePatchUtils.merge(patch, target)));
+
+        return response;
     }
 
     protected abstract T findById(String id);

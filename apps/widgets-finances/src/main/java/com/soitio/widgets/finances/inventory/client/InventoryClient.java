@@ -1,7 +1,6 @@
 package com.soitio.widgets.finances.inventory.client;
 
 import com.soitio.commons.models.dto.PageDto;
-import com.soitio.commons.models.dto.inventory.category.CategoryDto;
 import com.soitio.commons.models.dto.inventory.item.InventoryItemDto;
 import com.soitio.widgets.finances.inventory.domain.ObjectIdsDto;
 import jakarta.ws.rs.GET;

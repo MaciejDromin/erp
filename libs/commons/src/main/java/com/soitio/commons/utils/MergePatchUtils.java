@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.dependency.model.DependencyCheckContext;
 import com.soitio.commons.dependency.model.DependencyCheckDiff;
 import com.soitio.commons.models.commons.MergePatch;
-
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -78,17 +76,38 @@ public class MergePatchUtils {
 
     private static Set<DependencyCheckDiff> runDiff(String key, MergePatch value, MergePatch target, String parentKey) {
         MergePatch to = target.getObjectValue().get(key);
+        String newFieldKey = parentKey + key;
         if (to == null) return Set.of();
-        // if basic just return the diff value or empty if there is no change
-        // TODO: make diff for basic types
-
         // if value is null but not target
-        // TODO: handle above scenario
 
-        if (value.getObjectType() == MergePatch.ObjectType.OBJECT) return streamAndRunDiff(value, target, parentKey + key);
+        if (value.getIsNull()) {
+            if (to.getIsNull()) return Set.of();
+            return Set.of(new DependencyCheckDiff(newFieldKey, getValueAsString(to), null));
+        }
 
-        // default just in case
-        return Set.of();
+        if (value.getObjectType() == MergePatch.ObjectType.OBJECT) return streamAndRunDiff(value, to, newFieldKey + ".");
+
+        // if basic just return the diff value or empty if there is no change
+        String newVal = getValueAsString(value);
+        String oldVal = getValueAsString(to);
+
+        if (newVal.equals(oldVal)) return Set.of();
+
+        return Set.of(new DependencyCheckDiff(newFieldKey, oldVal, newVal));
+    }
+
+    private static String getValueAsString(MergePatch toExtract) {
+        return switch(toExtract.getObjectType()) {
+            case LIST -> toExtract.getListValue().stream()
+                    .map(MergePatchUtils::getValueAsString)
+                    .collect(Collectors.joining(","));
+            case STRING -> toExtract.getStrValue();
+            case INTEGER -> String.valueOf(toExtract.getIntValue());
+            case DOUBLE -> String.valueOf(toExtract.getDoubleValue());
+            case BOOLEAN -> String.valueOf(toExtract.getBoolValue());
+            case BIG_NUMBER -> toExtract.getBigNumberValue().toString();
+            case OBJECT -> "";
+        };
     }
 
     private static Set<DependencyCheckDiff> streamAndRunDiff(MergePatch patch, MergePatch target, String parentKey) {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.model.Action;
+import com.soitio.commons.dependency.model.DependencyCheckContext;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.dependency.model.Dependent;
@@ -27,7 +28,9 @@ public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepo
     }
 
     public DependencyCheckResponse delete(Dependent dependent, Set<String> ids) {
-        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, ids, Action.DELETE);
+        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, ids.stream()
+                .map(DependencyCheckContext::emptyOfId)
+                .collect(Collectors.toSet()), Action.DELETE);
 
         Set<String> diff = new HashSet<>(ids);
         response.getResults()
@@ -48,22 +51,20 @@ public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepo
     }
 
     public DependencyCheckResponse update(Dependent dependent, String id, JsonNode node) {
-        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, Set.of(id), Action.EDIT);
-
-        if (response.isFailed()) return response;
-
-        updateOne(id, node);
-
-        return response;
-    }
-
-    public void updateOne(String id, JsonNode node) {
         var entity = findById(new ObjectId(id));
         JsonNode entityNode = mapper.valueToTree(entity);
         MergePatch patch = MergePatchUtils.fromJsonNode(node);
         MergePatch target = MergePatchUtils.fromJsonNode(entityNode);
-        MergePatch merged = MergePatchUtils.merge(patch, target);
-        update(mapToEntity(merged));
+
+        var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent,
+                Set.of(MergePatchUtils.buildContext(patch, target)),
+                Action.EDIT);
+
+        if (response.isFailed()) return response;
+
+        update(mapToEntity(MergePatchUtils.merge(patch, target)));
+
+        return response;
     }
 
     protected abstract T mapToEntity(MergePatch object);

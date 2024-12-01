@@ -3,6 +3,7 @@ package com.soitio.inventory.item.application;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.commons.dependency.DependencyCheckRequester;
 import com.soitio.commons.dependency.DependencyCheckService;
+import com.soitio.commons.dependency.model.DependencyCheckContext;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.inventory.ItemUnit;
@@ -125,14 +126,16 @@ public class InventoryItemRepository extends AbstractDependencyCheckRepo<Invento
     }
 
     @Override
-    public Set<DependencyCheckResult> checkForEdit(Set<String> set) {
+    public Set<DependencyCheckResult> checkForEdit(Set<DependencyCheckContext> set) {
         return Set.of();
     }
 
     @Override
-    public Set<DependencyCheckResult> checkForDelete(Set<String> set) {
+    public Set<DependencyCheckResult> checkForDelete(Set<DependencyCheckContext> set) {
         var objectIds = set.stream()
-                .map(ObjectId::new).collect(Collectors.toSet());
+                .map(DependencyCheckContext::id)
+                .map(ObjectId::new)
+                .collect(Collectors.toSet());
         var allCategories = findAllByCategoryIdsIn(objectIds)
                 .stream()
                 .map(InventoryItem::getCategories)
