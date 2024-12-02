@@ -25,7 +25,8 @@
     data === undefined
       ? MoneyOperationType.INCOME
       : data.operation.operationType
-  let effectiveDate = data === undefined ? undefined : data.operation.effectiveDate
+  let effectiveDate =
+    data === undefined ? undefined : data.operation.effectiveDate
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
