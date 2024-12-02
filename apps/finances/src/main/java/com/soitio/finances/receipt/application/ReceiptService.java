@@ -1,9 +1,9 @@
 package com.soitio.finances.receipt.application;
 
+import com.soitio.commons.models.dto.finances.MoneyOperationType;
 import com.soitio.finances.common.messaging.RabbitPublisher;
 import com.soitio.finances.moneyoperation.application.MoneyOperationService;
 import com.soitio.finances.moneyoperation.domain.MoneyOperation;
-import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.receipt.domain.Purchase;
 import com.soitio.finances.receipt.domain.PurchaseItem;
 import com.soitio.finances.receipt.domain.dto.PurchaseItemToAnalyzeDto;

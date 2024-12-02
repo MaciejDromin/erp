@@ -2,9 +2,10 @@ package com.soitio.finances.moneyoperation.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.soitio.commons.models.dto.finances.AmountDto;
-import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
-import com.soitio.finances.operationcategories.domain.dto.OperationCategoryDto;
 import java.time.LocalDateTime;
+
+import com.soitio.commons.models.dto.finances.MoneyOperationType;
+import com.soitio.commons.models.dto.finances.OperationCategoryDto;
 import lombok.Builder;
 import lombok.Value;
 

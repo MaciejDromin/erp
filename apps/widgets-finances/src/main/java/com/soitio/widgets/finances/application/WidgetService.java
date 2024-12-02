@@ -3,6 +3,7 @@ package com.soitio.widgets.finances.application;
 import com.soitio.commons.models.dto.PageDto;
 import com.soitio.commons.models.dto.finances.AmountDto;
 import com.soitio.commons.models.dto.finances.ObjectValueDto;
+import com.soitio.commons.models.dto.finances.PlannedExpensesDto;
 import com.soitio.commons.models.dto.finances.TopItemByCategoryDto;
 import com.soitio.commons.models.dto.inventory.category.CategoryDto;
 import com.soitio.commons.models.dto.inventory.item.InventoryItemDto;
@@ -22,6 +23,7 @@ import com.soitio.widgets.finances.inventory.domain.ObjectIdsDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -150,7 +152,7 @@ public class WidgetService {
 
     public WidgetData getMostExpensiveItemPerCat() {
         // Get all items
-        List<InventoryItemDto> items = PageableDataFetcher.fetchData(inventoryClient::getAllItems);
+        List<InventoryItemDto> items = PageableDataFetcher.fetchDataWithNoParams(inventoryClient::getAllItems);
         // grep by categories
         Map<CategoryDto, Set<String>> itemsGrouped = groupItems(items);
 
@@ -177,7 +179,7 @@ public class WidgetService {
 
     public WidgetData getValuePerCategory() {
         // Get all items
-        List<InventoryItemDto> items = PageableDataFetcher.fetchData(inventoryClient::getAllItems);
+        List<InventoryItemDto> items = PageableDataFetcher.fetchDataWithNoParams(inventoryClient::getAllItems);
         // grep by categories
         Map<CategoryDto, Set<String>> itemsGrouped = groupItems(items);
 
@@ -229,5 +231,14 @@ public class WidgetService {
             }
         }
         return itemsGrouped;
+    }
+
+    public WidgetData getRemainingPlannedExpenses() {
+        LocalDate today = LocalDate.now();
+        Map<String, String> params = Map.of("year", String.valueOf(today.getYear()),
+                "month", today.getMonth().toString());
+        List<PlannedExpensesDto> data = PageableDataFetcher.fetchData(financesClient::getPlannedExpenses, params);
+        // TODO: Finish writing the method
+        return null;
     }
 }

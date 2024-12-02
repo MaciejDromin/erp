@@ -1,7 +1,7 @@
 package com.soitio.finances.operationcategories.domain;
 
+import com.soitio.commons.models.dto.finances.MoneyOperationType;
 import com.soitio.finances.common.persistence.BaseEntity;
-import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

@@ -1,4 +1,4 @@
-package com.soitio.finances.moneyoperation.domain;
+package com.soitio.commons.models.dto.finances;
 
 public enum MoneyOperationType {
 

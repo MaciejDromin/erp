@@ -1,8 +1,9 @@
 package com.soitio.finances.plannedexpenses.domain;
 
 import com.soitio.commons.dependency.Dependencies;
+import com.soitio.commons.models.dto.finances.MoneyOperationType;
+import com.soitio.commons.models.dto.finances.PlannedExpensesStatus;
 import com.soitio.finances.common.persistence.BaseEntity;
-import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
