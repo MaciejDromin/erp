@@ -28,7 +28,7 @@ public class PeriodicalMoneyOperationController {
     private final PeriodicalMoneyOperationService periodicalMoneyOperationService;
 
     @GetMapping
-    public Page<PeriodicalMoneyOperationDto> getMoneyOpeations(@PageableDefault(size = 20) Pageable pageable) {
+    public Page<PeriodicalMoneyOperationDto> getMoneyOperations(@PageableDefault(size = 20) Pageable pageable) {
         return periodicalMoneyOperationService.getPage(pageable);
     }
 
