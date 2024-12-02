@@ -51,7 +51,10 @@ public class MergePatchUtils {
 
         patch.getObjectValue().forEach((k, v) -> {
             MergePatch to = target.getObjectValue().get(k);
-            if (to == null) return;
+            if (to == null || to.getIsNull()) {
+                target.getObjectValue().put(k, v);
+                return;
+            }
             if (to.getObjectType() != v.getObjectType() && !(to.getIsNull() || v.getIsNull())) throw new IllegalStateException("Object Types do not match");
             handleBasic(v, to);
             if (v.getIsNull()) {
@@ -83,6 +86,11 @@ public class MergePatchUtils {
         if (value.getIsNull()) {
             if (to.getIsNull()) return Set.of();
             return Set.of(new DependencyCheckDiff(newFieldKey, getValueAsString(to), null));
+        }
+
+        if(to.getIsNull()) {
+            if (value.getIsNull()) return Set.of();
+            return Set.of(new DependencyCheckDiff(newFieldKey, null, getValueAsString(value)));
         }
 
         if (value.getObjectType() == MergePatch.ObjectType.OBJECT) return streamAndRunDiff(value, to, newFieldKey + ".");

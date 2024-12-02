@@ -207,8 +207,6 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
                 .operationType(MoneyOperationType.valueOf(fields.get("operationType").getStrValue()))
                 .operationCategory(OperationCategory.builder()
                         .id(opCat.get("id").getStrValue())
-                        .operationType(MoneyOperationType.valueOf(opCat.get("operationType").getStrValue()))
-                        .operationName(opCat.get("operationName").getStrValue())
                         .build())
                 .build();
     }

@@ -25,6 +25,8 @@
     data === undefined
       ? MoneyOperationType.INCOME
       : data.operation.operationType
+  let effectiveDate =
+    data === undefined ? undefined : data.operation.effectiveDate
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
@@ -71,6 +73,15 @@
       placeholder="Currency Code"
       class="input input-bordered input-primary w-full max-w-xs"
     />
+    {#if data !== undefined}
+      <input
+        name="effectiveDate"
+        type="text"
+        bind:value={effectiveDate}
+        placeholder="Effective Date"
+        class="input input-bordered input-primary w-full max-w-xs"
+      />
+    {/if}
   </div>
   <div class="flex flex-row gap-3">
     <input
