@@ -46,4 +46,10 @@ public class WidgetsController {
         return widgetService.getValuePerCategory();
     }
 
+    @GET
+    @Path("/remaining-planned-expenses")
+    public WidgetData getRemainingPlannedExpenses() {
+        return widgetService.getRemainingPlannedExpenses();
+    }
+
 }

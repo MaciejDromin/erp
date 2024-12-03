@@ -8,23 +8,24 @@ import com.soitio.commons.dependency.model.DependencyCheckDiff;
 import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.finances.AmountDto;
+import com.soitio.commons.models.dto.finances.MoneyOperationType;
+import com.soitio.commons.models.dto.finances.PlannedExpensesDto;
+import com.soitio.commons.models.dto.finances.PlannedExpensesStatus;
 import com.soitio.finances.common.AbstractDependencyCheckService;
 import com.soitio.finances.moneyoperation.application.MoneyOperationService;
-import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
 import com.soitio.finances.operationcategories.application.OperationCategoryService;
 import com.soitio.finances.operationcategories.domain.OperationCategory;
 import com.soitio.finances.plannedexpenses.application.port.PlannedExpensesRepository;
 import com.soitio.finances.plannedexpenses.domain.PlannedExpenses;
-import com.soitio.finances.plannedexpenses.domain.PlannedExpensesStatus;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCompletionDto;
 import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesCreationDto;
-import com.soitio.finances.plannedexpenses.domain.dto.PlannedExpensesDto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,7 +72,13 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
                 .build();
     }
 
-    public Page<PlannedExpensesDto> getAll(Pageable pageable) {
+    public Page<PlannedExpensesDto> getAll(Pageable pageable, Map<String, String> params) {
+        if (params.containsKey("year") && params.containsKey("month")) {
+            return repository.findAllPageableByPlannedYearAndPlannedMonth(pageable,
+                    Integer.valueOf(params.get("year")),
+                    Month.valueOf(params.get("month")))
+                    .map(this::convertToDto);
+        }
         return repository.findAll(pageable)
                 .map(this::convertToDto);
     }

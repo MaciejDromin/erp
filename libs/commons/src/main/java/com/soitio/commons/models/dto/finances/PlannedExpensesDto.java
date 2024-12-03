@@ -1,18 +1,23 @@
-package com.soitio.finances.plannedexpenses.domain.dto;
+package com.soitio.commons.models.dto.finances;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.soitio.commons.models.dto.finances.AmountDto;
-import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
-import com.soitio.finances.operationcategories.domain.dto.OperationCategoryDto;
-import com.soitio.finances.plannedexpenses.domain.PlannedExpensesStatus;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;
 import java.time.Month;
-import lombok.Builder;
-import lombok.Value;
 
-@Value
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PlannedExpensesDto {
 

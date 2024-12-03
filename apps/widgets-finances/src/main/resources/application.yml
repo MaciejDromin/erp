@@ -56,3 +56,8 @@ widgets:
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN005
+    - name: Remaining Planned Expenses For This Month
+      datasource: http://localhost:8080/widgets/remaining-planned-expenses
+      widget-domain: FINANCES
+      version: v1.0
+      unique-code: FIN006

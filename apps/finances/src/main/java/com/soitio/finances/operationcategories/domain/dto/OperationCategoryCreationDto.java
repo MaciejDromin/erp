@@ -1,6 +1,6 @@
 package com.soitio.finances.operationcategories.domain.dto;
 
-import com.soitio.finances.moneyoperation.domain.MoneyOperationType;
+import com.soitio.commons.models.dto.finances.MoneyOperationType;
 import lombok.Builder;
 import lombok.Value;
 
