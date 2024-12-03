@@ -64,7 +64,7 @@
       type="text"
       bind:value={amount}
       placeholder="Amount"
-      class="input input-bordered input-primary w-full max-w-xs"
+      class="input input-bordered input-primary w-full max-w-xs bg-white text-black"
     />
     <input
       name="currencyCode"
