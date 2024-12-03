@@ -216,7 +216,7 @@
 <div class="flex flex-col">
   <div class="flex justify-between mb-8">
     <h1 class="text-2xl">{data.name}</h1>
-    <div class="flex flex-row gap-4">
+    <div class="flex flex-row gap-2 items-center">
       <Modal modalId="add_widget_modal" buttonName="Add Widget">
         <AddWidget {dashboardId} {domain} />
       </Modal>

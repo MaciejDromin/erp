@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -238,7 +239,15 @@ public class WidgetService {
         Map<String, String> params = Map.of("year", String.valueOf(today.getYear()),
                 "month", today.getMonth().toString());
         List<PlannedExpensesDto> data = PageableDataFetcher.fetchData(financesClient::getPlannedExpenses, params);
-        // TODO: Finish writing the method
-        return null;
+        return WidgetData.builder()
+                .labels(List.of("Remaining Planned Expenses"))
+                .datasets(List.of(Dataset.builder()
+                        .label("%s".formatted(data.stream()
+                                .filter(Predicate.not(PlannedExpensesDto::isFinalized))
+                                .map(PlannedExpensesDto::getPlannedAmount)
+                                .map(AmountDto::getValue)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add)))
+                        .build()))
+                .build();
     }
 }

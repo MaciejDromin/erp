@@ -2,13 +2,22 @@ package com.soitio.commons.models.dto.finances;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;
 import java.time.Month;
 
-@Value
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PlannedExpensesDto {
 
