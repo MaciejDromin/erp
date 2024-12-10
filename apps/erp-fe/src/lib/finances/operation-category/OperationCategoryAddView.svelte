@@ -1,5 +1,8 @@
 <script>
   import { MoneyOperationType } from '$lib/finances/types/financialTypes'
+  import TextInput from '$lib/commons/TextInput.svelte'
+  import SelectInput from '$lib/commons/SelectInput.svelte'
+  import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
 
@@ -9,25 +12,25 @@
   let buttonName = data === undefined ? 'Add' : 'Edit'
 </script>
 
-<form method="POST" class="mx-auto flex flex-col gap-3 py-6">
+<form method="POST" class="mx-auto flex flex-col gap-3">
   <input name="categoryId" type="text" class="hidden" bind:value={categoryId} />
   <div class="flex flex-row gap-3 mx-auto">
-    <select
-      name="operationType"
-      bind:value={type}
-      class="select select-primary w-full max-w-xs"
-    >
-      {#each Object.values(MoneyOperationType) as operationType}
-        <option value={operationType}>{operationType}</option>
-      {/each}
-    </select>
-    <input
-      name="operationName"
-      type="text"
-      bind:value={name}
-      placeholder="Operation Name"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
+    <div class="mx-auto">
+      <InputSection name="Object Value" classes=" flex-row gap-2">
+        <TextInput
+          name="operationName"
+          bind:value={name}
+          placeholder="Operation Name"
+          classes=" bg-white text-black"
+        />
+        <SelectInput
+          name="operationType"
+          bind:value={type}
+          classes=" bg-white text-black"
+          options={Object.values(MoneyOperationType)}
+        />
+      </InputSection>
+    </div>
   </div>
   <button class="btn btn-primary mx-auto">{buttonName}</button>
 </form>

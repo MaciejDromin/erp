@@ -5,6 +5,10 @@
   import Pageable from '$lib/Pageable.svelte'
   import Modal from '$lib/Modal.svelte'
   import OperationCategoryTable from '$lib/finances/operation-category/OperationCategoryTable.svelte'
+  import TextInput from '$lib/commons/TextInput.svelte'
+  import TextArea from '$lib/commons/TextArea.svelte'
+  import SelectInput from '$lib/commons/SelectInput.svelte'
+  import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
 
@@ -51,7 +55,7 @@
   }
 </script>
 
-<form method="POST" class="mx-auto flex flex-col gap-3 py-6">
+<form method="POST" class="mx-auto flex flex-col gap-3">
   <input
     name="periodicalOperationId"
     type="text"
@@ -59,80 +63,89 @@
     bind:value={periodicalOperationId}
   />
   <div class="flex flex-row gap-3">
-    <input
-      name="amount"
-      type="text"
-      bind:value={amount}
-      placeholder="Amount"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
-      name="currencyCode"
-      type="text"
-      bind:value={currencyCode}
-      placeholder="Currency Code"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-  </div>
-  <div class="flex flex-row gap-3">
-    <input
-      name="operationDescription"
-      type="text"
-      bind:value={operationDescription}
-      placeholder="Operation Description"
-      class="input input-bordered input-primary w-full"
-    />
-  </div>
-  <div class="flex flex-row gap-3">
-    <select
-      name="nextApplicableMonth"
-      bind:value={nextApplicableMonth}
-      class="select select-primary w-full max-w-xs"
-    >
-      {#each Object.values(Month) as month}
-        <option value={month}>{month}</option>
-      {/each}
-    </select>
-    <input
-      name="repetitionPeriod"
-      type="text"
-      bind:value={repetitionPeriod}
-      placeholder="Repetition Period"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-  </div>
-
-  <div class="flex flex-row gap-3">
-    <select
-      name="operationType"
-      class="select select-primary w-full max-w-xs"
-      bind:value={operationType}
-    >
-      {#each Object.values(MoneyOperationType) as operationType}
-        <option value={operationType}>{operationType}</option>
-      {/each}
-    </select>
-    <select
-      multiple
-      name="category"
-      class="p-4 mr-auto hidden"
-      bind:value={selectedCategory}
-    >
-      {#each categories as category}
-        <option value={JSON.stringify(category)}></option>
-      {/each}
-    </select>
-    <div class="mr-auto">
-      <Modal
-        modalId="category_modal"
-        buttonName={determineButtonName(categories)}
-      >
-        <Pageable
-          endpoint="/finances/operation-category"
-          component={OperationCategoryTable}
-          additionalSearch={`&operationType=${operationType}`}
+    <div>
+      <InputSection name="Operation" classes=" flex-row gap-2">
+        <TextInput
+          name="amount"
+          bind:value={amount}
+          placeholder="Amount"
+          classes=" bg-white text-black"
         />
-      </Modal>
+        <TextInput
+          name="currencyCode"
+          bind:value={currencyCode}
+          placeholder="Currency Code"
+          classes=" bg-white text-black"
+        />
+      </InputSection>
+      <InputSection name="Category" classes=" flex-row gap-2 items-center">
+        <SelectInput
+          name="operationType"
+          bind:value={operationType}
+          classes=" bg-white text-black"
+          options={Object.values(MoneyOperationType)}
+        />
+        <select
+          multiple
+          name="category"
+          class="p-4 mr-auto hidden"
+          bind:value={selectedCategory}
+        >
+          {#each categories as category}
+            <option value={JSON.stringify(category)}></option>
+          {/each}
+        </select>
+        <div class="mr-auto">
+          <Modal
+            modalId="category_modal"
+            buttonName={determineButtonName(categories)}
+          >
+            <Pageable
+              endpoint="/finances/operation-category"
+              component={OperationCategoryTable}
+              additionalSearch={`&operationType=${operationType}`}
+            />
+            <button slot="button" class="btn btn-primary"
+              >{determineButtonName(categories)}</button
+            >
+          </Modal>
+        </div>
+      </InputSection>
+    </div>
+    <div class="grow flex flex-col">
+      <InputSection name="Schedule" classes=" flex-row gap-2">
+        <SelectInput
+          name="nextApplicableMonth"
+          bind:value={nextApplicableMonth}
+          classes=" bg-white text-black"
+          options={Object.values(Month)}
+        />
+        <select
+          name="nextApplicableMonth"
+          class="p-4 mr-auto hidden"
+          bind:value={nextApplicableMonth}
+        >
+          {#each Object.values(Month) as month}
+            <option value={month}></option>
+          {/each}
+        </select>
+        <TextInput
+          name="repetitionPeriod"
+          bind:value={repetitionPeriod}
+          placeholder="Repetition Period"
+          classes=" bg-white text-black"
+        />
+      </InputSection>
+      <div>
+        <InputSection name="Description" classes=" h-full w-full min-h-full">
+          <TextArea
+            name="operationDescription"
+            bind:value={operationDescription}
+            placeholder="Operation Description"
+            classes=" bg-white text-black w-full min-h-full"
+          />
+        </InputSection>
+      </div>
     </div>
   </div>
   <button class="btn btn-primary mx-auto">{buttonName}</button>
