@@ -125,7 +125,7 @@
           class="p-4 mr-auto hidden"
           bind:value={nextApplicableMonth}
         >
-          {#each Object.values(Month) as month }
+          {#each Object.values(Month) as month}
             <option value={month}></option>
           {/each}
         </select>
