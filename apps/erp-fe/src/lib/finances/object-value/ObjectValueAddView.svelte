@@ -4,7 +4,6 @@
   import { genericStore } from '$lib/stores/genericStore.ts'
   import { onMount } from 'svelte'
   import TextInput from '$lib/commons/TextInput.svelte'
-  import SelectInput from '$lib/commons/SelectInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let config
