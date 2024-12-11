@@ -3,6 +3,8 @@
   import Pageable from '$lib/Pageable.svelte'
   import { genericStore } from '$lib/stores/genericStore.ts'
   import { onMount } from 'svelte'
+  import TextInput from '$lib/commons/TextInput.svelte'
+  import InputSection from '$lib/commons/InputSection.svelte'
 
   export let config
 
@@ -54,43 +56,50 @@
     bind:value={objectValueId}
   />
   <div class="flex flex-row gap-3">
-    <input
-      name="amount"
-      type="text"
-      bind:value={amount}
-      placeholder="Amount"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
-      name="currencyCode"
-      type="text"
-      bind:value={currency}
-      placeholder="Currency Code"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-  </div>
-
-  <div class="flex flex-row gap-3">
-    <select
-      multiple
-      name="object"
-      class="p-4 mr-auto hidden"
-      bind:value={selectedObject}
-    >
-      {#each objects as object}
-        <option value={JSON.stringify(object)} />
-      {/each}
-    </select>
-    <div>
-      <Modal modalId="object_modal" buttonName={determineButtonName(objects)}>
-        <Pageable
-          endpoint={config.endpoint}
-          component={config.component}
-          additionalSearch={config.data.objectIds.length === 0
-            ? ''
-            : `&objectIds=${config.data.objectIds.join(',')}`}
+    <div class="mx-auto">
+      <InputSection name="Object Value" classes=" flex-row gap-2">
+        <TextInput
+          name="amount"
+          bind:value={amount}
+          placeholder="Amount"
+          classes=" bg-white text-black"
         />
-      </Modal>
+        <TextInput
+          name="currencyCode"
+          bind:value={currency}
+          placeholder="Currency Code"
+          classes=" bg-white text-black"
+        />
+      </InputSection>
+      <InputSection name="Item" classes=" flex-row gap-2">
+        <select
+          multiple
+          name="object"
+          class="p-4 mr-auto hidden"
+          bind:value={selectedObject}
+        >
+          {#each objects as object}
+            <option value={JSON.stringify(object)} />
+          {/each}
+        </select>
+        <div class="mx-auto">
+          <Modal
+            modalId="object_modal"
+            buttonName={determineButtonName(objects)}
+          >
+            <Pageable
+              endpoint={config.endpoint}
+              component={config.component}
+              additionalSearch={config.data.objectIds.length === 0
+                ? ''
+                : `&objectIds=${config.data.objectIds.join(',')}`}
+            />
+            <button slot="button" class="btn btn-primary"
+              >{determineButtonName(objects)}</button
+            >
+          </Modal>
+        </div>
+      </InputSection>
     </div>
   </div>
   <button class="btn btn-primary mx-auto">{buttonName}</button>

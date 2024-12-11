@@ -5,6 +5,9 @@
   import { genericStore } from '$lib/stores/genericStore.ts'
   import { onMount } from 'svelte'
   import { ItemUnit } from '$lib/inventory/types/inventoryTypes'
+  import TextInput from '$lib/commons/TextInput.svelte'
+  import SelectInput from '$lib/commons/SelectInput.svelte'
+  import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
 
@@ -39,53 +42,62 @@
   let buttonName = data === undefined ? 'Add' : 'Edit'
 </script>
 
-<form method="POST" class="mx-auto flex flex-col gap-3 py-6">
+<form method="POST" class="mx-auto flex flex-col gap-3">
   <input name="itemId" type="text" class="hidden" bind:value={itemId} />
-  <div class="flex flex-row gap-3">
-    <input
-      name="name"
-      bind:value={name}
-      type="text"
-      placeholder="Name"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
-      name="quantity"
-      bind:value={quantity}
-      type="text"
-      placeholder="Quantity"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-  </div>
-
-  <div class="flex flex-row gap-3">
-    <select
-      multiple
-      name="category"
-      class="p-4 mr-auto hidden"
-      bind:value={selectedCategory}
-    >
-      {#each categories as category}
-        <option value={JSON.stringify(category)}></option>
-      {/each}
-    </select>
-    <select
-      name="unit"
-      class="select select-primary w-full max-w-xs"
-      bind:value={unit}
-    >
-      {#each Object.values(ItemUnit) as unit}
-        <option value={unit}>{unit}</option>
-      {/each}
-    </select>
-    <div class="mr-auto">
-      <Modal
-        modalId="category_modal"
-        buttonName={determineButtonName(categories)}
-      >
-        <Pageable endpoint="/inventory/categories" component={CategoryTable} />
-      </Modal>
+  <div class="flex flex-row gap-3 w-fit mx-auto">
+    <div>
+      <InputSection name="Item" classes=" flex-row gap-2 items-center">
+        <TextInput
+          name="name"
+          bind:value={name}
+          placeholder="Name"
+          classes=" bg-white text-black"
+        />
+        <select
+          multiple
+          name="category"
+          class="p-4 mr-auto hidden"
+          bind:value={selectedCategory}
+        >
+          {#each categories as category}
+            <option value={JSON.stringify(category)}></option>
+          {/each}
+        </select>
+        <div class="mr-auto">
+          <Modal
+            modalId="category_modal"
+            buttonName={determineButtonName(categories)}
+          >
+            <Pageable
+              endpoint="/inventory/categories"
+              component={CategoryTable}
+            />
+            <button slot="button" class="btn btn-primary"
+              >{determineButtonName(categories)}</button
+            >
+          </Modal>
+        </div>
+      </InputSection>
     </div>
-    <button class="btn btn-primary">{buttonName} Item</button>
+    <div>
+      <InputSection
+        name="Quantity"
+        classes=" flex-row gap-2 min-h-full items-center"
+      >
+        <TextInput
+          name="name"
+          bind:value={name}
+          placeholder="Name"
+          classes=" bg-white text-black"
+        />
+        <SelectInput
+          name="unit"
+          bind:value={unit}
+          classes=" bg-white text-black"
+          options={Object.values(ItemUnit)}
+        />
+      </InputSection>
+    </div>
   </div>
+  <button class="btn btn-primary mx-auto">{buttonName}</button>
 </form>

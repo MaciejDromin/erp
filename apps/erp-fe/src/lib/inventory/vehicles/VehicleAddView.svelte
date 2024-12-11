@@ -6,6 +6,9 @@
     Make,
     Transmission,
   } from '$lib/inventory/types/inventoryTypes'
+  import TextInput from '$lib/commons/TextInput.svelte'
+  import SelectInput from '$lib/commons/SelectInput.svelte'
+  import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
 
@@ -28,105 +31,89 @@
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
   <input name="vehicleId" type="text" class="hidden" bind:value={vehicleId} />
-  <div class="flex flex-row gap-3">
-    <input
-      name="name"
-      bind:value={name}
-      type="text"
-      placeholder="Name"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
-      name="year"
-      bind:value={year}
-      type="text"
-      placeholder="Year"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
-      name="odometer"
-      bind:value={odometer}
-      type="text"
-      placeholder="Odometer"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <select
-      name="bodyStyle"
-      bind:value={bodyStyle}
-      class="select select-primary w-full max-w-xs"
-    >
-      {#each Object.values(BodyStyle) as bodyStyle}
-        <option value={bodyStyle}>{bodyStyle}</option>
-      {/each}
-    </select>
+  <div class="flex flex-row gap-3 mx-auto">
+    <InputSection name="Details" classes=" flex-row gap-2">
+      <TextInput
+        name="name"
+        bind:value={name}
+        placeholder="Name"
+        classes=" bg-white text-black"
+      />
+      <TextInput
+        name="odometer"
+        bind:value={odometer}
+        placeholder="Odometer"
+        classes=" bg-white text-black"
+      />
+    </InputSection>
+    <InputSection name="Identification" classes=" flex-row gap-2">
+      <TextInput
+        name="vin"
+        bind:value={vin}
+        placeholder="VIN"
+        classes=" bg-white text-black"
+      />
+      <TextInput
+        name="registrationPlate"
+        bind:value={registrationPlate}
+        placeholder="Registration Plate"
+        classes=" bg-white text-black"
+      />
+    </InputSection>
   </div>
-  <div class="flex flex-row gap-3">
-    <select
-      name="make"
-      bind:value={make}
-      class="select select-primary w-full max-w-xs"
-    >
-      {#each Object.values(Make) as make}
-        <option value={make}>{make}</option>
-      {/each}
-    </select>
-    <input
-      name="model"
-      bind:value={model}
-      type="text"
-      placeholder="Model"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <select
-      name="fuelType"
-      bind:value={fuelType}
-      class="select select-primary w-full max-w-xs"
-    >
-      {#each Object.values(FuelType) as fuelType}
-        <option value={fuelType}>{fuelType}</option>
-      {/each}
-    </select>
-    <select
-      name="driveTrain"
-      bind:value={driveTrain}
-      class="select select-primary w-full max-w-xs"
-    >
-      {#each Object.values(DriveTrain) as driveTrain}
-        <option value={driveTrain}>{driveTrain}</option>
-      {/each}
-    </select>
-  </div>
-  <div class="flex flex-row gap-3">
-    <select
-      name="transmission"
-      bind:value={transmission}
-      class="select select-primary w-full max-w-xs"
-    >
-      {#each Object.values(Transmission) as transmission}
-        <option value={transmission}>{transmission}</option>
-      {/each}
-    </select>
-    <input
-      name="engineType"
-      bind:value={engineType}
-      type="text"
-      placeholder="Engine Type"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
-      name="vin"
-      bind:value={vin}
-      type="text"
-      placeholder="VIN"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
-      name="registrationPlate"
-      bind:value={registrationPlate}
-      type="text"
-      placeholder="Registration Plate"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <button class="btn btn-primary">{buttonName} Row</button>
-  </div>
+  <InputSection name="Specification" classes=" flex-col gap-2 w-fit mx-auto">
+    <div class="flex flex-row gap-3">
+      <SelectInput
+        name="make"
+        bind:value={make}
+        classes=" bg-white text-black"
+        options={Object.values(Make)}
+      />
+      <TextInput
+        name="model"
+        bind:value={model}
+        placeholder="Model"
+        classes=" bg-white text-black"
+      />
+      <SelectInput
+        name="bodyStyle"
+        bind:value={bodyStyle}
+        classes=" bg-white text-black"
+        options={Object.values(BodyStyle)}
+      />
+      <TextInput
+        name="year"
+        bind:value={year}
+        placeholder="Year"
+        classes=" bg-white text-black"
+      />
+    </div>
+    <div class="flex flex-row gap-3">
+      <SelectInput
+        name="driveTrain"
+        bind:value={driveTrain}
+        classes=" bg-white text-black"
+        options={Object.values(DriveTrain)}
+      />
+      <SelectInput
+        name="transmission"
+        bind:value={transmission}
+        classes=" bg-white text-black"
+        options={Object.values(Transmission)}
+      />
+      <SelectInput
+        name="fuelType"
+        bind:value={fuelType}
+        classes=" bg-white text-black"
+        options={Object.values(FuelType)}
+      />
+      <TextInput
+        name="engineType"
+        bind:value={engineType}
+        placeholder="Engine Type"
+        classes=" bg-white text-black"
+      />
+    </div>
+  </InputSection>
+  <button class="btn btn-primary mx-auto">{buttonName}</button>
 </form>
