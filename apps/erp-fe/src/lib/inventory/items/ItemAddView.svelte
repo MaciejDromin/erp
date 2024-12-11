@@ -42,7 +42,7 @@
   let buttonName = data === undefined ? 'Add' : 'Edit'
 </script>
 
-<form method="POST" class="mx-auto flex flex-col gap-3 justify-center">
+<form method="POST" class="mx-auto flex flex-col gap-3">
   <input name="itemId" type="text" class="hidden" bind:value={itemId} />
   <div class="flex flex-row gap-3 w-fit mx-auto">
     <div>
