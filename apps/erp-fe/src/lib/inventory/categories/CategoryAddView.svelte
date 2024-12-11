@@ -1,4 +1,7 @@
 <script>
+  import TextInput from '$lib/commons/TextInput.svelte'
+  import InputSection from '$lib/commons/InputSection.svelte'
+
   export let data = undefined
 
   let name = data === undefined ? '' : data.category.name
@@ -6,14 +9,17 @@
   let buttonName = data === undefined ? 'Add' : 'Edit'
 </script>
 
-<form method="POST" class="mx-auto flex flex-row gap-3 py-6">
+<form method="POST" class="mx-auto flex flex-col gap-3">
   <input name="categoryId" type="text" class="hidden" bind:value={categoryId} />
-  <input
-    name="name"
-    type="text"
-    placeholder="Type here"
-    class="input input-bordered input-primary w-full max-w-xs"
-    bind:value={name}
-  />
-  <button class="btn btn-primary">{buttonName} Row</button>
+  <div class="mx-auto">
+    <InputSection name="Operation" classes=" flex-row gap-2">
+      <TextInput
+        name="name"
+        bind:value={name}
+        placeholder="Category Name"
+        classes=" bg-white text-black"
+      />
+    </InputSection>
+  </div>
+  <button class="btn btn-primary mx-auto">{buttonName}</button>
 </form>
