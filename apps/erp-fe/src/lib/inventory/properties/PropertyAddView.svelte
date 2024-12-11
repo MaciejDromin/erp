@@ -9,6 +9,9 @@
     LandClassification,
     AreaUnit,
   } from '$lib/inventory/types/inventoryTypes'
+  import TextInput from '$lib/commons/TextInput.svelte'
+  import SelectInput from '$lib/commons/SelectInput.svelte'
+  import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
 
@@ -61,87 +64,80 @@
   }
 </script>
 
-<form method="POST" class="mx-auto flex flex-col gap-3 py-6">
+<form method="POST" class="mx-auto flex flex-col gap-3">
   <input name="propertyId" type="text" class="hidden" bind:value={propertyId} />
-  <div class="flex flex-row gap-3">
-    <input
-      name="name"
-      type="text"
-      bind:value={name}
-      placeholder="Name"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
-      name="uniqueIdentifier"
-      type="text"
-      bind:value={uniqueIdentifier}
-      placeholder="Unique Identifier"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
-      name="landRegister"
-      type="text"
-      bind:value={landRegister}
-      placeholder="Land Register"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-  </div>
-
-  <div class="flex flex-row gap-3">
-    <select
-      multiple
-      name="address"
-      class="p-4 mr-auto hidden"
-      bind:value={selectedAddress}
-    >
-      {#each addresses as address}
-        <option value={JSON.stringify(address)}></option>
-      {/each}
-    </select>
-    <select
-      name="propertyType"
-      bind:value={propertyType}
-      class="select select-primary w-full max-w-xs"
-    >
-      {#each Object.values(PropertyType) as propertyType}
-        <option value={propertyType}>{propertyType}</option>
-      {/each}
-    </select>
-    <div class="mr-auto">
-      <Modal
-        modalId="address_modal"
-        buttonName={determineButtonName(addresses)}
-      >
-        <Pageable endpoint="/inventory/addresses" component={AddressTable} />
-      </Modal>
-    </div>
-    <div class="flex flex-row gap-3">
-      <select
-        name="landClassification"
-        class="select select-primary w-full max-w-xs"
-        bind:value={landClassification}
-      >
-        {#each Object.values(LandClassification) as landClassification}
-          <option value={landClassification}>{landClassification}</option>
-        {/each}
-      </select>
-      <input
-        name="area"
-        type="text"
-        bind:value={area}
-        placeholder="100,00"
-        class="input input-bordered input-primary w-full max-w-xs"
+  <div class="flex flex-row gap-3 mx-auto">
+    <InputSection name="Property" classes=" flex-row gap-2 items-center">
+      <TextInput
+        name="name"
+        bind:value={name}
+        placeholder="Name"
+        classes=" bg-white text-black"
       />
+      <SelectInput
+        name="propertyType"
+        bind:value={propertyType}
+        classes=" bg-white text-black"
+        options={Object.values(PropertyType)}
+      />
+    </InputSection>
+    <InputSection name="Identification" classes=" flex-col gap-2">
+      <div class="flex flex-row gap-3">
+        <TextInput
+          name="uniqueIdentifier"
+          bind:value={uniqueIdentifier}
+          placeholder="Unique Identifier"
+          classes=" bg-white text-black"
+        />
+        <TextInput
+          name="landRegister"
+          bind:value={landRegister}
+          placeholder="Land Register"
+          classes=" bg-white text-black"
+        />
+      </div>
       <select
-        name="areaUnit"
-        bind:value={areaUnit}
-        class="select select-primary w-full max-w-xs"
+        multiple
+        name="address"
+        class="p-4 mr-auto hidden"
+        bind:value={selectedAddress}
       >
-        {#each Object.values(AreaUnit) as areaUnit}
-          <option value={areaUnit}>{areaUnit}</option>
+        {#each addresses as address}
+          <option value={JSON.stringify(address)}></option>
         {/each}
       </select>
-    </div>
-    <button class="btn btn-primary">{buttonName}</button>
+      <div class="mx-auto">
+        <Modal
+          modalId="address_modal"
+          buttonName={determineButtonName(addresses)}
+        >
+          <Pageable endpoint="/inventory/addresses" component={AddressTable} />
+          <button slot="button" class="btn btn-primary"
+            >{determineButtonName(addresses)}</button
+          >
+        </Modal>
+      </div>
+    </InputSection>
   </div>
+  <InputSection name="Property Details" classes=" flex-row gap-2 w-fit mx-auto">
+    <SelectInput
+      name="landClassification"
+      bind:value={landClassification}
+      classes=" bg-white text-black"
+      options={Object.values(LandClassification)}
+    />
+    <TextInput
+      name="area"
+      bind:value={area}
+      placeholder="100,00"
+      classes=" bg-white text-black"
+    />
+    <SelectInput
+      name="areaUnit"
+      bind:value={areaUnit}
+      classes=" bg-white text-black"
+      options={Object.values(AreaUnit)}
+    />
+  </InputSection>
+  <button class="btn btn-primary mx-auto">{buttonName}</button>
 </form>
