@@ -5,6 +5,8 @@
   import Pageable from '$lib/Pageable.svelte'
   import { genericStore } from '$lib/stores/genericStore.ts'
   import { onMount } from 'svelte'
+  import TextInput from '$lib/commons/TextInput.svelte'
+  import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
 
@@ -85,21 +87,21 @@
     class="hidden"
     bind:value={maintenanceId}
   />
-  <div class="flex flex-row gap-3">
-    <input
+  <InputSection name="Details" classes=" flex-row gap-2 w-fit mx-auto">
+    <TextInput
       name="date"
       bind:value={date}
-      type="text"
       placeholder="Date"
-      class="input input-bordered input-primary w-full max-w-xs"
+      classes=" bg-white text-black"
     />
-    <input
+    <TextInput
       name="odometer"
       bind:value={odometer}
-      type="text"
       placeholder="Odometer"
-      class="input input-bordered input-primary w-full max-w-xs"
+      classes=" bg-white text-black"
     />
+  </InputSection>
+  <InputSection name="Parts & Contractor" classes=" flex-row gap-2 w-fit mx-auto">
     <select
       multiple
       name="contractor"
@@ -110,42 +112,41 @@
         <option value={JSON.stringify(contractor)}></option>
       {/each}
     </select>
-    <div>
-      <Modal
-        modalId="contractor_modal"
-        buttonName={determineButtonName(contractors, 'contractor')}
+    <Modal
+      modalId="contractor_modal"
+      buttonName={determineButtonName(contractors, 'contractor')}
+    >
+      <Pageable
+        endpoint="/inventory/contractors"
+        component={ContractorsTable}
+      />
+      <button slot="button" class="btn btn-primary"
+        >{determineButtonName(contractors, 'contractor')}</button
       >
-        <Pageable
-          endpoint="/inventory/contractors"
-          component={ContractorsTable}
-        />
-      </Modal>
-    </div>
-    <div class="mr-auto">
-      <Modal
-        modalId="parts_modal"
-        buttonName={determineButtonName(parts, 'part')}
+    </Modal>
+    <Modal
+      modalId="parts_modal"
+      buttonName={determineButtonName(parts, 'part')}
+    >
+      <Pageable endpoint="/inventory/parts" component={PartsTable} />
+      <button slot="button" class="btn btn-primary"
+        >{determineButtonName(parts, 'part')}</button
       >
-        <Pageable endpoint="/inventory/parts" component={PartsTable} />
-      </Modal>
-    </div>
-  </div>
+    </Modal>
+  </InputSection>
   <div class="flex flex-col gap-3">
     <input name="parts" type="text" class="hidden" bind:value={partVal} />
     <h2 class="mx-auto my-6 text-3xl text-black">Parts</h2>
     {#each parts as part}
-      <label class="form-control w-full max-w-xs mx-auto">
-        <div class="label">
-          <span class="label-text text-black">{part.name}</span>
-        </div>
+      <InputSection name={part.name} classes=" flex-row gap-2 w-fit mx-auto">
         <input
           type="text"
           placeholder={part.name + ' quantity'}
           value={getValue(part.id)}
-          class="input input-bordered input-primary w-full max-w-xs mx-auto"
+          class="input input-bordered input-primary w-full max-w-xs mx-auto bg-white text-black"
           on:change={(e) => updatePartsList(part.id, e.target.value)}
         />
-      </label>
+      </InputSection>
     {/each}
     <button class="btn btn-primary mx-auto">{buttonName} Row</button>
   </div>
