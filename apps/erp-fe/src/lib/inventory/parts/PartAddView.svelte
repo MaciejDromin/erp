@@ -4,6 +4,8 @@
   import Pageable from '$lib/Pageable.svelte'
   import { onMount } from 'svelte'
   import { genericStore } from '$lib/stores/genericStore.ts'
+  import TextInput from '$lib/commons/TextInput.svelte'
+  import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
 
@@ -41,21 +43,21 @@
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
   <input name="partId" type="text" class="hidden" bind:value={partId} />
-  <div class="flex flex-row gap-3">
-    <input
+  <InputSection name="Part Details" classes=" flex-row gap-2 w-fit mx-auto">
+    <TextInput
       name="name"
       bind:value={name}
-      type="text"
       placeholder="Name"
-      class="input input-bordered input-primary w-full max-w-xs"
+      classes=" bg-white text-black"
     />
-    <input
+    <TextInput
       name="partNumber"
       bind:value={partNumber}
-      type="text"
       placeholder="Part Number"
-      class="input input-bordered input-primary w-full max-w-xs"
+      classes=" bg-white text-black"
     />
+  </InputSection>
+  <InputSection name="Manufacturer" classes=" flex-row gap-2 w-fit mx-auto">
     <select
       multiple
       name="manufacturer"
@@ -75,8 +77,11 @@
           endpoint="/inventory/contractors"
           component={ContractorsTable}
         />
+        <button slot="button" class="btn btn-primary"
+          >{determineButtonName(contractors)}</button
+        >
       </Modal>
     </div>
-    <button class="btn btn-primary">{buttonName} Row</button>
-  </div>
+  </InputSection>
+  <button class="btn btn-primary mx-auto">{buttonName}</button>
 </form>
