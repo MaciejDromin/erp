@@ -38,7 +38,10 @@
       classes=" bg-white text-black"
     />
   </InputSection>
-  <InputSection name="Contact Information" classes=" flex-row gap-2 w-fit mx-auto">
+  <InputSection
+    name="Contact Information"
+    classes=" flex-row gap-2 w-fit mx-auto"
+  >
     <TextInput
       name="phoneNumber"
       bind:value={phoneNumber}

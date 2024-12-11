@@ -101,7 +101,10 @@
       classes=" bg-white text-black"
     />
   </InputSection>
-  <InputSection name="Parts & Contractor" classes=" flex-row gap-2 w-fit mx-auto">
+  <InputSection
+    name="Parts & Contractor"
+    classes=" flex-row gap-2 w-fit mx-auto"
+  >
     <select
       multiple
       name="contractor"

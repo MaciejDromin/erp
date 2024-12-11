@@ -68,7 +68,10 @@
             modalId="category_modal"
             buttonName={determineButtonName(categories)}
           >
-            <Pageable endpoint="/inventory/categories" component={CategoryTable} />
+            <Pageable
+              endpoint="/inventory/categories"
+              component={CategoryTable}
+            />
             <button slot="button" class="btn btn-primary"
               >{determineButtonName(categories)}</button
             >
@@ -77,7 +80,10 @@
       </InputSection>
     </div>
     <div>
-      <InputSection name="Quantity" classes=" flex-row gap-2 min-h-full items-center">
+      <InputSection
+        name="Quantity"
+        classes=" flex-row gap-2 min-h-full items-center"
+      >
         <TextInput
           name="name"
           bind:value={name}
