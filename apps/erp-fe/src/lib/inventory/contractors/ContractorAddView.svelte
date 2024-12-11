@@ -1,4 +1,7 @@
 <script lang="ts">
+  import TextInput from '$lib/commons/TextInput.svelte'
+  import InputSection from '$lib/commons/InputSection.svelte'
+
   export let data = undefined
 
   let contractorId = data === undefined ? undefined : data.contractor.id
@@ -21,35 +24,33 @@
     class="hidden"
     bind:value={contractorId}
   />
-  <div class="flex flex-row gap-3">
-    <input
+  <InputSection name="Details" classes=" flex-row gap-2 w-fit mx-auto">
+    <TextInput
       name="name"
       bind:value={name}
-      type="text"
       placeholder="Name"
-      class="input input-bordered input-primary w-full max-w-xs"
+      classes=" bg-white text-black"
     />
-    <input
-      name="phoneNumber"
-      bind:value={phoneNumber}
-      type="text"
-      placeholder="Phone Number"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
-      name="email"
-      bind:value={email}
-      type="text"
-      placeholder="Email"
-      class="input input-bordered input-primary w-full max-w-xs"
-    />
-    <input
+    <TextInput
       name="website"
       bind:value={website}
-      type="text"
       placeholder="Website"
-      class="input input-bordered input-primary w-full max-w-xs"
+      classes=" bg-white text-black"
     />
-    <button class="btn btn-primary">{buttonName} Row</button>
-  </div>
+  </InputSection>
+  <InputSection name="Contact Information" classes=" flex-row gap-2 w-fit mx-auto">
+    <TextInput
+      name="phoneNumber"
+      bind:value={phoneNumber}
+      placeholder="Phone Number"
+      classes=" bg-white text-black"
+    />
+    <TextInput
+      name="email"
+      bind:value={email}
+      placeholder="Email"
+      classes=" bg-white text-black"
+    />
+  </InputSection>
+  <button class="btn btn-primary mx-auto">{buttonName}</button>
 </form>
