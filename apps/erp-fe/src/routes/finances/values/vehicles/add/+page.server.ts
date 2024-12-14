@@ -4,7 +4,57 @@ import type { Actions } from './$types'
 import type { PageServerLoad } from './$types'
 import { FINANCES_URL, INVENTORY_URL } from '$lib/scripts/urls'
 import { ObjectType } from '$lib/finances/types/financialTypes'
-import { redirect } from '@sveltejs/kit'
+import { redirect, fail } from '@sveltejs/kit'
+import {
+  validate,
+  nonEmpty,
+  isNumber,
+  isNonNegative,
+  leX,
+} from '$lib/scripts/validator.ts'
+
+const validateArgs = (body, object) => {
+  let error = {
+    failed: false,
+    returnBody: {
+      amount: undefined,
+      currencyCode: undefined,
+      object: undefined,
+    },
+  }
+
+  const valueResult = validate(
+    body.amount,
+    nonEmpty,
+    isNumber,
+    isNonNegative
+  )
+
+  if (!valueResult.result) {
+    error.failed = true
+    error.returnBody.amount = valueResult.message
+  }
+
+  const currencyCodeResult = validate(
+    body.currencyCode,
+    nonEmpty,
+    leX(3)
+  )
+
+  if (!currencyCodeResult.result) {
+    error.failed = true
+    error.returnBody.currencyCode = currencyCodeResult.message
+  }
+
+  const objectResult = validate(object, nonEmpty)
+
+  if (!objectResult.result) {
+    error.failed = true
+    error.returnBody.object = objectResult.message
+  }
+
+  return error
+}
 
 export const actions = {
   default: async ({ request }) => {
@@ -13,9 +63,17 @@ export const actions = {
     const body = {
       amount: data.get('amount'),
       currencyCode: data.get('currencyCode'),
-      objectId: object.id,
       objectType: ObjectType.VEHICLE,
     }
+
+    const validationResult = validateArgs(body, object)
+
+    if (validationResult.failed) {
+      return fail(422, validationResult.returnBody)
+    }
+
+    body.objectId = object.id
+
     await unsecuredExternalApiRequest(
       FINANCES_URL + '/object-value',
       HttpMethods.POST,
