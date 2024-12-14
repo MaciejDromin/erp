@@ -11,6 +11,47 @@ import {
   le3,
 } from '$lib/scripts/validator.ts'
 
+const validateArgs = (body, category) => {
+  let error = {
+    failed: false,
+    returnBody: {
+      amount: {
+        value: undefined,
+        currencyCode: undefined,
+      },
+      category: undefined,
+    },
+  }
+
+  const valueResult = validate(
+    body.amount.value,
+    nonEmpty,
+    isNumber,
+    isNonNegative
+  )
+
+  if (!valueResult.result) {
+    error.failed = true
+    error.returnBody.amount.value = valueResult.message
+  }
+
+  const currencyCodeResult = validate(body.amount.currencyCode, nonEmpty, le3)
+
+  if (!currencyCodeResult.result) {
+    error.failed = true
+    error.returnBody.amount.currencyCode = currencyCodeResult.message
+  }
+
+  const categoryResult = validate(category, nonEmpty)
+
+  if (!categoryResult.result) {
+    error.failed = true
+    error.returnBody.category = categoryResult.message
+  }
+
+  return error
+}
+
 export const actions = {
   default: async ({ request }) => {
     const data = await request.formData()
@@ -24,45 +65,10 @@ export const actions = {
       operationDescription: data.get('operationDescription'),
     }
 
-    let error = {
-      failed: false,
-      returnBody: {
-        amount: {
-          value: undefined,
-          currencyCode: undefined,
-        },
-        category: undefined,
-      },
-    }
+    const validationResult = validateArgs(body, category)
 
-    const valueResult = validate(
-      body.amount.value,
-      nonEmpty,
-      isNumber,
-      isNonNegative
-    )
-
-    if (!valueResult.result) {
-      error.failed = true
-      error.returnBody.amount.value = valueResult.message
-    }
-
-    const currencyCodeResult = validate(body.amount.currencyCode, nonEmpty, le3)
-
-    if (!currencyCodeResult.result) {
-      error.failed = true
-      error.returnBody.amount.currencyCode = currencyCodeResult.message
-    }
-
-    const categoryResult = validate(category, nonEmpty)
-
-    if (!categoryResult.result) {
-      error.failed = true
-      error.returnBody.category = categoryResult.message
-    }
-
-    if (error.failed) {
-      return fail(422, error.returnBody)
+    if (validationResult.failed) {
+      return fail(422, validationResult.returnBody)
     }
 
     body.operationCategoryId = category.id
