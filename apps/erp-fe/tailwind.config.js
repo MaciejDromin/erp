@@ -19,6 +19,10 @@ export default {
             'border-color':
               'var(--fallback-p,oklch(var(--error-red)/var(--tw-border-opacity)))',
           },
+          '.btn-error-red': {
+            '--btn-color': 'var(--error-red)',
+            color: 'white',
+          },
         },
       },
     ],
