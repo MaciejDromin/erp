@@ -8,7 +8,7 @@ import {
   nonEmpty,
   isNumber,
   isNonNegative,
-  le3,
+  leX,
 } from '$lib/scripts/validator.ts'
 
 const validateArgs = (body, category) => {
@@ -35,7 +35,11 @@ const validateArgs = (body, category) => {
     error.returnBody.amount.value = valueResult.message
   }
 
-  const currencyCodeResult = validate(body.amount.currencyCode, nonEmpty, le3)
+  const currencyCodeResult = validate(
+    body.amount.currencyCode,
+    nonEmpty,
+    leX(3)
+  )
 
   if (!currencyCodeResult.result) {
     error.failed = true

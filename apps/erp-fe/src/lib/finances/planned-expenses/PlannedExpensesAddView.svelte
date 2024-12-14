@@ -11,6 +11,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let plannedExpenseId = data === undefined ? undefined : data.plannedExpense.id
   let category =
@@ -71,12 +72,14 @@
           bind:value={plannedAmount}
           placeholder="Planned Amount"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.plannedAmount.value}
         />
         <TextInput
           name="currencyCode"
           bind:value={currencyCode}
           placeholder="Currency Code"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.plannedAmount.currencyCode}
         />
       </InputSection>
       <InputSection name="Period" classes=" flex-row gap-2 items-center">
@@ -85,6 +88,7 @@
           bind:value={plannedYear}
           placeholder="Planned Year"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.plannedYear}
         />
         <SelectInput
           name="plannedMonth"
@@ -116,7 +120,9 @@
               component={OperationCategoryTable}
               additionalSearch={`&operationType=${MoneyOperationType.EXPENSES}`}
             />
-            <button slot="button" class="btn btn-primary"
+            <button
+              slot="button"
+              class={`btn ${form && form.category ? 'btn-error-red' : 'btn-primary'}`}
               >{determineButtonName(categories)}</button
             >
           </Modal>

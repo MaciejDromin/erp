@@ -110,7 +110,7 @@
             />
             <button
               slot="button"
-              class={`btn ${!form ? 'btn-primary' : 'btn-error-red'}`}
+              class={`btn ${form && form.category ? 'btn-error-red' : 'btn-primary'}`}
               >{determineButtonName(categories)}</button
             >
           </Modal>

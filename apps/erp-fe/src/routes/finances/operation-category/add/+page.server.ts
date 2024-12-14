@@ -3,7 +3,7 @@ import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import { FINANCES_URL } from '$lib/scripts/urls'
 import { redirect, fail } from '@sveltejs/kit'
-import { validate, nonEmpty, lb3n16 } from '$lib/scripts/validator.ts'
+import { validate, nonEmpty, lbXnY } from '$lib/scripts/validator.ts'
 
 export const actions = {
   default: async ({ request }) => {
@@ -12,7 +12,7 @@ export const actions = {
       operationType: data.get('operationType'),
       operationName: data.get('operationName'),
     }
-    let validation = validate(body.operationName, nonEmpty, lb3n16)
+    let validation = validate(body.operationName, nonEmpty, lbXnY(3, 16))
     if (!validation.result) {
       return fail(422, {
         operationName: validation.message,

@@ -3,12 +3,12 @@ const pipe =
   (x) =>
     fns.reduce((v, f) => f(v), x)
 
-const isNb1N12 = (val) => {
-  let toValidate = Number(val)
-  if (toValidate < 1 || toValidate > 12) {
-    throw new Error(`Number must be between 1 and 12`)
+const isNbXnY = (x, y) => (v) => {
+  let toValidate = Number(v)
+  if (toValidate < x || toValidate > y) {
+    throw new Error(`Number must be between ${x} and ${y}`)
   }
-  return val
+  return v
 }
 
 const isNonNegative = (val) => {
@@ -25,17 +25,17 @@ const isNumber = (val) => {
   return val
 }
 
-const le3 = (val) => {
-  if (val.length !== 3) {
-    throw new Error(`Variable must be of exactly 3 characters`)
+const leX = (x) => (val) => {
+  if (val.length !== x) {
+    throw new Error(`Variable must be of exactly ${x} characters`)
   }
   return val
 }
 
-const lb3n16 = (val) => {
+const lbXnY = (x, y) => (val) => {
   const len = val.length
-  if (len < 3 || len > 16) {
-    throw new Error(`Variable length must be between 3 and 16`)
+  if (len < x || len > y) {
+    throw new Error(`Variable length must be between ${x} and ${y}`)
   }
   return val
 }
@@ -59,4 +59,4 @@ const validate = (val, ...fn) => {
   return { result: true, message: undefined }
 }
 
-export { validate, nonEmpty, lb3n16, le3, isNumber, isNonNegative, isNb1N12 }
+export { validate, nonEmpty, lbXnY, leX, isNumber, isNonNegative, isNbXnY }

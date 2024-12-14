@@ -8,8 +8,8 @@ import {
   nonEmpty,
   isNumber,
   isNonNegative,
-  le3,
-  isNb1N12,
+  leX,
+  isNbXnY,
 } from '$lib/scripts/validator.ts'
 
 const validateArgs = (body, category) => {
@@ -37,7 +37,11 @@ const validateArgs = (body, category) => {
     error.returnBody.amount.value = valueResult.message
   }
 
-  const currencyCodeResult = validate(body.amount.currencyCode, nonEmpty, le3)
+  const currencyCodeResult = validate(
+    body.amount.currencyCode,
+    nonEmpty,
+    leX(3)
+  )
 
   if (!currencyCodeResult.result) {
     error.failed = true
@@ -55,7 +59,7 @@ const validateArgs = (body, category) => {
     body.repetitionPeriod,
     nonEmpty,
     isNumber,
-    isNb1N12
+    isNbXnY(1, 12)
   )
 
   if (!repetitionResult.result) {
