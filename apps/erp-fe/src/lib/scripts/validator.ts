@@ -3,6 +3,14 @@ const pipe =
   (x) =>
     fns.reduce((v, f) => f(v), x)
 
+const isNb1N12 = (val) => {
+  let toValidate = Number(val)
+  if (toValidate < 1 || toValidate > 12) {
+    throw new Error(`Number must be between 1 and 12`)
+  }
+  return val
+}
+
 const isNonNegative = (val) => {
   if (Number(val) < 0) {
     throw new Error(`Number must be positive`)
@@ -51,4 +59,4 @@ const validate = (val, ...fn) => {
   return { result: true, message: undefined }
 }
 
-export { validate, nonEmpty, lb3n16, le3, isNumber, isNonNegative }
+export { validate, nonEmpty, lb3n16, le3, isNumber, isNonNegative, isNb1N12 }

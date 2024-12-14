@@ -11,6 +11,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let periodicalOperationId = data === undefined ? undefined : data.operation.id
   let category =
@@ -70,12 +71,14 @@
           bind:value={amount}
           placeholder="Amount"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.amount.value}
         />
         <TextInput
           name="currencyCode"
           bind:value={currencyCode}
           placeholder="Currency Code"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.amount.currencyCode}
         />
       </InputSection>
       <InputSection name="Category" classes=" flex-row gap-2 items-center">
@@ -105,7 +108,9 @@
               component={OperationCategoryTable}
               additionalSearch={`&operationType=${operationType}`}
             />
-            <button slot="button" class="btn btn-primary"
+            <button
+              slot="button"
+              class={`btn ${!form ? 'btn-primary' : 'btn-error-red'}`}
               >{determineButtonName(categories)}</button
             >
           </Modal>
@@ -134,6 +139,7 @@
           bind:value={repetitionPeriod}
           placeholder="Repetition Period"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.repetitionPeriod}
         />
       </InputSection>
       <div>
