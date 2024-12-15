@@ -14,6 +14,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let propertyId = data === undefined ? undefined : data.property.id
   let name = data === undefined ? undefined : data.property.name
@@ -73,6 +74,7 @@
         bind:value={name}
         placeholder="Name"
         classes=" bg-white text-black"
+        error={!form ? undefined : form.name}
       />
       <SelectInput
         name="propertyType"
@@ -88,12 +90,14 @@
           bind:value={uniqueIdentifier}
           placeholder="Unique Identifier"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.uniqueIdentifier}
         />
         <TextInput
           name="landRegister"
           bind:value={landRegister}
           placeholder="Land Register"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.landRegister}
         />
       </div>
       <select
@@ -112,7 +116,9 @@
           buttonName={determineButtonName(addresses)}
         >
           <Pageable endpoint="/inventory/addresses" component={AddressTable} />
-          <button slot="button" class="btn btn-primary"
+          <button
+            slot="button"
+            class={`btn ${form && form.address ? 'btn-error-red' : 'btn-primary'}`}
             >{determineButtonName(addresses)}</button
           >
         </Modal>
@@ -131,6 +137,7 @@
       bind:value={area}
       placeholder="100,00"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.area}
     />
     <SelectInput
       name="areaUnit"
