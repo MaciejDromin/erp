@@ -29,9 +29,14 @@ const validateArgs = (body, category) => {
     error.returnBody.name = nameResult.message
   }
 
-  const quantityResult = validate(body.quantity, nonEmpty, isNumber, isNonNegative)
+  const quantityResult = validate(
+    body.quantity,
+    nonEmpty,
+    isNumber,
+    isNonNegative
+  )
 
-  if(!quantityResult.result) {
+  if (!quantityResult.result) {
     error.failed = true
     error.returnBody.quantity = quantityResult.message
   }

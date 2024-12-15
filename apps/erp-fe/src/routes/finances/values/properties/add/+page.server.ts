@@ -23,23 +23,14 @@ const validateArgs = (body, object) => {
     },
   }
 
-  const valueResult = validate(
-    body.amount,
-    nonEmpty,
-    isNumber,
-    isNonNegative
-  )
+  const valueResult = validate(body.amount, nonEmpty, isNumber, isNonNegative)
 
   if (!valueResult.result) {
     error.failed = true
     error.returnBody.amount = valueResult.message
   }
 
-  const currencyCodeResult = validate(
-    body.currencyCode,
-    nonEmpty,
-    leX(3)
-  )
+  const currencyCodeResult = validate(body.currencyCode, nonEmpty, leX(3))
 
   if (!currencyCodeResult.result) {
     error.failed = true

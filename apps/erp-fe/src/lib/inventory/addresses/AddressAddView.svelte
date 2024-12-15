@@ -3,6 +3,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let addressId = data === undefined ? '' : data.address.id
   let addressLine = data === undefined ? '' : data.address.addressLine
@@ -21,12 +22,14 @@
       bind:value={addressLine}
       placeholder="Address Line"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.addressLine}
     />
     <TextInput
       name="postalCode"
       bind:value={postalCode}
       placeholder="Postal Code"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.postalCode}
     />
   </InputSection>
   <InputSection name="Region" classes=" flex-row gap-2 w-fit mx-auto">
@@ -35,12 +38,14 @@
       bind:value={city}
       placeholder="City"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.city}
     />
     <TextInput
       name="province"
       bind:value={province}
       placeholder="Province"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.province}
     />
   </InputSection>
   <InputSection name="Country" classes=" flex-row gap-2 w-fit mx-auto">
@@ -49,6 +54,7 @@
       bind:value={country}
       placeholder="Country"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.country}
     />
   </InputSection>
   <button class="btn btn-primary mx-auto">{buttonName}</button>
