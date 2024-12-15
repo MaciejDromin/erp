@@ -10,6 +10,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let categories: any[] = []
   let selectedCategory
@@ -52,6 +53,7 @@
           bind:value={name}
           placeholder="Name"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.name}
         />
         <select
           multiple
@@ -72,7 +74,9 @@
               endpoint="/inventory/categories"
               component={CategoryTable}
             />
-            <button slot="button" class="btn btn-primary"
+            <button
+              slot="button"
+              class={`btn ${form && form.category ? 'btn-error-red' : 'btn-primary'}`}
               >{determineButtonName(categories)}</button
             >
           </Modal>
@@ -85,10 +89,11 @@
         classes=" flex-row gap-2 min-h-full items-center"
       >
         <TextInput
-          name="name"
-          bind:value={name}
-          placeholder="Name"
+          name="quantity"
+          bind:value={quantity}
+          placeholder="Quantity"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.quantity}
         />
         <SelectInput
           name="unit"
