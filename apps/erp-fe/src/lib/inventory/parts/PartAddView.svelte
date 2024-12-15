@@ -8,6 +8,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let partId = data === undefined ? undefined : data.part.id
   let name = data === undefined ? undefined : data.part.name
@@ -49,12 +50,14 @@
       bind:value={name}
       placeholder="Name"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.name}
     />
     <TextInput
       name="partNumber"
       bind:value={partNumber}
       placeholder="Part Number"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.partNumber}
     />
   </InputSection>
   <InputSection name="Manufacturer" classes=" flex-row gap-2 w-fit mx-auto">
@@ -77,7 +80,9 @@
           endpoint="/inventory/contractors"
           component={ContractorsTable}
         />
-        <button slot="button" class="btn btn-primary"
+        <button
+          slot="button"
+          class={`btn ${form && form.manufacturer ? 'btn-error-red' : 'btn-primary'}`}
           >{determineButtonName(contractors)}</button
         >
       </Modal>

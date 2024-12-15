@@ -22,7 +22,7 @@ const validateArgs = (body, address) => {
     },
   }
 
-  const addressResult = validate(body.address, nonEmpty)
+  const addressResult = validate(address, nonEmpty)
 
   if (!addressResult.result) {
     error.failed = true
