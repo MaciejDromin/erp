@@ -3,6 +3,22 @@ const pipe =
   (x) =>
     fns.reduce((v, f) => f(v), x)
 
+const emailRegex = new RegExp(
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+)
+const websiteRegex = new RegExp(
+  /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
+)
+
+const matchesRegex = (r, m) => (v) => {
+  if (!r.test(v)) {
+    throw new Error(
+      `Field value does not match regular expression. Value should be a valid ${m}`
+    )
+  }
+  return v
+}
+
 const isNbXnY = (x, y) => (v) => {
   let toValidate = Number(v)
   if (toValidate < x || toValidate > y) {
@@ -59,4 +75,15 @@ const validate = (val, ...fn) => {
   return { result: true, message: undefined }
 }
 
-export { validate, nonEmpty, lbXnY, leX, isNumber, isNonNegative, isNbXnY }
+export {
+  validate,
+  nonEmpty,
+  lbXnY,
+  leX,
+  isNumber,
+  isNonNegative,
+  isNbXnY,
+  matchesRegex,
+  emailRegex,
+  websiteRegex,
+}
