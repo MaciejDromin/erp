@@ -3,6 +3,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let name = data === undefined ? '' : data.category.name
   let categoryId = data === undefined ? '' : data.category.id
@@ -18,6 +19,7 @@
         bind:value={name}
         placeholder="Category Name"
         classes=" bg-white text-black"
+        error={!form ? undefined : form.name}
       />
     </InputSection>
   </div>
