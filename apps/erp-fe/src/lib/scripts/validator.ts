@@ -19,6 +19,13 @@ const matchesRegex = (r, m) => (v) => {
   return v
 }
 
+const isDate = (v) => {
+  if (new Date(v).toString() === 'Invalid Date') {
+    throw new Error(`Value ${v} is not a valid date: YYYY-MM-dd`)
+  }
+  return v
+}
+
 const isNbXnY = (x, y) => (v) => {
   let toValidate = Number(v)
   if (toValidate < x || toValidate > y) {
@@ -27,9 +34,16 @@ const isNbXnY = (x, y) => (v) => {
   return v
 }
 
+const isPositive = (val) => {
+  if (Number(val) <= 0) {
+    throw new Error(`Number must be positive`)
+  }
+  return val
+}
+
 const isNonNegative = (val) => {
   if (Number(val) < 0) {
-    throw new Error(`Number must be positive`)
+    throw new Error(`Number must be non-negative`)
   }
   return val
 }
@@ -57,7 +71,7 @@ const lbXnY = (x, y) => (val) => {
 }
 
 const nonEmpty = (val) => {
-  if (!val) {
+  if (val === undefined || val === null) {
     throw new Error(`Variable cannot be empty`)
   }
   if (val.length === 0) {
@@ -86,4 +100,6 @@ export {
   matchesRegex,
   emailRegex,
   websiteRegex,
+  isDate,
+  isPositive,
 }
