@@ -9,6 +9,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let maintenanceId = data === undefined ? undefined : data.maintenance.id
   let date = data === undefined ? undefined : data.maintenance.date
@@ -27,7 +28,7 @@
     data === undefined
       ? []
       : parts.map((p) => ({ id: p.id, quantity: partsQuantityMap.get(p.id) }))
-  let partVal: string = data === undefined ? '' : JSON.stringify(partQuantity)
+  let partVal: string = JSON.stringify(partQuantity)
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
@@ -74,10 +75,39 @@
   const getValue = (partId: string) => {
     const index = partQuantity.findIndex((p) => p.id === partId)
     if (index === -1) {
-      return 0
+      return 1
     }
     return partQuantity[index].quantity
   }
+
+  const partFailed = (partId: string) => {
+    if (form && form[partId]) {
+      return 'input-error-red focus:border-error-red focus:outline-error-red'
+    }
+    return 'input-primary'
+  }
+
+  const updateParts = (parts) => {
+    // add new parts
+    parts.forEach((part) => {
+      const index = partQuantity.findIndex((p) => p.id === part.id)
+      if (index === -1) {
+        partQuantity.push({ id: part.id, quantity: 1 })
+      }
+    })
+    // delete non existsing
+    partQuantity.forEach((part, index) => {
+      const indx = parts.findIndex((p) => p.id === part.id)
+      if (indx === -1) {
+        partQuantity.splice(index, 1)
+      }
+    })
+    partQuantity = [...partQuantity]
+    partQuantity = partQuantity
+    partVal = JSON.stringify(partQuantity)
+  }
+
+  $: parts, updateParts(parts)
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3 py-6">
@@ -93,12 +123,14 @@
       bind:value={date}
       placeholder="Date"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.date}
     />
     <TextInput
       name="odometer"
       bind:value={odometer}
       placeholder="Odometer"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.odometer}
     />
   </InputSection>
   <InputSection
@@ -123,7 +155,9 @@
         endpoint="/inventory/contractors"
         component={ContractorsTable}
       />
-      <button slot="button" class="btn btn-primary"
+      <button
+        slot="button"
+        class={`btn ${form && form.contractor ? 'btn-error-red' : 'btn-primary'}`}
         >{determineButtonName(contractors, 'contractor')}</button
       >
     </Modal>
@@ -146,7 +180,7 @@
           type="text"
           placeholder={part.name + ' quantity'}
           value={getValue(part.id)}
-          class="input input-bordered input-primary w-full max-w-xs mx-auto bg-white text-black"
+          class={`input input-bordered ${partFailed(part.id)} w-full max-w-xs mx-auto bg-white text-black`}
           on:change={(e) => updatePartsList(part.id, e.target.value)}
         />
       </InputSection>

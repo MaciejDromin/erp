@@ -3,6 +3,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let contractorId = data === undefined ? undefined : data.contractor.id
   let name = data === undefined ? undefined : data.contractor.name
@@ -30,12 +31,14 @@
       bind:value={name}
       placeholder="Name"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.name}
     />
     <TextInput
       name="website"
       bind:value={website}
       placeholder="Website"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.website}
     />
   </InputSection>
   <InputSection
@@ -47,12 +50,14 @@
       bind:value={phoneNumber}
       placeholder="Phone Number"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.phoneNumber}
     />
     <TextInput
       name="email"
       bind:value={email}
       placeholder="Email"
       classes=" bg-white text-black"
+      error={!form ? undefined : form.email}
     />
   </InputSection>
   <button class="btn btn-primary mx-auto">{buttonName}</button>

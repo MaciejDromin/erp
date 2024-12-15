@@ -10,7 +10,7 @@
   export let data: PageData
 
   let config = {
-    title: 'Item Values',
+    title: 'Property Values',
     addButton: {
       url: '/finances/values/properties/add',
     },

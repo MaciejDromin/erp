@@ -11,6 +11,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let operationId = data === undefined ? undefined : data.operation.id
   let category =
@@ -70,12 +71,14 @@
           bind:value={amount}
           placeholder="Amount"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.amount.value}
         />
         <TextInput
           name="currencyCode"
           bind:value={currencyCode}
           placeholder="Currency Code"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.amount.currencyCode}
         />
         {#if data !== undefined}
           <TextInput
@@ -113,7 +116,9 @@
               component={OperationCategoryTable}
               additionalSearch={`&operationType=${operationType}`}
             />
-            <button slot="button" class="btn btn-primary"
+            <button
+              slot="button"
+              class={`btn ${form && form.category ? 'btn-error-red' : 'btn-primary'}`}
               >{determineButtonName(categories)}</button
             >
           </Modal>

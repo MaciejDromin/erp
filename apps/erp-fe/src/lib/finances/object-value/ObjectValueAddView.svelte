@@ -7,6 +7,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let config
+  export let form
 
   let data = config.data
 
@@ -63,12 +64,14 @@
           bind:value={amount}
           placeholder="Amount"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.amount}
         />
         <TextInput
           name="currencyCode"
           bind:value={currency}
           placeholder="Currency Code"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.currencyCode}
         />
       </InputSection>
       <InputSection name="Item" classes=" flex-row gap-2">
@@ -94,7 +97,9 @@
                 ? ''
                 : `&objectIds=${config.data.objectIds.join(',')}`}
             />
-            <button slot="button" class="btn btn-primary"
+            <button
+              slot="button"
+              class={`btn ${form && form.object ? 'btn-error-red' : 'btn-primary'}`}
               >{determineButtonName(objects)}</button
             >
           </Modal>

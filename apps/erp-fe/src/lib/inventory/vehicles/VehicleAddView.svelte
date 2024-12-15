@@ -11,6 +11,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let vehicleId = data === undefined ? undefined : data.vehicle.id
   let name = data === undefined ? undefined : data.vehicle.name
@@ -38,12 +39,14 @@
         bind:value={name}
         placeholder="Name"
         classes=" bg-white text-black"
+        error={!form ? undefined : form.name}
       />
       <TextInput
         name="odometer"
         bind:value={odometer}
         placeholder="Odometer"
         classes=" bg-white text-black"
+        error={!form ? undefined : form.odometer}
       />
     </InputSection>
     <InputSection name="Identification" classes=" flex-row gap-2">
@@ -52,12 +55,14 @@
         bind:value={vin}
         placeholder="VIN"
         classes=" bg-white text-black"
+        error={!form ? undefined : form.vin}
       />
       <TextInput
         name="registrationPlate"
         bind:value={registrationPlate}
         placeholder="Registration Plate"
         classes=" bg-white text-black"
+        error={!form ? undefined : form.registrationPlate}
       />
     </InputSection>
   </div>
@@ -74,6 +79,7 @@
         bind:value={model}
         placeholder="Model"
         classes=" bg-white text-black"
+        error={!form ? undefined : form.model}
       />
       <SelectInput
         name="bodyStyle"
@@ -86,6 +92,7 @@
         bind:value={year}
         placeholder="Year"
         classes=" bg-white text-black"
+        error={!form ? undefined : form.year}
       />
     </div>
     <div class="flex flex-row gap-3">
@@ -112,6 +119,7 @@
         bind:value={engineType}
         placeholder="Engine Type"
         classes=" bg-white text-black"
+        error={!form ? undefined : form.engineType}
       />
     </div>
   </InputSection>

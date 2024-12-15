@@ -5,6 +5,7 @@
   import InputSection from '$lib/commons/InputSection.svelte'
 
   export let data = undefined
+  export let form
 
   let categoryId = data === undefined ? undefined : data.category.id
   let name = data === undefined ? undefined : data.category.operationName
@@ -22,6 +23,7 @@
           bind:value={name}
           placeholder="Operation Name"
           classes=" bg-white text-black"
+          error={!form ? undefined : form.operationName}
         />
         <SelectInput
           name="operationType"

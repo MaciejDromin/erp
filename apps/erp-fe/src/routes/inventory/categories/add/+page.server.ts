@@ -2,13 +2,20 @@ import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import { INVENTORY_URL } from '$lib/scripts/urls'
-import { redirect } from '@sveltejs/kit'
+import { redirect, fail } from '@sveltejs/kit'
+import { validate, nonEmpty, lbXnY } from '$lib/scripts/validator.ts'
 
 export const actions = {
   default: async ({ cookies, request }) => {
     const data = await request.formData()
     const body = {
       name: data.get('name'),
+    }
+    let validation = validate(body.name, nonEmpty, lbXnY(3, 16))
+    if (!validation.result) {
+      return fail(422, {
+        name: validation.message,
+      })
     }
     await unsecuredExternalApiRequest(
       INVENTORY_URL + '/categories',
