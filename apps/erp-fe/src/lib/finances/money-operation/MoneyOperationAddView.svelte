@@ -16,7 +16,6 @@
   export let form
 
   let operationId = extractValue(data, form, moneyOperationKeys.operationId)
-
   let category = extractValue(data, form, moneyOperationKeys.category, null)
   let categories: any[] = category === null ? [] : [category]
   let selectedCategory = JSON.stringify(category)

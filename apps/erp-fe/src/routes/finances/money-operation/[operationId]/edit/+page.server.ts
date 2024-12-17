@@ -36,7 +36,7 @@ const validateArgs = (body, category) => {
         message: undefined,
       },
       operationDescription: {
-        val: body.operationType,
+        val: body.operationDescription,
         message: undefined,
       },
       id: {
