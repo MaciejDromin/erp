@@ -18,7 +18,7 @@
   let operationId = extractValue(data, form, moneyOperationKeys.operationId)
 
   let category = extractValue(data, form, moneyOperationKeys.category, null)
-  let categories: any[] = category === null ? [] : [{ id: category.id }]
+  let categories: any[] = category === null ? [] : [category]
   let selectedCategory = JSON.stringify(category)
   let amount = extractValue(data, form, moneyOperationKeys.amount)
   let currencyCode = extractValue(data, form, moneyOperationKeys.currencyCode)
@@ -88,6 +88,7 @@
             bind:value={effectiveDate}
             placeholder="Effective Date"
             classes=" bg-white text-black"
+            error={!form ? undefined : form.effectiveDate.message}
           />
         {/if}
       </InputSection>
