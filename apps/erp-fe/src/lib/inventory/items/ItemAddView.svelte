@@ -8,12 +8,19 @@
   import TextInput from '$lib/commons/TextInput.svelte'
   import SelectInput from '$lib/commons/SelectInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
+  import { extractValue } from '$lib/scripts/dataExtractor.ts'
+  import itemKeys from '$lib/inventory/types/itemKeys.ts'
 
   export let data = undefined
   export let form
 
-  let categories: any[] = []
-  let selectedCategory
+  let itemId = extractValue(data, form, itemKeys.id)
+  let name = extractValue(data, form, itemKeys.name)
+  let quantity = extractValue(data, form, itemKeys.quantity)
+  let unit = extractValue(data, form, itemKeys.unit)
+  let categories: any[] = extractValue(data, form, itemKeys.category, [])
+  let selectedCategory = JSON.stringify(categories[0])
+  let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
     $genericStore = {}
@@ -35,12 +42,6 @@
     if (arr.length === 0) return 'select categories'
     return `${arr.length} categories selected`
   }
-
-  let itemId = data === undefined ? '' : data.item.id
-  let name = data === undefined ? '' : data.item.name
-  let quantity = data === undefined ? '' : data.item.quantity
-  let unit = data === undefined ? '' : data.item.unit
-  let buttonName = data === undefined ? 'Add' : 'Edit'
 </script>
 
 <form method="POST" class="mx-auto flex flex-col gap-3">
@@ -53,7 +54,7 @@
           bind:value={name}
           placeholder="Name"
           classes=" bg-white text-black"
-          error={!form ? undefined : form.name}
+          error={!form ? undefined : form.name.message}
         />
         <select
           multiple
@@ -76,7 +77,7 @@
             />
             <button
               slot="button"
-              class={`btn ${form && form.category ? 'btn-error-red' : 'btn-primary'}`}
+              class={`btn ${form && form.categories.message ? 'btn-error-red' : 'btn-primary'}`}
               >{determineButtonName(categories)}</button
             >
           </Modal>
@@ -93,7 +94,7 @@
           bind:value={quantity}
           placeholder="Quantity"
           classes=" bg-white text-black"
-          error={!form ? undefined : form.quantity}
+          error={!form ? undefined : form.quantity.message}
         />
         <SelectInput
           name="unit"

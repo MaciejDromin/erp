@@ -3,13 +3,15 @@
   import TextInput from '$lib/commons/TextInput.svelte'
   import SelectInput from '$lib/commons/SelectInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
+  import { extractValue } from '$lib/scripts/dataExtractor.ts'
+  import categoryKeys from '$lib/finances/types/categoryKeys.ts'
 
   export let data = undefined
   export let form
 
-  let categoryId = data === undefined ? undefined : data.category.id
-  let name = data === undefined ? undefined : data.category.operationName
-  let type = data === undefined ? undefined : data.category.operationType
+  let categoryId = extractValue(data, form, categoryKeys.id)
+  let name = extractValue(data, form, categoryKeys.name)
+  let type = extractValue(data, form, categoryKeys.type)
   let buttonName = data === undefined ? 'Add' : 'Edit'
 </script>
 
@@ -23,7 +25,7 @@
           bind:value={name}
           placeholder="Operation Name"
           classes=" bg-white text-black"
-          error={!form ? undefined : form.operationName}
+          error={!form ? undefined : form.operationName.message}
         />
         <SelectInput
           name="operationType"
