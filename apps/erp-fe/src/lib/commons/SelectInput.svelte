@@ -15,7 +15,7 @@
 <select
   {name}
   class={'select select-primary w-full max-w-xs' + classes}
-  bind:value={value}
+  bind:value
 >
   {#each options as opt}
     <option value={provideValue(opt)}>{opt}</option>

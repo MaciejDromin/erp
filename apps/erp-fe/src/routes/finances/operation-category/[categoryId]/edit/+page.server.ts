@@ -27,8 +27,8 @@ export const actions = {
         },
         operationType: {
           val: body.operationType,
-          message: undefined
-        }
+          message: undefined,
+        },
       })
     }
     await unsecuredExternalApiRequest(

@@ -8,5 +8,5 @@
 
 <div class="p-8">
   <h1 class="text-4xl font-bold text-black mb-8">Edit Operation Category</h1>
-  <OperationCategoryAddView {data} form={form} />
+  <OperationCategoryAddView {data} {form} />
 </div>

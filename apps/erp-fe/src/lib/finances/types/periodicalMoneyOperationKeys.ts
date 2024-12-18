@@ -33,4 +33,4 @@ const periodicalMoneyOperationKeys = {
   },
 }
 
-export default periodicalMoneyOperationKeys 
+export default periodicalMoneyOperationKeys

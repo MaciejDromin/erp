@@ -74,14 +74,14 @@ const validateArgs = (body, category) => {
 
   if (!currencyCodeResult.result) {
     error.failed = true
-    error.returnBody.amount.currencyCode.message  = currencyCodeResult.message
+    error.returnBody.amount.currencyCode.message = currencyCodeResult.message
   }
 
   const categoryResult = validate(category, nonEmpty)
 
   if (!categoryResult.result) {
     error.failed = true
-    error.returnBody.category.message  = categoryResult.message
+    error.returnBody.category.message = categoryResult.message
   }
 
   const repetitionResult = validate(
@@ -93,7 +93,7 @@ const validateArgs = (body, category) => {
 
   if (!repetitionResult.result) {
     error.failed = true
-    error.returnBody.repetitionPeriod.message  = repetitionResult.message
+    error.returnBody.repetitionPeriod.message = repetitionResult.message
   }
 
   return error

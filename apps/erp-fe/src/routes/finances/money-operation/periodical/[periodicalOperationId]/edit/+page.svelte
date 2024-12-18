@@ -10,5 +10,5 @@
   <h1 class="text-4xl font-bold text-black mb-8">
     Edit Periodical Money Operation
   </h1>
-  <PeriodicalMoneyOperationAddView {data} form={form} />
+  <PeriodicalMoneyOperationAddView {data} {form} />
 </div>

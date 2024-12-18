@@ -15,17 +15,47 @@
   export let data = undefined
   export let form
 
-  let periodicalOperationId = extractValue(data, form, periodicalMoneyOperationKeys.operationId)
-  let category = extractValue(data, form, periodicalMoneyOperationKeys.category, null)
+  let periodicalOperationId = extractValue(
+    data,
+    form,
+    periodicalMoneyOperationKeys.operationId
+  )
+  let category = extractValue(
+    data,
+    form,
+    periodicalMoneyOperationKeys.category,
+    null
+  )
   let categories: any[] = category === null ? [] : [category]
   let selectedCategory =
     category === undefined ? undefined : JSON.stringify(category)
   let amount = extractValue(data, form, periodicalMoneyOperationKeys.amount)
-  let currencyCode = extractValue(data, form, periodicalMoneyOperationKeys.currencyCode)
-  let operationDescription = extractValue(data, form, periodicalMoneyOperationKeys.operationDescription)
-  let operationType = extractValue(data, form, periodicalMoneyOperationKeys.operationType, MoneyOperationType.INCOME)
-  let repetitionPeriod = extractValue(data, form, periodicalMoneyOperationKeys.repetitionPeriod)
-  let nextApplicableMonth = extractValue(data, form, periodicalMoneyOperationKeys.nextApplicableMonth)
+  let currencyCode = extractValue(
+    data,
+    form,
+    periodicalMoneyOperationKeys.currencyCode
+  )
+  let operationDescription = extractValue(
+    data,
+    form,
+    periodicalMoneyOperationKeys.operationDescription
+  )
+  let operationType = extractValue(
+    data,
+    form,
+    periodicalMoneyOperationKeys.operationType,
+    MoneyOperationType.INCOME
+  )
+  let repetitionPeriod = extractValue(
+    data,
+    form,
+    periodicalMoneyOperationKeys.repetitionPeriod
+  )
+  let nextApplicableMonth = extractValue(
+    data,
+    form,
+    periodicalMoneyOperationKeys.nextApplicableMonth
+  )
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {

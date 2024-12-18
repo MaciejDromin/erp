@@ -13,4 +13,4 @@ const categoryKeys = {
   },
 }
 
-export default categoryKeys 
+export default categoryKeys
