@@ -17,9 +17,22 @@ const validateArgs = (body, object) => {
   let error = {
     failed: false,
     returnBody: {
-      amount: undefined,
-      currencyCode: undefined,
-      object: undefined,
+      id: {
+        val: undefined,
+        message: undefined,
+      },
+      amount: {
+        val: body.amount,
+        message: undefined,
+      },
+      currencyCode: {
+        val: body.currencyCode,
+        message: undefined,
+      },
+      object: {
+        val: object,
+        message: undefined,
+      },
     },
   }
 

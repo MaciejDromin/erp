@@ -5,26 +5,20 @@
   import { onMount } from 'svelte'
   import TextInput from '$lib/commons/TextInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
+  import { extractValue } from '$lib/scripts/dataExtractor.ts'
+  import objectValuesKeys from '$lib/finances/types/objectValuesKeys.ts'
 
   export let config
   export let form
 
   let data = config.data
 
-  let objectValueId =
-    data.objectValue === undefined ? undefined : data.objectValue.id
-  let obj =
-    data.objectValue === undefined
-      ? undefined
-      : { id: data.objectValue.objectId }
-  let objects: any[] = obj === undefined ? [] : [obj]
-  let selectedObject = obj === undefined ? undefined : JSON.stringify(obj)
-  let amount =
-    data.objectValue === undefined ? undefined : data.objectValue.amount.value
-  let currency =
-    data.objectValue === undefined
-      ? undefined
-      : data.objectValue.amount.currencyCode
+  let objectValueId = extractValue(data, form, objectValuesKeys.id)
+  let obj = extractValue(data, form, objectValuesKeys.object, null)
+  let objects: any[] = obj === null ? [] : [obj]
+  let selectedObject = JSON.stringify(obj)
+  let amount = extractValue(data, form, objectValuesKeys.amount)
+  let currency = extractValue(data, form, objectValuesKeys.currencyCode)
   let buttonName = data.objectValue === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
@@ -64,14 +58,14 @@
           bind:value={amount}
           placeholder="Amount"
           classes=" bg-white text-black"
-          error={!form ? undefined : form.amount}
+          error={!form ? undefined : form.amount.message}
         />
         <TextInput
           name="currencyCode"
           bind:value={currency}
           placeholder="Currency Code"
           classes=" bg-white text-black"
-          error={!form ? undefined : form.currencyCode}
+          error={!form ? undefined : form.currencyCode.message}
         />
       </InputSection>
       <InputSection name="Item" classes=" flex-row gap-2">
@@ -99,7 +93,7 @@
             />
             <button
               slot="button"
-              class={`btn ${form && form.object ? 'btn-error-red' : 'btn-primary'}`}
+              class={`btn ${form && form.object.message ? 'btn-error-red' : 'btn-primary'}`}
               >{determineButtonName(objects)}</button
             >
           </Modal>

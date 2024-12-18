@@ -17,10 +17,10 @@ const extractValue = (
   defaultValue = undefined,
   valueWrapperFunc = actualValueWrapper
 ) => {
-  if (form !== undefined && form !== null) {
+  if (form !== undefined && form !== null && form[keys.form[0]] !== undefined) {
     return valueWrapperFunc(extractActualValue(form, keys.form))
   }
-  if (data !== undefined && data !== null) {
+  if (data !== undefined && data !== null && data[keys.data[0]] !== undefined) {
     return valueWrapperFunc(extractActualValue(data, keys.data))
   }
   return defaultValue
