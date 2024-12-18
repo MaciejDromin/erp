@@ -3,7 +3,7 @@ import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import type { PageServerLoad } from './$types'
 import { FINANCES_URL } from '$lib/scripts/urls'
-import { redirect } from '@sveltejs/kit'
+import { redirect, fail } from '@sveltejs/kit'
 import {
   validate,
   nonEmpty,
