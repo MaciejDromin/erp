@@ -18,7 +18,7 @@ const validateArgs = (body) => {
     failed: false,
     returnBody: {
       id: {
-        val: undefined,
+        val: body.id,
         message: undefined,
       },
       name: {
