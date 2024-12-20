@@ -15,10 +15,46 @@ const validateArgs = (body, address) => {
   let error = {
     failed: false,
     returnBody: {
-      name: undefined,
-      uniqueIdentifier: undefined,
-      landRegister: undefined,
-      area: undefined,
+      id: {
+        val: undefined,
+        message: undefined,
+      },
+      name: {
+        val: body.name,
+        message: undefined,
+      },
+      uniqueIdentifier: {
+        val: body.uniqueIdentifier,
+        message: undefined,
+      },
+      landRegister: {
+        val: body.landRegister,
+        message: undefined,
+      },
+      address: {
+        val: address,
+        message: undefined,
+      },
+      propertyInformation: {
+        propertyType: {
+          val: body.propertyInformation.propertyType,
+          message: undefined,
+        },
+        landClassification: {
+          val: body.propertyInformation.landClassification,
+          message: undefined,
+        },
+        landArea: {
+          area: {
+            val: body.propertyInformation.landArea.area,
+            message: undefined,
+          },
+          unit: {
+            val: body.propertyInformation.landArea.unit,
+            message: undefined,
+          },
+        },
+      },
     },
   }
 
@@ -26,14 +62,14 @@ const validateArgs = (body, address) => {
 
   if (!addressResult.result) {
     error.failed = true
-    error.returnBody.address = addressResult.message
+    error.returnBody.address.message = addressResult.message
   }
 
   const nameResult = validate(body.name, nonEmpty, lbXnY(3, 30))
 
   if (!nameResult.result) {
     error.failed = true
-    error.returnBody.name = nameResult.message
+    error.returnBody.name.message = nameResult.message
   }
 
   const uniqueIdentifierResult = validate(
@@ -44,14 +80,14 @@ const validateArgs = (body, address) => {
 
   if (!uniqueIdentifierResult.result) {
     error.failed = true
-    error.returnBody.uniqueIdentifier = uniqueIdentifierResult.message
+    error.returnBody.uniqueIdentifier.message = uniqueIdentifierResult.message
   }
 
   const landRegisterResult = validate(body.landRegister, nonEmpty, lbXnY(3, 50))
 
   if (!landRegisterResult.result) {
     error.failed = true
-    error.returnBody.landRegister = landRegisterResult.message
+    error.returnBody.landRegister.message = landRegisterResult.message
   }
 
   const areaResult = validate(
@@ -63,7 +99,8 @@ const validateArgs = (body, address) => {
 
   if (!areaResult.result) {
     error.failed = true
-    error.returnBody.area = areaResult.message
+    error.returnBody.propertyInformation.landArea.area.message =
+      areaResult.message
   }
 
   return error

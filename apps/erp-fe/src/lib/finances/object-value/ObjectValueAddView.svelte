@@ -6,6 +6,7 @@
   import TextInput from '$lib/commons/TextInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
   import { extractValue } from '$lib/scripts/dataExtractor.ts'
+  import { idObjWrapper } from '$lib/scripts/valueWrappers.ts'
   import objectValuesKeys from '$lib/finances/types/objectValuesKeys.ts'
 
   export let config
@@ -14,7 +15,13 @@
   let data = config.data
 
   let objectValueId = extractValue(data, form, objectValuesKeys.id)
-  let obj = extractValue(data, form, objectValuesKeys.object, null)
+  let obj = extractValue(
+    data,
+    form,
+    objectValuesKeys.object,
+    null,
+    idObjWrapper
+  )
   let objects: any[] = obj === null ? [] : [obj]
   let selectedObject = JSON.stringify(obj)
   let amount = extractValue(data, form, objectValuesKeys.amount)
