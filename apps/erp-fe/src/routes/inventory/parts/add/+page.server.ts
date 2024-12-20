@@ -9,9 +9,22 @@ const validateArgs = (body, manufacturer) => {
   let error = {
     failed: false,
     returnBody: {
-      name: undefined,
-      partNumber: undefined,
-      manufacturer: undefined,
+      id: {
+        val: undefined,
+        message: undefined,
+      },
+      name: {
+        val: body.name,
+        message: undefined
+      },
+      partNumber: {
+        val: body.partNumber,
+        message: undefined
+      },
+      manufacturer: {
+        val: manufacturer,
+        message: undefined
+      },
     },
   }
 
@@ -19,21 +32,21 @@ const validateArgs = (body, manufacturer) => {
 
   if (!nameResult.result) {
     error.failed = true
-    error.returnBody.name = nameResult.message
+    error.returnBody.name.message = nameResult.message
   }
 
   const partNumberResult = validate(body.partNumber, nonEmpty, lbXnY(3, 30))
 
   if (!partNumberResult.result) {
     error.failed = true
-    error.returnBody.partNumber = partNumberResult.message
+    error.returnBody.partNumber.message  = partNumberResult.message
   }
 
   const manufacturerResult = validate(manufacturer, nonEmpty)
 
   if (!manufacturerResult.result) {
     error.failed = true
-    error.returnBody.manufacturer = manufacturerResult.message
+    error.returnBody.manufacturer.message  = manufacturerResult.message
   }
 
   return error

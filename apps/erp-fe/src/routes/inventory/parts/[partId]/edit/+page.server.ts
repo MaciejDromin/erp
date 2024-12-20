@@ -2,7 +2,55 @@ import type { PageServerLoad } from './$types'
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import { INVENTORY_URL } from '$lib/scripts/urls'
-import { redirect } from '@sveltejs/kit'
+import { redirect, fail } from '@sveltejs/kit'
+import { validate, nonEmpty, lbXnY } from '$lib/scripts/validator.ts'
+
+const validateArgs = (body, manufacturer) => {
+  let error = {
+    failed: false,
+    returnBody: {
+      id: {
+        val: body.id,
+        message: undefined,
+      },
+      name: {
+        val: body.name,
+        message: undefined
+      },
+      partNumber: {
+        val: body.partNumber,
+        message: undefined
+      },
+      manufacturer: {
+        val: manufacturer,
+        message: undefined
+      },
+    },
+  }
+
+  const nameResult = validate(body.name, nonEmpty, lbXnY(3, 30))
+
+  if (!nameResult.result) {
+    error.failed = true
+    error.returnBody.name.message = nameResult.message
+  }
+
+  const partNumberResult = validate(body.partNumber, nonEmpty, lbXnY(3, 30))
+
+  if (!partNumberResult.result) {
+    error.failed = true
+    error.returnBody.partNumber.message  = partNumberResult.message
+  }
+
+  const manufacturerResult = validate(manufacturer, nonEmpty)
+
+  if (!manufacturerResult.result) {
+    error.failed = true
+    error.returnBody.manufacturer.message  = manufacturerResult.message
+  }
+
+  return error
+}
 
 export const actions = {
   default: async ({ cookies, request }) => {
@@ -12,8 +60,16 @@ export const actions = {
       id: data.get('partId'),
       name: data.get('name'),
       partNumber: data.get('partNumber'),
-      manufacturerId: manufacturer === null ? null : manufacturer.id,
     }
+
+    const validationResult = validateArgs(body, manufacturer)
+
+    if (validationResult.failed) {
+      return fail(422, validationResult.returnBody)
+    }
+
+    body.manufacturerId = manufacturer.id
+
     await unsecuredExternalApiRequest(
       INVENTORY_URL + `/parts/${body.id}`,
       HttpMethods.PATCH,
