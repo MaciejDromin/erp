@@ -16,9 +16,26 @@ const validateArgs = (body, category) => {
   let error = {
     failed: false,
     returnBody: {
-      name: undefined,
-      quantity: undefined,
-      category: undefined,
+      id: {
+        val: undefined,
+        message: undefined,
+      },
+      name: {
+        val: body.name,
+        message: undefined,
+      },
+      categories: {
+        val: [category],
+        message: undefined,
+      },
+      quantity: {
+        val: body.quantity,
+        message: undefined,
+      },
+      unit: {
+        val: body.unit,
+        message: undefined,
+      },
     },
   }
 
@@ -26,7 +43,7 @@ const validateArgs = (body, category) => {
 
   if (!nameResult.result) {
     error.failed = true
-    error.returnBody.name = nameResult.message
+    error.returnBody.name.message = nameResult.message
   }
 
   const quantityResult = validate(
@@ -38,14 +55,14 @@ const validateArgs = (body, category) => {
 
   if (!quantityResult.result) {
     error.failed = true
-    error.returnBody.quantity = quantityResult.message
+    error.returnBody.quantity.message = quantityResult.message
   }
 
   const categoryResult = validate(category, nonEmpty)
 
   if (!categoryResult.result) {
     error.failed = true
-    error.returnBody.category = categoryResult.message
+    error.returnBody.category.message = categoryResult.message
   }
 
   return error

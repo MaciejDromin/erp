@@ -17,12 +17,40 @@ const validateArgs = (body, category) => {
   let error = {
     failed: false,
     returnBody: {
-      plannedAmount: {
-        value: undefined,
-        currencyCode: undefined,
+      id: {
+        val: undefined,
+        message: undefined,
       },
-      category: undefined,
-      plannedYear: undefined,
+      plannedAmount: {
+        value: {
+          val: body.plannedAmount.value,
+          message: undefined,
+        },
+        currencyCode: {
+          val: body.plannedAmount.currencyCode,
+          message: undefined,
+        },
+      },
+      category: {
+        val: category,
+        message: undefined,
+      },
+      plannedYear: {
+        val: body.plannedYear,
+        message: undefined,
+      },
+      plannedMonth: {
+        val: body.plannedMonth,
+        message: undefined,
+      },
+      operationDescription: {
+        val: body.operationDescription,
+        message: undefined,
+      },
+      operationType: {
+        val: body.operationType,
+        message: undefined,
+      },
     },
   }
 
@@ -35,7 +63,7 @@ const validateArgs = (body, category) => {
 
   if (!valueResult.result) {
     error.failed = true
-    error.returnBody.plannedAmount.value = valueResult.message
+    error.returnBody.plannedAmount.value.message = valueResult.message
   }
 
   const currencyCodeResult = validate(
@@ -46,14 +74,15 @@ const validateArgs = (body, category) => {
 
   if (!currencyCodeResult.result) {
     error.failed = true
-    error.returnBody.plannedAmount.currencyCode = currencyCodeResult.message
+    error.returnBody.plannedAmount.currencyCode.message =
+      currencyCodeResult.message
   }
 
   const categoryResult = validate(category, nonEmpty)
 
   if (!categoryResult.result) {
     error.failed = true
-    error.returnBody.category = categoryResult.message
+    error.returnBody.category.message = categoryResult.message
   }
 
   const plannedYearResult = validate(
@@ -65,7 +94,7 @@ const validateArgs = (body, category) => {
 
   if (!plannedYearResult.result) {
     error.failed = true
-    error.returnBody.plannedYear = plannedYearResult.message
+    error.returnBody.plannedYear.message = plannedYearResult.message
   }
 
   return error

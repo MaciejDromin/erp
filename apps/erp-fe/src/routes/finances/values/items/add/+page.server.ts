@@ -17,9 +17,22 @@ const validateArgs = (body, object) => {
   let error = {
     failed: false,
     returnBody: {
-      amount: undefined,
-      currencyCode: undefined,
-      object: undefined,
+      id: {
+        val: undefined,
+        message: undefined,
+      },
+      amount: {
+        val: body.amount,
+        message: undefined,
+      },
+      currencyCode: {
+        val: body.currencyCode,
+        message: undefined,
+      },
+      object: {
+        val: object,
+        message: undefined,
+      },
     },
   }
 
@@ -27,21 +40,21 @@ const validateArgs = (body, object) => {
 
   if (!valueResult.result) {
     error.failed = true
-    error.returnBody.amount = valueResult.message
+    error.returnBody.amount.message = valueResult.message
   }
 
   const currencyCodeResult = validate(body.currencyCode, nonEmpty, leX(3))
 
   if (!currencyCodeResult.result) {
     error.failed = true
-    error.returnBody.currencyCode = currencyCodeResult.message
+    error.returnBody.currencyCode.message = currencyCodeResult.message
   }
 
   const objectResult = validate(object, nonEmpty)
 
   if (!objectResult.result) {
     error.failed = true
-    error.returnBody.object = objectResult.message
+    error.returnBody.object.message = objectResult.message
   }
 
   return error

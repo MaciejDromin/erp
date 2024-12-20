@@ -14,7 +14,14 @@ export const actions = {
     let validation = validate(body.name, nonEmpty, lbXnY(3, 16))
     if (!validation.result) {
       return fail(422, {
-        name: validation.message,
+        id: {
+          val: undefined,
+          message: undefined,
+        },
+        name: {
+          val: body.name,
+          message: validation.message,
+        },
       })
     }
     await unsecuredExternalApiRequest(

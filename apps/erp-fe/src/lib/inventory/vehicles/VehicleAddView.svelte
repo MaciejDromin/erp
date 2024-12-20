@@ -9,24 +9,29 @@
   import TextInput from '$lib/commons/TextInput.svelte'
   import SelectInput from '$lib/commons/SelectInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
+  import { extractValue } from '$lib/scripts/dataExtractor.ts'
+  import vehicleKeys from '$lib/inventory/types/vehicleKeys.ts'
 
   export let data = undefined
   export let form
 
-  let vehicleId = data === undefined ? undefined : data.vehicle.id
-  let name = data === undefined ? undefined : data.vehicle.name
-  let year = data === undefined ? undefined : data.vehicle.year
-  let odometer = data === undefined ? undefined : data.vehicle.odometer
-  let bodyStyle = data === undefined ? undefined : data.vehicle.bodyStyle
-  let make = data === undefined ? undefined : data.vehicle.make
-  let model = data === undefined ? undefined : data.vehicle.model
-  let fuelType = data === undefined ? undefined : data.vehicle.fuelType
-  let driveTrain = data === undefined ? undefined : data.vehicle.driveTrain
-  let transmission = data === undefined ? undefined : data.vehicle.transmission
-  let engineType = data === undefined ? undefined : data.vehicle.engineType
-  let vin = data === undefined ? undefined : data.vehicle.vin
-  let registrationPlate =
-    data === undefined ? undefined : data.vehicle.registrationPlate
+  let vehicleId = extractValue(data, form, vehicleKeys.id)
+  let name = extractValue(data, form, vehicleKeys.name)
+  let year = extractValue(data, form, vehicleKeys.year)
+  let odometer = extractValue(data, form, vehicleKeys.odometer)
+  let bodyStyle = extractValue(data, form, vehicleKeys.bodyStyle)
+  let make = extractValue(data, form, vehicleKeys.make)
+  let model = extractValue(data, form, vehicleKeys.model)
+  let fuelType = extractValue(data, form, vehicleKeys.fuelType)
+  let driveTrain = extractValue(data, form, vehicleKeys.driveTrain)
+  let transmission = extractValue(data, form, vehicleKeys.transmission)
+  let engineType = extractValue(data, form, vehicleKeys.engineType)
+  let vin = extractValue(data, form, vehicleKeys.vin)
+  let registrationPlate = extractValue(
+    data,
+    form,
+    vehicleKeys.registrationPlate
+  )
   let buttonName = data === undefined ? 'Add' : 'Edit'
 </script>
 
@@ -39,14 +44,14 @@
         bind:value={name}
         placeholder="Name"
         classes=" bg-white text-black"
-        error={!form ? undefined : form.name}
+        error={!form ? undefined : form.name.message}
       />
       <TextInput
         name="odometer"
         bind:value={odometer}
         placeholder="Odometer"
         classes=" bg-white text-black"
-        error={!form ? undefined : form.odometer}
+        error={!form ? undefined : form.odometer.message}
       />
     </InputSection>
     <InputSection name="Identification" classes=" flex-row gap-2">
@@ -55,14 +60,14 @@
         bind:value={vin}
         placeholder="VIN"
         classes=" bg-white text-black"
-        error={!form ? undefined : form.vin}
+        error={!form ? undefined : form.vin.message}
       />
       <TextInput
         name="registrationPlate"
         bind:value={registrationPlate}
         placeholder="Registration Plate"
         classes=" bg-white text-black"
-        error={!form ? undefined : form.registrationPlate}
+        error={!form ? undefined : form.registrationPlate.message}
       />
     </InputSection>
   </div>
@@ -79,7 +84,7 @@
         bind:value={model}
         placeholder="Model"
         classes=" bg-white text-black"
-        error={!form ? undefined : form.model}
+        error={!form ? undefined : form.model.message}
       />
       <SelectInput
         name="bodyStyle"
@@ -92,7 +97,7 @@
         bind:value={year}
         placeholder="Year"
         classes=" bg-white text-black"
-        error={!form ? undefined : form.year}
+        error={!form ? undefined : form.year.message}
       />
     </div>
     <div class="flex flex-row gap-3">
@@ -119,7 +124,7 @@
         bind:value={engineType}
         placeholder="Engine Type"
         classes=" bg-white text-black"
-        error={!form ? undefined : form.engineType}
+        error={!form ? undefined : form.engineType.message}
       />
     </div>
   </InputSection>
