@@ -16,7 +16,13 @@
   let partId = extractValue(data, form, partKeys.id)
   let name = extractValue(data, form, partKeys.name)
   let partNumber = extractValue(data, form, partKeys.partNumber)
-  let contractor = extractValue(data, form, partKeys.contractor, null, idObjWrapper)
+  let contractor = extractValue(
+    data,
+    form,
+    partKeys.contractor,
+    null,
+    idObjWrapper
+  )
   let selectedContractor = JSON.stringify(contractor)
   let contractors: any[] = contractor === null ? [] : [contractor]
   let buttonName = data === undefined ? 'Add' : 'Edit'

@@ -15,15 +15,15 @@ const validateArgs = (body, manufacturer) => {
       },
       name: {
         val: body.name,
-        message: undefined
+        message: undefined,
       },
       partNumber: {
         val: body.partNumber,
-        message: undefined
+        message: undefined,
       },
       manufacturer: {
         val: manufacturer,
-        message: undefined
+        message: undefined,
       },
     },
   }
@@ -39,14 +39,14 @@ const validateArgs = (body, manufacturer) => {
 
   if (!partNumberResult.result) {
     error.failed = true
-    error.returnBody.partNumber.message  = partNumberResult.message
+    error.returnBody.partNumber.message = partNumberResult.message
   }
 
   const manufacturerResult = validate(manufacturer, nonEmpty)
 
   if (!manufacturerResult.result) {
     error.failed = true
-    error.returnBody.manufacturer.message  = manufacturerResult.message
+    error.returnBody.manufacturer.message = manufacturerResult.message
   }
 
   return error

@@ -8,5 +8,5 @@
 
 <div class="p-8">
   <h1 class="text-4xl font-bold text-black mb-8">Edit Part</h1>
-  <PartAddView {data} form={form} />
+  <PartAddView {data} {form} />
 </div>
