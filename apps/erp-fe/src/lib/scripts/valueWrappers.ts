@@ -1,6 +1,6 @@
 const idObjWrapper = (val) => {
-  if (val === undefined) return undefined
-  if (typeof val === 'object' && !Array.isArray(val) && val !== null) {
+  if (val === undefined || val === null) return val
+  if (typeof val === 'object' && !Array.isArray(val)) {
     return val
   }
   return { id: val }

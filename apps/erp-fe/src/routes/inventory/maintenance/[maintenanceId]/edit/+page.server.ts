@@ -87,8 +87,7 @@ const validateArgs = (body, contractor) => {
 export const actions = {
   default: async ({ cookies, request }) => {
     const data = await request.formData()
-    let contractor = JSON.parse(data.get('contractor'))
-    contractor = contractor === null ? undefined : contractor
+    const contractor = JSON.parse(data.get('contractor'))
     const partsData = JSON.parse(data.get('partsData'))
     const body = {
       id: data.get('maintenanceId'),

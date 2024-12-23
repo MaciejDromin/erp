@@ -21,10 +21,10 @@
     data,
     form,
     maintenanceKeys.contractor,
-    undefined,
+    null,
     idObjWrapper
   )
-  let contractors: any[] = contractor === undefined ? [] : [contractor]
+  let contractors: any[] = contractor === null ? [] : [contractor]
   let selectedContractor = JSON.stringify(contractor)
   let partsQuantityMap = extractValue(
     data,
@@ -198,6 +198,6 @@
         />
       </InputSection>
     {/each}
-    <button class="btn btn-primary mx-auto">{buttonName} Row</button>
+    <button class="btn btn-primary mx-auto">{buttonName}</button>
   </div>
 </form>
