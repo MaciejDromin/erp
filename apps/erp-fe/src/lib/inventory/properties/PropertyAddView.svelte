@@ -12,35 +12,34 @@
   import TextInput from '$lib/commons/TextInput.svelte'
   import SelectInput from '$lib/commons/SelectInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
+  import { extractValue } from '$lib/scripts/dataExtractor.ts'
+  import { idObjWrapper } from '$lib/scripts/valueWrappers.ts'
+  import propertyKeys from '$lib/inventory/types/propertyKeys.ts'
 
   export let data = undefined
   export let form
 
-  let propertyId = data === undefined ? undefined : data.property.id
-  let name = data === undefined ? undefined : data.property.name
-  let uniqueIdentifier =
-    data === undefined ? undefined : data.property.uniqueIdentifier
-  let landRegister = data === undefined ? undefined : data.property.landRegister
-  let propertyType =
-    data === undefined
-      ? undefined
-      : data.property.propertyInformation.propertyType
-  let landClassification =
-    data === undefined
-      ? undefined
-      : data.property.propertyInformation.landClassification
-  let area =
-    data === undefined
-      ? undefined
-      : data.property.propertyInformation.landArea.area
-  let areaUnit =
-    data === undefined
-      ? undefined
-      : data.property.propertyInformation.landArea.unit
-  let address = data === undefined ? undefined : { id: data.property.addressId }
-  let addresses: any[] = address === undefined ? [] : [address]
-  let selectedAddress =
-    address === undefined ? undefined : JSON.stringify(address)
+  let propertyId = extractValue(data, form, propertyKeys.id)
+  let name = extractValue(data, form, propertyKeys.name)
+  let uniqueIdentifier = extractValue(data, form, propertyKeys.uniqueIdentifier)
+  let landRegister = extractValue(data, form, propertyKeys.landRegister)
+  let propertyType = extractValue(data, form, propertyKeys.propertyType)
+  let landClassification = extractValue(
+    data,
+    form,
+    propertyKeys.landClassification
+  )
+  let area = extractValue(data, form, propertyKeys.area)
+  let areaUnit = extractValue(data, form, propertyKeys.unit)
+  let address = extractValue(
+    data,
+    form,
+    propertyKeys.address,
+    null,
+    idObjWrapper
+  )
+  let addresses: any[] = address === null ? [] : [address]
+  let selectedAddress = JSON.stringify(address)
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
@@ -74,7 +73,7 @@
         bind:value={name}
         placeholder="Name"
         classes=" bg-white text-black"
-        error={!form ? undefined : form.name}
+        error={!form ? undefined : form.name.message}
       />
       <SelectInput
         name="propertyType"
@@ -90,14 +89,14 @@
           bind:value={uniqueIdentifier}
           placeholder="Unique Identifier"
           classes=" bg-white text-black"
-          error={!form ? undefined : form.uniqueIdentifier}
+          error={!form ? undefined : form.uniqueIdentifier.message}
         />
         <TextInput
           name="landRegister"
           bind:value={landRegister}
           placeholder="Land Register"
           classes=" bg-white text-black"
-          error={!form ? undefined : form.landRegister}
+          error={!form ? undefined : form.landRegister.message}
         />
       </div>
       <select
@@ -118,7 +117,7 @@
           <Pageable endpoint="/inventory/addresses" component={AddressTable} />
           <button
             slot="button"
-            class={`btn ${form && form.address ? 'btn-error-red' : 'btn-primary'}`}
+            class={`btn ${form && form.address.message ? 'btn-error-red' : 'btn-primary'}`}
             >{determineButtonName(addresses)}</button
           >
         </Modal>
@@ -137,7 +136,7 @@
       bind:value={area}
       placeholder="100,00"
       classes=" bg-white text-black"
-      error={!form ? undefined : form.area}
+      error={!form ? undefined : form.propertyInformation.landArea.area.message}
     />
     <SelectInput
       name="areaUnit"

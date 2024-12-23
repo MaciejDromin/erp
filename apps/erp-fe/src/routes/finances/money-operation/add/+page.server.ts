@@ -16,10 +16,35 @@ const validateArgs = (body, category) => {
     failed: false,
     returnBody: {
       amount: {
-        value: undefined,
-        currencyCode: undefined,
+        value: {
+          val: body.amount.value,
+          message: undefined,
+        },
+        currencyCode: {
+          val: body.amount.currencyCode,
+          message: undefined,
+        },
       },
-      category: undefined,
+      category: {
+        val: category,
+        message: undefined,
+      },
+      operationType: {
+        val: body.operationType,
+        message: undefined,
+      },
+      operationDescription: {
+        val: body.operationDescription,
+        message: undefined,
+      },
+      id: {
+        val: undefined,
+        message: undefined,
+      },
+      effectiveDate: {
+        val: undefined,
+        message: undefined,
+      },
     },
   }
 
@@ -32,7 +57,7 @@ const validateArgs = (body, category) => {
 
   if (!valueResult.result) {
     error.failed = true
-    error.returnBody.amount.value = valueResult.message
+    error.returnBody.amount.value.message = valueResult.message
   }
 
   const currencyCodeResult = validate(
@@ -43,14 +68,14 @@ const validateArgs = (body, category) => {
 
   if (!currencyCodeResult.result) {
     error.failed = true
-    error.returnBody.amount.currencyCode = currencyCodeResult.message
+    error.returnBody.amount.currencyCode.message = currencyCodeResult.message
   }
 
   const categoryResult = validate(category, nonEmpty)
 
   if (!categoryResult.result) {
     error.failed = true
-    error.returnBody.category = categoryResult.message
+    error.returnBody.category.message = categoryResult.message
   }
 
   return error

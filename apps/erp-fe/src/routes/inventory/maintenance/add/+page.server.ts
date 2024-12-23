@@ -16,21 +16,41 @@ const validateArgs = (body, contractor) => {
   let error = {
     failed: false,
     returnBody: {
-      date: undefined,
-      odometer: undefined,
-      contractor: undefined,
+      id: {
+        val: undefined,
+        message: undefined,
+      },
+      date: {
+        val: body.date,
+        message: undefined,
+      },
+      odometer: {
+        val: body.odometer,
+        message: undefined,
+      },
+      contractor: {
+        val: contractor,
+        message: undefined,
+      },
+      parts: {
+        val: body.parts,
+        message: undefined,
+      },
     },
   }
 
   body.parts.forEach((part) => {
-    error.returnBody[part.id] = undefined
+    error.returnBody[part.id] = {
+      val: undefined,
+      message: undefined,
+    }
   })
 
   const dateResult = validate(body.date, nonEmpty, isDate)
 
   if (!dateResult.result) {
     error.failed = true
-    error.returnBody.date = dateResult.message
+    error.returnBody.date.message = dateResult.message
   }
 
   const odometerResult = validate(
@@ -42,14 +62,14 @@ const validateArgs = (body, contractor) => {
 
   if (!odometerResult.result) {
     error.failed = true
-    error.returnBody.odometer = odometerResult.message
+    error.returnBody.odometer.message = odometerResult.message
   }
 
   const contractorResult = validate(contractor, nonEmpty)
 
   if (!contractorResult.result) {
     error.failed = true
-    error.returnBody.contractor = contractorResult.message
+    error.returnBody.contractor.message = contractorResult.message
   }
 
   body.parts.forEach((part) => {
@@ -57,7 +77,7 @@ const validateArgs = (body, contractor) => {
 
     if (!partResult.result) {
       error.failed = true
-      error.returnBody[part.id] = partResult.message
+      error.returnBody[part.id].message = partResult.message
     }
   })
 
@@ -68,6 +88,7 @@ export const actions = {
   default: async ({ request }) => {
     const data = await request.formData()
     const contractor = JSON.parse(data.get('contractor'))
+    const partsData = JSON.parse(data.get('partsData'))
     const body = {
       date: data.get('date'),
       odometer: data.get('odometer'),
@@ -77,6 +98,7 @@ export const actions = {
     const validationResult = validateArgs(body, contractor)
 
     if (validationResult.failed) {
+      validationResult.returnBody.partsData = partsData
       return fail(422, validationResult.returnBody)
     }
 

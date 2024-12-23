@@ -1,12 +1,14 @@
 <script>
   import TextInput from '$lib/commons/TextInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
+  import { extractValue } from '$lib/scripts/dataExtractor.ts'
+  import categoryKeys from '$lib/inventory/types/categoryKeys.ts'
 
   export let data = undefined
   export let form
 
-  let name = data === undefined ? '' : data.category.name
-  let categoryId = data === undefined ? '' : data.category.id
+  let categoryId = extractValue(data, form, categoryKeys.id)
+  let name = extractValue(data, form, categoryKeys.name)
   let buttonName = data === undefined ? 'Add' : 'Edit'
 </script>
 
@@ -19,7 +21,7 @@
         bind:value={name}
         placeholder="Category Name"
         classes=" bg-white text-black"
-        error={!form ? undefined : form.name}
+        error={!form ? undefined : form.name.message}
       />
     </InputSection>
   </div>

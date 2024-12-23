@@ -9,29 +9,30 @@
   import TextArea from '$lib/commons/TextArea.svelte'
   import SelectInput from '$lib/commons/SelectInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
+  import { extractValue } from '$lib/scripts/dataExtractor.ts'
+  import moneyOperationKeys from '$lib/finances/types/moneyOperationKeys.ts'
 
   export let data = undefined
   export let form
 
-  let operationId = data === undefined ? undefined : data.operation.id
-  let category =
-    data === undefined || data.operation.operationCategory === null
-      ? undefined
-      : { id: data.operation.operationCategory.id }
-  let categories: any[] = category === undefined ? [] : [category]
-  let selectedCategory =
-    category === undefined ? undefined : JSON.stringify(category)
-  let amount = data === undefined ? undefined : data.operation.amount.value
-  let currencyCode =
-    data === undefined ? undefined : data.operation.amount.currencyCode
-  let operationDescription =
-    data === undefined ? undefined : data.operation.operationDescription
-  let operationType =
-    data === undefined
-      ? MoneyOperationType.INCOME
-      : data.operation.operationType
-  let effectiveDate =
-    data === undefined ? undefined : data.operation.effectiveDate
+  let operationId = extractValue(data, form, moneyOperationKeys.operationId)
+  let category = extractValue(data, form, moneyOperationKeys.category, null)
+  let categories: any[] = category === null ? [] : [category]
+  let selectedCategory = JSON.stringify(category)
+  let amount = extractValue(data, form, moneyOperationKeys.amount)
+  let currencyCode = extractValue(data, form, moneyOperationKeys.currencyCode)
+  let operationDescription = extractValue(
+    data,
+    form,
+    moneyOperationKeys.operationDescription
+  )
+  let operationType = extractValue(
+    data,
+    form,
+    moneyOperationKeys.operationType,
+    MoneyOperationType.INCOME
+  )
+  let effectiveDate = extractValue(data, form, moneyOperationKeys.effectiveDate)
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
@@ -71,14 +72,14 @@
           bind:value={amount}
           placeholder="Amount"
           classes=" bg-white text-black"
-          error={!form ? undefined : form.amount.value}
+          error={!form ? undefined : form.amount.value.message}
         />
         <TextInput
           name="currencyCode"
           bind:value={currencyCode}
           placeholder="Currency Code"
           classes=" bg-white text-black"
-          error={!form ? undefined : form.amount.currencyCode}
+          error={!form ? undefined : form.amount.currencyCode.message}
         />
         {#if data !== undefined}
           <TextInput
@@ -86,6 +87,7 @@
             bind:value={effectiveDate}
             placeholder="Effective Date"
             classes=" bg-white text-black"
+            error={!form ? undefined : form.effectiveDate.message}
           />
         {/if}
       </InputSection>
@@ -118,7 +120,7 @@
             />
             <button
               slot="button"
-              class={`btn ${form && form.category ? 'btn-error-red' : 'btn-primary'}`}
+              class={`btn ${form && form.category.message ? 'btn-error-red' : 'btn-primary'}`}
               >{determineButtonName(categories)}</button
             >
           </Modal>

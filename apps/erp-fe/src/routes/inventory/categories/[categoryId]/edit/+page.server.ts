@@ -2,7 +2,8 @@ import type { PageServerLoad } from './$types'
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import { INVENTORY_URL } from '$lib/scripts/urls'
-import { redirect } from '@sveltejs/kit'
+import { redirect, fail } from '@sveltejs/kit'
+import { validate, nonEmpty, lbXnY } from '$lib/scripts/validator.ts'
 
 export const actions = {
   default: async ({ cookies, request }) => {
@@ -10,6 +11,19 @@ export const actions = {
     const body = {
       id: data.get('categoryId'),
       name: data.get('name'),
+    }
+    let validation = validate(body.name, nonEmpty, lbXnY(3, 16))
+    if (!validation.result) {
+      return fail(422, {
+        id: {
+          val: body.id,
+          message: undefined,
+        },
+        name: {
+          val: body.name,
+          message: validation.message,
+        },
+      })
     }
     await unsecuredExternalApiRequest(
       INVENTORY_URL + `/categories/${body.id}`,

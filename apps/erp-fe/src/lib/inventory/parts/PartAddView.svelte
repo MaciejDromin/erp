@@ -6,19 +6,31 @@
   import { genericStore } from '$lib/stores/genericStore.ts'
   import TextInput from '$lib/commons/TextInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
+  import { extractValue } from '$lib/scripts/dataExtractor.ts'
+  import { idObjWrapper } from '$lib/scripts/valueWrappers.ts'
+  import partKeys from '$lib/inventory/types/partKeys.ts'
 
   export let data = undefined
   export let form
 
-  let partId = data === undefined ? undefined : data.part.id
-  let name = data === undefined ? undefined : data.part.name
-  let partNumber = data === undefined ? undefined : data.part.partNumber
-  let contractor =
-    data === undefined ? undefined : { id: data.part.manufacturerId }
-  let selectedContractor =
-    data === undefined ? undefined : JSON.stringify(contractor)
-  let contractors: any[] = data === undefined ? [] : [contractor]
+  let partId = extractValue(data, form, partKeys.id)
+  let name = extractValue(data, form, partKeys.name)
+  let partNumber = extractValue(data, form, partKeys.partNumber)
+  let contractor = extractValue(
+    data,
+    form,
+    partKeys.contractor,
+    null,
+    idObjWrapper
+  )
+  let selectedContractor = JSON.stringify(contractor)
+  let contractors: any[] = contractor === null ? [] : [contractor]
   let buttonName = data === undefined ? 'Add' : 'Edit'
+
+  console.log(data)
+  console.log(form)
+
+  console.log(contractor)
 
   onMount(() => {
     $genericStore = {}
@@ -50,14 +62,14 @@
       bind:value={name}
       placeholder="Name"
       classes=" bg-white text-black"
-      error={!form ? undefined : form.name}
+      error={!form ? undefined : form.name.message}
     />
     <TextInput
       name="partNumber"
       bind:value={partNumber}
       placeholder="Part Number"
       classes=" bg-white text-black"
-      error={!form ? undefined : form.partNumber}
+      error={!form ? undefined : form.partNumber.message}
     />
   </InputSection>
   <InputSection name="Manufacturer" classes=" flex-row gap-2 w-fit mx-auto">
@@ -82,7 +94,7 @@
         />
         <button
           slot="button"
-          class={`btn ${form && form.manufacturer ? 'btn-error-red' : 'btn-primary'}`}
+          class={`btn ${form && form.manufacturer.message ? 'btn-error-red' : 'btn-primary'}`}
           >{determineButtonName(contractors)}</button
         >
       </Modal>

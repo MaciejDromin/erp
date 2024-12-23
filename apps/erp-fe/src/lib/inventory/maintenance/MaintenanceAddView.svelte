@@ -7,28 +7,39 @@
   import { onMount } from 'svelte'
   import TextInput from '$lib/commons/TextInput.svelte'
   import InputSection from '$lib/commons/InputSection.svelte'
+  import { extractValue } from '$lib/scripts/dataExtractor.ts'
+  import { idObjWrapper, partMapper } from '$lib/scripts/valueWrappers.ts'
+  import maintenanceKeys from '$lib/inventory/types/maintenanceKeys.ts'
 
   export let data = undefined
   export let form
 
-  let maintenanceId = data === undefined ? undefined : data.maintenance.id
-  let date = data === undefined ? undefined : data.maintenance.date
-  let odometer = data === undefined ? undefined : data.maintenance.odometer
-  let contractor =
-    data === undefined ? undefined : { id: data.maintenance.contractorId }
-  let contractors: any[] = data === undefined ? [] : [contractor]
-  let selectedContractor =
-    data === undefined ? undefined : JSON.stringify(contractor)
-  let partsQuantityMap =
-    data === undefined
-      ? undefined
-      : new Map(data.maintenance.parts.map((p) => [p.id, p.quantity]))
-  let parts: any[] = data === undefined ? [] : data.parts
-  let partQuantity: any[] =
-    data === undefined
-      ? []
-      : parts.map((p) => ({ id: p.id, quantity: partsQuantityMap.get(p.id) }))
+  let maintenanceId = extractValue(data, form, maintenanceKeys.id)
+  let date = extractValue(data, form, maintenanceKeys.date)
+  let odometer = extractValue(data, form, maintenanceKeys.odometer)
+  let contractor = extractValue(
+    data,
+    form,
+    maintenanceKeys.contractor,
+    null,
+    idObjWrapper
+  )
+  let contractors: any[] = contractor === null ? [] : [contractor]
+  let selectedContractor = JSON.stringify(contractor)
+  let partsQuantityMap = extractValue(
+    data,
+    form,
+    maintenanceKeys.parts,
+    undefined,
+    partMapper
+  )
+  let parts: any[] = extractValue(data, form, maintenanceKeys.partsData, [])
+  let partQuantity: any[] = parts.map((p) => ({
+    id: p.id,
+    quantity: partsQuantityMap.get(p.id),
+  }))
   let partVal: string = JSON.stringify(partQuantity)
+  let partsJ = JSON.stringify(parts)
   let buttonName = data === undefined ? 'Add' : 'Edit'
 
   onMount(() => {
@@ -81,7 +92,7 @@
   }
 
   const partFailed = (partId: string) => {
-    if (form && form[partId]) {
+    if (form && form[partId].message) {
       return 'input-error-red focus:border-error-red focus:outline-error-red'
     }
     return 'input-primary'
@@ -105,6 +116,7 @@
     partQuantity = [...partQuantity]
     partQuantity = partQuantity
     partVal = JSON.stringify(partQuantity)
+    partsJ = JSON.stringify(parts)
   }
 
   $: parts, updateParts(parts)
@@ -117,20 +129,21 @@
     class="hidden"
     bind:value={maintenanceId}
   />
+  <input name="partsData" type="text" class="hidden" bind:value={partsJ} />
   <InputSection name="Details" classes=" flex-row gap-2 w-fit mx-auto">
     <TextInput
       name="date"
       bind:value={date}
       placeholder="Date"
       classes=" bg-white text-black"
-      error={!form ? undefined : form.date}
+      error={!form ? undefined : form.date.message}
     />
     <TextInput
       name="odometer"
       bind:value={odometer}
       placeholder="Odometer"
       classes=" bg-white text-black"
-      error={!form ? undefined : form.odometer}
+      error={!form ? undefined : form.odometer.message}
     />
   </InputSection>
   <InputSection
@@ -157,7 +170,7 @@
       />
       <button
         slot="button"
-        class={`btn ${form && form.contractor ? 'btn-error-red' : 'btn-primary'}`}
+        class={`btn ${form && form.contractor.message ? 'btn-error-red' : 'btn-primary'}`}
         >{determineButtonName(contractors, 'contractor')}</button
       >
     </Modal>
@@ -185,6 +198,6 @@
         />
       </InputSection>
     {/each}
-    <button class="btn btn-primary mx-auto">{buttonName} Row</button>
+    <button class="btn btn-primary mx-auto">{buttonName}</button>
   </div>
 </form>

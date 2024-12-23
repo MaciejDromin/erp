@@ -17,13 +17,58 @@ const validateArgs = (body) => {
   let error = {
     failed: false,
     returnBody: {
-      name: undefined,
-      year: undefined,
-      odometer: undefined,
-      model: undefined,
-      engineType: undefined,
-      vin: undefined,
-      registrationPlate: undefined,
+      id: {
+        val: undefined,
+        message: undefined,
+      },
+      name: {
+        val: body.name,
+        message: undefined,
+      },
+      year: {
+        val: body.year,
+        message: undefined,
+      },
+      odometer: {
+        val: body.odometer,
+        message: undefined,
+      },
+      bodyStyle: {
+        val: body.bodyStyle,
+        message: undefined,
+      },
+      make: {
+        val: body.make,
+        message: undefined,
+      },
+      model: {
+        val: body.model,
+        message: undefined,
+      },
+      fuelType: {
+        val: body.fuelType,
+        message: undefined,
+      },
+      driveTrain: {
+        val: body.driveTrain,
+        message: undefined,
+      },
+      transmission: {
+        val: body.transmission,
+        message: undefined,
+      },
+      engineType: {
+        val: body.engineType,
+        message: undefined,
+      },
+      vin: {
+        val: body.vin,
+        message: undefined,
+      },
+      registrationPlate: {
+        val: body.registrationPlate,
+        message: undefined,
+      },
     },
   }
 
@@ -31,28 +76,28 @@ const validateArgs = (body) => {
 
   if (!nameResult.result) {
     error.failed = true
-    error.returnBody.name = nameResult.message
+    error.returnBody.name.message = nameResult.message
   }
 
   const modelResult = validate(body.model, nonEmpty, lbXnY(3, 30))
 
   if (!modelResult.result) {
     error.failed = true
-    error.returnBody.model = modelResult.message
+    error.returnBody.model.message = modelResult.message
   }
 
   const engineTypeResult = validate(body.engineType, nonEmpty, lbXnY(3, 30))
 
   if (!engineTypeResult.result) {
     error.failed = true
-    error.returnBody.engineType = engineTypeResult.message
+    error.returnBody.engineType.message = engineTypeResult.message
   }
 
   const vinResult = validate(body.vin, nonEmpty, leX(17))
 
   if (!vinResult.result) {
     error.failed = true
-    error.returnBody.vin = vinResult.message
+    error.returnBody.vin.message = vinResult.message
   }
 
   const registrationPlateResult = validate(
@@ -63,7 +108,7 @@ const validateArgs = (body) => {
 
   if (!registrationPlateResult.result) {
     error.failed = true
-    error.returnBody.registrationPlate = registrationPlateResult.message
+    error.returnBody.registrationPlate.message = registrationPlateResult.message
   }
 
   const odometerResult = validate(
@@ -75,7 +120,7 @@ const validateArgs = (body) => {
 
   if (!odometerResult.result) {
     error.failed = true
-    error.returnBody.odometer = odometerResult.message
+    error.returnBody.odometer.message = odometerResult.message
   }
 
   const yearResult = validate(
@@ -87,7 +132,7 @@ const validateArgs = (body) => {
 
   if (!yearResult.result) {
     error.failed = true
-    error.returnBody.year = yearResult.message
+    error.returnBody.year.message = yearResult.message
   }
 
   return error

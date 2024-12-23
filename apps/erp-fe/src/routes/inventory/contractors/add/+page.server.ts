@@ -18,10 +18,26 @@ const validateArgs = (body) => {
   let error = {
     failed: false,
     returnBody: {
-      name: undefined,
-      phoneNumber: undefined,
-      email: undefined,
-      website: undefined,
+      id: {
+        val: undefined,
+        message: undefined,
+      },
+      name: {
+        val: body.name,
+        message: undefined,
+      },
+      phoneNumber: {
+        val: body.contactInformation.phoneNumber,
+        message: undefined,
+      },
+      email: {
+        val: body.contactInformation.email,
+        message: undefined,
+      },
+      website: {
+        val: body.contactInformation.website,
+        message: undefined,
+      },
     },
   }
 
@@ -29,7 +45,7 @@ const validateArgs = (body) => {
 
   if (!nameResult.result) {
     error.failed = true
-    error.returnBody.name = nameResult.message
+    error.returnBody.name.message = nameResult.message
   }
 
   const emailResult = validate(
@@ -40,7 +56,7 @@ const validateArgs = (body) => {
 
   if (!emailResult.result) {
     error.failed = true
-    error.returnBody.email = emailResult.message
+    error.returnBody.email.message = emailResult.message
   }
 
   const websiteResult = validate(
@@ -51,7 +67,7 @@ const validateArgs = (body) => {
 
   if (!websiteResult.result) {
     error.failed = true
-    error.returnBody.website = websiteResult.message
+    error.returnBody.website.message = websiteResult.message
   }
 
   const phoneNumberResult = validate(
@@ -63,7 +79,7 @@ const validateArgs = (body) => {
 
   if (!phoneNumberResult.result) {
     error.failed = true
-    error.returnBody.phoneNumber = phoneNumberResult.message
+    error.returnBody.phoneNumber.message = phoneNumberResult.message
   }
 
   return error
