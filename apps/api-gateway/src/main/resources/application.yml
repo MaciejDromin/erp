@@ -1,0 +1,15 @@
+quarkus:
+  http:
+    port: 8070
+  datasource:
+    db-kind: postgresql
+    username: gateway
+    password: gateway
+    reactive:
+      url: postgresql://localhost:5432/gateway?useUnicode=yes&characterEncoding=UTF-8
+      max-size: 60
+  hibernate-orm:
+    database:
+      generation: update
+  rest-client:
+    http2: true

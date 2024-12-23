@@ -1,0 +1,13 @@
+quarkus:
+  http:
+    port: 8080
+  datasource:
+    db-kind: postgresql
+    username: gateway
+    password: gateway
+    reactive:
+      url: postgresql://erp-pg:5432/gateway?useUnicode=yes&characterEncoding=UTF-8
+      max-size: 60
+  hibernate-orm:
+    database:
+      generation: update
