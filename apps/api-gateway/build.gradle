@@ -22,10 +22,6 @@ dependencies {
     // COMMONS
     implementation 'com.soitio:commons:1.0-SNAPSHOT'
 
-    // SQL DB
-    implementation 'io.quarkus:quarkus-hibernate-reactive-panache'
-    implementation 'io.quarkus:quarkus-reactive-pg-client'
-
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
 
