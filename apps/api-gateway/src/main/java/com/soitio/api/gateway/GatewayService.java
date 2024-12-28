@@ -1,55 +1,83 @@
 package com.soitio.api.gateway;
 
-import com.soitio.api.gateway.application.PathResourceRepository;
 import com.soitio.api.gateway.client.GatewayClient;
-import com.soitio.api.gateway.domain.PathResource;
+import com.soitio.api.gateway.config.RouteDetails;
+import com.soitio.api.gateway.config.GatewayConfig;
+import com.soitio.commons.models.commons.ServiceKey;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.UriInfo;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
 public class GatewayService {
 
-    private static final int ENDPOINT_START_INDEX = 4;
+    private static final int SERVICE_KEY_START_INDEX = 4;
     private final GatewayClient gatewayClient;
-    private final PathResourceRepository pathResourceRepository;
+    private final GatewayConfig gatewayConfig;
 
     public GatewayService(@RestClient GatewayClient gatewayClient,
-                          PathResourceRepository pathResourceRepository) {
+                          GatewayConfig gatewayConfig) {
         this.gatewayClient = gatewayClient;
-        this.pathResourceRepository = pathResourceRepository;
+        this.gatewayConfig = gatewayConfig;
     }
 
     public Uni<Object> getRoute(UriInfo uriInfo, HttpHeaders headers) {
-        // auth token from headers
-        // buildURL
-        String endpoint = extractPath(uriInfo.getPath());
-        return pathResourceRepository.getByPath(endpoint)
-                .onItem()
-                .transform(pr -> buildRoute(pr, endpoint))
-                .onItem()
-                .transformToUni(p -> gatewayClient.getRoute(p, uriInfo.getQueryParameters()))
-                .onFailure()
-                .transform(NotFoundException::new);
+        String[] endpointDetails = extractPath(uriInfo.getPath());
+        return gatewayClient.getRoute(
+                buildRoute(gatewayConfig.routes()
+                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
+                uriInfo.getQueryParameters());
+//        return pathResourceRepository.getServiceKey(ServiceKey.getByName(endpointDetails[0]))
+//                .onItem()
+//                .transform(pr -> buildRoute(pr, endpointDetails[1]))
+//                .onItem()
+//                .transformToUni(p -> gatewayClient.getRoute(p, uriInfo.getQueryParameters()))
+//                .onFailure()
+//                .transform(NotFoundException::new);
     }
 
-    private String extractPath(String baseUri) {
-        return baseUri.substring(ENDPOINT_START_INDEX);
+    public Uni<Object> postRoute(UriInfo uri, HttpHeaders headers, Object body) {
+        String[] endpointDetails = extractPath(uri.getPath());
+        return gatewayClient.postRoute(
+                buildRoute(gatewayConfig.routes()
+                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
+                uri.getQueryParameters(), body);
     }
 
-    private String buildRoute(PathResource resource, String endpoint) {
-        return "http://%s:%d%s".formatted(resource.getHostname(), resource.getPort(), endpoint);
+    public Uni<Object> putRoute(UriInfo uri, HttpHeaders headers, Object body) {
+        String[] endpointDetails = extractPath(uri.getPath());
+        return gatewayClient.postRoute(
+                buildRoute(gatewayConfig.routes()
+                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
+                uri.getQueryParameters(), body);
     }
 
-    private Uni<Object> attemptRequest(String uri, Throwable t, MultivaluedMap<String, String> queryParams) {
-        if (t != null) {
-            throw new RuntimeException("Sorry but we couldn't find the path you were looking for!");
-        }
-        return gatewayClient.getRoute(uri, queryParams);
+    public Uni<Object> patchRoute(UriInfo uri, HttpHeaders headers, Object body) {
+        String[] endpointDetails = extractPath(uri.getPath());
+        return gatewayClient.getRoute(
+                buildRoute(gatewayConfig.routes()
+                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
+                uri.getQueryParameters());
+    }
+
+    public Uni<Object> deleteRoute(UriInfo uri, HttpHeaders headers) {
+        String[] endpointDetails = extractPath(uri.getPath());
+        return gatewayClient.getRoute(
+                buildRoute(gatewayConfig.routes()
+                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
+                uri.getQueryParameters());
+    }
+
+    private String[] extractPath(String baseUri) {
+        int secondSlashPos = baseUri.indexOf('/', SERVICE_KEY_START_INDEX + 1);
+        return new String[] {baseUri.substring(SERVICE_KEY_START_INDEX + 1, secondSlashPos),
+                baseUri.substring(secondSlashPos)};
+    }
+
+    private String buildRoute(RouteDetails route, String endpoint) {
+        return "http://%s:%d%s".formatted(route.hostname(), route.port(), endpoint);
     }
 
 }

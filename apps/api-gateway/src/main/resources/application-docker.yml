@@ -1,13 +1,19 @@
 quarkus:
+  log:
+    level: INFO
   http:
     port: 8080
-  datasource:
-    db-kind: postgresql
-    username: gateway
-    password: gateway
-    reactive:
-      url: postgresql://erp-pg:5432/gateway?useUnicode=yes&characterEncoding=UTF-8
-      max-size: 60
-  hibernate-orm:
-    database:
-      generation: update
+  rest-client:
+    http2: true
+  mongodb:
+    connection-string: mongodb://localhost:27017
+    database: gateway
+
+gateway:
+  routes:
+    FINANCES:
+      hostname: finances
+      port: 8080
+    INVENTORY:
+      hostname: localhost
+      port: 8080

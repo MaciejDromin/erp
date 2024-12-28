@@ -17,6 +17,10 @@ dependencies {
     implementation 'io.quarkus:quarkus-rest'
     implementation 'io.quarkus:quarkus-rest-jackson'
     implementation 'io.quarkus:quarkus-rest-client-jackson'
+    implementation 'io.quarkus:quarkus-mongodb-panache'
+
+    // COMMONS
+    implementation 'com.soitio:commons:1.0-SNAPSHOT'
 
     // SQL DB
     implementation 'io.quarkus:quarkus-hibernate-reactive-panache'
