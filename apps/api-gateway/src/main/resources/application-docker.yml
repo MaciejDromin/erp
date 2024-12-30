@@ -6,7 +6,7 @@ quarkus:
   rest-client:
     http2: true
   mongodb:
-    connection-string: mongodb://localhost:27017
+    connection-string: mongodb://erp-mongodb:27017
     database: gateway
 
 gateway:

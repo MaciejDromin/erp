@@ -1,9 +1,8 @@
 package com.soitio.commons.dependency;
 
-import com.soitio.commons.dependency.client.ConsulStoreClient;
+import com.soitio.commons.dependency.client.DependencyKeyClient;
 import com.soitio.commons.dependency.exception.DependencyLockException;
 import com.soitio.commons.dependency.model.Dependent;
-import com.soitio.commons.dependency.model.Session;
 import dev.failsafe.Failsafe;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -15,26 +14,25 @@ import java.util.stream.Collectors;
 
 public abstract class DependencyInitializerBaseService implements DependencyInitializer {
 
-    private final ConsulStoreClient consulStoreClient;
+    private final DependencyKeyClient dependencyKeyClient;
     private final DependencyConfig dependencyConfig;
     private final Map<String, DependencyCheckService> checkServiceMapping;
     protected DependencyCheckMap dependencyCheckMap;
 
-    protected DependencyInitializerBaseService(ConsulStoreClient consulStoreClient,
+    protected DependencyInitializerBaseService(DependencyKeyClient dependencyKeyClient,
                                                DependencyConfig dependencyConfig,
                                                List<DependencyCheckService> dependencyCheckServices) {
-        this.consulStoreClient = consulStoreClient;
+        this.dependencyKeyClient = dependencyKeyClient;
         this.dependencyConfig = dependencyConfig;
         this.checkServiceMapping = buildMapping(dependencyCheckServices);
     }
 
     @Override
-    public void createOrUpdateKey(Set<String> services, String key, Session session) throws DependencyLockException {
-        boolean ret = consulStoreClient.updateKey(services, key, session.getId());
+    public void createOrUpdateKey(Set<String> services, String key) throws DependencyLockException {
+        boolean ret = dependencyKeyClient.updateKey(key, services);
         if (!ret) {
             throw new DependencyLockException("Key is locked by another client");
         }
-        consulStoreClient.relaeseKey(services, key, session.getId());
     }
 
     @Override
@@ -42,10 +40,9 @@ public abstract class DependencyInitializerBaseService implements DependencyInit
         Set<Class<? extends Dependencies>> dependencies = dependencyConfig.getClassesWithDependencies();
         var dependenciesMap = validateAndMakeDependencies(dependencies);
         this.dependencyCheckMap = new DependencyCheckMap(dependenciesMap);
-        Session session = consulStoreClient.createSession();
 
         dependenciesMap.keySet()
-                .forEach(k -> getCurrentAndSet(k, session));
+                .forEach(this::getCurrentAndSet);
     }
 
     @Override
@@ -80,17 +77,16 @@ public abstract class DependencyInitializerBaseService implements DependencyInit
     }
 
     @Override
-    public void getCurrentAndSet(Dependent key, Session session) {
+    public void getCurrentAndSet(Dependent key) {
         Set<String> tmp = new HashSet<>();
         try {
-            tmp = DependencyUtils.decodeBase64(
-                    consulStoreClient.getCurrentValue(key.getName()).getFirst().getValue());
+            tmp = dependencyKeyClient.getCurrentValue(key.getName()).value();
         } catch (Exception e) {
             // ignored
         }
         Set<String> currentVal = tmp;
         currentVal.add(dependencyConfig.getServiceName());
-        Failsafe.with(dependencyConfig.getPolicy()).run(() -> createOrUpdateKey(currentVal, key.getName(), session));
+        Failsafe.with(dependencyConfig.getPolicy()).run(() -> createOrUpdateKey(currentVal, key.getName()));
     }
 
     private Map<String, DependencyCheckService> buildMapping(List<DependencyCheckService> dependencyCheckServices) {

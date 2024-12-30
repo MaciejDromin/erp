@@ -16,7 +16,7 @@ import java.util.List;
 @Singleton
 public class DependencyInitializerServiceImpl extends DependencyInitializerBaseService {
 
-    public DependencyInitializerServiceImpl(@RestClient ConsulStoreClientIntf consulStoreClient,
+    public DependencyInitializerServiceImpl(@RestClient DependencyKeyClientIntf consulStoreClient,
                                             DependencyConfig dependencyConfig,
                                             @All List<DependencyCheckService> dependencyCheckServices) {
         super(consulStoreClient, dependencyConfig, dependencyCheckServices);

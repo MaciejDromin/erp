@@ -8,6 +8,9 @@ quarkus:
     consul-api:
       url: http://localhost:8500/
       scope: jakarta.inject.Singleton
+    gateway-api:
+      url: http://localhost:8070/
+      scope: jakarta.inject.Singleton
 
 service-discovery:
   service-name: inventory
