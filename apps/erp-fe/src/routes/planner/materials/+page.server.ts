@@ -1,7 +1,8 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
-import { PLANNER_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { PLANNER } from '$lib/scripts/serviceKey.ts'
 
 export const actions = {
   default: async ({ cookies, request }) => {
@@ -16,7 +17,7 @@ export const actions = {
       source: data.get('source'),
     }
     await unsecuredExternalApiRequest(
-      PLANNER_URL + '/planner/materials',
+      `${GATEWAY_URL}/${PLANNER}/materials`,
       HttpMethods.POST,
       body
     )

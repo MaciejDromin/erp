@@ -1,7 +1,8 @@
 import { unsecuredExternalApiRequestFileUpload } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
-import { PURCHASE_SCANNER_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { PURCHASE_SCANNER } from '$lib/scripts/serviceKey.ts'
 
 export const actions = {
   default: async ({ request }) => {
@@ -12,7 +13,7 @@ export const actions = {
       Accept: 'application/json',
     }
     const ret = await unsecuredExternalApiRequestFileUpload(
-      PURCHASE_SCANNER_URL + '/receipts',
+      `${GATEWAY_URL}/${PURCHASE_SCANNER}/receipts`,
       HttpMethods.POST,
       body,
       headers

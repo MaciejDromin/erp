@@ -94,7 +94,7 @@ export const actions = {
     }
 
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + `/addresses/${body.id}`,
+      `${GATEWAY_URL}/${INVENTORY}/addresses/${body.id}`,
       HttpMethods.PATCH,
       body
     )
