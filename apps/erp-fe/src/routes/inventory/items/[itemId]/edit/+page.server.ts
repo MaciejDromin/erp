@@ -1,7 +1,8 @@
 import type { PageServerLoad } from './$types'
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
-import { INVENTORY_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { INVENTORY } from '$lib/scripts/serviceKey.ts'
 import { redirect, fail } from '@sveltejs/kit'
 import {
   validate,
@@ -88,7 +89,7 @@ export const actions = {
     body.categories = [category.id]
 
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + `/items/${body.id}`,
+      `${GATEWAY_URL}/${INVENTORY}/items/${body.id}`,
       HttpMethods.PATCH,
       body
     )
@@ -98,7 +99,7 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const item = await unsecuredExternalApiRequest(
-    INVENTORY_URL + `/items/${params.itemId}`,
+    `${GATEWAY_URL}/${INVENTORY}/items/${params.itemId}`,
     HttpMethods.GET
   )
   return {
