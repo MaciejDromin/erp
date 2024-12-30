@@ -21,7 +21,7 @@ const getBaseUrl = (service) => {
 export const DELETE = (async ({ request }) => {
   const body = await request.json()
   const ret = await unsecuredExternalApiRequest(
-    `${GATEWAY_URL}/${getBaseUrl(body.service)}${body.endpoint}`,
+    `${GATEWAY_URL}${body.endpoint}`,
     HttpMethods.DELETE,
     body.content
   )

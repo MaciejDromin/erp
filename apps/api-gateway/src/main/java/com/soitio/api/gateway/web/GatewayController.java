@@ -57,8 +57,8 @@ public class GatewayController {
     @DELETE
     @Path("{subPaths: .*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<Object> deleteRoute(UriInfo uri, HttpHeaders headers) {
-        return service.deleteRoute(uri, headers);
+    public Uni<Object> deleteRoute(UriInfo uri, HttpHeaders headers, Object body) {
+        return service.deleteRoute(uri, headers, body);
     }
 
 }

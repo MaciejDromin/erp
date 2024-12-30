@@ -55,12 +55,12 @@ public class GatewayService {
                 uri.getQueryParameters(), body);
     }
 
-    public Uni<Object> deleteRoute(UriInfo uri, HttpHeaders headers) {
+    public Uni<Object> deleteRoute(UriInfo uri, HttpHeaders headers, Object body) {
         String[] endpointDetails = extractPath(uri.getPath());
         return gatewayClient.deleteRoute(
                 buildRoute(gatewayConfig.routes()
                         .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-                uri.getQueryParameters());
+                uri.getQueryParameters(), body);
     }
 
     private String[] extractPath(String baseUri) {

@@ -29,6 +29,6 @@ public interface GatewayClient {
     Uni<Object> patchRoute(@Url String p, @RestQuery MultivaluedMap<String, String> queryParameters, Object body);
 
     @DELETE
-    Uni<Object> deleteRoute(@Url String p, @RestQuery MultivaluedMap<String, String> queryParameters);
+    Uni<Object> deleteRoute(@Url String p, @RestQuery MultivaluedMap<String, String> queryParameters, Object body);
 
 }
