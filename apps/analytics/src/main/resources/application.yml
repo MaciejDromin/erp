@@ -2,12 +2,6 @@ server:
   port: 8084
 
 spring:
-  cloud:
-    openfeign:
-      client:
-        config:
-          self-register:
-            url: http://localhost:8000
   rabbitmq:
     host: localhost
     port: 5672
@@ -16,16 +10,11 @@ spring:
 
 logging:
   level:
-    pl:
-      mlisowski: DEBUG
+    com:
+      soitio: DEBUG
 
 #feign:
 #  client:
 #    config:
 #      default:
 #        loggerLevel: full
-
-service-discovery:
-  service-name: analytics
-  host: localhost
-  port: 8084

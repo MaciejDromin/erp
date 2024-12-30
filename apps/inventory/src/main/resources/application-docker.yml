@@ -5,19 +5,11 @@ quarkus:
     connection-string: mongodb://erp-mongodb:27017
     database: inventory
   rest-client:
-    consul-api:
-      url: http://erp-consul:8500
-      scope: jakarta.inject.Singleton
     gateway-api:
       url: http://gateway:8080
       scope: jakarta.inject.Singleton
   shutdown:
     timeout: PT5S
-
-service-discovery:
-  service-name: inventory
-  host: inventory
-  port: 8080
 
 soitio:
   service: "http://inventory:8080"

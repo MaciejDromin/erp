@@ -2,8 +2,6 @@ quarkus:
   http:
     port: 8080
   rest-client:
-    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
-      url: http://localhost:8500
     "com.soitio.widgets.startup.runtime.client.DashboardClient":
       url: http://localhost:8083
     "com.soitio.widgets.finances.inventory.client.InventoryClient":
@@ -12,11 +10,6 @@ quarkus:
       url: http://localhost:8084
     "com.soitio.widgets.finances.client.FiltersDataClient":
       url: http://localhost:8084
-
-service-discovery:
-  service-name: widgets-finances
-  host: localhost
-  port: 8080
 
 widgets:
   widget-definitions:

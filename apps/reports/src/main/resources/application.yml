@@ -4,14 +4,6 @@ quarkus:
   grpc:
     server:
       use-separate-server: false
-  rest-client:
-    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
-      url: http://consul.soitio-erp.com:8000
-
-service-discovery:
-  service-name: reports-generator
-  host: localhost
-  port: 8085
 
 reports-service:
   host: localhost

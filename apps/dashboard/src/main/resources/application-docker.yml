@@ -4,17 +4,9 @@ quarkus:
   mongodb:
     connection-string: mongodb://erp-mongodb:27017
     database: dashboard
-  rest-client:
-    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
-      url: http://erp-consul:8500
   index-dependency:
     widget-commons:
       group-id: com.soitio.widgets
       artifact-id: widget-commons
   shutdown:
     timeout: PT5S
-
-service-discovery:
-  service-name: dashboard
-  host: dashboard
-  port: 8080

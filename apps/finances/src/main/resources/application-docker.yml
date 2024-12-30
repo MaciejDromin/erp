@@ -15,8 +15,6 @@ spring:
     openfeign:
       client:
         config:
-          self-register:
-            url: http://erp-consul:8500
           gateway:
             url: http://gateway:8080/
   rabbitmq:
@@ -34,19 +32,14 @@ jakarta:
 
 logging:
   level:
-    pl:
-      mlisowski: DEBUG
+    com:
+      soitio: DEBUG
 
 #feign:
 #  client:
 #    config:
 #      default:
 #        loggerLevel: full
-
-service-discovery:
-  service-name: finances
-  host: finances
-  port: 8080
 
 soitio:
   service: "http://finances:8080"

@@ -3,12 +3,6 @@ server:
   shutdown: graceful
 
 spring:
-  cloud:
-    openfeign:
-      client:
-        config:
-          self-register:
-            url: http://erp-consul:8500
   rabbitmq:
     host: rabbit
     port: 5672
@@ -19,16 +13,11 @@ spring:
 
 logging:
   level:
-    pl:
-      mlisowski: DEBUG
+    com:
+      soitio: DEBUG
 
 #feign:
 #  client:
 #    config:
 #      default:
 #        loggerLevel: full
-
-service-discovery:
-  service-name: analytics
-  host: analytics
-  port: 8080

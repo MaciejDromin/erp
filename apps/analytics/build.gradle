@@ -27,15 +27,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	// JACKSON
 	implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jackson_version}"
 	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson_version}"
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
-
-	// SELFREGISTER
-	implementation "com.soitio.selfregister:self-register-spring:1.0.0"
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

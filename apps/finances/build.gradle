@@ -57,6 +57,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	// JACKSON
 	implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
@@ -69,9 +70,6 @@ dependencies {
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDsl}:jakarta"
 
 	implementation 'com.soitio:commons:1.0-SNAPSHOT'
-
-	// SELFREGISTER
-	implementation "com.soitio.selfregister:self-register-spring:1.0.0"
 
 	// LOMBOK
 	compileOnly 'org.projectlombok:lombok'

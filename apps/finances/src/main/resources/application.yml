@@ -14,8 +14,6 @@ spring:
     openfeign:
       client:
         config:
-          self-register:
-            url: http://localhost:8500/
           gateway:
             url: http://localhost:8070/
   rabbitmq:
@@ -39,11 +37,6 @@ logging:
 #    config:
 #      default:
 #        loggerLevel: full
-
-service-discovery:
-  service-name: finances
-  host: localhost
-  port: 8084
 
 soitio:
   service: "http://localhost:8084"

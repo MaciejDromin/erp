@@ -4,16 +4,8 @@ quarkus:
   grpc:
     server:
       use-separate-server: false
-  rest-client:
-    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
-      url: http://erp-consul:8500
   shutdown:
     timeout: PT5S
-
-service-discovery:
-  service-name: reports-generator
-  host: reports-generator
-  port: 8080
 
 reports-service:
   host: reports-service
