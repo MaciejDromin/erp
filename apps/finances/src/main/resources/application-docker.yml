@@ -17,6 +17,8 @@ spring:
         config:
           self-register:
             url: http://erp-consul:8500
+          gateway:
+            url: http://gateway:8080/
   rabbitmq:
     host: rabbit
     port: 5672

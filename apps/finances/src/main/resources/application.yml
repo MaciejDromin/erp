@@ -16,6 +16,8 @@ spring:
         config:
           self-register:
             url: http://localhost:8500/
+          gateway:
+            url: http://localhost:8070/
   rabbitmq:
     host: localhost
     port: 5672

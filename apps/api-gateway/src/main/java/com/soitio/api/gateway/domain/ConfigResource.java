@@ -1,6 +1,5 @@
 package com.soitio.api.gateway.domain;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
