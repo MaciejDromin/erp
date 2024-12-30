@@ -1,9 +1,6 @@
 NPROCS = $(shell grep -c 'processor' /proc/cpuinfo)
 MAKEFLAGS += -j$(shell echo $$(( $(NPROCS) / 2 )))
 
-self-register-quarkus:
-	cd libs/self-register-quarkus; mvn install -DskipTests
-
 self-register-spring:
 	cd libs/self-register-spring; ./gradlew build; ./gradlew publishToMavenLocal
 
@@ -30,7 +27,7 @@ finances: self-register-spring soitio-commons
 erp-fe:
 	cd apps/erp-fe; podman build -f Dockerfile -t erp/fe:latest .
 
-inventory: self-register-quarkus soitio-commons
+inventory: soitio-commons
 	cd apps/inventory; ./gradlew build \
 		-Dquarkus.native.enabled=true \
 		-Dquarkus.native.container-build=true \
@@ -41,7 +38,7 @@ inventory: self-register-quarkus soitio-commons
 purchase-scanner:
 	cd apps/purchase-scanner; podman build -f docker/Dockerfile -t erp/purchase-scanner:latest .
 
-dashboard: self-register-quarkus widget-commons
+dashboard: widget-commons
 	cd apps/dashboard; ./gradlew build \
 		-Dquarkus.native.enabled=true \
 		-Dquarkus.native.container-build=true \
@@ -49,7 +46,7 @@ dashboard: self-register-quarkus widget-commons
 		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/dashboard:latest .
 
-widgets-finances: self-register-quarkus widget-startup soitio-commons
+widgets-finances: widget-startup soitio-commons
 	cd apps/widgets-finances; \
 		./gradlew build \
 		-Dquarkus.native.enabled=true \
@@ -58,12 +55,12 @@ widgets-finances: self-register-quarkus widget-startup soitio-commons
 		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/widgets-finances:latest .
 
-reports-generator: self-register-quarkus reports-client
+reports-generator: reports-client
 	cd apps/reports; ./gradlew build \
 		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.jvm -t erp/reports-generator:latest .
 
-reports-service: self-register-quarkus reports-client soitio-commons
+reports-service: reports-client soitio-commons
 	cd apps/reports-service; ./gradlew build \
 		-Dquarkus.native.enabled=true \
 		-Dquarkus.native.container-build=true \
@@ -76,7 +73,6 @@ all: analytics finances erp-fe inventory purchase-scanner \
 	reports-service
 
 clean:
-	cd libs/self-register-quarkus; mvn clean
 	cd libs/self-register-spring; ./gradlew clean
 	cd libs/widget-commons; ./gradlew clean
 	cd libs/widget-startup; mvn clean

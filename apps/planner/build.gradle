@@ -17,10 +17,9 @@ dependencies {
     implementation 'io.quarkus:quarkus-rest-client-reactive-jackson'
     implementation 'io.quarkus:quarkus-mongodb-panache'
     implementation 'org.joda:joda-money:1.0.4'
+    implementation 'io.quarkus:quarkus-smallrye-health'
 
     implementation 'com.soitio:commons:1.0-SNAPSHOT'
-
-    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0-SNAPSHOT'
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
