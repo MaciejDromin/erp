@@ -1,24 +1,25 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { PageServerLoad } from './$types'
-import { FINANCES_URL, INVENTORY_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { FINANCES, INVENTORY } from '$lib/scripts/serviceKey.ts'
 import { ObjectType } from '$lib/finances/types/financialTypes'
 
 export const load = (async ({ params }) => {
   const objectIds = await unsecuredExternalApiRequest(
-    FINANCES_URL + `/object-value/object-ids?objectType=${ObjectType.ITEM}`,
+    `${GATEWAY_URL}/${FINANCES}/object-value/object-ids?objectType=${ObjectType.ITEM}`,
     HttpMethods.GET
   )
   const objectIdsBody = {
     itemIds: await objectIds.json(),
   }
   const countMap = await unsecuredExternalApiRequest(
-    INVENTORY_URL + '/items/object-count',
+    `${GATEWAY_URL}/${INVENTORY}/items/object-count`,
     HttpMethods.POST,
     objectIdsBody
   )
   const data = await unsecuredExternalApiRequest(
-    FINANCES_URL + `/object-value/total-value?objectType=${ObjectType.ITEM}`,
+    `${GATEWAY_URL}/${FINANCES}/object-value/total-value?objectType=${ObjectType.ITEM}`,
     HttpMethods.POST,
     await countMap.json()
   )

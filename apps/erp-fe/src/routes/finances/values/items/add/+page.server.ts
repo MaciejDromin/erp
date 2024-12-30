@@ -2,7 +2,8 @@ import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import type { PageServerLoad } from './$types'
-import { FINANCES_URL, INVENTORY_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { FINANCES } from '$lib/scripts/serviceKey.ts'
 import { ObjectType } from '$lib/finances/types/financialTypes'
 import { redirect, fail } from '@sveltejs/kit'
 import {
@@ -79,7 +80,7 @@ export const actions = {
     body.objectId = object.id
 
     await unsecuredExternalApiRequest(
-      FINANCES_URL + '/object-value',
+      `${GATEWAY_URL}/${FINANCES}/object-value`,
       HttpMethods.POST,
       body
     )
@@ -89,7 +90,7 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const objectIds = await unsecuredExternalApiRequest(
-    FINANCES_URL + `/object-value/object-ids?objectType=${ObjectType.ITEM}`,
+    `${GATEWAY_URL}/${FINANCES}/object-value/object-ids?objectType=${ObjectType.ITEM}`,
     HttpMethods.GET
   )
   return {
