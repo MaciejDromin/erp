@@ -1,9 +1,6 @@
 NPROCS = $(shell grep -c 'processor' /proc/cpuinfo)
 MAKEFLAGS += -j$(shell echo $$(( $(NPROCS) / 2 )))
 
-self-register-spring:
-	cd libs/self-register-spring; ./gradlew build; ./gradlew publishToMavenLocal
-
 widget-commons:
 	cd libs/widget-commons; ./gradlew build; ./gradlew publishToMavenLocal
 
@@ -16,11 +13,11 @@ reports-client:
 soitio-commons:
 	cd libs/commons; ./gradlew build; ./gradlew publishToMavenLocal
 
-analytics: self-register-spring
+analytics: 
 	cd apps/analytics; ./gradlew build -x test; \
 		podman build -f src/main/docker/Dockerfile -t erp/analytics:latest .
 
-finances: self-register-spring soitio-commons
+finances: soitio-commons
 	cd apps/finances;  ./gradlew build -x test -x checkstyleAot -x checkstyleAotTest; \
 		podman build -f src/main/docker/Dockerfile -t erp/finances:latest .
 
@@ -73,7 +70,6 @@ all: analytics finances erp-fe inventory purchase-scanner \
 	reports-service
 
 clean:
-	cd libs/self-register-spring; ./gradlew clean
 	cd libs/widget-commons; ./gradlew clean
 	cd libs/widget-startup; mvn clean
 	cd libs/reports-client; ./gradlew clean

@@ -1,4 +1,9 @@
 services:
+  gateway:
+    image: "erp/api-gateway:latest"
+    depends_on:
+      - erp-mongodb
+    restart: unless-stopped
   fe:
     image: "erp/fe:latest"
     restart: unless-stopped
@@ -20,30 +25,18 @@ services:
       MONGO_INITDB_DATABASE: inventory
     restart: unless-stopped
     user: "$UID:$GID"
-  consul-client:
-    image: "hashicorp/consul:1.18.2"
-    restart: unless-stopped
-    command: "agent"
-    volumes:
-      - ./consul/client.json:/consul/config/client.json:ro
-  erp-consul:
-    image: "hashicorp/consul:1.18.2"
-    restart: unless-stopped
-    command: "agent"
-    volumes:
-      - ./consul/server.json:/consul/config/server.json:ro
   inventory:
     image: "erp/inventory:latest"
     depends_on:
       - erp-mongodb
-      - erp-consul
+      - gateway
     restart: unless-stopped
   finances:
     image: "erp/finances:latest"
     depends_on:
       - erp-pg
       - rabbit
-      - erp-consul
+      - gateway
     restart: unless-stopped
   # SFTP has some weird issues with permissions, even tho I tell it to use my UID and GUID it is using
   # podman auto generated which requires full access on public (chmod 757 for example)
@@ -75,33 +68,33 @@ services:
     restart: unless-stopped
     depends_on: 
       - rabbit
-      - erp-consul
+      - gateway
   dashboard:
     image: "erp/dashboard:latest"
     depends_on:
       - erp-mongodb
-      - erp-consul
+      - gateway
     restart: unless-stopped
   widgets-finances:
     image: "erp/widgets-finances:latest"
     depends_on:
-      - erp-consul
       - dashboard
       - finances
       - inventory
+      - gateway
     restart: unless-stopped
   reports-generator:
     image: "erp/reports-generator:latest"
     depends_on:
-      - erp-consul
       - sftp
+      - gateway
     restart: unless-stopped
   reports-service:
     image: "erp/reports-service:latest"
     depends_on:
-      - erp-consul
       - erp-pg
       - reports-generator
+      - gateway
   rabbit:
     image: "rabbitmq:3.13-management"
     volumes:
