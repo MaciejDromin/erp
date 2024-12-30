@@ -13,6 +13,8 @@ quarkus:
   shutdown:
     timeout: PT5S
 
+# TODO: move datasource to go through the gateway
+
 widgets:
   widget-definitions:
     - name: Total Net Worth
