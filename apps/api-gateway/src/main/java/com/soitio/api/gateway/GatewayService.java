@@ -29,13 +29,6 @@ public class GatewayService {
                 buildRoute(gatewayConfig.routes()
                         .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
                 uriInfo.getQueryParameters());
-//        return pathResourceRepository.getServiceKey(ServiceKey.getByName(endpointDetails[0]))
-//                .onItem()
-//                .transform(pr -> buildRoute(pr, endpointDetails[1]))
-//                .onItem()
-//                .transformToUni(p -> gatewayClient.getRoute(p, uriInfo.getQueryParameters()))
-//                .onFailure()
-//                .transform(NotFoundException::new);
     }
 
     public Uni<Object> postRoute(UriInfo uri, HttpHeaders headers, Object body) {
@@ -48,7 +41,7 @@ public class GatewayService {
 
     public Uni<Object> putRoute(UriInfo uri, HttpHeaders headers, Object body) {
         String[] endpointDetails = extractPath(uri.getPath());
-        return gatewayClient.postRoute(
+        return gatewayClient.putRoute(
                 buildRoute(gatewayConfig.routes()
                         .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
                 uri.getQueryParameters(), body);
@@ -56,15 +49,15 @@ public class GatewayService {
 
     public Uni<Object> patchRoute(UriInfo uri, HttpHeaders headers, Object body) {
         String[] endpointDetails = extractPath(uri.getPath());
-        return gatewayClient.getRoute(
+        return gatewayClient.patchRoute(
                 buildRoute(gatewayConfig.routes()
                         .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-                uri.getQueryParameters());
+                uri.getQueryParameters(), body);
     }
 
     public Uni<Object> deleteRoute(UriInfo uri, HttpHeaders headers) {
         String[] endpointDetails = extractPath(uri.getPath());
-        return gatewayClient.getRoute(
+        return gatewayClient.deleteRoute(
                 buildRoute(gatewayConfig.routes()
                         .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
                 uri.getQueryParameters());

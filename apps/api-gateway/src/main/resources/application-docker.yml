@@ -15,5 +15,5 @@ gateway:
       hostname: finances
       port: 8080
     INVENTORY:
-      hostname: localhost
+      hostname: inventory
       port: 8080

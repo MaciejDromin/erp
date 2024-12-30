@@ -1,6 +1,5 @@
 package com.soitio.api.gateway;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soitio.api.gateway.application.ConfigStore;
 import com.soitio.api.gateway.domain.ConfigResource;
 import com.soitio.api.gateway.domain.ConfigResourceDto;
@@ -13,12 +12,9 @@ import jakarta.ws.rs.NotFoundException;
 public class ConfigStoreService {
 
     private final ConfigStore configStore;
-    private final ObjectMapper objectMapper;
 
-    public ConfigStoreService(ConfigStore configStore,
-                              ObjectMapper objectMapper) {
+    public ConfigStoreService(ConfigStore configStore) {
         this.configStore = configStore;
-        this.objectMapper = objectMapper;
     }
 
     public Uni<Boolean> updateOrCreate(String key, Object value) {
@@ -38,11 +34,7 @@ public class ConfigStoreService {
                 .onItem()
                 .transform(i -> Boolean.TRUE)
                 .onFailure()
-                .transform((t) -> {
-                    System.err.println(t.getMessage());
-                    return t;
-                });
-//                .recoverWithItem(Boolean.FALSE);
+                .recoverWithItem(Boolean.FALSE);
     }
 
     public Uni<ConfigResourceDto> getCurrentVal(String key) {
@@ -51,14 +43,6 @@ public class ConfigStoreService {
                 .transform(cr -> new ConfigResourceDto(cr.getId(), cr.getKey(), cr.getValue().value()))
                 .onFailure()
                 .transform(NotFoundException::new);
-    }
-
-    private String mapToString(Object o) {
-        try {
-            return objectMapper.writeValueAsString(o);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
