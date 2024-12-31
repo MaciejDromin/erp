@@ -3,6 +3,8 @@ quarkus:
     level: INFO
   http:
     port: 8070
+    limits:
+      max-body-size: 100000000
   mongodb:
     connection-string: mongodb://localhost:27017
     database: gateway

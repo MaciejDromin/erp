@@ -5,9 +5,6 @@ import { PURCHASE_SCANNER } from '$lib/scripts/serviceKey.ts'
 import type { RequestHandler } from './$types'
 
 export const POST = (async ({ request }) => {
-  /*const data = await request.formData()
-  const body = new FormData()
-  body.append('file', data.get('file'))*/
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/octet-stream',
@@ -19,5 +16,5 @@ export const POST = (async ({ request }) => {
     request.body,
     headers
   )
-  return new Response("test", { status: 200 })
+  return new Response(ret.body, { status: 200 })
 }) satisfies RequestHandler

@@ -3,6 +3,8 @@ quarkus:
     level: INFO
   http:
     port: 8080
+    limits:
+      max-body-size: 100000000
   mongodb:
     connection-string: mongodb://erp-mongodb:27017
     database: gateway
