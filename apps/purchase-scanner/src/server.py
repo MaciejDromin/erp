@@ -1,15 +1,18 @@
 from receipt_service import handle_uploaded_receipts
-from fastapi import FastAPI, UploadFile, status, Response
+from fastapi import FastAPI, UploadFile, status, Response, Request
+from urllib.parse import unquote
 import asyncio
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 
 @app.post("/receipts")
-async def upload_file(file: UploadFile):
-    asyncio.ensure_future(handle_uploaded_receipts(file.filename, await file.read()))
-    return {"filename": file.filename, "status": "PROCESSING"}
+async def upload_file(request: Request):
+    filename = request.headers['filename']
+    filename = unquote(filename)
+    await handle_uploaded_receipts(filename, request)
+    return {"filename": filename, "status": "PROCESSING"}
 
 
 @app.get("/healthcheck")

@@ -13,6 +13,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.UriInfo;
+import java.io.InputStream;
 
 @Path("/api")
 public class GatewayController {
@@ -36,6 +37,14 @@ public class GatewayController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Uni<Object> postRoute(UriInfo uri, HttpHeaders headers, Object body) {
         return service.postRoute(uri, headers, body);
+    }
+
+    @POST
+    @Path("{subPaths: .*}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    public Uni<Object> fileUpload(UriInfo uri, HttpHeaders headers, InputStream is) {
+        return service.fileUpload(uri, headers, is);
     }
 
     @PUT

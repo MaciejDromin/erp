@@ -30,6 +30,7 @@ const unsecuredExternalApiRequestFileUpload = async (
     method: method,
     body: body,
     headers: headers,
+    duplex: 'half',
   }).catch((e) => {
     console.log(e)
     return new Response(null, { status: 503 })

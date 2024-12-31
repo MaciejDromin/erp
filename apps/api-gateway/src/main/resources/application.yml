@@ -3,8 +3,6 @@ quarkus:
     level: INFO
   http:
     port: 8070
-  rest-client:
-    http2: true
   mongodb:
     connection-string: mongodb://localhost:27017
     database: gateway
@@ -17,3 +15,6 @@ gateway:
     INVENTORY:
       hostname: localhost
       port: 8082
+    PURCHASE-SCANNER:
+      hostname: localhost
+      port: 8100

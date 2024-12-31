@@ -15,4 +15,21 @@ const apiRequest = async (
   })
 }
 
-export { apiRequest }
+const apiRequestFile = async (
+  endpoint: string,
+  method: HttpMethods,
+  filename: string,
+  body?: any
+) => {
+  return await fetch('/api' + endpoint, {
+    method: method,
+    body: body,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/octet-stream',
+      filename: filename,
+    },
+  })
+}
+
+export { apiRequest, apiRequestFile }

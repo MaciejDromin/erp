@@ -3,8 +3,6 @@ quarkus:
     level: INFO
   http:
     port: 8080
-  rest-client:
-    http2: true
   mongodb:
     connection-string: mongodb://erp-mongodb:27017
     database: gateway
@@ -17,3 +15,6 @@ gateway:
     INVENTORY:
       hostname: inventory
       port: 8080
+    PURCHASE-SCANNER:
+      hostname: purchase-scanner
+      port: 80

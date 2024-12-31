@@ -9,6 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.UriInfo;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import java.io.InputStream;
 
 @ApplicationScoped
 public class GatewayService {
@@ -37,6 +38,14 @@ public class GatewayService {
                 buildRoute(gatewayConfig.routes()
                         .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
                 uri.getQueryParameters(), body);
+    }
+
+    public Uni<Object> fileUpload(UriInfo uri, HttpHeaders headers, InputStream is) {
+        String[] endpointDetails = extractPath(uri.getPath());
+        return gatewayClient.fileUpload(
+                buildRoute(gatewayConfig.routes()
+                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
+                uri.getQueryParameters(), headers.getHeaderString("filename"), is);
     }
 
     public Uni<Object> putRoute(UriInfo uri, HttpHeaders headers, Object body) {
