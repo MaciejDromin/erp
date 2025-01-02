@@ -19,6 +19,9 @@ dependencies {
     implementation 'io.quarkus:quarkus-rest-client-jackson'
     implementation 'io.quarkus:quarkus-mongodb-panache'
 
+    // WS
+    implementation 'io.quarkus:quarkus-websockets'
+
     // COMMONS
     implementation 'com.soitio:commons:1.0-SNAPSHOT'
 
