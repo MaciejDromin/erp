@@ -65,6 +65,14 @@ reports-service: reports-client soitio-commons
 		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/reports-service:latest .
 
+gateway: soitio-commons
+	cd apps/api-gateway; ./gradlew build \
+		-Dquarkus.native.enabled=true \
+		-Dquarkus.native.container-build=true \
+		-Dquarkus.package.jar.enabled=false \
+		-Dquarkus.profile=docker; \
+		podman build -f src/main/docker/Dockerfile.native -t erp/api-gateway:latest .
+
 all: analytics finances erp-fe inventory purchase-scanner \
 	dashboard widgets-finances reports-generator \
 	reports-service
@@ -78,6 +86,7 @@ clean:
 	cd apps/finances; ./gradlew clean
 	cd apps/inventory; ./gradlew clean
 	cd apps/dashboard; ./gradlew clean
+	cd apps/api-gateway; ./gradlew clean
 	cd apps/widgets-finances; ./gradlew clean
 	cd apps/reports; ./gradlew clean
 	cd apps/reports-service; ./gradlew clean

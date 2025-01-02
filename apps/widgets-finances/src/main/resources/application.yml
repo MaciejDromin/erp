@@ -14,43 +14,43 @@ quarkus:
 widgets:
   widget-definitions:
     - name: Total Net Worth
-      datasource: http://localhost:8080/widgets/total-net-worth
+      datasource: http://localhost:8070/api/widgets-finances/widgets/total-net-worth
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN001
     - name: Monthly Balance
-      datasource: http://localhost:8080/widgets/monthly-balance
+      datasource: http://localhost:8070/api/widgets-finances/widgets/monthly-balance
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN002
     - name: Monthly Balance Diff
-      datasource: http://localhost:8080/widgets/monthly-balance-diff
+      datasource: http://localhost:8070/api/widgets-finances/widgets/monthly-balance-diff
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN003
       available-filters:
         - name: Year
-          datasource: http://localhost:8080/filters/balance/year
+          datasource: http://localhost:8070/api/widgets-finances/filters/balance/year
           mandatory: true
           filter-type: SELECT
         - name: Month
           depends-on:
             - Year
-          datasource: http://localhost:8080/filters/balance/month
+          datasource: http://localhost:8070/api/widgets-finances/filters/balance/month
           mandatory: true
           filter-type: SELECT
     - name: Most Expensive Item Per Category
-      datasource: http://localhost:8080/widgets/most-expensive-item-per-category
+      datasource: http://localhost:8070/api/widgets-finances/widgets/most-expensive-item-per-category
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN004
     - name: Value Per Category
-      datasource: http://localhost:8080/widgets/value-per-category
+      datasource: http://localhost:8070/api/widgets-finances/widgets/value-per-category
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN005
     - name: Remaining Planned Expenses For This Month
-      datasource: http://localhost:8080/widgets/remaining-planned-expenses
+      datasource: http://localhost:8070/api/widgets-finances/widgets/remaining-planned-expenses
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN006

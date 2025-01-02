@@ -20,3 +20,12 @@ gateway:
     PURCHASE-SCANNER:
       hostname: localhost
       port: 8100
+    WIDGETS_FINANCES:
+      hostname: localhost
+      port: 8080
+    DASHBOARD:
+      hostname: localhost
+      port: 8083
+    REPORTS:
+      hostname: localhost
+      port: 8086
