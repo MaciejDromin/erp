@@ -15,11 +15,11 @@ dependencies {
     implementation 'io.quarkus:quarkus-config-yaml'
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-mongodb-panache'
+    implementation 'io.quarkus:quarkus-smallrye-health'
 
     implementation 'com.soitio:commons:1.0-SNAPSHOT'
 
     // SELF DISCOVERY
-    implementation 'com.soitio.selfregister:self-register-quarkus:1.0.0-SNAPSHOT'
     implementation 'io.quarkus:quarkus-rest-client-reactive-jackson'
 
     testImplementation 'io.quarkus:quarkus-junit5'

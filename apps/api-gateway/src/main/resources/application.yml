@@ -1,0 +1,31 @@
+quarkus:
+  log:
+    level: INFO
+  http:
+    port: 8070
+    limits:
+      max-body-size: 100000000
+  mongodb:
+    connection-string: mongodb://localhost:27017
+    database: gateway
+
+gateway:
+  routes:
+    FINANCES:
+      hostname: localhost
+      port: 8084
+    INVENTORY:
+      hostname: localhost
+      port: 8082
+    PURCHASE-SCANNER:
+      hostname: localhost
+      port: 8100
+    WIDGETS_FINANCES:
+      hostname: localhost
+      port: 8080
+    DASHBOARD:
+      hostname: localhost
+      port: 8083
+    REPORTS:
+      hostname: localhost
+      port: 8086

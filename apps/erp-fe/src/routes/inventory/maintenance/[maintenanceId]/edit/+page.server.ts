@@ -1,7 +1,8 @@
 import type { PageServerLoad } from './$types'
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
-import { INVENTORY_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { INVENTORY } from '$lib/scripts/serviceKey.ts'
 import { redirect, fail } from '@sveltejs/kit'
 import {
   validate,
@@ -106,7 +107,7 @@ export const actions = {
     body.contractorId = contractor.id
 
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + `/maintenance/${body.id}`,
+      `${GATEWAY_URL}/${INVENTORY}/maintenance/${body.id}`,
       HttpMethods.PATCH,
       body
     )
@@ -116,13 +117,13 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   let maintenance = await unsecuredExternalApiRequest(
-    INVENTORY_URL + `/maintenance/${params.maintenanceId}`,
+    `${GATEWAY_URL}/${INVENTORY}/maintenance/${params.maintenanceId}`,
     HttpMethods.GET
   )
   maintenance = await maintenance.json()
   const partsIds = maintenance.parts.map((p) => p.id)
   let partsData = await unsecuredExternalApiRequest(
-    INVENTORY_URL + `/parts?partIds=${partsIds.join(',')}&size=500`,
+    `${GATEWAY_URL}/${INVENTORY}/parts?partIds=${partsIds.join(',')}&size=500`,
     HttpMethods.GET
   )
   return {

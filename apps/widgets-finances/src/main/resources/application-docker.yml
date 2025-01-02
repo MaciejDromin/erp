@@ -2,8 +2,6 @@ quarkus:
   http:
     port: 8080
   rest-client:
-    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
-      url: http://erp-consul:8500
     "com.soitio.widgets.startup.runtime.client.DashboardClient":
       url: http://dashboard:8080
     "com.soitio.widgets.finances.inventory.client.InventoryClient":
@@ -15,51 +13,46 @@ quarkus:
   shutdown:
     timeout: PT5S
 
-service-discovery:
-  service-name: widgets-finances
-  host: widgets-finances
-  port: 8080
-
 widgets:
   widget-definitions:
     - name: Total Net Worth
-      datasource: http://widgets-finances:8080/widgets/total-net-worth
+      datasource: http://gateway:8080/api/widgets-finances/widgets/total-net-worth
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN001
     - name: Monthly Balance
-      datasource: http://widgets-finances:8080/widgets/monthly-balance
+      datasource: http://gateway:8080/api/widgets-finances/widgets/monthly-balance
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN002
     - name: Monthly Balance Diff
-      datasource: http://widgets-finances:8080/widgets/monthly-balance-diff
+      datasource: http://gateway:8080/api/widgets-finances/widgets/monthly-balance-diff
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN003
       available-filters:
         - name: Year
-          datasource: http://widgets-finances:8080/filters/balance/year
+          datasource: http://gateway:8080/api/widgets-finances/filters/balance/year
           mandatory: true
           filter-type: SELECT
         - name: Month
           depends-on:
             - Year
-          datasource: http://widgets-finances:8080/filters/balance/month
+          datasource: http://gateway:8080/api/widgets-finances/filters/balance/month
           mandatory: true
           filter-type: SELECT
     - name: Most Expensive Item Per Category
-      datasource: http://widgets-finances:8080/widgets/most-expensive-item-per-category
+      datasource: http://gateway:8080/api/widgets-finances/widgets/most-expensive-item-per-category
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN004
     - name: Value Per Category
-      datasource: http://widgets-finances:8080/widgets/value-per-category
+      datasource: http://gateway:8080/api/widgets-finances/widgets/value-per-category
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN005
     - name: Remaining Planned Expenses For This Month
-      datasource: http://widgets-finances:8080/widgets/remaining-planned-expenses
+      datasource: http://gateway:8080/api/widgets-finances/widgets/remaining-planned-expenses
       widget-domain: FINANCES
       version: v1.0
       unique-code: FIN006

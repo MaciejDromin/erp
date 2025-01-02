@@ -1,7 +1,8 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
-import { FINANCES_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { FINANCES } from '$lib/scripts/serviceKey.ts'
 import { redirect, fail } from '@sveltejs/kit'
 import { validate, nonEmpty, lbXnY } from '$lib/scripts/validator.ts'
 
@@ -30,7 +31,7 @@ export const actions = {
       })
     }
     await unsecuredExternalApiRequest(
-      FINANCES_URL + '/operation-category',
+      `${GATEWAY_URL}/${FINANCES}/operation-category`,
       HttpMethods.POST,
       body
     )

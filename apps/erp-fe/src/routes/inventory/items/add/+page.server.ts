@@ -1,7 +1,8 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
-import { INVENTORY_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { INVENTORY } from '$lib/scripts/serviceKey.ts'
 import { redirect, fail } from '@sveltejs/kit'
 import {
   validate,
@@ -87,7 +88,7 @@ export const actions = {
     body.categoryIds = [category.id]
 
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + '/items',
+      `${GATEWAY_URL}/${INVENTORY}/items`,
       HttpMethods.POST,
       body
     )

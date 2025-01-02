@@ -1,11 +1,12 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { RequestHandler } from './$types'
-import { DASHBOARD_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { DASHBOARD } from '$lib/scripts/serviceKey.ts'
 
 export const POST = (async ({ request, params }) => {
   const ret = await unsecuredExternalApiRequest(
-    DASHBOARD_URL + `/dashboards/${params.id}/widgets`,
+    `${GATEWAY_URL}/${DASHBOARD}/dashboards/${params.id}/widgets`,
     HttpMethods.POST,
     await request.json()
   )

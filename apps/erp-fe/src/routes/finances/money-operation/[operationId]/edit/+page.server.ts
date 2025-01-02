@@ -2,7 +2,8 @@ import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import type { PageServerLoad } from './$types'
-import { FINANCES_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { FINANCES } from '$lib/scripts/serviceKey.ts'
 import { redirect, fail } from '@sveltejs/kit'
 import {
   validate,
@@ -114,7 +115,7 @@ export const actions = {
     body.operationCategory = { id: category.id }
 
     await unsecuredExternalApiRequest(
-      FINANCES_URL + `/money-operation/${body.id}`,
+      `${GATEWAY_URL}/${FINANCES}/money-operation/${body.id}`,
       HttpMethods.PATCH,
       body
     )
@@ -124,7 +125,7 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const operation = await unsecuredExternalApiRequest(
-    FINANCES_URL + `/money-operation/${params.operationId}`,
+    `${GATEWAY_URL}/${FINANCES}/money-operation/${params.operationId}`,
     HttpMethods.GET
   )
   return {

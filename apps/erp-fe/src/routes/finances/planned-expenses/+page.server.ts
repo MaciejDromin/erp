@@ -2,7 +2,8 @@ import { MoneyOperationType } from '$lib/finances/types/financialTypes'
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
-import { FINANCES_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { FINANCES } from '$lib/scripts/serviceKey.ts'
 import { redirect } from '@sveltejs/kit'
 
 export const actions = {
@@ -11,7 +12,7 @@ export const actions = {
     const expensesArray = JSON.parse(data.get('plannedExpensesArr'))
     for (const val of expensesArray) {
       await unsecuredExternalApiRequest(
-        FINANCES_URL + `/planned-expenses/${val.id}/abandon`,
+        `${GATEWAY_URL}/${FINANCES}/planned-expenses/${val.id}/abandon`,
         HttpMethods.PATCH
       )
     }
@@ -24,7 +25,7 @@ export const actions = {
         actualAmount: val,
       }
       await unsecuredExternalApiRequest(
-        FINANCES_URL + `/planned-expenses/${key}/complete`,
+        `${GATEWAY_URL}/${FINANCES}/planned-expenses/${key}/complete`,
         HttpMethods.PATCH,
         body
       )

@@ -1,0 +1,31 @@
+quarkus:
+  log:
+    level: INFO
+  http:
+    port: 8080
+    limits:
+      max-body-size: 100000000
+  mongodb:
+    connection-string: mongodb://erp-mongodb:27017
+    database: gateway
+
+gateway:
+  routes:
+    FINANCES:
+      hostname: finances
+      port: 8080
+    INVENTORY:
+      hostname: inventory
+      port: 8080
+    PURCHASE-SCANNER:
+      hostname: purchase-scanner
+      port: 80
+    WIDGETS_FINANCES:
+      hostname: widgets-finances
+      port: 8080
+    DASHBOARD:
+      hostname: dashboard
+      port: 8080
+    REPORTS:
+      hostname: reports-service
+      port: 8080

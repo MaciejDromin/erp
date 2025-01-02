@@ -5,14 +5,9 @@ quarkus:
     connection-string: mongodb://localhost:27017
     database: inventory
   rest-client:
-    consul-api:
-      url: http://localhost:8500/
+    gateway-api:
+      url: http://localhost:8070/
       scope: jakarta.inject.Singleton
-
-service-discovery:
-  service-name: inventory
-  host: localhost
-  port: 8082
 
 soitio:
   service: "http://localhost:8082"

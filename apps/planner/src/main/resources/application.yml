@@ -4,12 +4,3 @@ quarkus:
   mongodb:
     connection-string: mongodb://localhost:27017
     database: planner
-
-  rest-client:
-    "com.soitio.selfregister.self.register.quarkus.runtime.client.RegistrationClient":
-      url: http://localhost:8080
-
-service-discovery:
-  service-name: planner
-  host: localhost
-  port: 8084

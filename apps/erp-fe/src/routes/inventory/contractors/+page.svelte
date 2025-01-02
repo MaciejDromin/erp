@@ -18,7 +18,7 @@
       disabled: false,
     },
     delete: {
-      endpoint: '/contractors',
+      endpoint: '/inventory/contractors',
       keys: ['inventory', 'contractors'],
     },
     service: Services.INVENTORY,

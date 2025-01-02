@@ -1,7 +1,7 @@
 package com.soitio.commons.dependency;
 
-import com.soitio.commons.dependency.client.ConsulStoreClient;
 import com.soitio.commons.dependency.client.DependencyCheckClient;
+import com.soitio.commons.dependency.client.DependencyKeyClient;
 import com.soitio.commons.dependency.model.Action;
 import com.soitio.commons.dependency.model.DependencyCheckContext;
 import com.soitio.commons.dependency.model.DependencyCheckRequest;
@@ -16,12 +16,12 @@ import java.util.stream.Stream;
 
 public abstract class DependencyCheckRequesterBaseImpl implements DependencyCheckRequester {
 
-    private final ConsulStoreClient consulStoreClient;
+    private final DependencyKeyClient dependencyKeyClient;
     private final DependencyCheckClient dependencyCheckClient;
 
-    protected DependencyCheckRequesterBaseImpl(ConsulStoreClient consulStoreClient,
+    protected DependencyCheckRequesterBaseImpl(DependencyKeyClient dependencyKeyClient,
                                                DependencyCheckClient dependencyCheckClient) {
-        this.consulStoreClient = consulStoreClient;
+        this.dependencyKeyClient = dependencyKeyClient;
         this.dependencyCheckClient = dependencyCheckClient;
     }
 
@@ -48,8 +48,7 @@ public abstract class DependencyCheckRequesterBaseImpl implements DependencyChec
 
     private Set<String> getServices(Dependent dependent) {
         try {
-            return DependencyUtils.decodeBase64(consulStoreClient.getCurrentValue(dependent.getName())
-                    .getFirst().getValue());
+            return dependencyKeyClient.getCurrentValue(dependent.getName()).value();
         } catch (Exception e) {
             // no key found
         }

@@ -1,7 +1,8 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
-import { PLANNER_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { PLANNER } from '$lib/scripts/serviceKey.ts'
 
 export const actions = {
   default: async ({ cookies, request }) => {
@@ -17,7 +18,7 @@ export const actions = {
       contractorContact: data.get('contractorContact'),
     }
     await unsecuredExternalApiRequest(
-      PLANNER_URL + '/planner/labours',
+      `${GATEWAY_URL}/${PLANNER}/labours`,
       HttpMethods.POST,
       body
     )

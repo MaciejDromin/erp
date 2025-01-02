@@ -4,7 +4,7 @@ import com.soitio.commons.dependency.DependencyCheckMap;
 import com.soitio.commons.dependency.DependencyCheckService;
 import com.soitio.commons.dependency.DependencyConfig;
 import com.soitio.commons.dependency.DependencyInitializerBaseService;
-import com.soitio.commons.dependency.client.ConsulStoreClient;
+import com.soitio.commons.dependency.client.DependencyKeyClient;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class DependencyInitializerImpl extends DependencyInitializerBaseService {
 
-    protected DependencyInitializerImpl(ConsulStoreClient consulStoreClient,
+    protected DependencyInitializerImpl(DependencyKeyClient dependencyKeyClient,
                                         DependencyConfig dependencyConfig,
                                         List<DependencyCheckService> dependencyCheckServices) {
-        super(consulStoreClient, dependencyConfig, dependencyCheckServices);
+        super(dependencyKeyClient, dependencyConfig, dependencyCheckServices);
     }
 
     @Override

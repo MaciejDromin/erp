@@ -5,11 +5,16 @@ from message_publisher import publish
 from fastapi import UploadFile
 import strategy_provider
 import json
+import asyncio
 
 provider = strategy_provider.StrategyProvider()
 
-async def handle_uploaded_receipts(filename, file_content):
-    saved_file = await save_locally(filename, file_content)
+async def handle_uploaded_receipts(filename, request):
+    saved_file = await save_locally(filename, request)
+    asyncio.ensure_future(process_file(saved_file))
+
+
+async def process_file(saved_file):
     archive_receipts(saved_file)
     receipts = unpack_archive(saved_file)
     grouped = group_by_extension(receipts)
@@ -22,4 +27,5 @@ async def handle_uploaded_receipts(filename, file_content):
     await publish("scanned-receipts", filtered_receipts)
 
     clean_directories()
+
 

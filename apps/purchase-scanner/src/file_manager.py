@@ -6,10 +6,11 @@ import shutil
 
 TMP_DIRECTORY = './tmp/'
 
-async def save_locally(filename, file_content):
+async def save_locally(filename, request):
     local_name = TMP_DIRECTORY + filename
     async with aiofiles.open(local_name, 'wb') as out_file:
-        await out_file.write(file_content)
+        async for chunk in request.stream():
+            await out_file.write(chunk)
     return local_name
 
 def unpack_archive(filename):

@@ -1,11 +1,12 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { RequestHandler } from './$types'
-import { INVENTORY_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { INVENTORY } from '$lib/scripts/serviceKey.ts'
 
 export const GET = (async (event) => {
   const ret = await unsecuredExternalApiRequest(
-    INVENTORY_URL + '/items' + event.url.search,
+    `${GATEWAY_URL}/${INVENTORY}/items${event.url.search}`,
     HttpMethods.GET
   )
   return new Response(ret.body, { status: 200 })

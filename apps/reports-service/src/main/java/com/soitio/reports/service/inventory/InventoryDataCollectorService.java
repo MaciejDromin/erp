@@ -6,6 +6,7 @@ import com.soitio.reports.service.inventory.domain.InventoryItemDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class InventoryDataCollectorService {
@@ -17,6 +18,6 @@ public class InventoryDataCollectorService {
     }
 
     public List<InventoryItemDto> getAllItems() {
-        return PageableDataFetcher.fetchData(inventoryClient::getAllItems);
+        return PageableDataFetcher.fetchData(inventoryClient::getAllItems, Map.of());
     }
 }

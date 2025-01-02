@@ -1,12 +1,13 @@
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { RequestHandler } from './$types'
-import { REPORTS_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { REPORTS } from '$lib/scripts/serviceKey.ts'
 
 export const POST = (async ({ request }) => {
   const data = await request.json()
   const ret = await unsecuredExternalApiRequest(
-    `${REPORTS_URL}/reports/${data.endpoint}`,
+    `${GATEWAY_URL}/${REPORTS}/reports/${data.endpoint}`,
     HttpMethods.POST,
     {
       name: data.name,

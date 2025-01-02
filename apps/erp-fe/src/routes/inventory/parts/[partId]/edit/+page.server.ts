@@ -1,7 +1,8 @@
 import type { PageServerLoad } from './$types'
 import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
-import { INVENTORY_URL } from '$lib/scripts/urls'
+import { GATEWAY_URL } from '$lib/scripts/urls'
+import { INVENTORY } from '$lib/scripts/serviceKey.ts'
 import { redirect, fail } from '@sveltejs/kit'
 import { validate, nonEmpty, lbXnY } from '$lib/scripts/validator.ts'
 
@@ -71,7 +72,7 @@ export const actions = {
     body.manufacturerId = manufacturer.id
 
     await unsecuredExternalApiRequest(
-      INVENTORY_URL + `/parts/${body.id}`,
+      `${GATEWAY_URL}/${INVENTORY}/parts/${body.id}`,
       HttpMethods.PATCH,
       body
     )
@@ -81,7 +82,7 @@ export const actions = {
 
 export const load = (async ({ params }) => {
   const part = await unsecuredExternalApiRequest(
-    INVENTORY_URL + `/parts/${params.partId}`,
+    `${GATEWAY_URL}/${INVENTORY}/parts/${params.partId}`,
     HttpMethods.GET
   )
   return {
