@@ -31,7 +31,6 @@ public class WsGateway {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("service") String service) {
-        log.info("Hey {}, {}", service, session.getQueryString());
         wsService.createConnection(session, service, session.getQueryString());
     }
 
@@ -48,16 +47,6 @@ public class WsGateway {
     @OnMessage
     public void onMessage(Session session, String message, @PathParam("service") String service) {
         wsService.sendDownstream(service, message);
-    }
-
-    private void broadcast(String message) {
-//        sessions.values().forEach(s -> {
-//            s.getAsyncRemote().sendObject(message, result ->  {
-//                if (result.getException() != null) {
-//                    System.out.println("Unable to send message: " + result.getException());
-//                }
-//            });
-//        });
     }
 
 }

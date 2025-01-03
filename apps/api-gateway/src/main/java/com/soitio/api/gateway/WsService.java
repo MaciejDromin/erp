@@ -13,6 +13,7 @@ import java.net.URI;
 @ApplicationScoped
 public class WsService {
 
+    private static final int PATH_END_INDEX = 5;
     private final GatewayConfig gatewayConfig;
     private final WsContext context;
 
@@ -34,7 +35,7 @@ public class WsService {
     }
 
     private String extractPath(String query) {
-        return query.substring(5);
+        return query.substring(PATH_END_INDEX);
     }
 
     private String buildRoute(RouteDetails route, String endpoint) {
