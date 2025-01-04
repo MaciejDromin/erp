@@ -1,4 +1,4 @@
-package com.soitio.api.gateway.config;
+package com.soitio.api.gateway.auth.config;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.IndexOptions;
@@ -9,19 +9,19 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 
 @ApplicationScoped
-public class MongoCollectionConfig {
+public class AuthMongoCollectionConfig {
 
     private final MongoClient client;
 
-    public MongoCollectionConfig(@MongoClientName("gateway") MongoClient client) {
+    public AuthMongoCollectionConfig(@MongoClientName("auth") MongoClient client) {
         this.client = client;
     }
 
     public void onStartup(@Observes StartupEvent event) {
-        client.getDatabase("gateway")
-                .getCollection("ConfigResource")
-                .createIndex(Indexes.ascending("key"),
-                        new IndexOptions().name("uniqueKey").unique(true));
+        client.getDatabase("auth")
+                .getCollection("OrgResource")
+                .createIndex(Indexes.ascending("orgId"),
+                        new IndexOptions().name("uniqueOrgId").unique(true));
     }
 
 }

@@ -1,4 +1,4 @@
-package com.soitio.api.gateway.domain;
+package com.soitio.api.gateway.auth.domain;
 
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
+import java.util.Set;
 
-@MongoEntity(clientName = "gateway", database = "gateway")
+@MongoEntity(clientName = "auth", database = "auth")
 @Builder
 @Getter
 @Setter
@@ -18,10 +19,14 @@ import org.bson.types.ObjectId;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class ConfigResource {
+public class UserResource {
 
     private ObjectId id;
-    private String key;
-    private ValueWrapper value;
+    private String username;
+    private String email;
+    private String password;
+//    private Set<Role> roles;
+    private String currentOrgId;
+    private Set<String> orgs;
 
 }

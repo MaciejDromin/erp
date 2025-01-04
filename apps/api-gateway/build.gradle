@@ -22,6 +22,10 @@ dependencies {
     // WS
     implementation 'io.quarkus:quarkus-websockets'
 
+    // GRPC
+    implementation 'io.quarkus:quarkus-grpc'
+    implementation 'com.soitio:auth-client:1.0-SNAPSHOT'
+
     // COMMONS
     implementation 'com.soitio:commons:1.0-SNAPSHOT'
 

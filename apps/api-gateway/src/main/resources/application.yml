@@ -6,8 +6,19 @@ quarkus:
     limits:
       max-body-size: 100000000
   mongodb:
-    connection-string: mongodb://localhost:27017
-    database: gateway
+    gateway:
+      connection-string: mongodb://localhost:27017
+      database: gateway
+    auth:
+      connection-string: mongodb://localhost:27017
+      database: auth
+  grpc:
+    server:
+      use-separate-server: false
+
+auth-client:
+  host: localhost
+  port: 8070
 
 gateway:
   routes:
