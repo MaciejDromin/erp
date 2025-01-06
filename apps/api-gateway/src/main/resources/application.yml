@@ -13,6 +13,7 @@ quarkus:
     clients:
       authService:
         host: localhost
+        port: 8070
   generate-code:
     grpc:
       scan-for-proto: com.soitio:auth-client

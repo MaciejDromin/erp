@@ -4,6 +4,7 @@ import com.soitio.api.gateway.client.GatewayClient;
 import com.soitio.api.gateway.config.RouteDetails;
 import com.soitio.api.gateway.config.GatewayConfig;
 import com.soitio.auth.client.AuthService;
+import com.soitio.auth.client.TokenRequest;
 import com.soitio.commons.models.commons.ServiceKey;
 import io.quarkus.grpc.GrpcClient;
 import io.smallrye.mutiny.Uni;
@@ -20,7 +21,7 @@ public class GatewayService {
     private final GatewayClient gatewayClient;
     private final GatewayConfig gatewayConfig;
 
-    private AuthService authService;
+    private final AuthService authService;
 
     public GatewayService(@RestClient GatewayClient gatewayClient,
                           GatewayConfig gatewayConfig,
@@ -32,14 +33,14 @@ public class GatewayService {
 
     public Uni<Object> getRoute(UriInfo uriInfo, HttpHeaders headers) {
         String[] endpointDetails = extractPath(uriInfo.getPath());
-//        return authService.authenticate(null).onItem().transform(ar -> gatewayClient.getRoute(
-//                buildRoute(gatewayConfig.routes()
-//                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-//                uriInfo.getQueryParameters()));
-        return gatewayClient.getRoute(
+        return authService.validate(TokenRequest.newBuilder().build()).onItem().transformToUni(ar -> gatewayClient.getRoute(
                 buildRoute(gatewayConfig.routes()
                         .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-                uriInfo.getQueryParameters());
+                uriInfo.getQueryParameters()));
+//        return gatewayClient.getRoute(
+//                buildRoute(gatewayConfig.routes()
+//                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
+//                uriInfo.getQueryParameters());
     }
 
     public Uni<Object> postRoute(UriInfo uri, HttpHeaders headers, Object body) {

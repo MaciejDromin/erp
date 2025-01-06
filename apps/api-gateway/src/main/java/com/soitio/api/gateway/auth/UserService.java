@@ -11,9 +11,13 @@ import com.soitio.auth.client.UserOrgRequest;
 import com.soitio.auth.client.UserOrgResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final OrgService orgService;
@@ -28,7 +32,8 @@ public class UserService {
     }
 
     public Uni<Empty> validate(TokenRequest request) {
-        return null;
+        log.info("Hello! {}", request);
+        return Uni.createFrom().item(Empty.newBuilder().build());
     }
 
     public Uni<UserOrgResponse> getOrgsForUser(UserOrgRequest request) {

@@ -13,9 +13,10 @@ quarkus:
     clients:
       authService:
         host: gateway
-    generate-code:
-      grpc:
-        scan-for-proto: com.soitio:auth-client
+        port: 8080
+  generate-code:
+    grpc:
+      scan-for-proto: com.soitio:auth-client
 
 gateway:
   routes:
