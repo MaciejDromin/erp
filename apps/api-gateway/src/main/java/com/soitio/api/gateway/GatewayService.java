@@ -3,8 +3,9 @@ package com.soitio.api.gateway;
 import com.soitio.api.gateway.client.GatewayClient;
 import com.soitio.api.gateway.config.RouteDetails;
 import com.soitio.api.gateway.config.GatewayConfig;
-import com.soitio.auth.client.GatewayAuthClient;
+import com.soitio.auth.client.AuthService;
 import com.soitio.commons.models.commons.ServiceKey;
+import io.quarkus.grpc.GrpcClient;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.HttpHeaders;
@@ -18,19 +19,23 @@ public class GatewayService {
     private static final int SERVICE_KEY_START_INDEX = 4;
     private final GatewayClient gatewayClient;
     private final GatewayConfig gatewayConfig;
-    private final GatewayAuthClient gatewayAuthClient;
+
+    private AuthService authService;
 
     public GatewayService(@RestClient GatewayClient gatewayClient,
                           GatewayConfig gatewayConfig,
-                          GatewayAuthClient gatewayAuthClient) {
+                          @GrpcClient AuthService authService) {
         this.gatewayClient = gatewayClient;
         this.gatewayConfig = gatewayConfig;
-        this.gatewayAuthClient = gatewayAuthClient;
+        this.authService = authService;
     }
 
     public Uni<Object> getRoute(UriInfo uriInfo, HttpHeaders headers) {
         String[] endpointDetails = extractPath(uriInfo.getPath());
-//        gatewayAuthClient.authenticate();
+//        return authService.authenticate(null).onItem().transform(ar -> gatewayClient.getRoute(
+//                buildRoute(gatewayConfig.routes()
+//                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
+//                uriInfo.getQueryParameters()));
         return gatewayClient.getRoute(
                 buildRoute(gatewayConfig.routes()
                         .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),

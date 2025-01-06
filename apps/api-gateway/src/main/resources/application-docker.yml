@@ -6,19 +6,16 @@ quarkus:
     limits:
       max-body-size: 100000000
   mongodb:
-    gateway:
-      connection-string: mongodb://erp-mongodb:27017
-      database: gateway
-    auth:
-      connection-string: mongodb://erp-mongodb:27017
-      database: auth
+    connection-string: mongodb://erp-mongodb:27017
   grpc:
     server:
       use-separate-server: false
-
-auth-client:
-  host: gateway
-  port: 8080
+    clients:
+      authService:
+        host: gateway
+    generate-code:
+      grpc:
+        scan-for-proto: com.soitio:auth-client
 
 gateway:
   routes:

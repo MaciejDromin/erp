@@ -11,7 +11,7 @@ import lombok.ToString;
 import org.bson.types.ObjectId;
 import java.util.Set;
 
-@MongoEntity(clientName = "auth", database = "auth")
+@MongoEntity(database = "auth")
 @Builder
 @Getter
 @Setter

@@ -10,7 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
 
-@MongoEntity(clientName = "gateway", database = "gateway")
+@MongoEntity(database = "gateway")
 @Builder
 @Getter
 @Setter

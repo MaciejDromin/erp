@@ -13,7 +13,7 @@ public class AuthMongoCollectionConfig {
 
     private final MongoClient client;
 
-    public AuthMongoCollectionConfig(@MongoClientName("auth") MongoClient client) {
+    public AuthMongoCollectionConfig(MongoClient client) {
         this.client = client;
     }
 
