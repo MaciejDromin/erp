@@ -9,7 +9,7 @@ package gateway.auth;
 
 service AuthService {
     rpc Authenticate (AuthRequest) returns (AuthResponse) {}
-    rpc Validate (TokenRequest) returns (google.protobuf.Empty) {}
+    rpc Validate (TokenRequest) returns (ValidationResponse) {}
     rpc GetOrgsForUser (UserOrgRequest) returns (UserOrgResponse) {}
     rpc UpdateCurrentlyUsedOrg (UpdateCurrentOrgRequest) returns (google.protobuf.Empty) {}
     rpc refreshToken (RefreshTokenRequest) returns (AuthResponse) {}
@@ -29,7 +29,10 @@ message AuthResponse {
 
 message TokenRequest {
     string authToken = 1;
-    string orgId = 2;
+}
+
+message ValidationResponse {
+    string orgId = 1;
 }
 
 message UserOrgRequest {

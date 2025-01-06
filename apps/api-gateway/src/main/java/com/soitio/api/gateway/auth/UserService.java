@@ -9,6 +9,7 @@ import com.soitio.auth.client.TokenRequest;
 import com.soitio.auth.client.UpdateCurrentOrgRequest;
 import com.soitio.auth.client.UserOrgRequest;
 import com.soitio.auth.client.UserOrgResponse;
+import com.soitio.auth.client.ValidationResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.slf4j.Logger;
@@ -31,9 +32,9 @@ public class UserService {
         return null;
     }
 
-    public Uni<Empty> validate(TokenRequest request) {
+    public Uni<ValidationResponse> validate(TokenRequest request) {
         log.info("Hello! {}", request);
-        return Uni.createFrom().item(Empty.newBuilder().build());
+        return Uni.createFrom().item(ValidationResponse.newBuilder().build());
     }
 
     public Uni<UserOrgResponse> getOrgsForUser(UserOrgRequest request) {

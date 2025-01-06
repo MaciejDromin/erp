@@ -9,6 +9,7 @@ import com.soitio.auth.client.TokenRequest;
 import com.soitio.auth.client.UpdateCurrentOrgRequest;
 import com.soitio.auth.client.UserOrgRequest;
 import com.soitio.auth.client.UserOrgResponse;
+import com.soitio.auth.client.ValidationResponse;
 import io.quarkus.grpc.GrpcService;
 import io.smallrye.mutiny.Uni;
 
@@ -27,7 +28,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Uni<Empty> validate(TokenRequest request) {
+    public Uni<ValidationResponse> validate(TokenRequest request) {
         return userService.validate(request);
     }
 
