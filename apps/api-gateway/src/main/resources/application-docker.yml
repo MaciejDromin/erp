@@ -6,6 +6,8 @@ quarkus:
     limits:
       max-body-size: 100000000
   mongodb:
+#    TODO: After it gets fixed, can create multiple reactive clients
+#    https://github.com/quarkusio/quarkus/issues/45433
     connection-string: mongodb://erp-mongodb:27017
   grpc:
     server:
@@ -17,6 +19,28 @@ quarkus:
   generate-code:
     grpc:
       scan-for-proto: com.soitio:auth-client
+  index-dependency:
+    smallrye-jwt:
+      group-id: io.smallrye
+      artifact-id: smallrye-jwt
+
+smallrye:
+  jwt:
+    sign:
+      key:
+          ocation: <private_key_location>
+    encrypt:
+      key:
+        location: <public_key_location>
+    new-token:
+      issuer: https://soitio.com
+
+mp:
+  jwt:
+    verify:
+      publickey:
+        location: <public_key_location>
+      issuer: https://soitio.com
 
 gateway:
   routes:

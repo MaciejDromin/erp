@@ -7,12 +7,15 @@ import com.soitio.auth.client.AuthService;
 import com.soitio.auth.client.TokenRequest;
 import com.soitio.commons.models.commons.ServiceKey;
 import io.quarkus.grpc.GrpcClient;
+import io.quarkus.security.UnauthorizedException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.UriInfo;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.io.InputStream;
+import java.util.function.BiFunction;
 
 @ApplicationScoped
 public class GatewayService {
@@ -32,55 +35,45 @@ public class GatewayService {
     }
 
     public Uni<Object> getRoute(UriInfo uriInfo, HttpHeaders headers) {
-        String[] endpointDetails = extractPath(uriInfo.getPath());
-        return authService.validate(TokenRequest.newBuilder().build()).onItem().transformToUni(ar -> gatewayClient.getRoute(
-                buildRoute(gatewayConfig.routes()
-                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-                uriInfo.getQueryParameters()));
-//        return gatewayClient.getRoute(
-//                buildRoute(gatewayConfig.routes()
-//                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-//                uriInfo.getQueryParameters());
+        return authenticateAndExecute(uriInfo, headers, gatewayClient::getRoute);
     }
 
     public Uni<Object> postRoute(UriInfo uri, HttpHeaders headers, Object body) {
-        String[] endpointDetails = extractPath(uri.getPath());
-        return gatewayClient.postRoute(
-                buildRoute(gatewayConfig.routes()
-                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-                uri.getQueryParameters(), body);
+        return authenticateAndExecute(uri, headers, (s, m, o) -> gatewayClient.postRoute(s, m, o, body));
     }
 
     public Uni<Object> fileUpload(UriInfo uri, HttpHeaders headers, InputStream is) {
-        String[] endpointDetails = extractPath(uri.getPath());
-        return gatewayClient.fileUpload(
-                buildRoute(gatewayConfig.routes()
-                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-                uri.getQueryParameters(), headers.getHeaderString("filename"), is);
+        return authenticateAndExecute(uri, headers,
+                (s, m, o) -> gatewayClient.fileUpload(s, m, headers.getHeaderString("filename"), o, is));
     }
 
     public Uni<Object> putRoute(UriInfo uri, HttpHeaders headers, Object body) {
-        String[] endpointDetails = extractPath(uri.getPath());
-        return gatewayClient.putRoute(
-                buildRoute(gatewayConfig.routes()
-                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-                uri.getQueryParameters(), body);
+        return authenticateAndExecute(uri, headers, (s, m, o) -> gatewayClient.putRoute(s, m, o, body));
     }
 
     public Uni<Object> patchRoute(UriInfo uri, HttpHeaders headers, Object body) {
-        String[] endpointDetails = extractPath(uri.getPath());
-        return gatewayClient.patchRoute(
-                buildRoute(gatewayConfig.routes()
-                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-                uri.getQueryParameters(), body);
+        return authenticateAndExecute(uri, headers, (s, m, o) -> gatewayClient.patchRoute(s, m, o, body));
     }
 
     public Uni<Object> deleteRoute(UriInfo uri, HttpHeaders headers, Object body) {
-        String[] endpointDetails = extractPath(uri.getPath());
-        return gatewayClient.deleteRoute(
-                buildRoute(gatewayConfig.routes()
-                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
-                uri.getQueryParameters(), body);
+        return authenticateAndExecute(uri, headers, (s, m, o) -> gatewayClient.deleteRoute(s, m, o, body));
+    }
+
+    private Uni<Object> authenticateAndExecute(UriInfo uriInfo,
+                                               HttpHeaders headers,
+                                               TriFunction<String, MultivaluedMap<String, String>, String, Uni<Object>> httpCall) {
+        String[] endpointDetails = extractPath(uriInfo.getPath());
+        String token = headers.getHeaderString("Authorization");
+        if (token == null) return Uni.createFrom().failure(new UnauthorizedException("Missing Authorization header"));
+        TokenRequest tokenRequest = TokenRequest.newBuilder()
+                .setAuthToken(extractToken(token))
+                .build();
+        return authService.validate(tokenRequest).onItem()
+                .transformToUni(ar -> httpCall.apply(
+                        buildRoute(gatewayConfig.routes()
+                                .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
+                        uriInfo.getQueryParameters(),
+                        ar.getOrgId()));
     }
 
     private String[] extractPath(String baseUri) {
@@ -91,6 +84,10 @@ public class GatewayService {
 
     private String buildRoute(RouteDetails route, String endpoint) {
         return "http://%s:%d%s".formatted(route.hostname(), route.port(), endpoint);
+    }
+
+    private String extractToken(String token) {
+        return token.substring(7);
     }
 
 }

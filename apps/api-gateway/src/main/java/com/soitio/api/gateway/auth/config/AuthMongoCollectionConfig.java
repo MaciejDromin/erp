@@ -3,7 +3,6 @@ package com.soitio.api.gateway.auth.config;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
-import io.quarkus.mongodb.MongoClientName;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
@@ -22,6 +21,10 @@ public class AuthMongoCollectionConfig {
                 .getCollection("OrgResource")
                 .createIndex(Indexes.ascending("orgId"),
                         new IndexOptions().name("uniqueOrgId").unique(true));
+        client.getDatabase("auth")
+                .getCollection("UserResource")
+                .createIndex(Indexes.ascending("email"),
+                        new IndexOptions().name("uniqueEmail").unique(true));
     }
 
 }
