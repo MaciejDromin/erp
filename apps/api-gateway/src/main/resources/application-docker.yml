@@ -28,7 +28,7 @@ smallrye:
   jwt:
     sign:
       key:
-          ocation: <private_key_location>
+          location: <private_key_location>
     encrypt:
       key:
         location: <public_key_location>

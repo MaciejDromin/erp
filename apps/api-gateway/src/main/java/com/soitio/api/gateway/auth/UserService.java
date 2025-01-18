@@ -54,23 +54,49 @@ public class UserService {
     }
 
     public Uni<UserOrgResponse> getOrgsForUser(UserOrgRequest request) {
-        return null;
+        try {
+            JsonWebToken parsedToken = validateToken(request.getAuthToken());
+            return userRepository.findByEmail(parsedToken.getSubject()).onItem()
+                    .transform(u -> UserOrgResponse.newBuilder()
+                            .addAllOrgs(u.getOrgs())
+                            .build());
+        } catch (UnauthorizedException e) {
+            return Uni.createFrom().failure(e);
+        }
     }
 
     public Uni<Empty> updateCurrentlyUsedOrg(UpdateCurrentOrgRequest request) {
-        return null;
+        try {
+            JsonWebToken parsedToken = validateToken(request.getAuthToken());
+            return userRepository.findByEmail(parsedToken.getSubject()).onItem()
+                    .call(u -> {
+                        u.setCurrentOrgId(request.getOrgId());
+                        return userRepository.update(u);
+                    }).onItem().transform(u -> Empty.newBuilder().build());
+        } catch (UnauthorizedException e) {
+            return Uni.createFrom().failure(e);
+        }
     }
 
     public Uni<AuthResponse> refreshToken(RefreshTokenRequest request) {
-        return null;
+        try {
+            JsonWebToken parsedToken = validateToken(request.getRefreshToken());
+            return userRepository.findByEmail(parsedToken.getSubject()).onItem()
+                    .transform(u -> AuthResponse.newBuilder()
+                            .setAuthToken(buildAuthToken(u))
+                            .setRefreshToken(request.getRefreshToken())
+                            .setOrgId(u.getCurrentOrgId())
+                            .build());
+        } catch (UnauthorizedException e) {
+            return Uni.createFrom().failure(e);
+        }
     }
 
     private AuthResponse authenticateUser(UserResource userResource, String plainPassword) {
         if (BcryptUtil.matches(plainPassword, userResource.getPassword())) return AuthResponse.newBuilder()
                 .setAuthToken(buildAuthToken(userResource))
                 .setRefreshToken(buildRefreshToken(userResource))
-//                .setOrgId(userResource.getCurrentOrgId()) TODO: Only for debug
-                .setOrgId("5")
+                .setOrgId(userResource.getCurrentOrgId())
                 .build();
         throw new UnauthorizedException("Invalid email or password");
     }
@@ -81,7 +107,6 @@ public class UserService {
                 .expiresAt(now.plus(7, ChronoUnit.DAYS))
                 .audience(userResource.getUsername())
                 .issuedAt(now)
-//                .issuer("soitio.com")
                 .subject(userResource.getEmail())
                 // TODO: Roles?
                 .sign();
@@ -93,27 +118,34 @@ public class UserService {
                 .expiresAt(now.plus(30, ChronoUnit.DAYS))
                 .audience(userResource.getUsername())
                 .issuedAt(now)
-//                .issuer("soitio.com")
                 .subject(userResource.getEmail())
                 .sign();
     }
 
     private Uni<ValidationResponse> verifyToken(TokenRequest request) {
+        try {
+            JsonWebToken parsedToken = validateToken(request.getAuthToken());
+            return userRepository.findByEmail(parsedToken.getSubject()).onItem()
+                    .transform(i -> ValidationResponse.newBuilder()
+                            .setOrgId(i.getCurrentOrgId())
+                            .build());
+        } catch (UnauthorizedException e) {
+            return Uni.createFrom().failure(e);
+        }
+    }
+
+    private JsonWebToken validateToken(String token) throws UnauthorizedException {
         JsonWebToken parsedToken;
         try {
-            parsedToken = tokenParser.parse(request.getAuthToken());
+            parsedToken = tokenParser.parse(token);
             Instant now = Instant.now();
             Instant expiresAt = Instant.ofEpochMilli(parsedToken.getExpirationTime());
-            if (expiresAt.isAfter(now)) return Uni.createFrom().failure(new UnauthorizedException("Token Expired!"));
+            if (expiresAt.isAfter(now)) throw new UnauthorizedException("Token Expired!");
         } catch (ParseException e) {
             log.warn("Couldn't parse token {}", e.getMessage());
-            return Uni.createFrom().failure(new UnauthorizedException(e.getMessage()));
+            throw new UnauthorizedException(e.getMessage());
         }
-        return userRepository.findByEmail(parsedToken.getSubject()).onItem()
-                .transform(i -> ValidationResponse.newBuilder()
-//                        .setOrgId(i.getCurrentOrgId())
-                        .setOrgId("5")
-                        .build());
+        return parsedToken;
     }
 
 }
