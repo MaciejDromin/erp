@@ -3,6 +3,7 @@ package com.soitio.api.gateway;
 import com.soitio.api.gateway.domain.auth.AuthRequestDto;
 import com.soitio.api.gateway.domain.auth.AuthResponseDto;
 import com.soitio.api.gateway.domain.auth.UserOrgResponseDto;
+import com.soitio.api.gateway.utils.AuthUtils;
 import com.soitio.auth.client.AuthRequest;
 import com.soitio.auth.client.AuthResponse;
 import com.soitio.auth.client.AuthService;
@@ -34,25 +35,29 @@ public class GatewayAuthService {
     }
 
     public Uni<UserOrgResponseDto> getOrgsForUser(HttpHeaders headers) {
-        String token = headers.getHeaderString("Authorization");
+        String token = AuthUtils.extractAuthorizationHeader(headers);
         if (token == null) return Uni.createFrom().failure(new UnauthorizedException("Missing Authorization header"));
-        return authService.getOrgsForUser(UserOrgRequest.newBuilder().setAuthToken(extractToken(token)).build()).onItem()
+        return authService.getOrgsForUser(UserOrgRequest.newBuilder()
+                        .setAuthToken(AuthUtils.extractToken(token))
+                        .build()).onItem()
                 .transform(this::mapOrgResponse);
     }
 
     public Uni<AuthResponseDto> refreshToken(HttpHeaders headers) {
-        String token = headers.getHeaderString("Refresh-Token");
+        String token = AuthUtils.extractRefreshTokenHeader(headers);
         if (token == null) return Uni.createFrom().failure(new UnauthorizedException("Missing Refresh-Token header"));
-        return authService.refreshToken(RefreshTokenRequest.newBuilder().setRefreshToken(extractToken(token)).build()).onItem()
+        return authService.refreshToken(RefreshTokenRequest.newBuilder()
+                        .setRefreshToken(AuthUtils.extractToken(token))
+                        .build()).onItem()
                 .transform(this::mapAuthResponse);
     }
 
     public Uni<Void> updateCurrentOrg(String orgId, HttpHeaders headers) {
-        String token = headers.getHeaderString("Authorization");
+        String token = AuthUtils.extractAuthorizationHeader(headers);
         if (token == null) return Uni.createFrom().failure(new UnauthorizedException("Missing Authorization header"));
         return authService.updateCurrentlyUsedOrg(UpdateCurrentOrgRequest.newBuilder()
                         .setOrgId(orgId)
-                        .setAuthToken(extractToken(token))
+                        .setAuthToken(AuthUtils.extractToken(token))
                         .build()).onItem()
                 .transformToUni(i -> Uni.createFrom().voidItem());
     }
@@ -70,10 +75,6 @@ public class GatewayAuthService {
                 .setEmail(authRequest.email())
                 .setPassword(authRequest.password())
                 .build();
-    }
-
-    private String extractToken(String token) {
-        return token.substring(7);
     }
 
 }

@@ -1,8 +1,8 @@
 package com.soitio.api.gateway.auth.config;
 
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
+import io.quarkus.mongodb.reactive.ReactiveMongoClient;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
@@ -10,9 +10,9 @@ import jakarta.enterprise.event.Observes;
 @ApplicationScoped
 public class AuthMongoCollectionConfig {
 
-    private final MongoClient client;
+    private final ReactiveMongoClient client;
 
-    public AuthMongoCollectionConfig(MongoClient client) {
+    public AuthMongoCollectionConfig(ReactiveMongoClient client) {
         this.client = client;
     }
 

@@ -28,6 +28,8 @@ import java.time.temporal.ChronoUnit;
 public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private static final int AUTH_TOKEN_DEFAULT_PERIOD = 7;
+    private static final int REFRESH_TOKEN_DEFAULT_PERIOD = 30;
 
     private final UserRepository userRepository;
     private final OrgService orgService;
@@ -104,7 +106,7 @@ public class UserService {
     private String buildAuthToken(UserResource userResource) {
         Instant now = Instant.now();
         return Jwt.claims()
-                .expiresAt(now.plus(7, ChronoUnit.DAYS))
+                .expiresAt(now.plus(AUTH_TOKEN_DEFAULT_PERIOD, ChronoUnit.DAYS))
                 .audience(userResource.getUsername())
                 .issuedAt(now)
                 .subject(userResource.getEmail())
@@ -115,7 +117,7 @@ public class UserService {
     private String buildRefreshToken(UserResource userResource) {
         Instant now = Instant.now();
         return Jwt.claims()
-                .expiresAt(now.plus(30, ChronoUnit.DAYS))
+                .expiresAt(now.plus(REFRESH_TOKEN_DEFAULT_PERIOD, ChronoUnit.DAYS))
                 .audience(userResource.getUsername())
                 .issuedAt(now)
                 .subject(userResource.getEmail())

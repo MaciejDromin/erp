@@ -3,6 +3,7 @@ package com.soitio.api.gateway;
 import com.soitio.api.gateway.client.GatewayClient;
 import com.soitio.api.gateway.config.RouteDetails;
 import com.soitio.api.gateway.config.GatewayConfig;
+import com.soitio.api.gateway.utils.AuthUtils;
 import com.soitio.auth.client.AuthService;
 import com.soitio.auth.client.TokenRequest;
 import com.soitio.commons.models.commons.ServiceKey;
@@ -63,10 +64,10 @@ public class GatewayService {
                                                HttpHeaders headers,
                                                TriFunction<String, MultivaluedMap<String, String>, String, Uni<Object>> httpCall) {
         String[] endpointDetails = extractPath(uriInfo.getPath());
-        String token = headers.getHeaderString("Authorization");
+        String token = AuthUtils.extractAuthorizationHeader(headers);
         if (token == null) return Uni.createFrom().failure(new UnauthorizedException("Missing Authorization header"));
         TokenRequest tokenRequest = TokenRequest.newBuilder()
-                .setAuthToken(extractToken(token))
+                .setAuthToken(AuthUtils.extractToken(token))
                 .build();
         return authService.validate(tokenRequest).onItem()
                 .transformToUni(ar -> httpCall.apply(
@@ -84,10 +85,6 @@ public class GatewayService {
 
     private String buildRoute(RouteDetails route, String endpoint) {
         return "http://%s:%d%s".formatted(route.hostname(), route.port(), endpoint);
-    }
-
-    private String extractToken(String token) {
-        return token.substring(7);
     }
 
 }
