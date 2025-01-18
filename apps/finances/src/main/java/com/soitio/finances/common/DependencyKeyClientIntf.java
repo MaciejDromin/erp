@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-@FeignClient(name = "consul-store",
+@FeignClient(name = "gateway-store",
              url = "${spring.cloud.openfeign.client.config.gateway.url}",
              configuration = FeignConfig.class)
 public interface DependencyKeyClientIntf extends DependencyKeyClient {

@@ -22,8 +22,17 @@ dependencies {
     // WS
     implementation 'io.quarkus:quarkus-websockets'
 
+    // GRPC
+    implementation 'io.quarkus:quarkus-grpc'
+    implementation 'com.soitio:auth-client:1.0-SNAPSHOT'
+
     // COMMONS
     implementation 'com.soitio:commons:1.0-SNAPSHOT'
+
+    // SECURITY
+    implementation 'io.quarkus:quarkus-elytron-security-common'
+    implementation 'io.smallrye:smallrye-jwt-build'
+    implementation 'io.smallrye:smallrye-jwt'
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'

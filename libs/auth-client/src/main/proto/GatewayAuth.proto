@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.soitio.auth.client";
+option java_outer_classname = "GatewayAuthProto";
+import "google/protobuf/empty.proto";
+
+package gateway.auth;
+
+service AuthService {
+    rpc Authenticate (AuthRequest) returns (AuthResponse) {}
+    rpc Validate (TokenRequest) returns (ValidationResponse) {}
+    rpc GetOrgsForUser (UserOrgRequest) returns (UserOrgResponse) {}
+    rpc UpdateCurrentlyUsedOrg (UpdateCurrentOrgRequest) returns (google.protobuf.Empty) {}
+    rpc refreshToken (RefreshTokenRequest) returns (AuthResponse) {}
+}
+
+message AuthRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message AuthResponse {
+    string authToken = 1;
+    string refreshToken = 2;
+    string orgId = 3;
+    int64 expiresIn = 4;
+}
+
+message TokenRequest {
+    string authToken = 1;
+}
+
+message ValidationResponse {
+    string orgId = 1;
+}
+
+message UserOrgRequest {
+    string authToken = 1;
+}
+
+message UserOrgResponse {
+    repeated string orgs = 1;
+}
+
+message UpdateCurrentOrgRequest {
+    string authToken = 1;
+    string orgId = 2;
+}
+
+message RefreshTokenRequest {
+    string refreshToken = 1;
+}

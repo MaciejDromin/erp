@@ -1,4 +1,4 @@
-package com.soitio.api.gateway.domain;
+package com.soitio.api.gateway.auth.domain;
 
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.bson.types.ObjectId;
 
-@MongoEntity(database = "gateway")
+@MongoEntity(database = "auth")
 @Builder
 @Getter
 @Setter
@@ -18,10 +18,10 @@ import org.bson.types.ObjectId;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class ConfigResource {
+public class OrgResource {
 
     private ObjectId id;
-    private String key;
-    private ValueWrapper value;
+    private String orgId;
+//    private OrgStatus status; -- PAYING, DEACTIVATED, TRIAL...
 
 }

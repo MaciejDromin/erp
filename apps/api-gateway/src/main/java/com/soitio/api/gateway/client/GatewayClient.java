@@ -22,10 +22,15 @@ import java.io.InputStream;
 public interface GatewayClient {
 
     @GET
-    Uni<Object> getRoute(@Url String url, @RestQuery MultivaluedMap<String, String> queryParams);
+    Uni<Object> getRoute(@Url String url,
+                         @RestQuery MultivaluedMap<String, String> queryParams,
+                         @HeaderParam("X-OrgId") String orgId);
 
     @POST
-    Uni<Object> postRoute(@Url String p, @RestQuery MultivaluedMap<String, String> queryParameters, Object body);
+    Uni<Object> postRoute(@Url String p,
+                          @RestQuery MultivaluedMap<String, String> queryParameters,
+                          @HeaderParam("X-OrgId") String orgId,
+                          Object body);
 
     @POST
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
@@ -33,15 +38,25 @@ public interface GatewayClient {
     Uni<Object> fileUpload(@Url String p,
                            @RestQuery MultivaluedMap<String, String> queryParameters,
                            @HeaderParam("filename") String filename,
+                           @HeaderParam("X-OrgId") String orgId,
                            InputStream is);
 
     @PUT
-    Uni<Object> putRoute(@Url String p, @RestQuery MultivaluedMap<String, String> queryParameters, Object body);
+    Uni<Object> putRoute(@Url String p,
+                         @RestQuery MultivaluedMap<String, String> queryParameters,
+                         @HeaderParam("X-OrgId") String orgId,
+                         Object body);
 
     @PATCH
-    Uni<Object> patchRoute(@Url String p, @RestQuery MultivaluedMap<String, String> queryParameters, Object body);
+    Uni<Object> patchRoute(@Url String p,
+                           @RestQuery MultivaluedMap<String, String> queryParameters,
+                           @HeaderParam("X-OrgId") String orgId,
+                           Object body);
 
     @DELETE
-    Uni<Object> deleteRoute(@Url String p, @RestQuery MultivaluedMap<String, String> queryParameters, Object body);
+    Uni<Object> deleteRoute(@Url String p,
+                            @RestQuery MultivaluedMap<String, String> queryParameters,
+                            @HeaderParam("X-OrgId") String orgId,
+                            Object body);
 
 }
