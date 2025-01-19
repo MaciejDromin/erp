@@ -43,17 +43,18 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property> im
         this.propertyProvider = propertyProvider;
     }
 
-    public void create(PropertyCreationDto propertyCreation) {
-        persist(from(propertyCreation));
+    public void create(PropertyCreationDto propertyCreation, String orgId) {
+        persist(from(propertyCreation, orgId));
     }
 
-    private Property from(PropertyCreationDto propertyCreation) {
+    private Property from(PropertyCreationDto propertyCreation, String orgId) {
         return Property.builder()
                 .name(propertyCreation.getName())
                 .uniqueIdentifier(propertyCreation.getUniqueIdentifier())
                 .addressId(propertyCreation.getAddressId())
                 .landRegister(propertyCreation.getLandRegister())
                 .propertyInformation(fromPropertyInformation(propertyCreation.getPropertyInformation()))
+                .orgId(orgId)
                 .build();
     }
 
@@ -62,30 +63,24 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property> im
                 .create(propertyInformation);
     }
 
-    public PageDto<PropertyForListDto> getForList(UriInfo uriInfo) {
+    public PageDto<PropertyForListDto> getForList(UriInfo uriInfo, String orgId) {
         var params = uriInfo.getQueryParameters();
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
         var objectIdsString = params.getFirst("objectIds");
         PanacheQuery<Property> properties;
-        if (objectIdsString == null) properties = findAll();
+        if (objectIdsString == null) properties = findAllByOrgId(orgId);
         else {
             List<String> objectIds = Arrays.asList(objectIdsString.split(","));
-            if (objectIds.isEmpty()) properties = findAll();
+            if (objectIds.isEmpty()) properties = findAllByOrgId(orgId);
             else {
-                properties = findAllByIdsNotIn(objectIds.stream()
-                        .map(ObjectId::new)
-                        .collect(Collectors.toSet()));
+                properties = findAllByIdsNotInAndOrgId(objectIds, orgId);
             }
         }
         var propertyList = properties.page(pageNum, DEFAULT_PAGE_SIZE).list();
         return PageDto.of(propertyList.stream()
                 .map(this::to)
                 .toList(), properties.pageCount());
-    }
-
-    public PanacheQuery<Property> findAllByIdsNotIn(Set<ObjectId> itemIds) {
-        return find("{_id: { $nin: [?1]}}", itemIds);
     }
 
     private PropertyForListDto to(Property property) {
@@ -98,22 +93,16 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property> im
                 .build();
     }
 
-    public Map<String, Integer> findCountByObjectsIds(List<String> itemIds) {
+    public Map<String, Integer> findCountByObjectsIds(List<String> itemIds, String orgId) { // What happened here?
         return itemIds.stream()
                 .collect(Collectors.toMap(id -> id, id -> 1));
     }
 
-    public Map<String, String> findAllItemNamesByIds(List<String> itemIds) {
+    public Map<String, String> findAllItemNamesByIds(List<String> itemIds, String orgId) {
         Map<String, String> ret = new HashMap<>();
-        var items = findAllByIdsIn(itemIds.stream()
-                .map(ObjectId::new)
-                .collect(Collectors.toSet()));
+        var items = listAllByIdsInAndOrgId(itemIds, orgId);
         items.forEach(item -> ret.put(item.getId().toString(), item.getName()));
         return ret;
-    }
-
-    public Set<Property> findAllByIdsIn(Set<ObjectId> itemIds) {
-        return new HashSet<>(list("_id in ?1", itemIds));
     }
 
     public Set<Property> findAllByAddressIdsIn(Set<ObjectId> ids) {
@@ -156,8 +145,8 @@ public class PropertyRepository extends AbstractDependencyCheckRepo<Property> im
                 .build();
     }
 
-    public PropertyDto getProperty(String id) {
-        return toDto(findById(new ObjectId(id)));
+    public PropertyDto getProperty(String id, String orgId) {
+        return toDto(findByIdAndOrgId(id, orgId));
     }
 
     private PropertyDto toDto(Property object) {

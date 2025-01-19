@@ -36,20 +36,18 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
         super(mapper, dependencyCheckRequester);
     }
 
-    public PageDto<VehicleForListDto> getForList(UriInfo uriInfo) {
+    public PageDto<VehicleForListDto> getForList(UriInfo uriInfo, String orgId) {
         var params = uriInfo.getQueryParameters();
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
         var objectIdsString = params.getFirst("objectIds");
         PanacheQuery<Vehicle> vehicles;
-        if (objectIdsString == null) vehicles = findAll();
+        if (objectIdsString == null) vehicles = findAllByOrgId(orgId);
         else {
             List<String> objectIds = Arrays.asList(objectIdsString.split(","));
-            if (objectIds.isEmpty()) vehicles = findAll();
+            if (objectIds.isEmpty()) vehicles = findAllByOrgId(orgId);
             else {
-                vehicles = findAllByIdsNotIn(objectIds.stream()
-                        .map(ObjectId::new)
-                        .collect(Collectors.toSet()));
+                vehicles = findAllByIdsNotInAndOrgId(objectIds, orgId);
             }
         }
         var propertyList = vehicles.page(pageNum, DEFAULT_PAGE_SIZE).list();
@@ -58,17 +56,13 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
                 .toList(), vehicles.pageCount());
     }
 
-    public void create(VehicleCreationDto vehicleCreation) {
-        persist(from(vehicleCreation));
+    public void create(VehicleCreationDto vehicleCreation, String orgId) {
+        persist(from(vehicleCreation, orgId));
     }
 
-    public Map<String, Integer> findCountByObjectsIds(List<String> vehicleIds) {
+    public Map<String, Integer> findCountByObjectsIds(List<String> vehicleIds, String orgId) { // What happened here?
         return vehicleIds.stream()
                 .collect(Collectors.toMap(id -> id, id -> 1));
-    }
-
-    public PanacheQuery<Vehicle> findAllByIdsNotIn(Set<ObjectId> itemIds) {
-        return find("{_id: { $nin: [?1]}}", itemIds);
     }
 
     private VehicleForListDto to(Vehicle vehicle) {
@@ -83,7 +77,7 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
                 .build();
     }
 
-    private Vehicle from(VehicleCreationDto vehicleCreation) {
+    private Vehicle from(VehicleCreationDto vehicleCreation, String orgId) {
         return Vehicle.builder()
                 .name(vehicleCreation.getName())
                 .year(vehicleCreation.getYear())
@@ -97,20 +91,15 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
                 .engineType(vehicleCreation.getEngineType())
                 .vin(vehicleCreation.getVin())
                 .registrationPlate(vehicleCreation.getRegistrationPlate())
+                .orgId(orgId)
                 .build();
     }
 
-    public Map<String, String> findAllItemNamesByIds(List<String> itemIds) {
+    public Map<String, String> findAllItemNamesByIds(List<String> itemIds, String orgId) {
         Map<String, String> ret = new HashMap<>();
-        var items = findAllByIdsIn(itemIds.stream()
-                .map(ObjectId::new)
-                .collect(Collectors.toSet()));
+        var items = listAllByIdsInAndOrgId(itemIds, orgId);
         items.forEach(item -> ret.put(item.getId().toString(), item.getName()));
         return ret;
-    }
-
-    public Set<Vehicle> findAllByIdsIn(Set<ObjectId> itemIds) {
-        return new HashSet<>(list("_id in ?1", itemIds));
     }
 
     @Override
@@ -133,8 +122,8 @@ public class VehicleRepository extends AbstractDependencyCheckRepo<Vehicle> {
                 .build();
     }
 
-    public VehicleDto getVehicle(String id) {
-        return toDto(findById(new ObjectId(id)));
+    public VehicleDto getVehicle(String id, String orgId) {
+        return toDto(findByIdAndOrgId(id, orgId));
     }
 
     private VehicleDto toDto(Vehicle vehicle) {
