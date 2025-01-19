@@ -49,10 +49,10 @@ public class InventoryItemRepository extends AbstractDependencyCheckRepo<Invento
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
         var objectIdsString = params.getFirst("objectIds");
         PanacheQuery<InventoryItem> items;
-        if (objectIdsString == null) items = findAllById(orgId);
+        if (objectIdsString == null) items = findAllByOrgId(orgId);
         else {
             List<String> objectIds = Arrays.asList(objectIdsString.split(","));
-            if (objectIds.isEmpty()) items = findAllById(orgId);
+            if (objectIds.isEmpty()) items = findAllByOrgId(orgId);
             else {
                 items = findAllByIdsNotInAndOrgId(objectIds.stream()
                         .map(ObjectId::new)
@@ -63,58 +63,44 @@ public class InventoryItemRepository extends AbstractDependencyCheckRepo<Invento
         var size = requestedSize == null ? DEFAULT_PAGE_SIZE : Integer.parseInt(requestedSize);
         var itemList = items.page(pageNum, size).list();
         return PageDto.of(itemList.stream()
-                .map(this::convert)
+                .map(i -> convert(i, orgId))
                 .toList(), items.pageCount());
     }
 
-    private PanacheQuery<InventoryItem> findAllById(String orgId) {
-        return find("orgId", orgId);
-    }
-
-    private InventoryItemDto convert(InventoryItem item) {
-        return InventoryItemDto.builder()
-                .id(item.getId().toString())
-                .name(item.getName())
-                .quantity(item.getQuantity())
-                .unit(item.getUnit())
-                .categories(categoryRepository.findAllByIdsIn(item.getCategories()).stream()
-                        .map(categoryRepository::convert)
-                        .collect(Collectors.toSet()))
-                .build();
-    }
-
     public void create(ItemCreationDto itemCreation, String orgId) {
-        var item = convert(itemCreation);
-        item.setOrgId(orgId);
+        var item = convert(itemCreation, orgId);
         item.setCategories(itemCreation.getCategoryIds().stream()
                 .map(ObjectId::new)
                 .collect(Collectors.toSet()));
         persist(item);
     }
 
-    private InventoryItem convert(ItemCreationDto itemCreation) {
+    private InventoryItemDto convert(InventoryItem item, String orgId) {
+        return InventoryItemDto.builder()
+                .id(item.getId().toString())
+                .name(item.getName())
+                .quantity(item.getQuantity())
+                .unit(item.getUnit())
+                .categories(categoryRepository.findAllByIdsInAndOrgId(item.getCategories(), orgId).stream()
+                        .map(categoryRepository::convert)
+                        .collect(Collectors.toSet()))
+                .build();
+    }
+
+    private InventoryItem convert(ItemCreationDto itemCreation, String orgId) {
         return InventoryItem.builder()
                 .name(itemCreation.getName())
                 .unit(itemCreation.getUnit())
                 .quantity(itemCreation.getQuantity())
+                .orgId(orgId)
                 .build();
     }
 
     public Map<String, String> findAllItemNamesByIds(List<String> objectIds, String orgId) {
         Map<String, String> ret = new HashMap<>();
-        var items = findAllByIdsInAndOrgId(objectIds.stream()
-                .map(ObjectId::new)
-                .collect(Collectors.toSet()), orgId);
+        var items = listAllByIdsInAndOrgId(objectIds, orgId);
         items.forEach(item -> ret.put(item.getId().toString(), item.getName()));
         return ret;
-    }
-
-    public Set<InventoryItem> findAllByIdsInAndOrgId(Set<ObjectId> itemIds, String orgId) {
-        return new HashSet<>(list("_id in ?1 and orgId = ?2", itemIds, orgId));
-    }
-
-    public PanacheQuery<InventoryItem> findAllByIdsNotInAndOrgId(Set<ObjectId> itemIds, String orgId) {
-        return find("{_id: { $nin: [?1]}, orgId: ?2}", itemIds, orgId);
     }
 
     public Map<String, Integer> findCountByObjectsIds(List<String> objectIds, String orgId) {
@@ -171,10 +157,7 @@ public class InventoryItemRepository extends AbstractDependencyCheckRepo<Invento
     }
 
     public InventoryItemDto getItem(String itemId, String orgId) {
-        return convert(findByIdAndOrgId(new ObjectId(itemId), orgId));
+        return convert(findByIdAndOrgId(itemId, orgId), orgId);
     }
 
-    private InventoryItem findByIdAndOrgId(ObjectId objectId, String orgId) {
-        return find("{_id: ?1, orgId: ?2}", objectId, orgId).firstResult();
-    }
 }

@@ -48,7 +48,9 @@ public class CategoryController {
 
     @PATCH
     @Path("/{categoryId}")
-    public void updateSingleCategory(@PathParam("categoryId") String categoryId, JsonNode node, @HeaderParam("X-OrgId") String orgId) {
+    public void updateSingleCategory(@PathParam("categoryId") String categoryId,
+                                     JsonNode node,
+                                     @HeaderParam("X-OrgId") String orgId) {
         categoryRepository.update(Dependent.INVENTORY_CATEGORY, categoryId, node, orgId);
     }
 

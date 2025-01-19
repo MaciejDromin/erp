@@ -65,7 +65,9 @@ public class InventoryItemController {
 
     @PATCH
     @Path("/{itemId}")
-    public void updateSingleItem(@PathParam("itemId") String itemId, JsonNode json, @HeaderParam("X-OrgId") String orgId) {
+    public void updateSingleItem(@PathParam("itemId") String itemId,
+                                 JsonNode json,
+                                 @HeaderParam("X-OrgId") String orgId) {
         inventoryItemRepository.update(Dependent.INVENTORY_ITEM, itemId, json, orgId);
     }
 

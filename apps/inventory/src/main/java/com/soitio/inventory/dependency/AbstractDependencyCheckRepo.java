@@ -10,13 +10,12 @@ import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.dependency.model.Dependent;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.utils.MergePatchUtils;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
-import org.bson.types.ObjectId;
+import com.soitio.inventory.commons.OrgMongoRepository;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepository<T> {
+public abstract class AbstractDependencyCheckRepo<T> implements OrgMongoRepository<T> {
 
     private final ObjectMapper mapper;
     private final DependencyCheckRequester dependencyCheckRequester;
@@ -39,19 +38,13 @@ public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepo
                 .toList()
                 .forEach(diff::remove);
 
-        deleteByIdsAndOrgId(diff.stream()
-                .map(ObjectId::new)
-                .collect(Collectors.toSet()), orgId);
+        deleteByIdsAndOrgId(diff, orgId);
 
         return response;
     }
 
-    private void deleteByIdsAndOrgId(Set<ObjectId> diff, String orgId) {
-        delete("_id in ?1 and orgId = ?2", diff, orgId);
-    }
-
     public DependencyCheckResponse update(Dependent dependent, String id, JsonNode node, String orgId) {
-        T entity = findByIdAndOrgId(new ObjectId(id), orgId);
+        T entity = findByIdAndOrgId(id, orgId);
         JsonNode entityNode = mapper.valueToTree(entity);
         MergePatch patch = MergePatchUtils.fromJsonNode(node);
         MergePatch target = MergePatchUtils.fromJsonNode(entityNode);
@@ -65,10 +58,6 @@ public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepo
         update(mapToEntity(MergePatchUtils.merge(patch, target)));
 
         return response;
-    }
-
-    private T findByIdAndOrgId(ObjectId objectId, String orgId) {
-        return find("_id = ?1 and orgId = ?2", objectId, orgId).firstResult();
     }
 
     protected abstract T mapToEntity(MergePatch object);

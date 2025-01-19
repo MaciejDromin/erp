@@ -5,6 +5,7 @@ import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.Dependent;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -26,30 +27,32 @@ public class ContractorController {
     private final ContractorRepository contractorRepository;
 
     @GET
-    public PageDto<ContractorDto> getContractors(@Context UriInfo uriInfo) {
-        return contractorRepository.getContractors(uriInfo);
+    public PageDto<ContractorDto> getContractors(@Context UriInfo uriInfo, @HeaderParam("X-OrgId") String orgId) {
+        return contractorRepository.getContractors(uriInfo, orgId);
     }
 
     @GET
     @Path("/{contractorId}")
-    public ContractorDto getContractor(@PathParam("contractorId") String contractorId) {
-        return contractorRepository.getContractor(contractorId);
+    public ContractorDto getContractor(@PathParam("contractorId") String contractorId, @HeaderParam("X-OrgId") String orgId) {
+        return contractorRepository.getContractor(contractorId, orgId);
     }
 
     @POST
-    public void createContractor(ContractorCreationDto contractorCreation) {
-        contractorRepository.create(contractorCreation);
+    public void createContractor(ContractorCreationDto contractorCreation, @HeaderParam("X-OrgId") String orgId) {
+        contractorRepository.create(contractorCreation, orgId);
     }
 
     @DELETE
-    public DependencyCheckResponse delete(Set<String> ids) {
-        return contractorRepository.delete(Dependent.INVENTORY_CONTRACTOR, ids);
+    public DependencyCheckResponse delete(Set<String> ids, @HeaderParam("X-OrgId") String orgId) {
+        return contractorRepository.delete(Dependent.INVENTORY_CONTRACTOR, ids, orgId);
     }
 
     @PATCH
     @Path("/{contractorId}")
-    public void updateSingleCategory(@PathParam("contractorId") String contractorId, JsonNode node) {
-        contractorRepository.update(Dependent.INVENTORY_CONTRACTOR, contractorId, node);
+    public void updateSingleCategory(@PathParam("contractorId") String contractorId,
+                                     JsonNode node,
+                                     @HeaderParam("X-OrgId") String orgId) {
+        contractorRepository.update(Dependent.INVENTORY_CONTRACTOR, contractorId, node, orgId);
     }
 
 }

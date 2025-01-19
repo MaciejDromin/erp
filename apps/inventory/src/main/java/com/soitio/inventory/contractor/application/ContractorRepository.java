@@ -29,7 +29,7 @@ public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor
         super(mapper, dependencyCheckRequester);
     }
 
-    public PageDto<ContractorDto> getContractors(UriInfo uriInfo) {
+    public PageDto<ContractorDto> getContractors(UriInfo uriInfo, String orgId) {
         var params = uriInfo.getQueryParameters();
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
