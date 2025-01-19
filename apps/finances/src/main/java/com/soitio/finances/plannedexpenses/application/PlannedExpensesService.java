@@ -54,12 +54,12 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
         this.moneyOperationService = moneyOperationService;
     }
 
-    public void create(PlannedExpensesCreationDto creation) {
-        repository.save(convert(creation));
+    public void create(PlannedExpensesCreationDto creation, String orgId) {
+        repository.save(convert(creation, orgId));
     }
 
     // TODO: Extract to factory
-    private PlannedExpenses convert(PlannedExpensesCreationDto creation) {
+    private PlannedExpenses convert(PlannedExpensesCreationDto creation, String orgId) {
         var operationCategory = operationCategoryService.getCategoryById(creation.getOperationCategoryId());
         return PlannedExpenses.builder()
                 .plannedAmount(creation.getPlannedAmount().getValue())
@@ -69,14 +69,16 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
                 .plannedYear(creation.getPlannedYear())
                 .plannedMonth(creation.getPlannedMonth())
                 .operationCategory(operationCategory)
+                .orgId(orgId)
                 .build();
     }
 
-    public Page<PlannedExpensesDto> getAll(Pageable pageable, Map<String, String> params) {
+    public Page<PlannedExpensesDto> getAll(Pageable pageable, Map<String, String> params, String orgId) {
         if (params.containsKey("year") && params.containsKey("month")) {
-            return repository.findAllPageableByPlannedYearAndPlannedMonth(pageable,
+            return repository.findAllPageableByPlannedYearAndPlannedMonthAndOrgId(pageable,
                     Integer.valueOf(params.get("year")),
-                    Month.valueOf(params.get("month")))
+                    Month.valueOf(params.get("month")),
+                    orgId)
                     .map(this::convertToDto);
         }
         return repository.findAll(pageable)
@@ -106,8 +108,8 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
                 .build();
     }
 
-    public void abandon(String plannedExpenseId) {
-        repository.save(updateForAbandon(repository.getReferenceById(plannedExpenseId)));
+    public void abandon(String plannedExpenseId, String orgId) {
+        repository.save(updateForAbandon(repository.getReferenceByIdAndOrgId(plannedExpenseId, orgId)));
     }
 
     private PlannedExpenses updateForAbandon(PlannedExpenses plannedExpenses) {
@@ -116,10 +118,10 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
         return plannedExpenses;
     }
 
-    public void complete(String plannedExpenseId, PlannedExpensesCompletionDto completion) {
+    public void complete(String plannedExpenseId, PlannedExpensesCompletionDto completion, String orgId) {
         moneyOperationService.registerPlannedExpense(
                 repository.save(updateForCompletion(
-                        repository.getReferenceById(plannedExpenseId), completion)));
+                        repository.getReferenceByIdAndOrgId(plannedExpenseId, orgId), completion)));
     }
 
     private PlannedExpenses updateForCompletion(PlannedExpenses plannedExpenses, PlannedExpensesCompletionDto completion) {
@@ -226,7 +228,7 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
                 .build();
     }
 
-    public PlannedExpensesDto getPlannedExpense(String id) {
-        return convertToDto(findByIdAndOrgId(id, ));
+    public PlannedExpensesDto getPlannedExpense(String id, String orgId) {
+        return convertToDto(findByIdAndOrgId(id, orgId));
     }
 }

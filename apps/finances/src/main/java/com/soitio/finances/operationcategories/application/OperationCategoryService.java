@@ -10,10 +10,8 @@ import com.soitio.finances.operationcategories.application.port.OperationCategor
 import com.soitio.finances.operationcategories.domain.OperationCategory;
 import com.soitio.finances.operationcategories.domain.QOperationCategory;
 import com.soitio.finances.operationcategories.domain.dto.OperationCategoryCreationDto;
-
 import java.util.Collection;
 import java.util.Map;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,26 +28,28 @@ public class OperationCategoryService extends AbstractDependencyCheckService<Ope
         this.repository = repository;
     }
 
-    public void create(OperationCategoryCreationDto creation) {
-        repository.save(createEntity(creation));
+    public void create(OperationCategoryCreationDto creation, String orgId) {
+        repository.save(createEntity(creation, orgId));
     }
 
-    private OperationCategory createEntity(OperationCategoryCreationDto creation) {
+    private OperationCategory createEntity(OperationCategoryCreationDto creation, String orgId) {
         return OperationCategory.builder()
                 .operationType(creation.getOperationType())
                 .operationName(creation.getOperationName())
+                .orgId(orgId)
                 .build();
     }
 
-    public Page<OperationCategoryDto> getPage(Map<String, String> queryParams) {
+    public Page<OperationCategoryDto> getPage(Map<String, String> queryParams, String orgId) {
         var pageable = Pageable.ofSize(20).withPage(Integer.parseInt(queryParams.get("page")));
         if (queryParams.containsKey("operationType")) {
             var operationType = MoneyOperationType.valueOf(queryParams.get("operationType"));
             QOperationCategory category = QOperationCategory.operationCategory;
             var search = category.operationType.eq(operationType);
+            search.and(category._super.orgId.eq(orgId));
             return repository.findAll(search, pageable).map(this::from);
         }
-        return repository.findAll(pageable).map(this::from);
+        return repository.findAllByOrgId(pageable, orgId).map(this::from);
     }
 
     public OperationCategoryDto from(OperationCategory category) {
@@ -95,7 +95,7 @@ public class OperationCategoryService extends AbstractDependencyCheckService<Ope
         return from(entity);
     }
 
-    public OperationCategoryDto getOperationCategory(String id) {
-        return from(findByIdAndOrgId(id, ));
+    public OperationCategoryDto getOperationCategory(String id, String orgId) {
+        return from(findByIdAndOrgId(id, orgId));
     }
 }

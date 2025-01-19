@@ -23,7 +23,7 @@ public interface ObjectValueRepository extends OrgRepository<ObjectValue, String
 
     List<ObjectValue> findAllByObjectTypeAndOrgId(ObjectType objectType, String orgId);
 
-    ObjectValue findFirstByObjectIdAndOrgIdInOrderByAmountDesc(Set<String> value, String orgId);
+    ObjectValue findFirstByObjectIdInAndOrgIdOrderByAmountDesc(Set<String> value, String orgId);
 
     List<ObjectValue> findAllByObjectIdIn(Set<String> ids);
 

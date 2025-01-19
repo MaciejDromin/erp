@@ -14,5 +14,5 @@ public interface PlannedExpensesRepository extends OrgRepository<PlannedExpenses
 
     List<PlannedExpenses> findAllByOperationCategoryIdIn(Set<String> set);
 
-    Page<PlannedExpenses> findAllPageableByPlannedYearAndPlannedMonth(Pageable pageable, Integer integer, Month month);
+    Page<PlannedExpenses> findAllPageableByPlannedYearAndPlannedMonthAndOrgId(Pageable pageable, Integer integer, Month month, String orgId);
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,38 +33,45 @@ public class PlannedExpensesController {
 
     @GetMapping
     public Page<PlannedExpensesDto> getAll(@PageableDefault(size = 20) Pageable pageable,
-                                           @RequestParam Map<String, String> params) {
-        return service.getAll(pageable, params);
+                                           @RequestParam Map<String, String> params,
+                                           @RequestHeader("X-OrgId") String orgId) {
+        return service.getAll(pageable, params, orgId);
     }
 
     @GetMapping("/{plannedExpenseId}")
-    public PlannedExpensesDto getPlannedExpense(@PathVariable("plannedExpenseId") String id) {
-        return service.getPlannedExpense(id);
+    public PlannedExpensesDto getPlannedExpense(@PathVariable("plannedExpenseId") String id,
+                                                @RequestHeader("X-OrgId") String orgId) {
+        return service.getPlannedExpense(id, orgId);
     }
 
     @PostMapping
-    public void create(@RequestBody PlannedExpensesCreationDto creation) {
-        service.create(creation);
+    public void create(@RequestBody PlannedExpensesCreationDto creation,
+                       @RequestHeader("X-OrgId") String orgId) {
+        service.create(creation, orgId);
     }
 
     @PatchMapping("/{plannedExpenseId}/abandon")
-    public void abandon(@PathVariable String plannedExpenseId) {
-        service.abandon(plannedExpenseId);
+    public void abandon(@PathVariable String plannedExpenseId,
+                        @RequestHeader("X-OrgId") String orgId) {
+        service.abandon(plannedExpenseId, orgId);
     }
 
     @PatchMapping("/{plannedExpenseId}/complete")
-    public void complete(@PathVariable String plannedExpenseId, @RequestBody PlannedExpensesCompletionDto completion) {
-        service.complete(plannedExpenseId, completion);
+    public void complete(@PathVariable String plannedExpenseId, @RequestBody PlannedExpensesCompletionDto completion,
+                         @RequestHeader("X-OrgId") String orgId) {
+        service.complete(plannedExpenseId, completion, orgId);
     }
 
     @DeleteMapping
-    public DependencyCheckResponse delete(@RequestBody Set<String> ids) {
-        return service.delete(Dependent.FINANCES_PLANNED_EXPENSES, ids);
+    public DependencyCheckResponse delete(@RequestBody Set<String> ids,
+                                          @RequestHeader("X-OrgId") String orgId) {
+        return service.delete(Dependent.FINANCES_PLANNED_EXPENSES, ids, orgId);
     }
 
     @PatchMapping("/{plannedExpensesId}")
-    public void updateSinglePlannedExpense(@PathVariable("plannedExpensesId") String id, @RequestBody JsonNode node) {
-        service.update(Dependent.FINANCES_PLANNED_EXPENSES, id, node);
+    public void updateSinglePlannedExpense(@PathVariable("plannedExpensesId") String id, @RequestBody JsonNode node,
+                                           @RequestHeader("X-OrgId") String orgId) {
+        service.update(Dependent.FINANCES_PLANNED_EXPENSES, id, node, orgId);
     }
 
 }

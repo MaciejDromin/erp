@@ -121,7 +121,7 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
     }
 
     public TopItemByCategoryDto findTopByObjectIdsIn(Set<String> value, String orgId) {
-        ObjectValue ov = objectValueRepository.findFirstByObjectIdAndOrgIdInOrderByAmountDesc(value, orgId);
+        ObjectValue ov = objectValueRepository.findFirstByObjectIdInAndOrgIdOrderByAmountDesc(value, orgId);
         var amount = ov.getAmount();
         return TopItemByCategoryDto.builder()
                 .amount(AmountDto.of(amount.getAmount(), amount.getCurrencyUnit().getCode()))
