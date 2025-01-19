@@ -31,7 +31,8 @@ import org.joda.money.Money;
 @Getter
 @Setter
 @Table(indexes = {
-    @Index(name = "nextApplicableMonth", columnList = "nextApplicableMonth")
+    @Index(name = "nextApplicableMonth", columnList = "nextApplicableMonth"),
+    @Index(name = "org_id", columnList = "id, orgId", unique = true)
 })
 @Dependencies(dependent = "PeriodicalMoneyOperation", dependencies = {"finances.category"})
 public class PeriodicalMoneyOperation extends BaseEntity {

@@ -6,6 +6,8 @@ import com.soitio.finances.common.persistence.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,9 @@ import org.joda.money.Money;
 @SuperBuilder
 @Getter
 @Dependencies(dependent = "ObjectValue", dependencies = {"inventory.item", "inventory.property", "inventory.vehicle"})
+@Table(indexes = {
+    @Index(name = "org_id", columnList = "id, orgId", unique = true)
+})
 public class ObjectValue extends BaseEntity {
 
     private String objectId;

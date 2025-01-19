@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,44 +37,53 @@ public class ObjectValueController {
     @GetMapping
     public Page<ObjectValueDto> getPage(@PageableDefault(size = 20) Pageable pageable,
                                         @RequestParam("objectType") ObjectType objectType,
-                                        @RequestParam(value = "objectIds", required = false) Set<String> objectIds) {
-        return objectValueService.getPage(pageable, objectType, objectIds);
+                                        @RequestParam(value = "objectIds", required = false) Set<String> objectIds,
+                                        @RequestHeader("X-OrgId") String orgId) {
+        return objectValueService.getPage(pageable, objectType, objectIds, orgId);
     }
 
     @GetMapping("/{objectValueId}")
-    public ObjectValueDto getObjectValue(@PathVariable("objectValueId") String id) {
-        return objectValueService.getObjectValue(id);
+    public ObjectValueDto getObjectValue(@PathVariable("objectValueId") String id,
+                                         @RequestHeader("X-OrgId") String orgId) {
+        return objectValueService.getObjectValue(id, orgId);
     }
 
     @PostMapping
-    public void create(@RequestBody ObjectValueCreationDto creation) {
-        objectValueService.create(creation);
+    public void create(@RequestBody ObjectValueCreationDto creation,
+                       @RequestHeader("X-OrgId") String orgId) {
+        objectValueService.create(creation, orgId);
     }
 
     @PostMapping("/total-value")
     public TotalObjectsValueDto totalValue(@RequestBody Map<String, Integer> quantityByObjectMap,
-                                           @RequestParam("objectType") ObjectType objectType) {
-        return objectValueService.totalValue(quantityByObjectMap, objectType);
+                                           @RequestParam("objectType") ObjectType objectType,
+                                           @RequestHeader("X-OrgId") String orgId) {
+        return objectValueService.totalValue(quantityByObjectMap, objectType, orgId);
     }
 
     @GetMapping("/object-ids")
-    public List<String> allObjectIds(@RequestParam("objectType") ObjectType objectType) {
-        return objectValueService.allObjectIds(objectType);
+    public List<String> allObjectIds(@RequestParam("objectType") ObjectType objectType,
+                                     @RequestHeader("X-OrgId") String orgId) {
+        return objectValueService.allObjectIds(objectType, orgId);
     }
 
     @PostMapping("/top")
-    public TopItemByCategoryDto findTopByObjectIdsIn(@RequestBody Set<String> value) {
-        return objectValueService.findTopByObjectIdsIn(value);
+    public TopItemByCategoryDto findTopByObjectIdsIn(@RequestBody Set<String> value,
+                                                     @RequestHeader("X-OrgId") String orgId) {
+        return objectValueService.findTopByObjectIdsIn(value, orgId);
     }
 
     @DeleteMapping
-    public DependencyCheckResponse delete(@RequestBody Set<String> ids) {
-        return objectValueService.delete(Dependent.FINANCES_OBJECT_VALUE, ids);
+    public DependencyCheckResponse delete(@RequestBody Set<String> ids,
+                                          @RequestHeader("X-OrgId") String orgId) {
+        return objectValueService.delete(Dependent.FINANCES_OBJECT_VALUE, ids, orgId);
     }
 
     @PatchMapping("/{objectValueId}")
-    public void updateObjectValue(@PathVariable("objectValueId") String id, @RequestBody JsonNode node) {
-        objectValueService.update(Dependent.FINANCES_OBJECT_VALUE, id, node);
+    public void updateObjectValue(@PathVariable("objectValueId") String id,
+                                  @RequestBody JsonNode node,
+                                  @RequestHeader("X-OrgId") String orgId) {
+        objectValueService.update(Dependent.FINANCES_OBJECT_VALUE, id, node, orgId);
     }
 
 }

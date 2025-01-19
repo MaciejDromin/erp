@@ -21,7 +21,8 @@ import lombok.experimental.SuperBuilder;
 @Table(indexes = {
     @Index(name = "code_index", columnList = "code"),
     @Index(name = "date_code_index", columnList = "code, effectiveDate", unique = true),
-    @Index(name = "date_index", columnList = "effectiveDate")
+    @Index(name = "date_index", columnList = "effectiveDate"),
+    @Index(name = "org_id", columnList = "id, orgId", unique = true)
 })
 public class Currency extends BaseEntity {
 

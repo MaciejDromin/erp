@@ -45,15 +45,15 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
         this.repository = repository;
     }
 
-    public Page<PeriodicalMoneyOperationDto> getPage(Pageable pageable) {
-        return repository.findAll(pageable).map(this::from);
+    public Page<PeriodicalMoneyOperationDto> getPage(Pageable pageable, String orgId) {
+        return repository.findAllByOrgId(pageable, orgId).map(this::from);
     }
 
-    public void create(PeriodicalMoneyOperationCreationDto creation) {
-        repository.save(createObject(creation));
+    public void create(PeriodicalMoneyOperationCreationDto creation, String orgId) {
+        repository.save(createObject(creation, orgId));
     }
 
-    private PeriodicalMoneyOperation createObject(PeriodicalMoneyOperationCreationDto creation) {
+    private PeriodicalMoneyOperation createObject(PeriodicalMoneyOperationCreationDto creation, String orgId) {
         return PeriodicalMoneyOperation.builder()
                 .amount(creation.getAmount().getValue())
                 .operationDescription(creation.getOperationDescription())
@@ -62,6 +62,7 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
                 .operationType(creation.getOperationType())
                 .nextApplicableMonth(creation.getNextApplicableMonth())
                 .operationCategory(operationCategoryService.getCategoryById(creation.getOperationCategoryId()))
+                .orgId(orgId)
                 .build();
     }
 
@@ -130,12 +131,12 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
     }
 
     @Override
-    public void deleteByIds(Set<String> collect) {
+    public void deleteByIdsAndOrgId(Collection<String> collect, String orgId) {
         repository.deleteAllById(collect);
     }
 
     @Override
-    protected PeriodicalMoneyOperation findById(String id) {
+    protected PeriodicalMoneyOperation findByIdAndOrgId(String id, String orgId) {
         return repository.getReferenceById(id);
     }
 
@@ -182,7 +183,7 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
                 .build();
     }
 
-    public PeriodicalMoneyOperationDto getPeriodicalOperation(String id) {
-        return from(findById(id));
+    public PeriodicalMoneyOperationDto getPeriodicalOperation(String id, String orgId) {
+        return from(findByIdAndOrgId(id, orgId));
     }
 }

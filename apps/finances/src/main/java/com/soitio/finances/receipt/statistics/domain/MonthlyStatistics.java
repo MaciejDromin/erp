@@ -24,7 +24,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @Table(indexes = {
-    @Index(name = "msperiod", columnList = "month, year")
+    @Index(name = "msperiod", columnList = "month, year"),
+    @Index(name = "org_id", columnList = "id, orgId", unique = true)
 })
 public class MonthlyStatistics extends BaseEntity {
 

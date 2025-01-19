@@ -4,8 +4,10 @@ import com.soitio.finances.common.persistence.BaseEntity;
 import com.soitio.finances.receipt.statistics.domain.PurchaseStatistics;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -24,6 +26,9 @@ import org.joda.money.Money;
 @NoArgsConstructor
 @SuperBuilder
 @Getter
+@Table(indexes = {
+    @Index(name = "org_id", columnList = "id, orgId", unique = true)
+})
 public class Purchase extends BaseEntity {
 
     private String address;

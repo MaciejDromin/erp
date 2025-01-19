@@ -8,8 +8,10 @@ import com.soitio.finances.operationcategories.domain.OperationCategory;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -30,6 +32,9 @@ import org.joda.money.Money;
 @Getter
 @Setter
 @Dependencies(dependent = "PlannedExpenses", dependencies = {"finances.category"})
+@Table(indexes = {
+    @Index(name = "org_id", columnList = "id, orgId", unique = true)
+})
 public class PlannedExpenses extends BaseEntity {
 
     private BigDecimal plannedAmount;

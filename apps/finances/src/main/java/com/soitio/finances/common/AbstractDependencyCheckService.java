@@ -10,6 +10,7 @@ import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.dependency.model.Dependent;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.utils.MergePatchUtils;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public abstract class AbstractDependencyCheckService<T> {
         this.dependencyCheckRequester = dependencyCheckRequester;
     }
 
-    public DependencyCheckResponse delete(Dependent dependent, Set<String> ids) {
+    public DependencyCheckResponse delete(Dependent dependent, Set<String> ids, String orgId) {
         var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, ids.stream()
                 .map(DependencyCheckContext::emptyOfId)
                 .collect(Collectors.toSet()), Action.DELETE);
@@ -38,15 +39,15 @@ public abstract class AbstractDependencyCheckService<T> {
                 .toList()
                 .forEach(diff::remove);
 
-        deleteByIds(diff);
+        deleteByIdsAndOrgId(diff, orgId);
 
         return response;
     }
 
-    public abstract void deleteByIds(Set<String> collect);
+    public abstract void deleteByIdsAndOrgId(Collection<String> collect, String orgId);
 
-    public DependencyCheckResponse update(Dependent dependent, String id, JsonNode object) {
-        var entity = findById(id);
+    public DependencyCheckResponse update(Dependent dependent, String id, JsonNode object, String orgId) {
+        var entity = findByIdAndOrgId(id, orgId);
         Object mappedDto = mapToDto(entity);
         JsonNode entityNode = mapper.valueToTree(mappedDto);
         JsonNode node = mapper.valueToTree(object);
@@ -64,7 +65,7 @@ public abstract class AbstractDependencyCheckService<T> {
         return response;
     }
 
-    protected abstract T findById(String id);
+    protected abstract T findByIdAndOrgId(String id, String orgId);
 
     protected abstract T mapToEntity(MergePatch object);
 

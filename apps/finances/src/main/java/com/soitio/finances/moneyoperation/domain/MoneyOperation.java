@@ -28,7 +28,8 @@ import org.joda.money.Money;
 @SuperBuilder
 @Getter
 @Table(indexes = {
-    @Index(name = "period", columnList = "effectiveMonth, effectiveYear")
+    @Index(name = "period", columnList = "effectiveMonth, effectiveYear"),
+    @Index(name = "org_id", columnList = "id, orgId", unique = true)
 })
 @Dependencies(dependent = "MoneyOperation", dependencies = {"finances.category"})
 public class MoneyOperation extends BaseEntity {

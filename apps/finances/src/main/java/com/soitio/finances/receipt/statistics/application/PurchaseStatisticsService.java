@@ -1,6 +1,7 @@
 package com.soitio.finances.receipt.statistics.application;
 
 import com.soitio.finances.receipt.application.PurchaseService;
+import com.soitio.finances.receipt.domain.dto.OrgWrapper;
 import com.soitio.finances.receipt.statistics.application.port.PurchaseStatisticsRepository;
 import com.soitio.finances.receipt.statistics.domain.MonthlyStatistics;
 import com.soitio.finances.receipt.statistics.domain.PurchaseStatistics;
@@ -17,18 +18,18 @@ public class PurchaseStatisticsService {
     private final PurchaseStatisticsRepository purchaseStatisticsRepository;
     private final MonthlyStatisticsService monthlyStatisticsService;
 
-    public void saveMonthlyStatistics(MonthlyPurchaseStatisticsDto content) {
+    public void saveMonthlyStatistics(OrgWrapper<MonthlyPurchaseStatisticsDto> content) {
         MonthlyStatistics monthlyStatistics = monthlyStatisticsService.createMonthly(content);
-        purchaseStatisticsRepository.saveAll(content.getPurchases().stream()
+        purchaseStatisticsRepository.saveAll(content.data().getPurchases().stream()
                 .map(p -> {
-                    var mapped = mapToPurchaseEntity(p);
+                    var mapped = mapToPurchaseEntity(p, content.orgId());
                     mapped.setMonthlyStatistics(monthlyStatistics);
                     return mapped;
                 })
                 .toList());
     }
 
-    private PurchaseStatistics mapToPurchaseEntity(PurchaseStatisticsDto p) {
+    private PurchaseStatistics mapToPurchaseEntity(PurchaseStatisticsDto p, String orgId) {
         return PurchaseStatistics.builder()
                 .purchase(purchaseService.getById(p.getId()))
                 .min(p.getMin())
@@ -39,6 +40,7 @@ public class PurchaseStatisticsService {
                 .standardDeviation(p.getStandardDeviation())
                 .total(p.getTotal())
                 .totalItems(p.getTotalItems())
+                .orgId(orgId)
                 .build();
     }
 

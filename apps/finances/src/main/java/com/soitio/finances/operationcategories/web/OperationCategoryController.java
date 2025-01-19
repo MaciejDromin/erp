@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,28 +29,33 @@ public class OperationCategoryController {
     private final OperationCategoryService operationCategoryService;
 
     @GetMapping
-    public Page<OperationCategoryDto> getOperationCategories(@RequestParam Map<String, String> queryParams) {
-        return operationCategoryService.getPage(queryParams);
+    public Page<OperationCategoryDto> getOperationCategories(@RequestParam Map<String, String> queryParams,
+                                                             @RequestHeader("X-OrgId") String orgId) {
+        return operationCategoryService.getPage(queryParams, orgId);
     }
 
     @GetMapping("/{operationCategoryId}")
-    public OperationCategoryDto getOperationCategory(@PathVariable("operationCategoryId") String id) {
-        return operationCategoryService.getOperationCategory(id);
+    public OperationCategoryDto getOperationCategory(@PathVariable("operationCategoryId") String id,
+                                                     @RequestHeader("X-OrgId") String orgId) {
+        return operationCategoryService.getOperationCategory(id, orgId);
     }
 
     @PostMapping
-    public void create(@RequestBody OperationCategoryCreationDto creation) {
-        operationCategoryService.create(creation);
+    public void create(@RequestBody OperationCategoryCreationDto creation,
+                       @RequestHeader("X-OrgId") String orgId) {
+        operationCategoryService.create(creation, orgId);
     }
 
     @DeleteMapping
-    public DependencyCheckResponse delete(@RequestBody Set<String> ids) {
-        return operationCategoryService.delete(Dependent.FINANCES_CATEGORY, ids);
+    public DependencyCheckResponse delete(@RequestBody Set<String> ids,
+                                          @RequestHeader("X-OrgId") String orgId) {
+        return operationCategoryService.delete(Dependent.FINANCES_CATEGORY, ids, orgId);
     }
 
     @PatchMapping("/{categoryId}")
-    public void update(@PathVariable("categoryId") String id, @RequestBody JsonNode node) {
-        operationCategoryService.update(Dependent.FINANCES_CATEGORY, id, node);
+    public void update(@PathVariable("categoryId") String id, @RequestBody JsonNode node,
+                       @RequestHeader("X-OrgId") String orgId) {
+        operationCategoryService.update(Dependent.FINANCES_CATEGORY, id, node, orgId);
     }
 
 }

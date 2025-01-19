@@ -3,9 +3,11 @@ package com.soitio.finances.receipt.statistics.domain;
 import com.soitio.finances.common.persistence.BaseEntity;
 import com.soitio.finances.receipt.domain.Purchase;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +21,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 @Setter
+@Table(indexes = {
+    @Index(name = "org_id", columnList = "id, orgId", unique = true)
+})
 public class PurchaseStatistics extends BaseEntity {
 
     @OneToOne

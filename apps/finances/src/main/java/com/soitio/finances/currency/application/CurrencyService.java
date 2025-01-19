@@ -51,6 +51,7 @@ public class CurrencyService {
                 .code(entry.getCode())
                 .rate(entry.getMid())
                 .effectiveDate(effectiveDate)
+                .orgId("111")
                 .build();
     }
 

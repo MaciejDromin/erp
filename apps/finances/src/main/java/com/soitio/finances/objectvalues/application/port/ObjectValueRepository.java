@@ -1,29 +1,29 @@
 package com.soitio.finances.objectvalues.application.port;
 
 import com.soitio.commons.models.dto.finances.ObjectType;
+import com.soitio.finances.common.persistence.OrgRepository;
 import com.soitio.finances.objectvalues.domain.ObjectValue;
 import com.soitio.finances.objectvalues.domain.proj.ObjectIdProj;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ObjectValueRepository extends JpaRepository<ObjectValue, String> {
+public interface ObjectValueRepository extends OrgRepository<ObjectValue, String> {
 
-    List<ObjectIdProj> findAllProjectedByObjectType(ObjectType objectType);
+    List<ObjectIdProj> findAllProjectedByObjectTypeAndOrgId(ObjectType objectType, String orgId);
 
-    Page<ObjectValue> findAllPageableByObjectType(ObjectType objectType, Pageable pageable);
+    Page<ObjectValue> findAllPageableByObjectTypeAndOrgId(ObjectType objectType, Pageable pageable, String orgId);
 
-    Page<ObjectValue> findAllPageableByObjectTypeAndObjectIdIn(ObjectType objectType,
-                                                               Set<String> objectIds,
-                                                               Pageable pageable);
+    Page<ObjectValue> findAllPageableByObjectTypeAndObjectIdInAndOrgId(ObjectType objectType,
+                                                                       Set<String> objectIds,
+                                                                       Pageable pageable, String orgId);
 
-    List<ObjectValue> findAllByObjectType(ObjectType objectType);
+    List<ObjectValue> findAllByObjectTypeAndOrgId(ObjectType objectType, String orgId);
 
-    ObjectValue findFirstByObjectIdInOrderByAmountDesc(Set<String> value);
+    ObjectValue findFirstByObjectIdInAndOrgIdOrderByAmountDesc(Set<String> value, String orgId);
 
     List<ObjectValue> findAllByObjectIdIn(Set<String> ids);
 
