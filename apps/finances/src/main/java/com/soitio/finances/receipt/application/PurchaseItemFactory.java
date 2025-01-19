@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class PurchaseItemFactory {
 
-    public List<PurchaseItem> from(List<ReceiptItemDto> items) {
+    public List<PurchaseItem> from(List<ReceiptItemDto> items, String orgId) {
         return items.parallelStream()
-                .map(this::buildPurchaseItem)
+                .map(i -> buildPurchaseItem(i, orgId))
                 .toList();
     }
 
-    private PurchaseItem buildPurchaseItem(ReceiptItemDto item) {
+    private PurchaseItem buildPurchaseItem(ReceiptItemDto item, String orgId) {
         return PurchaseItem.builder()
                 .name(item.getName())
                 .unit(item.getUnit())
@@ -23,6 +23,7 @@ public class PurchaseItemFactory {
                 .price(BigDecimal.valueOf(item.getPrice()))
                 .quantity(item.getQuantity())
                 .currency("PLN") // TODO: Make this dynamic
+                .orgId(orgId)
                 .build();
     }
 

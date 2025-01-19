@@ -6,6 +6,7 @@ import com.soitio.finances.moneyoperation.application.MoneyOperationService;
 import com.soitio.finances.moneyoperation.domain.MoneyOperation;
 import com.soitio.finances.receipt.domain.Purchase;
 import com.soitio.finances.receipt.domain.PurchaseItem;
+import com.soitio.finances.receipt.domain.dto.OrgWrapper;
 import com.soitio.finances.receipt.domain.dto.PurchaseItemToAnalyzeDto;
 import com.soitio.finances.receipt.domain.dto.PurchaseToAnalyzeDto;
 import com.soitio.finances.receipt.domain.dto.ReceiptDto;
@@ -23,17 +24,17 @@ public class ReceiptService {
     private final RabbitPublisher rabbitPublisher;
     private final MoneyOperationService moneyOperationService;
 
-    public void processReceipts(List<ReceiptDto> receipts) {
+    public void processReceipts(OrgWrapper<List<ReceiptDto>> receipts) {
         List<Purchase> saved = purchaseService.saveAll(purchaseFactory.from(receipts));
         convertToMoneyOperations(saved);
         // convert to analytics object
-        List<PurchaseToAnalyzeDto> converted = convertPurchasesToAnalyze(saved);
+        OrgWrapper<List<PurchaseToAnalyzeDto>> converted = convertPurchasesToAnalyze(saved, receipts.orgId());
         // publish rabbitMQ message for analytics
         rabbitPublisher.publish("purchase_analytics_queue", converted);
     }
 
-    private List<PurchaseToAnalyzeDto> convertPurchasesToAnalyze(List<Purchase> saved) {
-        return saved.stream()
+    private OrgWrapper<List<PurchaseToAnalyzeDto>> convertPurchasesToAnalyze(List<Purchase> saved, String orgId) {
+        return new OrgWrapper<>(orgId, saved.stream()
                 .map(p -> PurchaseToAnalyzeDto.builder()
                         .id(p.getId())
                         .amount(p.getRawAmount())
@@ -41,7 +42,7 @@ public class ReceiptService {
                         .date(p.getDate())
                         .items(convertItemsToAnalyze(p.getPurchaseItems()))
                         .build())
-                .toList();
+                .toList());
     }
 
     private List<PurchaseItemToAnalyzeDto> convertItemsToAnalyze(List<PurchaseItem> purchaseItems) {
@@ -72,6 +73,7 @@ public class ReceiptService {
                 .operationDescription(purchase.getSource())
                 .currency(purchase.getCurrency())
                 .operationType(MoneyOperationType.EXPENSES)
+                .orgId(purchase.getOrgId())
                 .build();
     }
 
