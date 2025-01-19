@@ -1,11 +1,11 @@
 package com.soitio.inventory.property.address.web;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.soitio.commons.dependency.model.DependencyCheckResponse;
 import com.soitio.commons.dependency.model.Dependent;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -27,30 +27,34 @@ public class PropertyAddressController {
     private final PropertyAddressRepository propertyAddressRepository;
 
     @GET
-    public PageDto<PropertyAddressDto> getAll(@Context UriInfo uriInfo) {
-        return propertyAddressRepository.getAll(uriInfo);
+    public PageDto<PropertyAddressDto> getAll(@Context UriInfo uriInfo, @HeaderParam("X-OrgId") String orgId) {
+        return propertyAddressRepository.getAll(uriInfo, orgId);
     }
 
     @GET
     @Path("/{addressId}")
-    public PropertyAddressDto getSingleAddress(@PathParam("addressId") String id) {
-        return propertyAddressRepository.getAddress(id);
+    public PropertyAddressDto getSingleAddress(@PathParam("addressId") String id,
+                                               @HeaderParam("X-OrgId") String orgId) {
+        return propertyAddressRepository.getAddress(id, orgId);
     }
 
     @POST
-    public void create(PropertyAddressCreationDto propertyAddressCreation) {
-        propertyAddressRepository.create(propertyAddressCreation);
+    public void create(PropertyAddressCreationDto propertyAddressCreation,
+                       @HeaderParam("X-OrgId") String orgId) {
+        propertyAddressRepository.create(propertyAddressCreation, orgId);
     }
 
     @DELETE
-    public DependencyCheckResponse delete(Set<String> ids) {
-        return propertyAddressRepository.delete(Dependent.INVENTORY_ADDRESS, ids);
+    public DependencyCheckResponse delete(Set<String> ids, @HeaderParam("X-OrgId") String orgId) {
+        return propertyAddressRepository.delete(Dependent.INVENTORY_ADDRESS, ids, orgId);
     }
 
     @PATCH
     @Path("/{addressId}")
-    public void updateSingleProperty(@PathParam("addressId") String addressId, JsonNode node) {
-        propertyAddressRepository.update(Dependent.INVENTORY_ADDRESS, addressId, node);
+    public void updateSingleProperty(@PathParam("addressId") String addressId,
+                                     JsonNode node,
+                                     @HeaderParam("X-OrgId") String orgId) {
+        propertyAddressRepository.update(Dependent.INVENTORY_ADDRESS, addressId, node, orgId);
     }
 
 }

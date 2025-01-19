@@ -22,25 +22,26 @@ public class PropertyAddressRepository extends AbstractDependencyCheckRepo<Prope
         super(mapper, dependencyCheckRequester);
     }
 
-    public void create(PropertyAddressCreationDto propertyAddressCreation) {
-        persist(from(propertyAddressCreation));
+    public void create(PropertyAddressCreationDto propertyAddressCreation, String orgId) {
+        persist(from(propertyAddressCreation, orgId));
     }
 
-    private PropertyAddress from(PropertyAddressCreationDto propertyAddressCreation) {
+    private PropertyAddress from(PropertyAddressCreationDto propertyAddressCreation, String orgId) {
         return PropertyAddress.builder()
                 .addressLine(propertyAddressCreation.getAddressLine())
                 .city(propertyAddressCreation.getCity())
                 .province(propertyAddressCreation.getProvince())
                 .country(propertyAddressCreation.getCountry())
                 .postalCode(propertyAddressCreation.getPostalCode())
+                .orgId(orgId)
                 .build();
     }
 
-    public PageDto<PropertyAddressDto> getAll(UriInfo uriInfo) {
+    public PageDto<PropertyAddressDto> getAll(UriInfo uriInfo, String orgId) {
         var params = uriInfo.getQueryParameters();
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
-        var addresses = findAll();
+        var addresses = findAllByOrgId(orgId);
         var addressList = addresses.page(pageNum, DEFAULT_PAGE_SIZE).list();
         return PageDto.of(addressList.stream()
                 .map(this::to)
@@ -71,7 +72,7 @@ public class PropertyAddressRepository extends AbstractDependencyCheckRepo<Prope
                 .build();
     }
 
-    public PropertyAddressDto getAddress(String id) {
-        return to(findById(new ObjectId(id)));
+    public PropertyAddressDto getAddress(String id, String orgId) {
+        return to(findByIdAndOrgId(id, orgId));
     }
 }

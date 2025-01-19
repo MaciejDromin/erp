@@ -32,7 +32,7 @@ public class PartRepository extends AbstractDependencyCheckRepo<Part> implements
         super(mapper, dependencyCheckRequester);
     }
 
-    public PageDto<PartDto> getParts(UriInfo uriInfo) {
+    public PageDto<PartDto> getParts(UriInfo uriInfo, String orgId) {
         var params = uriInfo.getQueryParameters();
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 0 : Integer.parseInt(requestedPage);
@@ -41,18 +41,14 @@ public class PartRepository extends AbstractDependencyCheckRepo<Part> implements
         PanacheQuery<Part> parts;
         if (objectIdsString != null) {
             List<String> objectIds = Arrays.asList(objectIdsString.split(","));
-            if (objectIds.isEmpty()) parts = findAll();
+            if (objectIds.isEmpty()) parts = findAllByOrgId(orgId);
             else {
-                parts = findAllByIdsNotIn(objectIds.stream()
-                        .map(ObjectId::new)
-                        .collect(Collectors.toSet()));
+                parts = findAllByIdsNotInAndOrgId(objectIds, orgId);
             }
         } else if (partIdsString != null) {
             List<String> partIds = Arrays.asList(partIdsString.split(","));
             if (partIds.isEmpty()) parts = findAll();
-            else parts = findAllByIdsIn(partIds.stream()
-                    .map(ObjectId::new)
-                    .collect(Collectors.toSet()));
+            else parts = findAllByIdsInAndOrgId(partIds, orgId);
         } else parts = findAll();
         var size = params.getFirst("size");
         var sizeToFetch = size == null ? DEFAULT_PAGE_SIZE : Integer.parseInt(size);
@@ -62,23 +58,16 @@ public class PartRepository extends AbstractDependencyCheckRepo<Part> implements
                 .toList(), parts.pageCount());
     }
 
-    private PanacheQuery<Part> findAllByIdsIn(Set<ObjectId> partIds) {
-        return find("_id in ?1", partIds);
+    public void create(PartCreationDto partCreation, String orgId) {
+        persist(from(partCreation, orgId));
     }
 
-    public PanacheQuery<Part> findAllByIdsNotIn(Set<ObjectId> partIds) {
-        return find("{_id: { $nin: [?1]}}", partIds);
-    }
-
-    public void create(PartCreationDto partCreation) {
-        persist(from(partCreation));
-    }
-
-    private Part from(PartCreationDto part) {
+    private Part from(PartCreationDto part, String orgId) {
         return Part.builder()
                 .name(part.getName())
                 .partNumber(part.getPartNumber())
                 .manufacturerId(part.getManufacturerId())
+                .orgId(orgId)
                 .build();
     }
 
@@ -127,7 +116,7 @@ public class PartRepository extends AbstractDependencyCheckRepo<Part> implements
                 .build();
     }
 
-    public PartDto getPart(String id) {
-        return to(findById(new ObjectId(id)));
+    public PartDto getPart(String id, String orgId) {
+        return to(findByIdAndOrgId(id, orgId));
     }
 }
