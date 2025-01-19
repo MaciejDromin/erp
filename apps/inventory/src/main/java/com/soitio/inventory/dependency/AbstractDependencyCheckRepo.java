@@ -10,13 +10,12 @@ import com.soitio.commons.dependency.model.DependencyCheckResult;
 import com.soitio.commons.dependency.model.Dependent;
 import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.utils.MergePatchUtils;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
-import org.bson.types.ObjectId;
+import com.soitio.inventory.commons.OrgMongoRepository;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepository<T> {
+public abstract class AbstractDependencyCheckRepo<T> implements OrgMongoRepository<T> {
 
     private final ObjectMapper mapper;
     private final DependencyCheckRequester dependencyCheckRequester;
@@ -27,7 +26,7 @@ public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepo
         this.dependencyCheckRequester = dependencyCheckRequester;
     }
 
-    public DependencyCheckResponse delete(Dependent dependent, Set<String> ids) {
+    public DependencyCheckResponse delete(Dependent dependent, Set<String> ids, String orgId) {
         var response = dependencyCheckRequester.requestDependencyCheckForIds(dependent, ids.stream()
                 .map(DependencyCheckContext::emptyOfId)
                 .collect(Collectors.toSet()), Action.DELETE);
@@ -39,19 +38,13 @@ public abstract class AbstractDependencyCheckRepo<T> implements PanacheMongoRepo
                 .toList()
                 .forEach(diff::remove);
 
-        deleteByIds(diff.stream()
-                .map(ObjectId::new)
-                .collect(Collectors.toSet()));
+        deleteByIdsAndOrgId(diff, orgId);
 
         return response;
     }
 
-    private void deleteByIds(Set<ObjectId> diff) {
-        delete("_id in ?1", diff);
-    }
-
-    public DependencyCheckResponse update(Dependent dependent, String id, JsonNode node) {
-        var entity = findById(new ObjectId(id));
+    public DependencyCheckResponse update(Dependent dependent, String id, JsonNode node, String orgId) {
+        T entity = findByIdAndOrgId(id, orgId);
         JsonNode entityNode = mapper.valueToTree(entity);
         MergePatch patch = MergePatchUtils.fromJsonNode(node);
         MergePatch target = MergePatchUtils.fromJsonNode(entityNode);

@@ -20,7 +20,6 @@ import com.soitio.inventory.maintenance.domain.dto.MaintenanceCreationDto;
 import com.soitio.inventory.maintenance.domain.dto.MaintenanceForListDto;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,34 +35,28 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
         super(mapper, dependencyCheckRequester);
     }
 
-    public void create(MaintenanceCreationDto maintenanceCreation) {
-        persist(from(maintenanceCreation));
+    public void create(MaintenanceCreationDto maintenanceCreation, String orgId) {
+        persist(from(maintenanceCreation, orgId));
     }
 
-    public PageDto<MaintenanceForListDto> getForList(UriInfo uriInfo) {
+    public PageDto<MaintenanceForListDto> getForList(UriInfo uriInfo, String orgId) {
         var params = uriInfo.getQueryParameters();
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
         var objectIdsString = params.getFirst("objectIds");
         PanacheQuery<MaintenanceRecord> maintenance;
-        if (objectIdsString == null) maintenance = findAll();
+        if (objectIdsString == null) maintenance = findAllByOrgId(orgId);
         else {
             List<String> objectIds = Arrays.asList(objectIdsString.split(","));
-            if (objectIds.isEmpty()) maintenance = findAll();
+            if (objectIds.isEmpty()) maintenance = findAllByOrgId(orgId);
             else {
-                maintenance = findAllByIdsNotIn(objectIds.stream()
-                        .map(ObjectId::new)
-                        .collect(Collectors.toSet()));
+                maintenance = findAllByIdsNotInAndOrgId(objectIds, orgId);
             }
         }
         var propertyList = maintenance.page(pageNum, DEFAULT_PAGE_SIZE).list();
         return PageDto.of(propertyList.stream()
                 .map(this::to)
                 .toList(), maintenance.pageCount());
-    }
-
-    public PanacheQuery<MaintenanceRecord> findAllByIdsNotIn(Set<ObjectId> itemIds) {
-        return find("{_id: { $nin: [?1]}}", itemIds);
     }
 
     private MaintenanceForListDto to(MaintenanceRecord maintenanceRecord) {
@@ -84,12 +77,13 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
                 .build();
     }
 
-    private MaintenanceRecord from(MaintenanceCreationDto maintenanceCreation) {
+    private MaintenanceRecord from(MaintenanceCreationDto maintenanceCreation, String orgId) {
         return MaintenanceRecord.builder()
                 .date(maintenanceCreation.getDate())
                 .odometer(maintenanceCreation.getOdometer())
                 .parts(maintenanceCreation.getParts())
                 .contractorId(maintenanceCreation.getContractorId())
+                .orgId(orgId)
                 .build();
     }
 
@@ -121,8 +115,8 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
                 .collect(Collectors.toSet());
     }
 
-    private Set<MaintenanceRecord> findAllByContractorIdIn(Set<ObjectId> set) {
-        return new HashSet<>(list("parts.id in ?1", set));
+    private List<MaintenanceRecord> findAllByContractorIdIn(Set<ObjectId> set) {
+        return list("parts.id in ?1", set);
     }
 
     @Override
@@ -141,7 +135,7 @@ public class MaintenanceRepository extends AbstractDependencyCheckRepo<Maintenan
                 .build();
     }
 
-    public MaintenanceRecordDto getMaintenance(String id) {
-        return toDto(findById(new ObjectId(id)));
+    public MaintenanceRecordDto getMaintenance(String id, String orgId) {
+        return toDto(findByIdAndOrgId(id, orgId));
     }
 }

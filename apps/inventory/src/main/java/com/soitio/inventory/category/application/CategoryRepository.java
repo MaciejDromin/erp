@@ -11,8 +11,6 @@ import jakarta.ws.rs.core.UriInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import com.soitio.inventory.category.domain.Category;
-import java.util.HashSet;
-import java.util.Set;
 
 @Slf4j
 @Singleton
@@ -34,17 +32,22 @@ public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
                 .build();
     }
 
-    public PageDto<CategoryDto> findAll(UriInfo uriInfo) {
+    public PageDto<CategoryDto> findAll(UriInfo uriInfo, String orgId) {
         var params = uriInfo.getQueryParameters();
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
-        var categories = findAll();
+        var categories = findAllByOrgId(orgId);
         var requestedSize = params.getFirst("size");
         var size = requestedSize == null ? DEFAULT_PAGE_SIZE : Integer.parseInt(requestedSize);
         var categoryList = categories.page(pageNum, size).list();
         return PageDto.of(categoryList.stream()
                 .map(this::convert)
                 .toList(), categories.pageCount());
+    }
+
+    public void create(CategoryDto category, String orgId) {
+        Category toSave = convert(category, orgId);
+        persist(toSave);
     }
 
     public CategoryDto convert(Category category) {
@@ -54,22 +57,15 @@ public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
                 .build();
     }
 
-    public void create(CategoryDto category) {
-        persist(convert(category));
-    }
-
-    private Category convert(CategoryDto categoryDto) {
+    private Category convert(CategoryDto categoryDto, String orgId) {
         return Category.builder()
                 .name(categoryDto.getName())
+                .orgId(orgId)
                 .build();
     }
 
-    public Set<Category> findAllByIdsIn(Set<ObjectId> categoryIds) {
-        return new HashSet<>(list("_id in ?1", categoryIds));
-    }
-
-    public CategoryDto findOne(String categoryId) {
-        return convert(findById(new ObjectId(categoryId)));
+    public CategoryDto findOne(String categoryId, String orgId) {
+        return convert(findByIdAndOrgId(categoryId, orgId));
     }
 
 }

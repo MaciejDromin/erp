@@ -43,79 +43,68 @@ public class InventoryItemRepository extends AbstractDependencyCheckRepo<Invento
         this.categoryRepository = categoryRepository;
     }
 
-    public PageDto<InventoryItemDto> listAllItems(UriInfo uriInfo) {
+    public PageDto<InventoryItemDto> listAllItems(UriInfo uriInfo, String orgId) {
         var params = uriInfo.getQueryParameters();
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
         var objectIdsString = params.getFirst("objectIds");
         PanacheQuery<InventoryItem> items;
-        if (objectIdsString == null) items = findAll();
+        if (objectIdsString == null) items = findAllByOrgId(orgId);
         else {
             List<String> objectIds = Arrays.asList(objectIdsString.split(","));
-            if (objectIds.isEmpty()) items = findAll();
+            if (objectIds.isEmpty()) items = findAllByOrgId(orgId);
             else {
-                items = findAllByIdsNotIn(objectIds.stream()
-                        .map(ObjectId::new)
-                        .collect(Collectors.toSet()));
+                items = findAllByIdsNotInAndOrgId(objectIds, orgId);
             }
         }
         var requestedSize = params.getFirst("size");
         var size = requestedSize == null ? DEFAULT_PAGE_SIZE : Integer.parseInt(requestedSize);
         var itemList = items.page(pageNum, size).list();
         return PageDto.of(itemList.stream()
-                .map(this::convert)
+                .map(i -> convert(i, orgId))
                 .toList(), items.pageCount());
     }
 
-    private InventoryItemDto convert(InventoryItem item) {
-        return InventoryItemDto.builder()
-                .id(item.getId().toString())
-                .name(item.getName())
-                .quantity(item.getQuantity())
-                .unit(item.getUnit())
-                .categories(categoryRepository.findAllByIdsIn(item.getCategories()).stream()
-                        .map(categoryRepository::convert)
-                        .collect(Collectors.toSet()))
-                .build();
-    }
-
-    public void create(ItemCreationDto itemCreation) {
-        var item = convert(itemCreation);
+    public void create(ItemCreationDto itemCreation, String orgId) {
+        var item = convert(itemCreation, orgId);
         item.setCategories(itemCreation.getCategoryIds().stream()
                 .map(ObjectId::new)
                 .collect(Collectors.toSet()));
         persist(item);
     }
 
-    private InventoryItem convert(ItemCreationDto itemCreation) {
+    private InventoryItemDto convert(InventoryItem item, String orgId) {
+        return InventoryItemDto.builder()
+                .id(item.getId().toString())
+                .name(item.getName())
+                .quantity(item.getQuantity())
+                .unit(item.getUnit())
+                .categories(categoryRepository.findAllByIdsInAndOrgId(item.getCategories(), orgId).stream()
+                        .map(categoryRepository::convert)
+                        .collect(Collectors.toSet()))
+                .build();
+    }
+
+    private InventoryItem convert(ItemCreationDto itemCreation, String orgId) {
         return InventoryItem.builder()
                 .name(itemCreation.getName())
                 .unit(itemCreation.getUnit())
                 .quantity(itemCreation.getQuantity())
+                .orgId(orgId)
                 .build();
     }
 
-    public Map<String, String> findAllItemNamesByIds(List<String> objectIds) {
+    public Map<String, String> findAllItemNamesByIds(List<String> objectIds, String orgId) {
         Map<String, String> ret = new HashMap<>();
-        var items = findAllByIdsIn(objectIds.stream()
-                .map(ObjectId::new)
-                .collect(Collectors.toSet()));
+        var items = listAllByIdsInAndOrgId(objectIds, orgId);
         items.forEach(item -> ret.put(item.getId().toString(), item.getName()));
         return ret;
     }
 
-    public Set<InventoryItem> findAllByIdsIn(Set<ObjectId> itemIds) {
-        return new HashSet<>(list("_id in ?1", itemIds));
-    }
-
-    public PanacheQuery<InventoryItem> findAllByIdsNotIn(Set<ObjectId> itemIds) {
-        return find("{_id: { $nin: [?1]}}", itemIds);
-    }
-
-    public Map<String, Integer> findCountByObjectsIds(List<String> objectIds) {
-        var objects = findAllByIdsIn(objectIds.stream()
+    public Map<String, Integer> findCountByObjectsIds(List<String> objectIds, String orgId) {
+        var objects = findAllByIdsInAndOrgId(objectIds.stream()
                 .map(ObjectId::new)
-                .collect(Collectors.toSet()));
+                .collect(Collectors.toSet()), orgId);
         return objects.stream()
                 .collect(Collectors.toMap(item -> item.getId().toString(), InventoryItem::getQuantity));
     }
@@ -165,7 +154,8 @@ public class InventoryItemRepository extends AbstractDependencyCheckRepo<Invento
                 .build();
     }
 
-    public InventoryItemDto getItem(String itemId) {
-        return convert(findById(new ObjectId(itemId)));
+    public InventoryItemDto getItem(String itemId, String orgId) {
+        return convert(findByIdAndOrgId(itemId, orgId), orgId);
     }
+
 }
