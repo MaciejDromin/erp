@@ -50,23 +50,29 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
         this.currencyService = currencyService;
     }
 
-    public void create(ObjectValueCreationDto creation) {
-        objectValueRepository.save(createObject(creation));
+    public void create(ObjectValueCreationDto creation, String orgId) {
+        objectValueRepository.save(createObject(creation, orgId));
     }
 
-    private ObjectValue createObject(ObjectValueCreationDto creation) {
+    private ObjectValue createObject(ObjectValueCreationDto creation, String orgId) {
         return ObjectValue.builder()
                 .objectId(creation.getObjectId())
                 .amount(new BigDecimal(creation.getAmount()))
                 .currency(creation.getCurrencyCode())
                 .objectType(creation.getObjectType())
+                .orgId(orgId)
                 .build();
     }
 
-    public Page<ObjectValueDto> getPage(Pageable pageable, ObjectType objectType, Set<String> objectIds) {
+    public Page<ObjectValueDto> getPage(Pageable pageable,
+                                        ObjectType objectType,
+                                        Set<String> objectIds,
+                                        String orgId) {
         return Optional.ofNullable(objectIds)
-                .map(oi -> objectValueRepository.findAllPageableByObjectTypeAndObjectIdIn(objectType, oi, pageable))
-                .orElseGet(() -> objectValueRepository.findAllPageableByObjectType(objectType, pageable))
+                .map(oi -> objectValueRepository.findAllPageableByObjectTypeAndObjectIdInAndOrgId(
+                        objectType, oi, pageable, orgId))
+                .orElseGet(() -> objectValueRepository.findAllPageableByObjectTypeAndOrgId(
+                        objectType, pageable, orgId))
                 .map(this::from);
     }
 
@@ -80,8 +86,8 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
                 .build();
     }
 
-    public TotalObjectsValueDto totalValue(Map<String, Integer> quantityByObjectMap, ObjectType objectType) {
-        List<ObjectValue> values = objectValueRepository.findAllByObjectType(objectType);
+    public TotalObjectsValueDto totalValue(Map<String, Integer> quantityByObjectMap, ObjectType objectType, String orgId) {
+        List<ObjectValue> values = objectValueRepository.findAllByObjectTypeAndOrgId(objectType, orgId);
         List<String> currencies = values.stream()
                 .map(ObjectValue::getCurrency)
                 .filter(curr -> !curr.equalsIgnoreCase("PLN"))
@@ -108,14 +114,14 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
                 .build();
     }
 
-    public List<String> allObjectIds(ObjectType objectType) {
-        return objectValueRepository.findAllProjectedByObjectType(objectType).stream()
+    public List<String> allObjectIds(ObjectType objectType, String orgId) {
+        return objectValueRepository.findAllProjectedByObjectTypeAndOrgId(objectType, orgId).stream()
                 .map(ObjectIdProj::getObjectId)
                 .toList();
     }
 
-    public TopItemByCategoryDto findTopByObjectIdsIn(Set<String> value) {
-        ObjectValue ov = objectValueRepository.findFirstByObjectIdInOrderByAmountDesc(value);
+    public TopItemByCategoryDto findTopByObjectIdsIn(Set<String> value, String orgId) {
+        ObjectValue ov = objectValueRepository.findFirstByObjectIdAndOrgIdInOrderByAmountDesc(value, orgId);
         var amount = ov.getAmount();
         return TopItemByCategoryDto.builder()
                 .amount(AmountDto.of(amount.getAmount(), amount.getCurrencyUnit().getCode()))
@@ -182,7 +188,7 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
         return from(entity);
     }
 
-    public ObjectValueDto getObjectValue(String id) {
-        return from(findByIdAndOrgId(id, ));
+    public ObjectValueDto getObjectValue(String id, String orgId) {
+        return from(findByIdAndOrgId(id, orgId));
     }
 }

@@ -13,17 +13,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ObjectValueRepository extends OrgRepository<ObjectValue, String> {
 
-    List<ObjectIdProj> findAllProjectedByObjectType(ObjectType objectType);
+    List<ObjectIdProj> findAllProjectedByObjectTypeAndOrgId(ObjectType objectType, String orgId);
 
-    Page<ObjectValue> findAllPageableByObjectType(ObjectType objectType, Pageable pageable);
+    Page<ObjectValue> findAllPageableByObjectTypeAndOrgId(ObjectType objectType, Pageable pageable, String orgId);
 
-    Page<ObjectValue> findAllPageableByObjectTypeAndObjectIdIn(ObjectType objectType,
-                                                               Set<String> objectIds,
-                                                               Pageable pageable);
+    Page<ObjectValue> findAllPageableByObjectTypeAndObjectIdInAndOrgId(ObjectType objectType,
+                                                                       Set<String> objectIds,
+                                                                       Pageable pageable, String orgId);
 
-    List<ObjectValue> findAllByObjectType(ObjectType objectType);
+    List<ObjectValue> findAllByObjectTypeAndOrgId(ObjectType objectType, String orgId);
 
-    ObjectValue findFirstByObjectIdInOrderByAmountDesc(Set<String> value);
+    ObjectValue findFirstByObjectIdAndOrgIdInOrderByAmountDesc(Set<String> value, String orgId);
 
     List<ObjectValue> findAllByObjectIdIn(Set<String> ids);
 
