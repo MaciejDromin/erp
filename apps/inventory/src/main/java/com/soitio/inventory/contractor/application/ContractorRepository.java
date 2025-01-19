@@ -35,14 +35,12 @@ public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
         var objectIdsString = params.getFirst("objectIds");
         PanacheQuery<Contractor> contractors;
-        if (objectIdsString == null) contractors = findAll();
+        if (objectIdsString == null) contractors = findAllByOrgId(orgId);
         else {
             List<String> objectIds = Arrays.asList(objectIdsString.split(","));
-            if (objectIds.isEmpty()) contractors = findAll();
+            if (objectIds.isEmpty()) contractors = findAllByOrgId(orgId);
             else {
-                contractors = findAllByIdsNotIn(objectIds.stream()
-                        .map(ObjectId::new)
-                        .collect(Collectors.toSet()));
+                contractors = findAllByIdsNotInAndOrgId(objectIds, orgId);
             }
         }
         var propertyList = contractors.page(pageNum, DEFAULT_PAGE_SIZE).list();
@@ -51,18 +49,15 @@ public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor
                 .toList(), contractors.pageCount());
     }
 
-    public PanacheQuery<Contractor> findAllByIdsNotIn(Set<ObjectId> itemIds) {
-        return find("{_id: { $nin: [?1]}}", itemIds);
+    public void create(ContractorCreationDto contractorCreation, String orgId) {
+        persist(from(contractorCreation, orgId));
     }
 
-    public void create(ContractorCreationDto contractorCreation) {
-        persist(from(contractorCreation));
-    }
-
-    private Contractor from(ContractorCreationDto contractorCreation) {
+    private Contractor from(ContractorCreationDto contractorCreation, String orgId) {
         return Contractor.builder()
                 .name(contractorCreation.getName())
                 .contactInformation(fromContactInformation(contractorCreation.getContactInformation()))
+                .orgId(orgId)
                 .build();
     }
 
@@ -103,7 +98,7 @@ public class ContractorRepository extends AbstractDependencyCheckRepo<Contractor
                 .build();
     }
 
-    public ContractorDto getContractor(String contractorId) {
-        return to(findById(new ObjectId(contractorId)));
+    public ContractorDto getContractor(String contractorId, String orgId) {
+        return to(findByIdAndOrgId(contractorId, orgId));
     }
 }

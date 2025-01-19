@@ -54,9 +54,7 @@ public class InventoryItemRepository extends AbstractDependencyCheckRepo<Invento
             List<String> objectIds = Arrays.asList(objectIdsString.split(","));
             if (objectIds.isEmpty()) items = findAllByOrgId(orgId);
             else {
-                items = findAllByIdsNotInAndOrgId(objectIds.stream()
-                        .map(ObjectId::new)
-                        .collect(Collectors.toSet()), orgId);
+                items = findAllByIdsNotInAndOrgId(objectIds, orgId);
             }
         }
         var requestedSize = params.getFirst("size");
