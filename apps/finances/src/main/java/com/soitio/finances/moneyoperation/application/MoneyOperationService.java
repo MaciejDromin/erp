@@ -51,11 +51,11 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
         this.repository = repository;
     }
 
-    public void create(MoneyOperationCreationDto creation) {
-        repository.save(createObject(creation));
+    public void create(MoneyOperationCreationDto creation, String orgId) {
+        repository.save(createObject(creation, orgId));
     }
 
-    private MoneyOperation createObject(MoneyOperationCreationDto creation) {
+    private MoneyOperation createObject(MoneyOperationCreationDto creation, String orgId) {
         LocalDateTime effectiveDate = LocalDateTime.now(ZoneOffset.UTC);
         return MoneyOperation.builder()
                 .amount(creation.getAmount().getValue())
@@ -66,11 +66,12 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
                 .currency(creation.getAmount().getCurrencyCode())
                 .operationType(creation.getOperationType())
                 .operationCategory(operationCategoryService.getCategoryById(creation.getOperationCategoryId()))
+                .orgId(orgId)
                 .build();
     }
 
-    public Page<MoneyOperationDto> getPage(Pageable pageable) {
-        return repository.findAll(pageable).map(this::from);
+    public Page<MoneyOperationDto> getPage(Pageable pageable, String orgId) {
+        return repository.findAllByOrgId(pageable, orgId).map(this::from);
     }
 
     private MoneyOperationDto from(MoneyOperation moneyOperation) {
@@ -100,6 +101,7 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
                 .currency(plannedExpenses.getActualAmount().getCurrencyUnit().getCode())
                 .operationType(plannedExpenses.getOperationType())
                 .operationCategory(plannedExpenses.getOperationCategory())
+                .orgId(plannedExpenses.getOrgId())
                 .build();
     }
 
@@ -107,10 +109,10 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
         repository.saveAll(converted);
     }
 
-    public List<MoneyOperationBalanceDto> getForBalance(int balanceYear, Month balanceMonth) {
+    public List<MoneyOperationBalanceDto> getForBalance(int balanceYear, Month balanceMonth, String orgId) {
         Supplier<List<MoneyOperation>> func;
 
-        if (balanceMonth == null) func = () -> repository.findAllByEffectiveYear(balanceYear);
+        if (balanceMonth == null) func = () -> repository.findAllByEffectiveYearAndOrgId(balanceYear, orgId);
         else func = () -> repository.findAllByEffectiveYearAndEffectiveMonth(balanceYear, balanceMonth);
 
         return func.get().stream()
@@ -175,12 +177,12 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
     }
 
     @Override
-    public void deleteByIds(Set<String> collect) {
+    public void deleteByIdsAndOrgId(Collection<String> collect, String orgId) {
         repository.deleteAllById(collect);
     }
 
     @Override
-    protected MoneyOperation findById(String id) {
+    protected MoneyOperation findByIdAndOrgId(String id, String orgId) {
         return repository.getReferenceById(id);
     }
 
@@ -221,7 +223,7 @@ public class MoneyOperationService extends AbstractDependencyCheckService<MoneyO
         return from(entity);
     }
 
-    public MoneyOperationDto getMoneyOperation(String id) {
-        return from(findById(id));
+    public MoneyOperationDto getMoneyOperation(String id, String orgId) {
+        return from(findByIdAndOrgId(id, orgId));
     }
 }

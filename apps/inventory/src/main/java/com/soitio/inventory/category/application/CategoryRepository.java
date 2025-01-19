@@ -46,8 +46,7 @@ public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
     }
 
     public void create(CategoryDto category, String orgId) {
-        Category toSave = convert(category, orgId);
-        persist(toSave);
+        persist(convert(category, orgId));
     }
 
     public CategoryDto convert(Category category) {

@@ -10,8 +10,10 @@ import com.soitio.finances.operationcategories.application.port.OperationCategor
 import com.soitio.finances.operationcategories.domain.OperationCategory;
 import com.soitio.finances.operationcategories.domain.QOperationCategory;
 import com.soitio.finances.operationcategories.domain.dto.OperationCategoryCreationDto;
+
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -64,12 +66,12 @@ public class OperationCategoryService extends AbstractDependencyCheckService<Ope
     }
 
     @Override
-    public void deleteByIds(Set<String> collect) {
+    public void deleteByIdsAndOrgId(Collection<String> collect, String orgId) {
         repository.deleteAllById(collect);
     }
 
     @Override
-    protected OperationCategory findById(String id) {
+    protected OperationCategory findByIdAndOrgId(String id, String orgId) {
         return repository.getReferenceById(id);
     }
 
@@ -94,6 +96,6 @@ public class OperationCategoryService extends AbstractDependencyCheckService<Ope
     }
 
     public OperationCategoryDto getOperationCategory(String id) {
-        return from(findById(id));
+        return from(findByIdAndOrgId(id, ));
     }
 }

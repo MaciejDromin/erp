@@ -19,6 +19,7 @@ import com.soitio.finances.objectvalues.domain.dto.TotalObjectsValueDto;
 import com.soitio.finances.objectvalues.domain.proj.ObjectIdProj;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -143,12 +144,12 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
     }
 
     @Override
-    public void deleteByIds(Set<String> collect) {
+    public void deleteByIdsAndOrgId(Collection<String> collect, String orgId) {
         objectValueRepository.deleteAllById(collect);
     }
 
     @Override
-    protected ObjectValue findById(String id) {
+    protected ObjectValue findByIdAndOrgId(String id, String orgId) {
         return objectValueRepository.getReferenceById(id);
     }
 
@@ -182,6 +183,6 @@ public class ObjectValueService extends AbstractDependencyCheckService<ObjectVal
     }
 
     public ObjectValueDto getObjectValue(String id) {
-        return from(findById(id));
+        return from(findByIdAndOrgId(id, ));
     }
 }

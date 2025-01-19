@@ -168,12 +168,12 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
     }
 
     @Override
-    public void deleteByIds(Set<String> collect) {
+    public void deleteByIdsAndOrgId(Collection<String> collect, String orgId) {
         repository.deleteAllById(collect);
     }
 
     @Override
-    protected PlannedExpenses findById(String id) {
+    protected PlannedExpenses findByIdAndOrgId(String id, String orgId) {
         return repository.getReferenceById(id);
     }
 
@@ -227,6 +227,6 @@ public class PlannedExpensesService extends AbstractDependencyCheckService<Plann
     }
 
     public PlannedExpensesDto getPlannedExpense(String id) {
-        return convertToDto(findById(id));
+        return convertToDto(findByIdAndOrgId(id, ));
     }
 }

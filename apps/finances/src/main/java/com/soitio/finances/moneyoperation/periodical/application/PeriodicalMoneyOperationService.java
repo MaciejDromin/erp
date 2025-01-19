@@ -130,12 +130,12 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
     }
 
     @Override
-    public void deleteByIds(Set<String> collect) {
+    public void deleteByIdsAndOrgId(Collection<String> collect, String orgId) {
         repository.deleteAllById(collect);
     }
 
     @Override
-    protected PeriodicalMoneyOperation findById(String id) {
+    protected PeriodicalMoneyOperation findByIdAndOrgId(String id, String orgId) {
         return repository.getReferenceById(id);
     }
 
@@ -183,6 +183,6 @@ public class PeriodicalMoneyOperationService extends AbstractDependencyCheckServ
     }
 
     public PeriodicalMoneyOperationDto getPeriodicalOperation(String id) {
-        return from(findById(id));
+        return from(findByIdAndOrgId(id, ));
     }
 }
