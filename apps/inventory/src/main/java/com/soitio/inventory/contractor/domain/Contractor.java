@@ -1,15 +1,14 @@
 package com.soitio.inventory.contractor.domain;
 
 
+import com.soitio.inventory.commons.BaseEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.bson.types.ObjectId;
 import com.soitio.inventory.contractor.contact.domain.ContactInformation;
 
 @Getter
@@ -19,10 +18,8 @@ import com.soitio.inventory.contractor.contact.domain.ContactInformation;
 @Builder
 @MongoEntity(collection = "Contractor")
 @ToString
-@EqualsAndHashCode(of = "id")
-public class Contractor {
+public class Contractor extends BaseEntity {
 
-    private ObjectId id;
     private String name;
     private ContactInformation contactInformation;
 

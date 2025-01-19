@@ -1,14 +1,13 @@
 package com.soitio.inventory.vehicle.domain;
 
+import com.soitio.inventory.commons.BaseEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.bson.types.ObjectId;
 import com.soitio.inventory.vehicle.domain.enums.BodyStyle;
 import com.soitio.inventory.vehicle.domain.enums.DriveTrain;
 import com.soitio.inventory.vehicle.domain.enums.FuelType;
@@ -22,10 +21,8 @@ import com.soitio.inventory.vehicle.domain.enums.Transmission;
 @Builder
 @MongoEntity(collection = "Vehicle")
 @ToString
-@EqualsAndHashCode(of = "id")
-public class Vehicle {
+public class Vehicle extends BaseEntity {
 
-    private ObjectId id;
     private String name;
     private int year;
     private int odometer;
