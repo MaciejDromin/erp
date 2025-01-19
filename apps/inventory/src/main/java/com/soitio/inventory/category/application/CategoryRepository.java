@@ -6,6 +6,7 @@ import com.soitio.commons.models.commons.MergePatch;
 import com.soitio.commons.models.dto.PageDto;
 import com.soitio.commons.models.dto.inventory.category.CategoryDto;
 import com.soitio.inventory.dependency.AbstractDependencyCheckRepo;
+import io.quarkus.mongodb.panache.PanacheQuery;
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.core.UriInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -34,17 +35,21 @@ public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
                 .build();
     }
 
-    public PageDto<CategoryDto> findAll(UriInfo uriInfo) {
+    public PageDto<CategoryDto> findAll(UriInfo uriInfo, String orgId) {
         var params = uriInfo.getQueryParameters();
         var requestedPage = params.getFirst("page");
         var pageNum = requestedPage == null ? 1 : Integer.parseInt(requestedPage);
-        var categories = findAll();
+        var categories = findAllByOrgId(orgId);
         var requestedSize = params.getFirst("size");
         var size = requestedSize == null ? DEFAULT_PAGE_SIZE : Integer.parseInt(requestedSize);
         var categoryList = categories.page(pageNum, size).list();
         return PageDto.of(categoryList.stream()
                 .map(this::convert)
                 .toList(), categories.pageCount());
+    }
+
+    private PanacheQuery<Category> findAllByOrgId(String orgId) {
+        return find("orgId = ?1", orgId);
     }
 
     public CategoryDto convert(Category category) {
@@ -54,8 +59,10 @@ public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
                 .build();
     }
 
-    public void create(CategoryDto category) {
-        persist(convert(category));
+    public void create(CategoryDto category, String orgId) {
+        Category toSave = convert(category);
+        toSave.setOrgId(orgId);
+        persist(toSave);
     }
 
     private Category convert(CategoryDto categoryDto) {
@@ -68,8 +75,12 @@ public class CategoryRepository extends AbstractDependencyCheckRepo<Category> {
         return new HashSet<>(list("_id in ?1", categoryIds));
     }
 
-    public CategoryDto findOne(String categoryId) {
-        return convert(findById(new ObjectId(categoryId)));
+    public CategoryDto findOne(String categoryId, String orgId) {
+        return convert(findByIdAndOrgId(new ObjectId(categoryId), orgId));
+    }
+
+    private Category findByIdAndOrgId(ObjectId id, String orgId) {
+        return find("_id = ?1 and orgId = ?2", id, orgId).firstResult();
     }
 
 }
