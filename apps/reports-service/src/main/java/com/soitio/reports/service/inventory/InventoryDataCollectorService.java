@@ -17,7 +17,7 @@ public class InventoryDataCollectorService {
         this.inventoryClient = inventoryClient;
     }
 
-    public List<InventoryItemDto> getAllItems() {
-        return PageableDataFetcher.fetchData(inventoryClient::getAllItems, Map.of());
+    public List<InventoryItemDto> getAllItems(String orgId) {
+        return PageableDataFetcher.fetchData(p -> inventoryClient.getAllItems(orgId, p), Map.of());
     }
 }
