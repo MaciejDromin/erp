@@ -10,8 +10,9 @@ app = FastAPI()
 @app.post("/receipts")
 async def upload_file(request: Request):
     filename = request.headers['filename']
+    orgId = request.headers['X-OrgId']
     filename = unquote(filename)
-    await handle_uploaded_receipts(filename, request)
+    await handle_uploaded_receipts(filename, request, orgId)
     return {"filename": filename, "status": "PROCESSING"}
 
 
