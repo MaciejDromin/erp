@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
-public class MaintenanceRepository extends AbstractDependencyCheckRepo<MaintenanceRecord>  implements DependencyCheckService {
+public class MaintenanceRepository extends AbstractDependencyCheckRepo<MaintenanceRecord> implements DependencyCheckService {
 
     private static final String SERVICE_NAME = "MaintenanceRecord";
     private static final Integer DEFAULT_PAGE_SIZE = 20;
