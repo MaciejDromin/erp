@@ -2,10 +2,9 @@ package com.soitio.widgets.finances.application;
 
 import com.soitio.widgets.finances.client.FiltersDataClient;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
 import java.time.Month;
 import java.util.List;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @ApplicationScoped
 public class FiltersDataService {
@@ -16,12 +15,12 @@ public class FiltersDataService {
         this.filtersDataClient = filtersDataClient;
     }
 
-    public List<Integer> getBalanceYears() {
-        return filtersDataClient.getDistinctYears();
+    public List<Integer> getBalanceYears(String orgId) {
+        return filtersDataClient.getDistinctYears(orgId);
     }
 
-    public List<Month> getBalanceMonths(int year) {
-        return filtersDataClient.getDistinctMonths(year);
+    public List<Month> getBalanceMonths(int year, String orgId) {
+        return filtersDataClient.getDistinctMonths(orgId, year);
     }
 
 }
