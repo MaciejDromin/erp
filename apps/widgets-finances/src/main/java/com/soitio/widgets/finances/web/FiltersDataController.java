@@ -2,6 +2,7 @@ package com.soitio.widgets.finances.web;
 
 import com.soitio.widgets.finances.application.FiltersDataService;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 import lombok.RequiredArgsConstructor;
@@ -16,14 +17,14 @@ public class FiltersDataController {
 
     @GET
     @Path("/balance/year")
-    public List<Integer> getBalanceYears() {
-        return filtersDataService.getBalanceYears();
+    public List<Integer> getBalanceYears(@HeaderParam("X-OrgId") String orgId) {
+        return filtersDataService.getBalanceYears(orgId);
     }
 
     @GET
     @Path("/balance/month")
-    public List<Month> getBalanceMonths(@QueryParam("year") int year) {
-        return filtersDataService.getBalanceMonths(year);
+    public List<Month> getBalanceMonths(@QueryParam("year") int year, @HeaderParam("X-OrgId") String orgId) {
+        return filtersDataService.getBalanceMonths(year, orgId);
     }
 
 }

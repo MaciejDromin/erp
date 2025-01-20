@@ -51,10 +51,16 @@ public class WidgetService {
         this.inventoryClient = inventoryClient;
     }
 
-    public WidgetData calculateTotalNetWorth() {
-        TotalObjectsValueDto totalValueItems = getTotalObjectValue(ObjectType.ITEM, inventoryClient::itemCount);
-        TotalObjectsValueDto totalValueProperties = getTotalObjectValue(ObjectType.PROPERTY, inventoryClient::propertyCount);
-        TotalObjectsValueDto totalValueVehicles = getTotalObjectValue(ObjectType.VEHICLE, inventoryClient::vehicleCount);
+    public WidgetData calculateTotalNetWorth(String orgId) {
+        TotalObjectsValueDto totalValueItems = getTotalObjectValue(ObjectType.ITEM,
+                type -> inventoryClient.itemCount(orgId, type),
+                orgId);
+        TotalObjectsValueDto totalValueProperties = getTotalObjectValue(ObjectType.PROPERTY,
+                type -> inventoryClient.propertyCount(orgId, type),
+                orgId);
+        TotalObjectsValueDto totalValueVehicles = getTotalObjectValue(ObjectType.VEHICLE,
+                type -> inventoryClient.vehicleCount(orgId, type),
+                orgId);
 
         return WidgetData.builder()
                 .labels(List.of("Total NET Worth"))
@@ -70,14 +76,18 @@ public class WidgetService {
     }
 
     private TotalObjectsValueDto getTotalObjectValue(ObjectType objectType,
-                                                     Function<ObjectIdsDto, Map<String, Integer>> invFunc) {
-        List<String> objectIds = financesClient.allObjectIds(objectType);
+                                                     Function<ObjectIdsDto, Map<String, Integer>> invFunc,
+                                                     String orgId) {
+        List<String> objectIds = financesClient.allObjectIds(orgId, objectType);
         Map<String, Integer> objectCountMap = invFunc.apply(ObjectIdsDto.of(objectIds));
-        return financesClient.totalValue(objectCountMap, objectType);
+        return financesClient.totalValue(orgId, objectCountMap, objectType);
     }
 
-    public WidgetData calculateMonthlyBalance() {
-        List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(LocalDateTime.now().getYear(), null);
+    public WidgetData calculateMonthlyBalance(String orgId) {
+        List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(
+                orgId,
+                LocalDateTime.now().getYear(),
+                null);
         return WidgetData.builder()
                 .labels(Arrays.stream(Month.values())
                         .map(Enum::name)
@@ -132,8 +142,8 @@ public class WidgetService {
                 .build();
     }
 
-    public WidgetData calculateMonthlyBalanceDiff(int year, Month month) {
-        List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(year, month);
+    public WidgetData calculateMonthlyBalanceDiff(int year, Month month, String orgId) {
+        List<MoneyOperationBalanceDto> operations = financesClient.getOperationsForBalance(orgId, year, month);
         BigDecimal income = sumAmountsByType(operations, MoneyOperationType.INCOME);
         BigDecimal expenses = sumAmountsByType(operations, MoneyOperationType.EXPENSES);
         return WidgetData.builder()
@@ -151,15 +161,16 @@ public class WidgetService {
                 .map(AmountDto::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public WidgetData getMostExpensiveItemPerCat() {
+    public WidgetData getMostExpensiveItemPerCat(String orgId) {
         // Get all items
-        List<InventoryItemDto> items = PageableDataFetcher.fetchDataWithNoParams(inventoryClient::getAllItems);
+        List<InventoryItemDto> items = PageableDataFetcher.fetchDataWithNoParams(
+                params -> inventoryClient.getAllItems(orgId, params));
         // grep by categories
         Map<CategoryDto, Set<String>> itemsGrouped = groupItems(items);
 
         // parallelize by category to fetch single highest value item
         List<CategoryWrapper<TopItemByCategoryDto>> wrapped = getByCategoryWrapped(itemsGrouped,
-                financesClient::findTopByObjectIdsIn);
+                value -> financesClient.findTopByObjectIdsIn(orgId, value));
         // create chart data
 
         List<String> labels = new ArrayList<>();
@@ -178,16 +189,17 @@ public class WidgetService {
                 .build();
     }
 
-    public WidgetData getValuePerCategory() {
+    public WidgetData getValuePerCategory(String orgId) {
         // Get all items
-        List<InventoryItemDto> items = PageableDataFetcher.fetchDataWithNoParams(inventoryClient::getAllItems);
+        List<InventoryItemDto> items = PageableDataFetcher.fetchDataWithNoParams(
+                params -> inventoryClient.getAllItems(orgId, params));
         // grep by categories
         Map<CategoryDto, Set<String>> itemsGrouped = groupItems(items);
 
         // parallelize by category to fetch object value by item ids
 
         List<CategoryWrapper<PageDto<ObjectValueDto>>> wrapped = getByCategoryWrapped(itemsGrouped,
-                s -> financesClient.getObjectValues(s.size(), ObjectType.ITEM, s));
+                s -> financesClient.getObjectValues(orgId, s.size(), ObjectType.ITEM, s));
 
         // create chart data
 
@@ -234,11 +246,11 @@ public class WidgetService {
         return itemsGrouped;
     }
 
-    public WidgetData getRemainingPlannedExpenses() {
+    public WidgetData getRemainingPlannedExpenses(String orgId) {
         LocalDate today = LocalDate.now();
         Map<String, String> params = Map.of("year", String.valueOf(today.getYear()),
                 "month", today.getMonth().toString());
-        List<PlannedExpensesDto> data = PageableDataFetcher.fetchData(financesClient::getPlannedExpenses, params);
+        List<PlannedExpensesDto> data = PageableDataFetcher.fetchData(p -> financesClient.getPlannedExpenses(orgId, p), params);
         return WidgetData.builder()
                 .labels(List.of("Remaining Planned Expenses"))
                 .datasets(List.of(Dataset.builder()
