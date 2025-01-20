@@ -9,7 +9,8 @@ import java.io.IOException;
 @ApplicationScoped
 public class SftpService {
 
-    private static final String GENERATED_DIR = "data/generated";
+    private static final String ROOT_DIR = "data";
+    private static final String GENERATED_DIR = "generated";
     private static final String DELIMITER = "/";
 
     private final SftpConnectionPool sftpConnectionPool;
@@ -18,25 +19,26 @@ public class SftpService {
         this.sftpConnectionPool = sftpConnectionPool;
     }
 
-    public String archiveFile(String filePath, SftpConnectionDetails sftpConnectionDetails) throws Exception {
+    public String archiveFile(String fn, SftpConnectionDetails sftpConnectionDetails, String orgId) throws Exception {
         ChannelSftp channelSftp = sftpConnectionPool.getChannelForCreds(sftpConnectionDetails);
 
-        cd(GENERATED_DIR, channelSftp);
+        String basePath = ROOT_DIR + DELIMITER + orgId + DELIMITER + GENERATED_DIR;
+        cd(basePath, channelSftp);
 
-        String filename = extractFilename(filePath);
+        String filename = extractFilename(fn);
 
-        try (FileInputStream is = new FileInputStream(filePath)){
+        try (FileInputStream is = new FileInputStream(fn)){
             put(is, filename, channelSftp);
         } catch (IOException e) {
             throw new IllegalStateException("Could not find file to archive");
         }
 
         sftpConnectionPool.returnToPool(sftpConnectionDetails, channelSftp);
-        return generateLocationPath(filename);
+        return generateLocationPath(basePath, filename);
     }
 
-    private String generateLocationPath(String filename) {
-        String fullPath = GENERATED_DIR + DELIMITER + filename;
+    private String generateLocationPath(String basePath, String filename) {
+        String fullPath = basePath + DELIMITER + filename;
         return fullPath.substring(fullPath.indexOf(DELIMITER) + 1);
     }
 
