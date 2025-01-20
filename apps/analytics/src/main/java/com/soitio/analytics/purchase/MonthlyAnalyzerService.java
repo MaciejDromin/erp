@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MonthlyAnalizerService {
+public class MonthlyAnalyzerService {
 
     public MonthlyPurchaseStatisticsDto calculateMonthlyStats(List<PurchaseToAnalyzeDto> purchases) {
         MonthlyPurchaseStatisticsDto stats = new MonthlyPurchaseStatisticsDto();
