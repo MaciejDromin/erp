@@ -1,11 +1,11 @@
 package com.soitio.dashboard.widget.definition.application;
 
+import com.soitio.dashboard.common.OrgMongoRepository;
 import com.soitio.dashboard.widget.definition.domain.WidgetDefinitionEntity;
 import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionDto;
 import com.soitio.dashboard.widget.definition.domain.dto.WidgetDefinitionNameDto;
 import com.soitio.widgets.common.domain.WidgetDefinition;
 import com.soitio.widgets.common.domain.WidgetDomain;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.bson.types.ObjectId;
 
 @ApplicationScoped
-public class WidgetDefinitionRepository implements PanacheMongoRepository<WidgetDefinitionEntity> {
+public class WidgetDefinitionRepository implements OrgMongoRepository<WidgetDefinitionEntity> {
 
     public void createWidgets(List<WidgetDefinition> widgetDefinitions) {
         List<WidgetDefinitionEntity> toSave = widgetDefinitions.stream()
@@ -24,7 +24,8 @@ public class WidgetDefinitionRepository implements PanacheMongoRepository<Widget
         Map<String, WidgetDefinition> codeWidgetDefinitionMap = widgetDefinitions.stream()
                 .collect(Collectors.toMap(WidgetDefinition::getUniqueCode, wd -> wd));
 
-        List<WidgetDefinitionEntity> toUpdate = find("uniqueCode in ?1", codeWidgetDefinitionMap.keySet()).stream()
+        List<WidgetDefinitionEntity> toUpdate = find("uniqueCode in ?1 and orgId = ?2",
+                codeWidgetDefinitionMap.keySet(), "111").stream()
                 .filter(entity -> !codeWidgetDefinitionMap.get(entity.getUniqueCode()).getVersion()
                         .equals(entity.getVersion()))
                 .toList();
@@ -55,11 +56,12 @@ public class WidgetDefinitionRepository implements PanacheMongoRepository<Widget
                 .widgetDomain(widgetDefinition.getWidgetDomain())
                 .version(widgetDefinition.getVersion())
                 .uniqueCode(widgetDefinition.getUniqueCode())
+                .orgId("111")
                 .build();
     }
 
     public List<WidgetDefinitionNameDto> getWidgetDefinitionNames(WidgetDomain widgetDomain) {
-        return find("widgetDomain = ?1", widgetDomain)
+        return find("widgetDomain = ?1 and orgId = ?2", widgetDomain, "111")
                 .project(WidgetDefinitionNameDto.class)
                 .list();
     }

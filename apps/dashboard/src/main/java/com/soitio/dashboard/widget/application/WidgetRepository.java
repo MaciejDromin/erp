@@ -1,12 +1,12 @@
 package com.soitio.dashboard.widget.application;
 
+import com.soitio.dashboard.common.OrgMongoRepository;
 import com.soitio.dashboard.common.Position;
 import com.soitio.dashboard.widget.domain.Widget;
 import com.soitio.dashboard.widget.domain.dto.WidgetCreationDto;
 import com.soitio.dashboard.widget.domain.dto.WidgetDto;
 import com.soitio.dashboard.widget.domain.dto.WidgetPositionUpdateDto;
 import com.soitio.dashboard.widget.domain.dto.WidgetUpdateDto;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import java.util.Map;
@@ -15,27 +15,25 @@ import java.util.stream.Collectors;
 import org.bson.types.ObjectId;
 
 @ApplicationScoped
-public class WidgetRepository implements PanacheMongoRepository<Widget> {
+public class WidgetRepository implements OrgMongoRepository<Widget> {
 
-    private static final String ID_IN_QUERY = "_id in ?1";
-
-    public ObjectId createWidget(WidgetCreationDto widgetCreation, Position position) {
-        Widget widget = to(widgetCreation, position);
+    public ObjectId createWidget(WidgetCreationDto widgetCreation, Position position, String orgId) {
+        Widget widget = to(widgetCreation, position, orgId);
         persist(widget);
         return widget.getId();
     }
 
-    public List<WidgetDto> getWidgetsByIds(Set<ObjectId> widgets) {
-        return list(ID_IN_QUERY, widgets).stream()
+    public List<WidgetDto> getWidgetsByIds(Set<ObjectId> widgets, String orgId) {
+        return listByIdsAndOrgId(widgets, orgId).stream()
                 .map(this::from)
                 .toList();
     }
 
-    public List<Widget> getPlainWidgetsByIds(Set<ObjectId> widgets) {
-        return list(ID_IN_QUERY, widgets);
+    public List<Widget> getPlainWidgetsByIds(Set<ObjectId> widgets, String orgId) {
+        return listByIdsAndOrgId(widgets, orgId);
     }
 
-    private Widget to(WidgetCreationDto widgetCreation, Position position) {
+    private Widget to(WidgetCreationDto widgetCreation, Position position, String orgId) {
         return Widget.builder()
                 .name(widgetCreation.getName())
                 .filters(widgetCreation.getFilters())
@@ -44,6 +42,7 @@ public class WidgetRepository implements PanacheMongoRepository<Widget> {
                 .datasource(widgetCreation.getDatasource())
                 .position(position)
                 .widgetDefinitionId(widgetCreation.getWidgetDefinitionId())
+                .orgId(orgId)
                 .build();
     }
 
@@ -59,24 +58,24 @@ public class WidgetRepository implements PanacheMongoRepository<Widget> {
                 .build();
     }
 
-    public void updateWidgetFilters(String widgetId, Map<String, Object> filters) {
-        Widget widget = findById(new ObjectId(widgetId));
+    public void updateWidgetFilters(String widgetId, Map<String, Object> filters, String orgId) {
+        Widget widget = findByIdAndOrgId(widgetId, orgId);
         widget.setFilters(filters);
         update(widget);
     }
 
-    public void updatePositions(List<WidgetPositionUpdateDto> toUpdate) {
+    public void updatePositions(List<WidgetPositionUpdateDto> toUpdate, String orgId) {
         Map<ObjectId, WidgetPositionUpdateDto> map = toUpdate.stream()
                 .collect(Collectors.toMap(w -> new ObjectId(w.getId()), w -> w));
-        List<Widget> widgets = list(ID_IN_QUERY, map.keySet());
+        List<Widget> widgets = listByIdsAndOrgId(map.keySet(), orgId);
         widgets.forEach(w -> {
             w.setPosition(map.get(w.getId()).getPosition());
             update(w);
         });
     }
 
-    public void updateWidget(String widgetId, WidgetUpdateDto update) {
-        Widget widget = findById(new ObjectId(widgetId));
+    public void updateWidget(String widgetId, WidgetUpdateDto update, String orgId) {
+        Widget widget = findByIdAndOrgId(widgetId, orgId);
         widget.setName(update.getName());
         widget.setWidgetType(update.getType());
         update(widget);

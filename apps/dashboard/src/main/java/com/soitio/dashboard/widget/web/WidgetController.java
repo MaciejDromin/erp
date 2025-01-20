@@ -9,6 +9,7 @@ import com.soitio.dashboard.widget.domain.dto.WidgetUpdateDto;
 import com.soitio.widgets.common.domain.WidgetDefinition;
 import com.soitio.widgets.common.domain.WidgetDomain;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -44,27 +45,31 @@ public class WidgetController {
 
     @GET
     @Path("/{widgetId}/definition")
-    public WidgetDefinitionDto getWidgetDefinitionByWidgetId(@PathParam("widgetId") String widgetId) {
+    public WidgetDefinitionDto getWidgetDefinitionByWidgetId(@PathParam("widgetId") String widgetId,
+                                                             @HeaderParam("X-OrgId") String orgId) {
         return widgetDefinitionRepository.getById(widgetRepository
-                .findById(new ObjectId(widgetId)).getWidgetDefinitionId().toString());
+                .findByIdAndOrgId(widgetId, orgId).getWidgetDefinitionId().toString());
     }
 
     @POST
     @Path("/{widgetId}/filters")
-    public void updateFilters(@PathParam("widgetId") String widgetId, Map<String, Object> filters) {
-        widgetRepository.updateWidgetFilters(widgetId, filters);
+    public void updateFilters(@PathParam("widgetId") String widgetId, Map<String, Object> filters,
+                              @HeaderParam("X-OrgId") String orgId) {
+        widgetRepository.updateWidgetFilters(widgetId, filters, orgId);
     }
 
     @POST
     @Path("/update-positions")
-    public void updatePositions(List<WidgetPositionUpdateDto> toUpdate) {
-        widgetRepository.updatePositions(toUpdate);
+    public void updatePositions(List<WidgetPositionUpdateDto> toUpdate,
+                                @HeaderParam("X-OrgId") String orgId) {
+        widgetRepository.updatePositions(toUpdate, orgId);
     }
 
     @POST
     @Path("/{widgetId}")
-    public void updateWidget(@PathParam("widgetId") String widgetId, WidgetUpdateDto update) {
-        widgetRepository.updateWidget(widgetId, update);
+    public void updateWidget(@PathParam("widgetId") String widgetId, WidgetUpdateDto update,
+                             @HeaderParam("X-OrgId") String orgId) {
+        widgetRepository.updateWidget(widgetId, update, orgId);
     }
 
 }
