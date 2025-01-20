@@ -9,13 +9,13 @@ import asyncio
 
 provider = strategy_provider.StrategyProvider()
 
-async def handle_uploaded_receipts(filename, request):
+async def handle_uploaded_receipts(filename, request, orgId):
     saved_file = await save_locally(filename, request)
-    asyncio.ensure_future(process_file(saved_file))
+    asyncio.ensure_future(process_file(saved_file, orgId))
 
 
-async def process_file(saved_file):
-    archive_receipts(saved_file)
+async def process_file(saved_file, orgId):
+    archive_receipts(saved_file, orgId)
     receipts = unpack_archive(saved_file)
     grouped = group_by_extension(receipts)
     parsed_receipts = []
@@ -24,7 +24,11 @@ async def process_file(saved_file):
         parsed_receipts = parsed_receipts + strategy.parse_data(grouped[ext]) 
 
     filtered_receipts = filter_receipts(parsed_receipts)
-    await publish("scanned-receipts", filtered_receipts)
+    org_wrapper = {
+        "orgId": orgId,
+        "data": filtered_receipts
+    }
+    await publish("scanned-receipts", org_wrapper)
 
     clean_directories()
 
