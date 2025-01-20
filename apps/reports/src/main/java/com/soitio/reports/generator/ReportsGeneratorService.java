@@ -67,9 +67,9 @@ public class ReportsGeneratorService {
     public String generateReport(ReportRequest request) throws Exception {
         String rendered = templateService.renderFromTemplate(request.getTemplate(), request.getDataMap());
 
-        String filePath = pdfService.generatePdf(request.getName(), rendered);
+        String filename = pdfService.generatePdf(request.getName(), rendered);
 
-        return sftpService.archiveFile(filePath, sftpConnectionDetails);
+        return sftpService.archiveFile(filename, sftpConnectionDetails, request.getOrgId());
     }
 
 }

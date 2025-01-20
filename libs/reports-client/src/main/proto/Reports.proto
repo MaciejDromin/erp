@@ -18,7 +18,8 @@ service ReportsStatusService {
 message ReportRequest {
     string name = 1;
     string template = 2;
-    map<string, Value> data = 3;
+    string orgId = 3;
+    map<string, Value> data = 4;
 }
 
 message ReportGenerationStatus {

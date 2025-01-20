@@ -4,6 +4,7 @@ import com.soitio.reports.service.ReportRequesterService;
 import com.soitio.reports.service.data.ValueDataMapper;
 import com.soitio.reports.service.domain.ReportGenerationRequestDto;
 import com.soitio.reports.service.inventory.InventoryDataCollectorService;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +23,11 @@ public class InventoryReportController {
     }
 
     @POST
-    public void requestReportGeneration(ReportGenerationRequestDto reportGenerationRequest) {
-        var data = collectorService.getAllItems();
+    public void requestReportGeneration(ReportGenerationRequestDto reportGenerationRequest,
+                                        @HeaderParam("X-OrgId") String orgId) {
+        var data = collectorService.getAllItems(orgId);
         log.info("Fetched {} items", data.size());
-        reportRequesterService.requestReportGeneration(reportGenerationRequest, ValueDataMapper.mapToValueMap(data));
+        reportRequesterService.requestReportGeneration(reportGenerationRequest, ValueDataMapper.mapToValueMap(data), orgId);
     }
 
 }

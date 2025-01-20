@@ -29,8 +29,10 @@ public class ReportRequesterService {
         this.wsSender = wsSender;
     }
 
-    public void requestReportGeneration(ReportGenerationRequestDto reportGenerationRequest, Map<String, Value> data) {
-        ReportRequest request = to(reportGenerationRequest, data);
+    public void requestReportGeneration(ReportGenerationRequestDto reportGenerationRequest,
+                                        Map<String, Value> data,
+                                        String orgId) {
+        ReportRequest request = to(reportGenerationRequest, data, orgId);
         ReportGenerationStatus status = reportsClient.generateReport(request);
         reportStatusRepository.create(status);
         wsSender.send("com.soitio.reports.service.ws.WebsocketServer",
@@ -38,10 +40,13 @@ public class ReportRequesterService {
                         new ConcreteJobContent(EventStatus.REQUESTED, status.getJobId())));
     }
 
-    private ReportRequest to(ReportGenerationRequestDto reportGenerationRequest, Map<String, Value> data) {
+    private ReportRequest to(ReportGenerationRequestDto reportGenerationRequest,
+                             Map<String, Value> data,
+                             String orgId) {
         return ReportRequest.newBuilder()
                 .setName(reportGenerationRequest.getName())
                 .setTemplate(reportGenerationRequest.getTemplate())
+                .setOrgId(orgId)
                 .putAllData(data)
                 .build();
     }
