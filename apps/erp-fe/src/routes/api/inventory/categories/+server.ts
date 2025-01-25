@@ -8,7 +8,8 @@ export const GET = (async (event) => {
   const ret = await securedExternalApiRequest(
     `${GATEWAY_URL}/${INVENTORY}/categories${event.url.search}`,
     HttpMethods.GET,
-    event.cookies.get('Authorization')
+    event.cookies.get('Authorization'),
+    event.cookies
   )
-  return new Response(ret.body, { status: 200 })
+  return new Response(ret.body, { status: ret.status, headers: ret.headers })
 }) satisfies RequestHandler

@@ -6,6 +6,8 @@ import { redirect, fail } from '@sveltejs/kit'
 import {
   validate,
   nonEmpty,
+  emailRegex,
+  matchesRegex,
 } from '$lib/scripts/validator.ts'
 
 const validateArgs = (body) => {
@@ -25,7 +27,8 @@ const validateArgs = (body) => {
 
   const emailResult = validate(
     body.email,
-    nonEmpty
+    nonEmpty,
+    matchesRegex(emailRegex, "email")
   )
 
   if (!emailResult.result) {
@@ -45,6 +48,11 @@ const validateArgs = (body) => {
 
   return error
 }
+
+export const load = (async ({ cookies }) => {
+  if (cookies.get("Authorization") !== undefined) throw redirect(303, "/")
+  return {}
+}) satisfies PageServerLoad
 
 export const actions = {
   default: async ({ cookies, request }) => {
