@@ -23,8 +23,8 @@ export const DELETE = (async ({ request, cookies }) => {
   const ret = await securedExternalApiRequest(
     `${GATEWAY_URL}${body.endpoint}`,
     HttpMethods.DELETE,
-    event.cookies.get('Authorization'),
-    event.cookies,
+    cookies.get('Authorization'),
+    cookies,
     body.content
   )
   return new Response(ret.body, { status: ret.status, headers: ret.headers })
