@@ -2,6 +2,7 @@ package com.soitio.api.gateway.auth;
 
 import com.google.protobuf.Empty;
 import com.soitio.api.gateway.auth.application.UserRepository;
+import com.soitio.api.gateway.auth.domain.Pair;
 import com.soitio.api.gateway.auth.domain.UserResource;
 import com.soitio.auth.client.AuthRequest;
 import com.soitio.auth.client.AuthResponse;
@@ -22,6 +23,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.Instant;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 
 @ApplicationScoped
@@ -84,34 +86,43 @@ public class UserService {
         try {
             JsonWebToken parsedToken = validateToken(request.getRefreshToken());
             return userRepository.findByEmail(parsedToken.getSubject()).onItem()
-                    .transform(u -> AuthResponse.newBuilder()
-                            .setAuthToken(buildAuthToken(u))
-                            .setRefreshToken(request.getRefreshToken())
-                            .setOrgId(u.getCurrentOrgId())
-                            .build());
+                    .transform(u -> {
+                        Pair<String, Instant> authTokenPair = buildAuthToken(u);
+                        return AuthResponse.newBuilder()
+                                .setAuthToken(authTokenPair.left())
+                                .setRefreshToken(request.getRefreshToken())
+                                .setOrgId(u.getCurrentOrgId())
+                                .setExpiresIn(authTokenPair.right().getLong(ChronoField.INSTANT_SECONDS))
+                                .build();
+                    });
         } catch (UnauthorizedException e) {
             return Uni.createFrom().failure(e);
         }
     }
 
     private AuthResponse authenticateUser(UserResource userResource, String plainPassword) {
-        if (BcryptUtil.matches(plainPassword, userResource.getPassword())) return AuthResponse.newBuilder()
-                .setAuthToken(buildAuthToken(userResource))
-                .setRefreshToken(buildRefreshToken(userResource))
-                .setOrgId(userResource.getCurrentOrgId())
-                .build();
+        if (BcryptUtil.matches(plainPassword, userResource.getPassword())) {
+            Pair<String, Instant> authTokenPair = buildAuthToken(userResource);
+            return AuthResponse.newBuilder()
+                    .setAuthToken(authTokenPair.left())
+                    .setRefreshToken(buildRefreshToken(userResource))
+                    .setOrgId(userResource.getCurrentOrgId())
+                    .setExpiresIn(authTokenPair.right().getLong(ChronoField.INSTANT_SECONDS))
+                    .build();
+        }
         throw new UnauthorizedException("Invalid email or password");
     }
 
-    private String buildAuthToken(UserResource userResource) {
+    private Pair<String, Instant> buildAuthToken(UserResource userResource) {
         Instant now = Instant.now();
-        return Jwt.claims()
-                .expiresAt(now.plus(AUTH_TOKEN_DEFAULT_PERIOD, ChronoUnit.DAYS))
+        Instant expiresAt = now.plus(AUTH_TOKEN_DEFAULT_PERIOD, ChronoUnit.DAYS);
+        return new Pair<>(Jwt.claims()
+                .expiresAt(expiresAt)
                 .audience(userResource.getUsername())
                 .issuedAt(now)
                 .subject(userResource.getEmail())
                 // TODO: Roles?
-                .sign();
+                .sign(), expiresAt);
     }
 
     private String buildRefreshToken(UserResource userResource) {

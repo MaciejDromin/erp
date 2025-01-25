@@ -65,10 +65,13 @@ export const actions = {
       HttpMethods.POST,
       body
     )
-    const opts = {
-      path: '/'
-    }
     const respBody = await resp.json()
+    let expiresAt = new Date(0)
+    expiresAt.setUTCSeconds(respBody.expiresIn)
+    const opts = {
+      path: '/',
+      expires: expiresAt
+    }
     cookies.set('Authorization', `Bearer ${respBody.authToken}`, opts)
     cookies.set('Refresh-Token', respBody.refreshToken, opts)
     cookies.set('X-OrgId', respBody.orgId, opts)
