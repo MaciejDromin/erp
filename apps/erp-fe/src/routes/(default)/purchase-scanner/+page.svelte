@@ -20,7 +20,6 @@
     filename = encodeURI(filename)
     apiRequestFile('/purchase-scanner', HttpMethods.POST, filename, contents)
   }
-
 </script>
 
 <div id="currency" class="flex flex-col gap-3 px-10 pt-10">

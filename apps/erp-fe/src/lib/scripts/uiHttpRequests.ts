@@ -9,11 +9,12 @@ const apiRequest = async (
     method: method,
     body: JSON.stringify(body),
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
   })
-  if (ret.status === 204 && ret.headers.get('redirected') === "true") window.location.href = ret.headers.get('location')
+  if (ret.status === 204 && ret.headers.get('redirected') === 'true')
+    window.location.href = ret.headers.get('location')
   return ret
 }
 
@@ -27,9 +28,9 @@ const apiRequestFile = async (
     method: method,
     body: body,
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/octet-stream',
-      'filename': filename,
+      filename: filename,
     },
   })
 }

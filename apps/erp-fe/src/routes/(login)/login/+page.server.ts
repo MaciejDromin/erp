@@ -19,7 +19,7 @@ const validateArgs = (body) => {
         message: undefined,
       },
       password: {
-        val: "",
+        val: '',
         message: undefined,
       },
     },
@@ -28,7 +28,7 @@ const validateArgs = (body) => {
   const emailResult = validate(
     body.email,
     nonEmpty,
-    matchesRegex(emailRegex, "email")
+    matchesRegex(emailRegex, 'email')
   )
 
   if (!emailResult.result) {
@@ -36,10 +36,7 @@ const validateArgs = (body) => {
     error.returnBody.email.message = emailResult.message
   }
 
-  const passwordResult = validate(
-    body.password,
-    nonEmpty
-  )
+  const passwordResult = validate(body.password, nonEmpty)
 
   if (!passwordResult.result) {
     error.failed = true
@@ -50,7 +47,7 @@ const validateArgs = (body) => {
 }
 
 export const load = (async ({ cookies }) => {
-  if (cookies.get("Authorization") !== undefined) throw redirect(303, "/")
+  if (cookies.get('Authorization') !== undefined) throw redirect(303, '/')
   return {}
 }) satisfies PageServerLoad
 
@@ -78,7 +75,7 @@ export const actions = {
     expiresAt.setUTCSeconds(respBody.expiresIn)
     const opts = {
       path: '/',
-      expires: expiresAt
+      expires: expiresAt,
     }
     cookies.set('Authorization', `Bearer ${respBody.authToken}`, opts)
     cookies.set('Refresh-Token', respBody.refreshToken, opts)

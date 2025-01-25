@@ -5,12 +5,16 @@
 
   export let form
 
-  let email = form !== undefined ? "" : form.email.val
-  let password = form !== undefined ? "" : form.password.val
+  let email = form !== undefined ? '' : form.email.val
+  let password = form !== undefined ? '' : form.password.val
 </script>
+
 <div class="mx-auto mt-[10%]">
   <form method="POST">
-    <InputSection name="Login" classes=" h-full w-full min-h-full flex-col gap-4">
+    <InputSection
+      name="Login"
+      classes=" h-full w-full min-h-full flex-col gap-4"
+    >
       <TextInput
         name="email"
         bind:value={email}
