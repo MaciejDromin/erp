@@ -6,9 +6,9 @@ import type { RequestHandler } from './$types'
 
 export const POST = (async ({ request, cookies }) => {
   const headers = {
-    'Accept': 'application/json',
+    Accept: 'application/json',
     'Content-Type': 'application/octet-stream',
-    'filename': request.headers.get('filename'),
+    filename: request.headers.get('filename'),
   }
   const ret = await securedExternalApiRequestFileUpload(
     `${GATEWAY_URL}/${PURCHASE_SCANNER}/receipts`,

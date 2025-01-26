@@ -113,7 +113,8 @@ export const actions = {
       cookies,
       body
     )
-    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
+    if (ret.status === 204 && ret.headers.get('redirected') === 'true')
+      throw redirect(303, ret.headers.get('location'))
     throw redirect(303, '/inventory/maintenance')
   },
 } satisfies Actions
@@ -123,18 +124,23 @@ export const load = (async ({ params, cookies }) => {
     `${GATEWAY_URL}/${INVENTORY}/maintenance/${params.maintenanceId}`,
     HttpMethods.GET,
     cookies.get('Authorization'),
-    cookies,
+    cookies
   )
-  if (maintenance.status === 204 && maintenance.headers.get("redirected") === "true") throw redirect(303, maintenance.headers.get("location"))
+  if (
+    maintenance.status === 204 &&
+    maintenance.headers.get('redirected') === 'true'
+  )
+    throw redirect(303, maintenance.headers.get('location'))
   maintenance = await maintenance.json()
   const partsIds = maintenance.parts.map((p) => p.id)
   let ret = await securedExternalApiRequest(
     `${GATEWAY_URL}/${INVENTORY}/parts?partIds=${partsIds.join(',')}&size=500`,
     HttpMethods.GET,
     cookies.get('Authorization'),
-    cookies,
+    cookies
   )
-  if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
+  if (ret.status === 204 && ret.headers.get('redirected') === 'true')
+    throw redirect(303, ret.headers.get('location'))
   return {
     maintenance: maintenance,
     parts: (await ret.json()).content,

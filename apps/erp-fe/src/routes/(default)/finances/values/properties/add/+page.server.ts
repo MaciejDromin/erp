@@ -86,7 +86,8 @@ export const actions = {
       cookies,
       body
     )
-    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
+    if (ret.status === 204 && ret.headers.get('redirected') === 'true')
+      throw redirect(303, ret.headers.get('location'))
     throw redirect(303, '/finances/values/properties')
   },
 } satisfies Actions
@@ -96,9 +97,13 @@ export const load = (async ({ params, cookies }) => {
     `${GATEWAY_URL}/${FINANCES}/object-value/object-ids?objectType=${ObjectType.PROPERTY}`,
     HttpMethods.GET,
     cookies.get('Authorization'),
-    cookies,
+    cookies
   )
-  if (objectIds.status === 204 && objectIds.headers.get("redirected") === "true") throw redirect(303, objectIds.headers.get("location"))
+  if (
+    objectIds.status === 204 &&
+    objectIds.headers.get('redirected') === 'true'
+  )
+    throw redirect(303, objectIds.headers.get('location'))
   return {
     objectIds: await objectIds.json(),
   }

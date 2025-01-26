@@ -9,7 +9,7 @@ export const GET = (async (event) => {
     `${GATEWAY_URL}/${DASHBOARD}/widgets/definitions/${event.params.id}`,
     HttpMethods.GET,
     event.cookies.get('Authorization'),
-    event.cookies,
+    event.cookies
   )
   return new Response(ret.body, { status: ret.status, headers: ret.headers })
 }) satisfies RequestHandler

@@ -10,9 +10,13 @@ export const load = (async ({ params, cookies }) => {
     `${GATEWAY_URL}/${FINANCES}/object-value/object-ids?objectType=${ObjectType.ITEM}`,
     HttpMethods.GET,
     cookies.get('Authorization'),
-    cookies,
+    cookies
   )
-  if (objectIds.status === 204 && objectIds.headers.get("redirected") === "true") throw redirect(303, objectIds.headers.get("location"))
+  if (
+    objectIds.status === 204 &&
+    objectIds.headers.get('redirected') === 'true'
+  )
+    throw redirect(303, objectIds.headers.get('location'))
   const objectIdsBody = {
     itemIds: await objectIds.json(),
   }
@@ -23,7 +27,8 @@ export const load = (async ({ params, cookies }) => {
     cookies,
     objectIdsBody
   )
-  if (countMap.status === 204 && countMap.headers.get("redirected") === "true") throw redirect(303, countMap.headers.get("location"))
+  if (countMap.status === 204 && countMap.headers.get('redirected') === 'true')
+    throw redirect(303, countMap.headers.get('location'))
   const data = await securedExternalApiRequest(
     `${GATEWAY_URL}/${FINANCES}/object-value/total-value?objectType=${ObjectType.ITEM}`,
     HttpMethods.POST,
@@ -31,7 +36,8 @@ export const load = (async ({ params, cookies }) => {
     cookies,
     await countMap.json()
   )
-  if (data.status === 204 && data.headers.get("redirected") === "true") throw redirect(303, data.headers.get("location"))
+  if (data.status === 204 && data.headers.get('redirected') === 'true')
+    throw redirect(303, data.headers.get('location'))
   return {
     objectsValue: await data.json(),
     objectIds: objectIdsBody.itemIds,

@@ -11,7 +11,7 @@ const unsecuredExternalApiRequest = async (
     method: method,
     body: JSON.stringify(body),
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
   }).catch((e) => {
@@ -32,7 +32,14 @@ const securedExternalApiRequestFileUpload = async (
   if (authHeader === undefined) {
     if (cookies.get('Refresh-Token') !== undefined) {
       const newAuthToken = tryRefreshingToken(cookies)
-      return securedExternalApiRequestFileUpload(url, method, headers, newAuthToken, cookies, body)
+      return securedExternalApiRequestFileUpload(
+        url,
+        method,
+        headers,
+        newAuthToken,
+        cookies,
+        body
+      )
     }
     return new Response(null, {
       status: 204,
@@ -51,7 +58,14 @@ const securedExternalApiRequestFileUpload = async (
   })
   if (ret.status === 401) {
     const newAuthToken = tryRefreshingToken(cookies)
-    return securedExternalApiRequestFileUpload(url, method, headers, newAuthToken, cookies, body)
+    return securedExternalApiRequestFileUpload(
+      url,
+      method,
+      headers,
+      newAuthToken,
+      cookies,
+      body
+    )
   }
   return ret
 }
@@ -77,9 +91,9 @@ const securedExternalApiRequest = async (
     method: method,
     body: JSON.stringify(body),
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': authHeader,
+      Authorization: authHeader,
     },
   }).catch((e) => {
     // IF token expired or something, return new Response to login page
@@ -104,7 +118,7 @@ const tryRefreshingToken = async (cookies) => {
   const refreshResp = await fetch(`${AUTH_URL}/token`, {
     method: HttpMethods.POST,
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
       'Refresh-Token': refreshToken,
     },

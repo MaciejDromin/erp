@@ -78,7 +78,8 @@ export const actions = {
       cookies,
       body
     )
-    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
+    if (ret.status === 204 && ret.headers.get('redirected') === 'true')
+      throw redirect(303, ret.headers.get('location'))
     throw redirect(303, '/inventory/parts')
   },
 } satisfies Actions
@@ -88,9 +89,10 @@ export const load = (async ({ params, cookies }) => {
     `${GATEWAY_URL}/${INVENTORY}/parts/${params.partId}`,
     HttpMethods.GET,
     cookies.get('Authorization'),
-    cookies,
+    cookies
   )
-  if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
+  if (ret.status === 204 && ret.headers.get('redirected') === 'true')
+    throw redirect(303, ret.headers.get('location'))
   return {
     part: await ret.json(),
   }
