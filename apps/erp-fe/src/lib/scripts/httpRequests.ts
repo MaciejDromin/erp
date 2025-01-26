@@ -11,7 +11,7 @@ const unsecuredExternalApiRequest = async (
     method: method,
     body: JSON.stringify(body),
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
   }).catch((e) => {
@@ -21,12 +21,25 @@ const unsecuredExternalApiRequest = async (
   return ret
 }
 
-const unsecuredExternalApiRequestFileUpload = async (
+const securedExternalApiRequestFileUpload = async (
   url: string,
   method: HttpMethods,
-  body: any,
-  headers: any
+  headers: any,
+  authHeader: string,
+  cookies: any,
+  body: any
 ) => {
+  if (authHeader === undefined) {
+    if (cookies.get('Refresh-Token') !== undefined) {
+      const newAuthToken = tryRefreshingToken(cookies)
+      return securedExternalApiRequestFileUpload(url, method, headers, newAuthToken, cookies, body)
+    }
+    return new Response(null, {
+      status: 204,
+      headers: { location: '/login', redirected: true },
+    })
+  }
+  headers['Authorization'] = authHeader
   const ret = await fetch(url, {
     method: method,
     body: body,
@@ -36,6 +49,10 @@ const unsecuredExternalApiRequestFileUpload = async (
     console.log(e)
     return new Response(null, { status: 503 })
   })
+  if (ret.status === 401) {
+    const newAuthToken = tryRefreshingToken(cookies)
+    return securedExternalApiRequestFileUpload(url, method, headers, newAuthToken, cookies, body)
+  }
   return ret
 }
 
@@ -60,9 +77,9 @@ const securedExternalApiRequest = async (
     method: method,
     body: JSON.stringify(body),
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
-      Authorization: authHeader,
+      'Authorization': authHeader,
     },
   }).catch((e) => {
     // IF token expired or something, return new Response to login page
@@ -87,7 +104,7 @@ const tryRefreshingToken = async (cookies) => {
   const refreshResp = await fetch(`${AUTH_URL}/token`, {
     method: HttpMethods.POST,
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Refresh-Token': refreshToken,
     },
