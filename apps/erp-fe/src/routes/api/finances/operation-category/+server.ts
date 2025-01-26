@@ -9,7 +9,7 @@ export const GET = (async (event) => {
     `${GATEWAY_URL}/${FINANCES}/operation-category${event.url.search}`,
     HttpMethods.GET,
     event.cookies.get('Authorization'),
-    event.cookies,
+    event.cookies
   )
   return new Response(ret.body, { status: ret.status, headers: ret.headers })
 }) satisfies RequestHandler
