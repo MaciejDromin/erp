@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types'
-import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
+import { securedExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import { GATEWAY_URL } from '$lib/scripts/urls'
 import { INVENTORY } from '$lib/scripts/serviceKey.ts'
@@ -106,28 +106,37 @@ export const actions = {
 
     body.contractorId = contractor.id
 
-    await unsecuredExternalApiRequest(
+    const ret = await securedExternalApiRequest(
       `${GATEWAY_URL}/${INVENTORY}/maintenance/${body.id}`,
       HttpMethods.PATCH,
+      cookies.get('Authorization'),
+      cookies,
       body
     )
+    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
     throw redirect(303, '/inventory/maintenance')
   },
 } satisfies Actions
 
-export const load = (async ({ params }) => {
-  let maintenance = await unsecuredExternalApiRequest(
+export const load = (async ({ params, cookies }) => {
+  let maintenance = await securedExternalApiRequest(
     `${GATEWAY_URL}/${INVENTORY}/maintenance/${params.maintenanceId}`,
-    HttpMethods.GET
+    HttpMethods.GET,
+    cookies.get('Authorization'),
+    cookies,
   )
+  if (maintenance.status === 204 && maintenance.headers.get("redirected") === "true") throw redirect(303, maintenance.headers.get("location"))
   maintenance = await maintenance.json()
   const partsIds = maintenance.parts.map((p) => p.id)
-  let partsData = await unsecuredExternalApiRequest(
+  let ret = await securedExternalApiRequest(
     `${GATEWAY_URL}/${INVENTORY}/parts?partIds=${partsIds.join(',')}&size=500`,
-    HttpMethods.GET
+    HttpMethods.GET,
+    cookies.get('Authorization'),
+    cookies,
   )
+  if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
   return {
     maintenance: maintenance,
-    parts: (await partsData.json()).content,
+    parts: (await ret.json()).content,
   }
 }) satisfies PageServerLoad

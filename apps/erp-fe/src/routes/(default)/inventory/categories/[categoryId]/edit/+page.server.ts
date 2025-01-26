@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types'
-import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
+import { securedExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import { GATEWAY_URL } from '$lib/scripts/urls'
 import { INVENTORY } from '$lib/scripts/serviceKey.ts'
@@ -26,21 +26,27 @@ export const actions = {
         },
       })
     }
-    await unsecuredExternalApiRequest(
+    const ret = await securedExternalApiRequest(
       `${GATEWAY_URL}/${INVENTORY}/categories/${body.id}`,
       HttpMethods.PATCH,
+      cookies.get('Authorization'),
+      cookies,
       body
     )
+    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
     throw redirect(303, '/inventory/categories')
   },
 } satisfies Actions
 
-export const load = (async ({ params }) => {
-  const category = await unsecuredExternalApiRequest(
+export const load = (async ({ params, cookies }) => {
+  const ret = await securedExternalApiRequest(
     `${GATEWAY_URL}/${INVENTORY}/categories/${params.categoryId}`,
-    HttpMethods.GET
+    HttpMethods.GET,
+    cookies.get('Authorization'),
+    cookies
   )
+    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
   return {
-    category: await category.json(),
+    category: await ret.json(),
   }
 }) satisfies PageServerLoad

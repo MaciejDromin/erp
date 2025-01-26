@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types'
-import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
+import { securedExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import { GATEWAY_URL } from '$lib/scripts/urls'
 import { INVENTORY } from '$lib/scripts/serviceKey.ts'
@@ -134,21 +134,27 @@ export const actions = {
 
     body.addressId = address.id
 
-    await unsecuredExternalApiRequest(
+    const ret = await securedExternalApiRequest(
       `${GATEWAY_URL}/${INVENTORY}/properties/${body.id}`,
       HttpMethods.PATCH,
+      cookies.get('Authorization'),
+      cookies,
       body
     )
+    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
     throw redirect(303, '/inventory/properties')
   },
 } satisfies Actions
 
-export const load = (async ({ params }) => {
-  const property = await unsecuredExternalApiRequest(
+export const load = (async ({ params, cookies }) => {
+  const ret = await securedExternalApiRequest(
     `${GATEWAY_URL}/${INVENTORY}/properties/${params.propertyId}`,
-    HttpMethods.GET
+    HttpMethods.GET,
+    cookies.get('Authorization'),
+    cookies,
   )
+  if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
   return {
-    property: await property.json(),
+    property: await ret.json(),
   }
 }) satisfies PageServerLoad

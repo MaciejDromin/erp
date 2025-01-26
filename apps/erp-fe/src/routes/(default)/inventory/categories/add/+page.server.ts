@@ -1,4 +1,4 @@
-import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
+import { securedExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import { GATEWAY_URL } from '$lib/scripts/urls'
@@ -25,11 +25,14 @@ export const actions = {
         },
       })
     }
-    await unsecuredExternalApiRequest(
+    const ret = await securedExternalApiRequest(
       `${GATEWAY_URL}/${INVENTORY}/categories`,
       HttpMethods.POST,
+      cookies.get('Authorization'),
+      cookies,
       body
     )
+    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
     throw redirect(303, '/inventory/categories')
   },
 } satisfies Actions

@@ -1,4 +1,4 @@
-import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
+import { securedExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import { GATEWAY_URL } from '$lib/scripts/urls'
@@ -86,7 +86,7 @@ const validateArgs = (body, contractor) => {
 }
 
 export const actions = {
-  default: async ({ request }) => {
+  default: async ({ request, cookies }) => {
     const data = await request.formData()
     const contractor = JSON.parse(data.get('contractor'))
     const partsData = JSON.parse(data.get('partsData'))
@@ -105,11 +105,14 @@ export const actions = {
 
     body.contractorId = contractor.id
 
-    await unsecuredExternalApiRequest(
+    const ret = await securedExternalApiRequest(
       `${GATEWAY_URL}/${INVENTORY}/maintenance`,
       HttpMethods.POST,
+      cookies.get('Authorization'),
+      cookies,
       body
     )
+    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
     throw redirect(303, '/inventory/maintenance')
   },
 } satisfies Actions

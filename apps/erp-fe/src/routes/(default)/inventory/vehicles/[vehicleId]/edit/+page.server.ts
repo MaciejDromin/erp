@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types'
-import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
+import { securedExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import { GATEWAY_URL } from '$lib/scripts/urls'
 import { INVENTORY } from '$lib/scripts/serviceKey.ts'
@@ -164,21 +164,27 @@ export const actions = {
       return fail(422, validationResult.returnBody)
     }
 
-    await unsecuredExternalApiRequest(
+    const ret = await securedExternalApiRequest(
       `${GATEWAY_URL}/${INVENTORY}/vehicles/${body.id}`,
       HttpMethods.PATCH,
+      cookies.get('Authorization'),
+      cookies,
       body
     )
+    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
     throw redirect(303, '/inventory/vehicles')
   },
 } satisfies Actions
 
-export const load = (async ({ params }) => {
-  const vehicle = await unsecuredExternalApiRequest(
+export const load = (async ({ params, cookies }) => {
+  const ret = await securedExternalApiRequest(
     `${GATEWAY_URL}/${INVENTORY}/vehicles/${params.vehicleId}`,
-    HttpMethods.GET
+    HttpMethods.GET,
+    cookies.get('Authorization'),
+    cookies,
   )
+  if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
   return {
-    vehicle: await vehicle.json(),
+    vehicle: await ret.json(),
   }
 }) satisfies PageServerLoad

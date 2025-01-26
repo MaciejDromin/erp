@@ -1,4 +1,4 @@
-import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
+import { securedExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import { GATEWAY_URL } from '$lib/scripts/urls'
@@ -70,7 +70,7 @@ const validateArgs = (body, category) => {
 }
 
 export const actions = {
-  default: async ({ request }) => {
+  default: async ({ request, cookies }) => {
     const data = await request.formData()
     const category = JSON.parse(data.get('category'))
     const body = {
@@ -87,11 +87,14 @@ export const actions = {
 
     body.categoryIds = [category.id]
 
-    await unsecuredExternalApiRequest(
+    const ret = await securedExternalApiRequest(
       `${GATEWAY_URL}/${INVENTORY}/items`,
       HttpMethods.POST,
+      cookies.get('Authorization'),
+      cookies,
       body
     )
+    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
     throw redirect(303, '/inventory/items')
   },
 } satisfies Actions
