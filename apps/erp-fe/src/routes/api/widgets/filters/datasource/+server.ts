@@ -1,8 +1,8 @@
-import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
+import { securedExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { RequestHandler } from './$types'
 
-export const POST = (async ({ request }) => {
+export const POST = (async ({ request, cookies }) => {
   const data = await request.json()
   let query = ''
   if (data.filters !== undefined) {
@@ -12,9 +12,11 @@ export const POST = (async ({ request }) => {
     }
     query = query.substring(0, query.length - 1)
   }
-  const ret = await unsecuredExternalApiRequest(
+  const ret = await securedExternalApiRequest(
     data.datasource + query,
+    cookies.get('Authorization'),
+    cookies,
     HttpMethods.GET
   )
-  return new Response(ret.body, { status: 200 })
+  return new Response(ret.body, { status: ret.status, headers: ret.headers })
 }) satisfies RequestHandler
