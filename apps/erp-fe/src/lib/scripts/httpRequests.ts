@@ -146,6 +146,6 @@ const tryRefreshingToken = async (cookies) => {
 
 export {
   unsecuredExternalApiRequest,
-  unsecuredExternalApiRequestFileUpload,
+  securedExternalApiRequestFileUpload,
   securedExternalApiRequest,
 }
