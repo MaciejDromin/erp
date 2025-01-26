@@ -67,7 +67,10 @@ public class GatewayAuthService {
     }
 
     private AuthResponseDto mapAuthResponse(AuthResponse authResponse) {
-        return new AuthResponseDto(authResponse.getAuthToken(), authResponse.getRefreshToken(), authResponse.getOrgId());
+        return new AuthResponseDto(authResponse.getAuthToken(),
+                authResponse.getRefreshToken(),
+                authResponse.getOrgId(),
+                authResponse.getExpiresIn());
     }
 
     private AuthRequest mapAuthRequest(AuthRequestDto authRequest) {
