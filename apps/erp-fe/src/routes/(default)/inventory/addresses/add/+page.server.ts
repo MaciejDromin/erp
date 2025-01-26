@@ -92,7 +92,7 @@ export const actions = {
       return fail(422, validationResult.returnBody)
     }
 
-    await securedExternalApiRequest(
+    const ret = await securedExternalApiRequest(
       `${GATEWAY_URL}/${INVENTORY}/addresses`,
       HttpMethods.POST,
       cookies.get('Authorization'),
