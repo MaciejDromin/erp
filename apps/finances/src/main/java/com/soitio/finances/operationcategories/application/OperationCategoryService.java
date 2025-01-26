@@ -45,8 +45,8 @@ public class OperationCategoryService extends AbstractDependencyCheckService<Ope
         if (queryParams.containsKey("operationType")) {
             var operationType = MoneyOperationType.valueOf(queryParams.get("operationType"));
             QOperationCategory category = QOperationCategory.operationCategory;
-            var search = category.operationType.eq(operationType);
-            search.and(category._super.orgId.eq(orgId));
+            var search = category.operationType.eq(operationType)
+                    .and(category._super.orgId.eq(orgId));
             return repository.findAll(search, pageable).map(this::from);
         }
         return repository.findAllByOrgId(pageable, orgId).map(this::from);
