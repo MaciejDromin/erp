@@ -1,4 +1,4 @@
-import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
+import { securedExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import type { PageServerLoad } from './$types'
@@ -8,7 +8,7 @@ import { redirect, fail } from '@sveltejs/kit'
 import { validate, nonEmpty, lbXnY } from '$lib/scripts/validator.ts'
 
 export const actions = {
-  default: async ({ request }) => {
+  default: async ({ request, cookies }) => {
     const data = await request.formData()
     const body = {
       id: data.get('categoryId'),
@@ -32,21 +32,27 @@ export const actions = {
         },
       })
     }
-    await unsecuredExternalApiRequest(
+    const ret = await securedExternalApiRequest(
       `${GATEWAY_URL}/${FINANCES}/operation-category/${body.id}`,
       HttpMethods.PATCH,
+      cookies.get('Authorization'),
+      cookies,
       body
     )
+    if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
     throw redirect(303, '/finances/operation-category')
   },
 } satisfies Actions
 
-export const load = (async ({ params }) => {
-  const category = await unsecuredExternalApiRequest(
+export const load = (async ({ params, cookies }) => {
+  const ret = await securedExternalApiRequest(
     `${GATEWAY_URL}/${FINANCES}/operation-category/${params.categoryId}`,
-    HttpMethods.GET
+    HttpMethods.GET,
+      cookies.get('Authorization'),
+      cookies,
   )
+  if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
   return {
-    category: await category.json(),
+    category: await ret.json(),
   }
 }) satisfies PageServerLoad

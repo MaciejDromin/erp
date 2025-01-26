@@ -1,5 +1,5 @@
 import { MoneyOperationType } from '$lib/finances/types/financialTypes'
-import { unsecuredExternalApiRequest } from '$lib/scripts/httpRequests'
+import { securedExternalApiRequest } from '$lib/scripts/httpRequests'
 import { HttpMethods } from '$lib/types/httpMethods'
 import type { Actions } from './$types'
 import { GATEWAY_URL } from '$lib/scripts/urls'
@@ -7,14 +7,17 @@ import { FINANCES } from '$lib/scripts/serviceKey.ts'
 import { redirect } from '@sveltejs/kit'
 
 export const actions = {
-  abandon: async ({ request }) => {
+  abandon: async ({ request, cookies }) => {
     const data = await request.formData()
     const expensesArray = JSON.parse(data.get('plannedExpensesArr'))
     for (const val of expensesArray) {
-      await unsecuredExternalApiRequest(
+      const ret = await securedExternalApiRequest(
         `${GATEWAY_URL}/${FINANCES}/planned-expenses/${val.id}/abandon`,
-        HttpMethods.PATCH
+        HttpMethods.PATCH,
+        cookies.get('Authorization'),
+        cookies,
       )
+      if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
     }
   },
   complete: async ({ request }) => {
@@ -24,11 +27,14 @@ export const actions = {
       const body = {
         actualAmount: val,
       }
-      await unsecuredExternalApiRequest(
+      const ret = await securedExternalApiRequest(
         `${GATEWAY_URL}/${FINANCES}/planned-expenses/${key}/complete`,
         HttpMethods.PATCH,
+        cookies.get('Authorization'),
+        cookies,
         body
       )
+      if (ret.status === 204 && ret.headers.get("redirected") === "true") throw redirect(303, ret.headers.get("location"))
     }
   },
 } satisfies Actions
