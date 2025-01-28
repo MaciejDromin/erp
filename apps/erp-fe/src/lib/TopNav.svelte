@@ -9,7 +9,7 @@
 
 <div class="navbar bg-base-300 h-8">
   <div class="flex-1">
-    <a href="/" class="btn btn-ghost normal-case text-xl">Dromin ERP</a>
+    <a href="/" class="btn btn-ghost normal-case text-xl">Soitio ERP</a>
   </div>
   <div class="flex-none">
     <ul class="menu menu-horizontal px-1 mr-16">
