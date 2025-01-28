@@ -6,6 +6,7 @@ import com.soitio.api.gateway.auth.domain.Pair;
 import com.soitio.api.gateway.auth.domain.UserResource;
 import com.soitio.auth.client.AuthRequest;
 import com.soitio.auth.client.AuthResponse;
+import com.soitio.auth.client.OrgDetails;
 import com.soitio.auth.client.RefreshTokenRequest;
 import com.soitio.auth.client.TokenRequest;
 import com.soitio.auth.client.UpdateCurrentOrgRequest;
@@ -61,8 +62,17 @@ public class UserService {
         try {
             JsonWebToken parsedToken = validateToken(request.getAuthToken());
             return userRepository.findByEmail(parsedToken.getSubject()).onItem()
-                    .transform(u -> UserOrgResponse.newBuilder()
-                            .addAllOrgs(u.getOrgs())
+                    .transform(UserResource::getOrgs)
+                    .onItem()
+                    .transformToUni(orgService::findByOrgIds)
+                    .onItem()
+                    .transform(ol -> UserOrgResponse.newBuilder()
+                            .addAllOrgs(ol.stream()
+                                    .map(or -> OrgDetails.newBuilder()
+                                            .setOrgId(or.getOrgId())
+                                            .setName(or.getName())
+                                            .build())
+                                    .toList())
                             .build());
         } catch (UnauthorizedException e) {
             return Uni.createFrom().failure(e);
