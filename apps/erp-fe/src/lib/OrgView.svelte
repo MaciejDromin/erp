@@ -4,10 +4,13 @@
   import { HttpMethods } from '$lib/types/httpMethods'
 
   let orgs = []
+  let currentOrg = ''
 
   onMount(async () => {
     const ret = await apiRequest('/orgs', HttpMethods.GET)
-    orgs = (await ret.json()).orgs
+    const data = await ret.json()
+    orgs = data.orgs
+    currentOrg = data.current
   })
 
   const updateOrg = async (orgId) => {
@@ -23,7 +26,10 @@
   <ul>
     {#each orgs as org}
       <li>
-        <a on:click={() => updateOrg(org.orgId)}>{org.name}</a>
+        <a
+          class={currentOrg === org.orgId ? 'text-primary' : ''}
+          on:click={() => updateOrg(org.orgId)}>{org.name}</a
+        >
       </li>
     {/each}
   </ul>

@@ -10,5 +10,7 @@ export const GET = (async ({ cookies }) => {
     cookies.get('Authorization'),
     cookies
   )
-  return new Response(ret.body, { status: ret.status, headers: ret.headers })
+  let data = await ret.json()
+  data.current = cookies.get('X-OrgId')
+  return new Response(JSON.stringify(data), { status: ret.status })
 }) satisfies RequestHandler
