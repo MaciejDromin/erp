@@ -11,8 +11,8 @@ import java.util.Set;
 @ApplicationScoped
 public class OrgRepository implements ReactivePanacheMongoRepository<OrgResource> {
 
-
     public Uni<List<OrgResource>> findByOrgIds(Set<String> orgIds) {
         return find("orgId in ?1", orgIds).list();
     }
+    
 }
