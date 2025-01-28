@@ -39,8 +39,13 @@ message UserOrgRequest {
     string authToken = 1;
 }
 
+message OrgDetails {
+    string orgId = 1;
+    string name = 2;
+}
+
 message UserOrgResponse {
-    repeated string orgs = 1;
+    repeated OrgDetails orgs = 1;
 }
 
 message UpdateCurrentOrgRequest {

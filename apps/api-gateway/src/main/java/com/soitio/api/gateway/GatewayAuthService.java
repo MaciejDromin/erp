@@ -2,6 +2,7 @@ package com.soitio.api.gateway;
 
 import com.soitio.api.gateway.domain.auth.AuthRequestDto;
 import com.soitio.api.gateway.domain.auth.AuthResponseDto;
+import com.soitio.api.gateway.domain.auth.OrgDetailsDto;
 import com.soitio.api.gateway.domain.auth.UserOrgResponseDto;
 import com.soitio.api.gateway.utils.AuthUtils;
 import com.soitio.auth.client.AuthRequest;
@@ -63,7 +64,9 @@ public class GatewayAuthService {
     }
 
     private UserOrgResponseDto mapOrgResponse(UserOrgResponse userOrgResponse) {
-        return new UserOrgResponseDto(userOrgResponse.getOrgsList().stream().toList());
+        return new UserOrgResponseDto(userOrgResponse.getOrgsList().stream()
+                .map(od -> new OrgDetailsDto(od.getOrgId(), od.getName()))
+                .toList());
     }
 
     private AuthResponseDto mapAuthResponse(AuthResponse authResponse) {

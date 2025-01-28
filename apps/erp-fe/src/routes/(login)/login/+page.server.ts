@@ -77,9 +77,11 @@ export const actions = {
       path: '/',
       expires: expiresAt,
     }
+    const neverExp = new Date()
+    neverExp.setDate(neverExp.getDate() + 10 * 365)
     cookies.set('Authorization', `Bearer ${respBody.authToken}`, opts)
     cookies.set('Refresh-Token', respBody.refreshToken, opts)
-    cookies.set('X-OrgId', respBody.orgId, opts)
+    cookies.set('X-OrgId', respBody.orgId, { path: '/', expires: neverExp })
     throw redirect(303, '/')
   },
 } satisfies Actions

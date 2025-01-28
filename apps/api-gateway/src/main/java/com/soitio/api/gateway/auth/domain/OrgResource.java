@@ -22,6 +22,8 @@ public class OrgResource {
 
     private ObjectId id;
     private String orgId;
-//    private OrgStatus status; -- PAYING, DEACTIVATED, TRIAL...
+    private String name;
+    //    private String creator;
+    //    private OrgStatus status; -- PAYING, DEACTIVATED, TRIAL...
 
 }
