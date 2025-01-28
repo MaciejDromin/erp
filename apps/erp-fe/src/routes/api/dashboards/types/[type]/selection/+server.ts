@@ -7,9 +7,9 @@ import { DASHBOARD } from '$lib/scripts/serviceKey.ts'
 export const GET = (async (event) => {
   const ret = await securedExternalApiRequest(
     `${GATEWAY_URL}/${DASHBOARD}/dashboards/types/${event.params.type}/selection`,
+    HttpMethods.GET,
     event.cookies.get('Authorization'),
-    event.cookies,
-    HttpMethods.GET
+    event.cookies
   )
   return new Response(ret.body, { status: ret.status, headers: ret.headers })
 }) satisfies RequestHandler

@@ -7,9 +7,9 @@ import { DASHBOARD } from '$lib/scripts/serviceKey.ts'
 export const DELETE = (async ({ params, cookies }) => {
   const ret = await securedExternalApiRequest(
     `${GATEWAY_URL}/${DASHBOARD}/dashboards/${params.id}/widgets/${params.widgetId}`,
+    HttpMethods.DELETE,
     cookies.get('Authorization'),
-    cookies,
-    HttpMethods.DELETE
+    cookies
   )
   return new Response(ret.body, { status: ret.status, headers: ret.headers })
 }) satisfies RequestHandler

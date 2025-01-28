@@ -14,9 +14,9 @@ export const POST = (async ({ request, cookies }) => {
   }
   const ret = await securedExternalApiRequest(
     data.url + query,
+    HttpMethods.GET,
     cookies.get('Authorization'),
-    cookies,
-    HttpMethods.GET
+    cookies
   )
   return new Response(ret.body, { status: ret.status, headers: ret.headers })
 }) satisfies RequestHandler
