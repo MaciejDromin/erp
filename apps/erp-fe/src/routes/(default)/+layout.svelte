@@ -11,6 +11,7 @@
   import { onMount } from 'svelte'
   import { GATEWAY_WS } from '$lib/scripts/urls.ts'
   import { REPORTS } from '$lib/scripts/serviceKey.ts'
+  import { genericStore } from '$lib/stores/genericStore.ts'
 
   config.autoAddCss = false
 
@@ -33,7 +34,9 @@
 
     ws.addEventListener('message', (m) => {
       if (m.data !== 'Connected') {
-        eventQueue.push(JSON.parse(m.data))
+        const reportData = JSON.parse(m.data)
+        if ($genericStore.reportJobId !== reportData.content.jobId) return
+        eventQueue.push(reportData)
         eventQueue = eventQueue
       }
     })

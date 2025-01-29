@@ -45,11 +45,12 @@
   }
 
   const requestReport = async () => {
-    await apiRequest('/reports', HttpMethods.POST, {
+    const ret = await apiRequest('/reports', HttpMethods.POST, {
       endpoint: 'inventory',
       name: 'inventory',
       template: 'inventory-report',
     })
+    $genericStore.reportJobId = (await ret.json()).jobId
   }
 
   $: $genericStore, updateConfig()
