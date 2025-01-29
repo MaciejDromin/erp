@@ -8,6 +8,7 @@ import com.soitio.reports.ReportRequest;
 import com.soitio.reports.Value;
 import com.soitio.reports.client.ReportsClient;
 import com.soitio.reports.service.application.ReportStatusRepository;
+import com.soitio.reports.service.domain.InitialReportStatusDto;
 import com.soitio.reports.service.domain.ReportGenerationRequestDto;
 import com.soitio.reports.service.ws.WsSender;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,7 +30,7 @@ public class ReportRequesterService {
         this.wsSender = wsSender;
     }
 
-    public void requestReportGeneration(ReportGenerationRequestDto reportGenerationRequest,
+    public InitialReportStatusDto requestReportGeneration(ReportGenerationRequestDto reportGenerationRequest,
                                         Map<String, Value> data,
                                         String orgId) {
         ReportRequest request = to(reportGenerationRequest, data, orgId);
@@ -38,6 +39,7 @@ public class ReportRequesterService {
         wsSender.send("com.soitio.reports.service.ws.WebsocketServer",
                 new WsMessage<>("event.reports",
                         new ConcreteJobContent(EventStatus.REQUESTED, status.getJobId())));
+        return new InitialReportStatusDto(status.getJobId(), status.getJobStatus());
     }
 
     private ReportRequest to(ReportGenerationRequestDto reportGenerationRequest,

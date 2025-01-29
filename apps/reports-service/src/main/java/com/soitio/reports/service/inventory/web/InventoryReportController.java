@@ -2,6 +2,7 @@ package com.soitio.reports.service.inventory.web;
 
 import com.soitio.reports.service.ReportRequesterService;
 import com.soitio.reports.service.data.ValueDataMapper;
+import com.soitio.reports.service.domain.InitialReportStatusDto;
 import com.soitio.reports.service.domain.ReportGenerationRequestDto;
 import com.soitio.reports.service.inventory.InventoryDataCollectorService;
 import jakarta.ws.rs.HeaderParam;
@@ -23,11 +24,11 @@ public class InventoryReportController {
     }
 
     @POST
-    public void requestReportGeneration(ReportGenerationRequestDto reportGenerationRequest,
-                                        @HeaderParam("X-OrgId") String orgId) {
+    public InitialReportStatusDto requestReportGeneration(ReportGenerationRequestDto reportGenerationRequest,
+                                                          @HeaderParam("X-OrgId") String orgId) {
         var data = collectorService.getAllItems(orgId);
         log.info("Fetched {} items", data.size());
-        reportRequesterService.requestReportGeneration(reportGenerationRequest, ValueDataMapper.mapToValueMap(data), orgId);
+        return reportRequesterService.requestReportGeneration(reportGenerationRequest, ValueDataMapper.mapToValueMap(data), orgId);
     }
 
 }
