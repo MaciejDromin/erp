@@ -12,6 +12,7 @@ public enum ServiceKey {
     DASHBOARD("dashboard"),
     REPORTS("reports-service"),
     WIDGETS_FINANCES("widgets-finances"),
+    ARTIFACT_MANAGER("artifact-manager"),
     REPORTS_WS("reports-ws");
 
     private final String name;

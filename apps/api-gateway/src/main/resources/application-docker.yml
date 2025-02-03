@@ -50,7 +50,7 @@ gateway:
     INVENTORY:
       hostname: inventory
       port: 8080
-    PURCHASE-SCANNER:
+    PURCHASE_SCANNER:
       hostname: purchase-scanner
       port: 80
     WIDGETS_FINANCES:
@@ -61,4 +61,7 @@ gateway:
       port: 8080
     REPORTS:
       hostname: reports-service
+      port: 8080
+    ARTIFACT_MANAGER:
+      hostname: artifact-manager
       port: 8080

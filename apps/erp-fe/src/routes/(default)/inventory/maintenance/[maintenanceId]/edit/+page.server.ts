@@ -114,8 +114,8 @@ export const actions = {
       body
     )
     if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-      throw redirect(303, ret.headers.get('location'))
-    throw redirect(303, '/inventory/maintenance')
+      redirect(303, ret.headers.get('location'));
+    redirect(303, '/inventory/maintenance');
   },
 } satisfies Actions
 
@@ -130,7 +130,7 @@ export const load = (async ({ params, cookies }) => {
     maintenance.status === 204 &&
     maintenance.headers.get('redirected') === 'true'
   )
-    throw redirect(303, maintenance.headers.get('location'))
+    redirect(303, maintenance.headers.get('location'));
   maintenance = await maintenance.json()
   const partsIds = maintenance.parts.map((p) => p.id)
   let ret = await securedExternalApiRequest(
@@ -140,7 +140,7 @@ export const load = (async ({ params, cookies }) => {
     cookies
   )
   if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-    throw redirect(303, ret.headers.get('location'))
+    redirect(303, ret.headers.get('location'));
   return {
     maintenance: maintenance,
     parts: (await ret.json()).content,
