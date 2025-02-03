@@ -61,9 +61,9 @@ services:
       RABBITMQ_PASSWORD: "admin"
     restart: unless-stopped
     depends_on:
-      - sftp
       - rabbit
       - gateway
+      - artifact-manager
   analytics:
     image: "erp/analytics:latest"
     restart: unless-stopped
@@ -87,8 +87,8 @@ services:
   reports-generator:
     image: "erp/reports-generator:latest"
     depends_on:
-      - sftp
       - gateway
+      - artifact-manager
     restart: unless-stopped
   reports-service:
     image: "erp/reports-service:latest"
@@ -96,8 +96,8 @@ services:
       - erp-pg
       - reports-generator
       - gateway
-  archive-manager:
-    image: "erp/archive-manager:latest"
+  artifact-manager:
+    image: "erp/artifact-manager:latest"
     depends_on:
       - sftp
       - gateway

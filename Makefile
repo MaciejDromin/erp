@@ -86,7 +86,7 @@ gateway: soitio-commons auth-client
 
 all: analytics finances erp-fe inventory purchase-scanner \
 	dashboard widgets-finances reports-generator \
-	reports-service artifact-manager
+	reports-service artifact-manager gateway
 
 clean:
 	cd libs/widget-commons; ./gradlew clean
