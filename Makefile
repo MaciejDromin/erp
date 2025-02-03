@@ -10,6 +10,9 @@ widget-startup: widget-commons
 reports-client:
 	cd libs/reports-client; ./gradlew build; ./gradlew publishToMavenLocal
 
+auth-client:
+	cd libs/auth-client; ./gradlew build; ./gradlew publishToMavenLocal
+
 soitio-commons:
 	cd libs/commons; ./gradlew build; ./gradlew publishToMavenLocal
 
@@ -65,7 +68,15 @@ reports-service: reports-client soitio-commons
 		-Dquarkus.profile=docker; \
 		podman build -f src/main/docker/Dockerfile.native -t erp/reports-service:latest .
 
-gateway: soitio-commons
+artifact-manager:
+	cd apps/artifact-manager; ./gradlew build \
+		-Dquarkus.native.enabled=true \
+		-Dquarkus.native.container-build=true \
+		-Dquarkus.package.jar.enabled=false \
+		-Dquarkus.profile=docker; \
+		podman build -f src/main/docker/Dockerfile.native -t erp/artifact-manager:latest .
+
+gateway: soitio-commons auth-client
 	cd apps/api-gateway; ./gradlew build \
 		-Dquarkus.native.enabled=true \
 		-Dquarkus.native.container-build=true \
@@ -75,12 +86,13 @@ gateway: soitio-commons
 
 all: analytics finances erp-fe inventory purchase-scanner \
 	dashboard widgets-finances reports-generator \
-	reports-service
+	reports-service artifact-manager
 
 clean:
 	cd libs/widget-commons; ./gradlew clean
 	cd libs/widget-startup; mvn clean
 	cd libs/reports-client; ./gradlew clean
+	cd libs/auth-client; ./gradlew clean
 	cd libs/commons; ./gradlew clean
 	cd apps/analytics; ./gradlew clean
 	cd apps/finances; ./gradlew clean
@@ -90,3 +102,4 @@ clean:
 	cd apps/widgets-finances; ./gradlew clean
 	cd apps/reports; ./gradlew clean
 	cd apps/reports-service; ./gradlew clean
+	cd apps/artifact-manager; ./gradlew clean

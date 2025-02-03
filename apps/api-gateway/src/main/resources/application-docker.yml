@@ -62,3 +62,6 @@ gateway:
     REPORTS:
       hostname: reports-service
       port: 8080
+    ARTIFACT-MANAGER:
+      hostname: artifact-manager
+      port: 8080

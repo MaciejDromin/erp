@@ -63,6 +63,7 @@ services:
     depends_on:
       - sftp
       - rabbit
+      - gateway
   analytics:
     image: "erp/analytics:latest"
     restart: unless-stopped
@@ -95,6 +96,12 @@ services:
       - erp-pg
       - reports-generator
       - gateway
+  archive-manager:
+    image: "erp/archive-manager:latest"
+    depends_on:
+      - sftp
+      - gateway
+    restart: unless-stopped
   rabbit:
     image: "rabbitmq:3.13-management"
     volumes:

@@ -62,3 +62,6 @@ gateway:
     REPORTS:
       hostname: localhost
       port: 8086
+    ARTIFACT-MANAGER:
+      hostname: localhost
+      port: 8089
