@@ -12,6 +12,15 @@ dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-config-yaml'
+    implementation 'io.quarkus:quarkus-smallrye-health'
+
+    // REST
+    implementation 'io.quarkus:quarkus-rest'
+    implementation 'io.quarkus:quarkus-rest-jackson'
+
+    // SFTP
+    implementation 'com.github.mwiede:jsch:0.2.19'
+    implementation 'org.apache.commons:commons-pool2:2.12.0'
 
     testImplementation 'io.quarkus:quarkus-junit5'
 }
