@@ -25,6 +25,6 @@ export const actions = {
       body
     )
     if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-      throw redirect(303, ret.headers.get('location'))
+      redirect(303, ret.headers.get('location'));
   },
 } satisfies Actions
