@@ -1,6 +1,8 @@
 quarkus:
   http:
     port: 8080
+    limits:
+      max-body-size: 100000000
 
 sftp:
   host: sftp

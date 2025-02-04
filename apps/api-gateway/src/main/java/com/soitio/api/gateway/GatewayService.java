@@ -16,7 +16,6 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.UriInfo;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.io.InputStream;
-import java.util.function.BiFunction;
 
 @ApplicationScoped
 public class GatewayService {

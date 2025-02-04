@@ -2,51 +2,97 @@ package com.soitio.artifact.manager.connectors.sftp;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpException;
+import com.soitio.artifact.manager.ArtifactService;
+import com.soitio.artifact.manager.domain.FileDto;
 import jakarta.enterprise.context.ApplicationScoped;
-
-import java.io.FileInputStream;
-import java.io.IOException;
+import jakarta.inject.Named;
+import java.io.InputStream;
 
 @ApplicationScoped
-public class SftpService {
+public class SftpService implements ArtifactService {
 
     private static final String ROOT_DIR = "data";
-    private static final String GENERATED_DIR = "generated";
     private static final String DELIMITER = "/";
 
     private final SftpConnectionPool sftpConnectionPool;
+    private final SftpConnectionDetails connectionDetails;
 
-    public SftpService(SftpConnectionPool sftpConnectionPool) {
+    public SftpService(SftpConnectionPool sftpConnectionPool,
+                       @Named("defaultSftp") SftpConnectionDetails sftpConnectionDetails) {
         this.sftpConnectionPool = sftpConnectionPool;
+        this.connectionDetails = sftpConnectionDetails;
     }
 
-    public String archiveFile(String fn, SftpConnectionDetails sftpConnectionDetails, String orgId) throws Exception {
+    @Override
+    public String uploadArtifact(String filename, String directory, String orgId, InputStream artifact) {
+        return archiveFile(filename, directory, this.connectionDetails, artifact, orgId);
+    }
+
+    @Override
+    public FileDto getArtifact(String filePath, String orgId) {
+        return getFile(filePath, this.connectionDetails, orgId);
+    }
+
+    @Override
+    public void deleteArtifact(String filePath, String orgId) {
+        deleteFile(filePath, this.connectionDetails, orgId);
+    }
+
+    private FileDto getFile(String filePath, SftpConnectionDetails connectionDetails, String orgId) {
+        ChannelSftp channelSftp = sftpConnectionPool.getChannelForCreds(connectionDetails);
+
+        String fullPath = ROOT_DIR + DELIMITER + orgId + DELIMITER + filePath;
+
+        InputStream artifact;
+
+        try {
+            artifact = channelSftp.get(fullPath);
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not find file to fetch");
+        } finally {
+            sftpConnectionPool.returnToPool(connectionDetails, channelSftp);
+        }
+        return new FileDto(artifact, fullPath.substring(fullPath.lastIndexOf("/") + 1));
+    }
+
+    private void deleteFile(String filePath, SftpConnectionDetails connectionDetails, String orgId) {
+        ChannelSftp channelSftp = sftpConnectionPool.getChannelForCreds(connectionDetails);
+
+        String fullPath = ROOT_DIR + DELIMITER + orgId + DELIMITER + filePath;
+
+        try {
+            channelSftp.rm(fullPath);
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not find file to delete");
+        } finally {
+            sftpConnectionPool.returnToPool(connectionDetails, channelSftp);
+        }
+    }
+
+    private String archiveFile(String filename,
+                               String directory,
+                               SftpConnectionDetails sftpConnectionDetails,
+                               InputStream artifact,
+                               String orgId) {
         ChannelSftp channelSftp = sftpConnectionPool.getChannelForCreds(sftpConnectionDetails);
 
-        String basePath = ROOT_DIR + DELIMITER + orgId + DELIMITER + GENERATED_DIR;
+        String basePath = ROOT_DIR + DELIMITER + orgId + DELIMITER + directory;
         cd(basePath, channelSftp);
 
-        String filename = extractFilename(fn);
-
-        try (FileInputStream is = new FileInputStream(fn)){
-            put(is, filename, channelSftp);
-        } catch (IOException e) {
+        try {
+            channelSftp.put(artifact, filename);
+        } catch (Exception e) {
             throw new IllegalStateException("Could not find file to archive");
+        } finally {
+            sftpConnectionPool.returnToPool(sftpConnectionDetails, channelSftp);
         }
 
-        sftpConnectionPool.returnToPool(sftpConnectionDetails, channelSftp);
         return generateLocationPath(basePath, filename);
     }
 
     private String generateLocationPath(String basePath, String filename) {
         String fullPath = basePath + DELIMITER + filename;
-        return fullPath.substring(fullPath.indexOf(DELIMITER) + 1);
-    }
-
-    private String extractFilename(String filePath) {
-        int lio = filePath.lastIndexOf(DELIMITER);
-        if (lio == -1) return filePath;
-        return filePath.substring(lio + 1);
+        return fullPath.substring(fullPath.indexOf(DELIMITER, fullPath.indexOf(DELIMITER) + 1) + 1);
     }
 
     private void cd(String path, ChannelSftp sftp) {
@@ -74,14 +120,6 @@ public class SftpService {
             sftp.cd(sftp.getHome());
         } catch (SftpException e) {
             // Issue
-        }
-    }
-
-    private void put(FileInputStream is, String name, ChannelSftp sftp) {
-        try {
-            sftp.put(is, name);
-        } catch (SftpException e) {
-            throw new IllegalStateException("Could not find file to archive");
         }
     }
 
