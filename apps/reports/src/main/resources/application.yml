@@ -4,13 +4,11 @@ quarkus:
   grpc:
     server:
       use-separate-server: false
+  rest-client:
+    artifact-api:
+      url: http://localhost:8089/
+      scope: jakarta.inject.Singleton
 
 reports-service:
   host: localhost
   port: 8086
-
-sftp:
-  host: localhost
-  port: 2222
-  username: erp
-  password: admin

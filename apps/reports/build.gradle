@@ -17,12 +17,12 @@ dependencies {
     implementation 'io.quarkus:quarkus-qute'
     implementation 'io.quarkus:quarkus-smallrye-health'
 
+    // REST
+    implementation 'io.quarkus:quarkus-rest-client-jackson'
+
     implementation 'org.jsoup:jsoup:1.18.1'
     implementation 'com.openhtmltopdf:openhtmltopdf-core:1.0.10'
     implementation 'com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10'
-
-    implementation 'com.github.mwiede:jsch:0.2.19'
-    implementation 'org.apache.commons:commons-pool2:2.12.0'
 
     implementation 'com.soitio:reports-client:1.0.0'
 

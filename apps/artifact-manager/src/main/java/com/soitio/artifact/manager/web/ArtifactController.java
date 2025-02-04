@@ -24,9 +24,9 @@ public class ArtifactController {
 
     @POST
     public String uploadArtifact(@HeaderParam("X-OrgId") String orgId,
-                                              @QueryParam("filename") String filename,
-                                              @QueryParam("directory") String directory,
-                                              InputStream is) {
+                                 @QueryParam("filename") String filename,
+                                 @QueryParam("directory") String directory,
+                                 InputStream is) {
         return artifactService.uploadArtifact(filename, directory, orgId, is);
     }
 
