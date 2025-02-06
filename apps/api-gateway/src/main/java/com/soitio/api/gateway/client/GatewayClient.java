@@ -45,8 +45,8 @@ public interface GatewayClient {
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     RestResponse<byte[]> getFile(@Url String p,
-                                        @RestQuery MultivaluedMap<String, String> queryParameters,
-                                        @HeaderParam("X-OrgId") String orgId);
+                                 @RestQuery MultivaluedMap<String, String> queryParameters,
+                                 @HeaderParam("X-OrgId") String orgId);
 
     @PUT
     Uni<Object> putRoute(@Url String p,

@@ -1,7 +1,6 @@
 package com.soitio.artifact.manager;
 
 import com.soitio.artifact.manager.domain.FileDto;
-
 import java.io.InputStream;
 
 public interface ArtifactService {
