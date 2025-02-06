@@ -4,13 +4,14 @@ import com.soitio.reports.JobStatus;
 import com.soitio.reports.ReportGenerationStatus;
 import com.soitio.reports.ReportRequest;
 import com.soitio.reports.client.ReportStatusClient;
-import com.soitio.reports.generator.sftp.SftpConnectionDetails;
-import com.soitio.reports.generator.sftp.SftpService;
+import com.soitio.reports.generator.client.ArtifactClient;
 import com.soitio.reports.generator.templates.TemplateService;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Named;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @ApplicationScoped
 public class ReportsGeneratorService {
@@ -19,20 +20,17 @@ public class ReportsGeneratorService {
 
     private final TemplateService templateService;
     private final PDFService pdfService;
-    private final SftpService sftpService;
     private final ReportStatusClient reportStatusClient;
-    private final SftpConnectionDetails sftpConnectionDetails;
+    private final ArtifactClient artifactClient;
 
     public ReportsGeneratorService(TemplateService templateService,
                                    PDFService pdfService,
-                                   SftpService sftpService,
                                    ReportStatusClient reportStatusClient,
-                                   @Named("defaultSftp") SftpConnectionDetails sftpConnectionDetails) {
+                                   @RestClient ArtifactClient artifactClient) {
         this.templateService = templateService;
         this.pdfService = pdfService;
-        this.sftpService = sftpService;
         this.reportStatusClient = reportStatusClient;
-        this.sftpConnectionDetails = sftpConnectionDetails;
+        this.artifactClient = artifactClient;
     }
 
     public void generateReportAndNotify(ReportRequest request, String jobId) {
@@ -69,7 +67,11 @@ public class ReportsGeneratorService {
 
         String filename = pdfService.generatePdf(request.getName(), rendered);
 
-        return sftpService.archiveFile(filename, sftpConnectionDetails, request.getOrgId());
+        try (FileInputStream is = new FileInputStream(filename)){
+            return artifactClient.uploadArtifact(request.getOrgId(), filename, "generated", is);
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not find file to archive");
+        }
     }
 
 }

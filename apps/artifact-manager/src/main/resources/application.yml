@@ -1,3 +1,11 @@
 quarkus:
   http:
     port: 8089
+    limits:
+      max-body-size: 100000000
+
+sftp:
+  host: localhost
+  port: 2222
+  username: erp
+  password: admin

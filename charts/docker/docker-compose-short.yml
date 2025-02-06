@@ -53,9 +53,8 @@ services:
   purchase-scanner:
     image: "erp/purchase-scanner:latest"
     environment:
-      SFTP_HOST: "sftp"
-      SFTP_USERNAME: "erp"
-      SFTP_PASSWORD: "admin"
+      ARTIFACT_HOST: "artifact-manager"
+      ARTIFACT_PORT: 8080
       RABBITMQ_HOST: "rabbit"
       RABBITMQ_USERNAME: "erp-user"
       RABBITMQ_PASSWORD: "admin"

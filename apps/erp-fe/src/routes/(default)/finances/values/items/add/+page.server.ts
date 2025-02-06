@@ -87,8 +87,8 @@ export const actions = {
       body
     )
     if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-      redirect(303, ret.headers.get('location'));
-    redirect(303, '/finances/values/items');
+      redirect(303, ret.headers.get('location'))
+    redirect(303, '/finances/values/items')
   },
 } satisfies Actions
 
@@ -100,7 +100,7 @@ export const load = (async ({ params, cookies }) => {
     cookies
   )
   if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-    redirect(303, ret.headers.get('location'));
+    redirect(303, ret.headers.get('location'))
   return {
     objectIds: await ret.json(),
   }

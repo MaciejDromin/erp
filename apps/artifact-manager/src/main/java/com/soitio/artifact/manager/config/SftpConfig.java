@@ -1,6 +1,6 @@
-package com.soitio.reports.generator.config;
+package com.soitio.artifact.manager.config;
 
-import com.soitio.reports.generator.sftp.SftpConnectionDetails;
+import com.soitio.artifact.manager.connectors.sftp.SftpConnectionDetails;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Named;

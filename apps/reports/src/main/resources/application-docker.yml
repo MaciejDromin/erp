@@ -4,15 +4,13 @@ quarkus:
   grpc:
     server:
       use-separate-server: false
+  rest-client:
+    artifact-api:
+      url: http://artifact-manager:8080/
+      scope: jakarta.inject.Singleton
   shutdown:
     timeout: PT5S
 
 reports-service:
   host: reports-service
   port: 8080
-
-sftp:
-  host: sftp
-  port: 22
-  username: erp
-  password: admin

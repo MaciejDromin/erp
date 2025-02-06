@@ -98,8 +98,8 @@ export const actions = {
       body
     )
     if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-      redirect(303, ret.headers.get('location'));
-    redirect(303, '/finances/values/items');
+      redirect(303, ret.headers.get('location'))
+    redirect(303, '/finances/values/items')
   },
 } satisfies Actions
 
@@ -114,7 +114,7 @@ export const load = (async ({ params, cookies }) => {
     objectIds.status === 204 &&
     objectIds.headers.get('redirected') === 'true'
   )
-    redirect(303, objectIds.headers.get('location'));
+    redirect(303, objectIds.headers.get('location'))
   const ov = await securedExternalApiRequest(
     `${GATEWAY_URL}/${FINANCES}/object-value/${params.itemId}`,
     HttpMethods.GET,
@@ -122,7 +122,7 @@ export const load = (async ({ params, cookies }) => {
     cookies
   )
   if (ov.status === 204 && ov.headers.get('redirected') === 'true')
-    redirect(303, ov.headers.get('location'));
+    redirect(303, ov.headers.get('location'))
   return {
     objectIds: await objectIds.json(),
     objectValue: await ov.json(),

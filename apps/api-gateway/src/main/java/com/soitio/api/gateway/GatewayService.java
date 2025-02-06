@@ -6,6 +6,7 @@ import com.soitio.api.gateway.config.GatewayConfig;
 import com.soitio.api.gateway.utils.AuthUtils;
 import com.soitio.auth.client.AuthService;
 import com.soitio.auth.client.TokenRequest;
+import com.soitio.auth.client.ValidationResponse;
 import com.soitio.commons.models.commons.ServiceKey;
 import io.quarkus.grpc.GrpcClient;
 import io.quarkus.security.UnauthorizedException;
@@ -15,8 +16,10 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.UriInfo;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.resteasy.reactive.RestResponse;
 import java.io.InputStream;
-import java.util.function.BiFunction;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 @ApplicationScoped
 public class GatewayService {
@@ -48,6 +51,10 @@ public class GatewayService {
                 (s, m, o) -> gatewayClient.fileUpload(s, m, headers.getHeaderString("filename"), o, is));
     }
 
+    public RestResponse<byte[]> getFile(UriInfo uri, HttpHeaders headers) {
+        return authenticateAndExecuteWithResponse(uri, headers, gatewayClient::getFile);
+    }
+
     public Uni<Object> putRoute(UriInfo uri, HttpHeaders headers, Object body) {
         return authenticateAndExecute(uri, headers, (s, m, o) -> gatewayClient.putRoute(s, m, o, body));
     }
@@ -75,6 +82,23 @@ public class GatewayService {
                                 .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
                         uriInfo.getQueryParameters(),
                         ar.getOrgId()));
+    }
+
+    private RestResponse<byte[]> authenticateAndExecuteWithResponse(UriInfo uriInfo,
+                                                                    HttpHeaders headers,
+                                                                    TriFunction<String, MultivaluedMap<String, String>, String, RestResponse<byte[]>> httpCall) {
+        String[] endpointDetails = extractPath(uriInfo.getPath());
+        String token = AuthUtils.extractAuthorizationHeader(headers);
+        if (token == null) throw new UnauthorizedException("Missing Authorization header");
+        TokenRequest tokenRequest = TokenRequest.newBuilder()
+                .setAuthToken(AuthUtils.extractToken(token))
+                .build();
+        ValidationResponse resp = authService.validate(tokenRequest).await().atMost(Duration.of(300, ChronoUnit.MILLIS));
+        return httpCall.apply(
+                buildRoute(gatewayConfig.routes()
+                        .get(ServiceKey.getByName(endpointDetails[0])), endpointDetails[1]),
+                uriInfo.getQueryParameters(),
+                resp.getOrgId());
     }
 
     private String[] extractPath(String baseUri) {

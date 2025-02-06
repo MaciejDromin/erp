@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { apiRequest } from '$lib/scripts/uiHttpRequests.ts'
+  import { HttpMethods } from '$lib/types/httpMethods'
+
   export let eventData
   export let triggerClose
 
@@ -6,8 +9,31 @@
     triggerClose = true
   }
 
-  const constructHref = (fileLocation) => {
-    return 'http://dl.soitio-erp.com:8000/' + fileLocation
+  let filename = ''
+
+  const downloadFile = async (fileLocation) => {
+    await apiRequest(
+      '/artifact-manager/?filePath=' + fileLocation,
+      HttpMethods.GET
+    )
+      .then((res) => {
+        console.log(res)
+        const disposition = res.headers.get('Content-Disposition')
+        filename = disposition.split(/;(.+)/)[1].split(/=(.+)/)[1]
+        if (filename.toLowerCase().startsWith("utf-8''"))
+          filename = decodeURIComponent(filename.replace(/utf-8''/i, ''))
+        else filename = filename.replace(/['"]/g, '')
+        return res.blob()
+      })
+      .then((blob) => {
+        let url = window.URL.createObjectURL(blob)
+        let a = document.createElement('a')
+        a.href = url
+        a.download = filename
+        document.body.appendChild(a) // append the element to the dom
+        a.click()
+        a.remove()
+      })
   }
 </script>
 
@@ -26,7 +52,7 @@
     ></path>
   </svg>
   <span>Your file is ready to download!</span>
-  <a href={constructHref(eventData.url)} target="_blank">{eventData.name}</a>
+  <button on:click={downloadFile(eventData.url)}>{eventData.name}</button>
   <div>
     <button class="btn btn-sm btn-primary" on:click={notifyClose}>Close</button>
   </div>

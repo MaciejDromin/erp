@@ -1,6 +1,5 @@
 fastapi==0.111.0
 python-multipart==0.0.18
-fabric==3.2.2
 pika==1.3.2
 aiofiles==23.2.1
 numpy==1.26.4

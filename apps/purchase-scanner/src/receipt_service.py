@@ -1,6 +1,6 @@
 from file_manager import save_locally, unpack_archive, clean_directories
 from receipt_scan import filter_receipts, group_by_extension
-from sftp_connector import archive_receipts
+from artifact_client import archive_receipts
 from message_publisher import publish
 from fastapi import UploadFile
 import strategy_provider
@@ -11,11 +11,11 @@ provider = strategy_provider.StrategyProvider()
 
 async def handle_uploaded_receipts(filename, request, orgId):
     saved_file = await save_locally(filename, request)
-    asyncio.ensure_future(process_file(saved_file, orgId))
+    asyncio.ensure_future(process_file(filename, saved_file, orgId))
 
 
-async def process_file(saved_file, orgId):
-    archive_receipts(saved_file, orgId)
+async def process_file(filename, saved_file, orgId):
+    archive_receipts(filename, saved_file, orgId)
     receipts = unpack_archive(saved_file)
     grouped = group_by_extension(receipts)
     parsed_receipts = []

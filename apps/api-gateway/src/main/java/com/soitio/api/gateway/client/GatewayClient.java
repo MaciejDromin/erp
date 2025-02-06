@@ -15,6 +15,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import org.jboss.resteasy.reactive.RestQuery;
+import org.jboss.resteasy.reactive.RestResponse;
 import java.io.InputStream;
 
 @Path("/")
@@ -40,6 +41,12 @@ public interface GatewayClient {
                            @HeaderParam("filename") String filename,
                            @HeaderParam("X-OrgId") String orgId,
                            InputStream is);
+
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    RestResponse<byte[]> getFile(@Url String p,
+                                 @RestQuery MultivaluedMap<String, String> queryParameters,
+                                 @HeaderParam("X-OrgId") String orgId);
 
     @PUT
     Uni<Object> putRoute(@Url String p,

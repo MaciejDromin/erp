@@ -47,7 +47,7 @@ const validateArgs = (body) => {
 }
 
 export const load = (async ({ cookies }) => {
-  if (cookies.get('Authorization') !== undefined) redirect(303, '/');
+  if (cookies.get('Authorization') !== undefined) redirect(303, '/')
   return {}
 }) satisfies PageServerLoad
 
@@ -82,6 +82,6 @@ export const actions = {
     cookies.set('Authorization', `Bearer ${respBody.authToken}`, opts)
     cookies.set('Refresh-Token', respBody.refreshToken, opts)
     cookies.set('X-OrgId', respBody.orgId, { path: '/', expires: neverExp })
-    redirect(303, '/');
+    redirect(303, '/')
   },
 } satisfies Actions

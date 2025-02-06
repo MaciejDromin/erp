@@ -13,6 +13,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.UriInfo;
+import org.jboss.resteasy.reactive.RestResponse;
 import java.io.InputStream;
 
 @Path("/api")
@@ -45,6 +46,13 @@ public class GatewayController {
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     public Uni<Object> fileUpload(UriInfo uri, HttpHeaders headers, InputStream is) {
         return service.fileUpload(uri, headers, is);
+    }
+
+    @GET
+    @Path("{subPaths: .*}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public RestResponse<byte[]> getFile(UriInfo uri, HttpHeaders headers) {
+        return service.getFile(uri, headers);
     }
 
     @PUT
