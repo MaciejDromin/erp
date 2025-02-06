@@ -70,11 +70,8 @@ reports-service: reports-client soitio-commons
 
 artifact-manager:
 	cd apps/artifact-manager; ./gradlew build \
-		-Dquarkus.native.enabled=true \
-		-Dquarkus.native.container-build=true \
-		-Dquarkus.package.jar.enabled=false \
 		-Dquarkus.profile=docker; \
-		podman build -f src/main/docker/Dockerfile.native -t erp/artifact-manager:latest .
+		podman build -f src/main/docker/Dockerfile.jvm -t erp/artifact-manager:latest .
 
 gateway: soitio-commons auth-client
 	cd apps/api-gateway; ./gradlew build \
