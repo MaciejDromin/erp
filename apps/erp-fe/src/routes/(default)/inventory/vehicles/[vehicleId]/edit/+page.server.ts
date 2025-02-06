@@ -172,8 +172,8 @@ export const actions = {
       body
     )
     if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-      redirect(303, ret.headers.get('location'));
-    redirect(303, '/inventory/vehicles');
+      redirect(303, ret.headers.get('location'))
+    redirect(303, '/inventory/vehicles')
   },
 } satisfies Actions
 
@@ -185,7 +185,7 @@ export const load = (async ({ params, cookies }) => {
     cookies
   )
   if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-    redirect(303, ret.headers.get('location'));
+    redirect(303, ret.headers.get('location'))
   return {
     vehicle: await ret.json(),
   }

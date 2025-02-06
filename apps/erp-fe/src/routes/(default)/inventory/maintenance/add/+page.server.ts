@@ -113,7 +113,7 @@ export const actions = {
       body
     )
     if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-      redirect(303, ret.headers.get('location'));
-    redirect(303, '/inventory/maintenance');
+      redirect(303, ret.headers.get('location'))
+    redirect(303, '/inventory/maintenance')
   },
 } satisfies Actions

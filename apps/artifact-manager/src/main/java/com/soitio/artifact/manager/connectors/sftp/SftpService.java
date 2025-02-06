@@ -43,6 +43,8 @@ public class SftpService implements ArtifactService {
 
         String fullPath = ROOT_DIR + DELIMITER + orgId + DELIMITER + filePath;
 
+        goHome(channelSftp);
+
         InputStream artifact;
 
         try {
@@ -59,6 +61,8 @@ public class SftpService implements ArtifactService {
         ChannelSftp channelSftp = sftpConnectionPool.getChannelForCreds(connectionDetails);
 
         String fullPath = ROOT_DIR + DELIMITER + orgId + DELIMITER + filePath;
+
+        goHome(channelSftp);
 
         try {
             channelSftp.rm(fullPath);

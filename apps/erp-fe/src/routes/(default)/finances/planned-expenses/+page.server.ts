@@ -18,7 +18,7 @@ export const actions = {
         cookies
       )
       if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-        redirect(303, ret.headers.get('location'));
+        redirect(303, ret.headers.get('location'))
     }
   },
   complete: async ({ request }) => {
@@ -36,7 +36,7 @@ export const actions = {
         body
       )
       if (ret.status === 204 && ret.headers.get('redirected') === 'true')
-        redirect(303, ret.headers.get('location'));
+        redirect(303, ret.headers.get('location'))
     }
   },
 } satisfies Actions
